@@ -1,0 +1,3 @@
+﻿  hw2_75wintest.c
+X:\csapp\2_homework.assets\hw2_75wintest\hw2_75wintest.c(9,12): warning C4244: 'return': conversion from 'int64_t' to 'int', possible loss of data
+  hw2_75wintest.vcxproj -> X:\csapp\2_homework.assets\hw2_75wintest\arm64\Debug\hw2_75wintest.exe

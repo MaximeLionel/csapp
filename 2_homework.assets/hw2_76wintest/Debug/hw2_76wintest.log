@@ -1,0 +1,5 @@
+﻿  hw2_76wintest.c
+X:\csapp\2_homework.assets\hw2_76wintest\hw2_76wintest.c(11,15): warning C4013: 'malloc' undefined; assuming extern returning int
+X:\csapp\2_homework.assets\hw2_76wintest\hw2_76wintest.c(13,5): warning C4013: 'memset' undefined; assuming extern returning int
+X:\csapp\2_homework.assets\hw2_76wintest\hw2_76wintest.c(11,11): warning C4047: 'initializing': 'void *' differs in levels of indirection from 'int'
+  hw2_76wintest.vcxproj -> X:\csapp\2_homework.assets\hw2_76wintest\Debug\hw2_76wintest.exe

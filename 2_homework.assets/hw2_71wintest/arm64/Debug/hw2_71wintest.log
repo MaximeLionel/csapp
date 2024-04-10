@@ -1,0 +1,4 @@
+﻿  hw2_71wintest.cpp
+X:\csapp\2_homework.assets\hw2_71wintest\hw2_71wintest.cpp(17,53): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+X:\csapp\2_homework.assets\hw2_71wintest\hw2_71wintest.cpp(18,43): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+  hw2_71wintest.vcxproj -> X:\csapp\2_homework.assets\hw2_71wintest\arm64\Debug\hw2_71wintest.exe
