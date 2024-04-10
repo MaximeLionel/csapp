@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_4.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_4.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_4.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_4.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
@@ -149,6 +149,7 @@
   },
   "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "2_4.md",
     "2_homework.assets/hw2_66.c",
     "2_homework.assets/hw2_66.nssyncsc",
     "2_homework.assets/hw2_66wintest.c",
@@ -159,9 +160,7 @@
     "2_homework.assets/hw2_66wintest/x64/Debug/hw2_66wintest.pdb",
     "2_homework.assets/hw2_66wintest/x64/Debug/hw2_66wintest.exe",
     "2_homework.assets/hw2_66wintest/hw2_66wintest/x64/Debug/hw2_66wintest.log",
-    "2_homework.assets/hw2_66wintest/hw2_66wintest/x64/Debug/hw2_66wintest.tlog/link.write.1.tlog",
     "2_homework.md",
-    "2_4.md",
     "2_homework.assets/image-20240105154108139.png",
     "2_homework.assets/image-20240105154036003.png",
     "2_homework.assets/image-20240104160405394.png",
