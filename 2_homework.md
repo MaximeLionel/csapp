@@ -1756,8 +1756,11 @@ For positive normalized,
 	$V_{max}=(-1)^0\times1.11...11_2\times2^{127}$ is in range ($2^{127},2^{128}$)
 	For min, e = [00000001], so E = -126
 	$V_{min}=(-1)^0\times1.00...00\times2^{-126}=2^{-126}$
-For positive denormalized,
+For positive denormalized,  
+	E = 1 - bias = -126
+	M = f = $0.111...111_2$
 	$V_{max}\approx 2^{-126}$
+	$M_{min}=f_{min}=0.000...001_2$
 	$V_{min}=(-1)^0\times 0.00...001\times 2^{1-127}=2^{-149}$
 
 0 -> $2^{-149}$ -> $2^{-126}$ -> $2^{127}$ -> $+\infty$
