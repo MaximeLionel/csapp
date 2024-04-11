@@ -1863,9 +1863,16 @@ $3\frac{1}{7}$ = 3+ $\frac{1}{7}$ = $0b11.001001(001)...$
 
 C. 
 $\frac{223}{71}$ = $3\frac{10}{71}$
-
-
-9th bit
+$\frac{10}{71} \times 2$ = $\frac{20}{71}$, it's less than 1, so the 1st bit after fraction point is 0. -> 0.0
+$\frac{20}{71} \times 2$ = $\frac{40}{71}$ -> 0.00
+$\frac{40}{71} \times 2$ = $1\frac{9}{71}$ -> 0.001
+$\frac{9}{71} \times 2$ = $\frac{18}{71}$ -> 0.0010
+$\frac{18}{71} \times 2$ = $\frac{36}{71}$ -> 0.00100
+$\frac{36}{71} \times 2$ = $1\frac{1}{71}$ -> 0.001001
+$\frac{1}{71} \times 2$ = $\frac{2}{71}$ -> 0.0010010
+$\frac{2}{71} \times 2$ = $\frac{4}{71}$ -> 0.00100100
+$\frac{4}{71} \times 2$ = $\frac{8}{71}$ -> 0.001001000
+so the 9th bit is different.
 
 ## Bit-Level Floating-Point Coding Rules
 In the following problems, you will write code to implement floating-point functions, operating directly on bit-level representations of floating-point numbers. Your code should exactly replicate the conventions for IEEE floating-point operations, including using round-to-even mode when rounding is required.
