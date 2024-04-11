@@ -1,0 +1,6 @@
+﻿  hw2_96wintest.c
+X:\csapp\2_homework.assets\hw2_96wintest\hw2_96wintest.c(38,13): warning C4018: '<': signed/unsigned mismatch
+X:\csapp\2_homework.assets\hw2_96wintest\hw2_96wintest.c(43,18): warning C4018: '>=': signed/unsigned mismatch
+X:\csapp\2_homework.assets\hw2_96wintest\hw2_96wintest.c(53,41): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+X:\csapp\2_homework.assets\hw2_96wintest\hw2_96wintest.c(54,34): warning C4554: '>>': check operator precedence for possible error; use parentheses to clarify precedence
+  hw2_96wintest.vcxproj -> X:\csapp\2_homework.assets\hw2_96wintest\Debug\hw2_96wintest.exe
