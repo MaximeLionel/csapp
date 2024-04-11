@@ -1857,10 +1857,14 @@ From 2.83, we know that:
 		y is a k-bit sequence
 		k is the width of y;
 		Y is the number having binary representation y;
-So $\frac{22}{7}$ = $3\frac{1}{7}$, then $(2^k-1)=7$ means k = 3, Y = 1, $y = 001_2$
-$3\frac{1}{7}$ = $0b11.001001(001)...$
+So $\frac{22}{7}$ = $3\frac{1}{7}$, 
+suppose Y = 1, then $2^k-1=7$, so we know the width of y = k =3, the value of y is Y = 1, therefore, y = 001, Finally, $\frac{1}{7}=0.001001001...$
+$3\frac{1}{7}$ = 3+ $\frac{1}{7}$ = $0b11.001001(001)...$
 
 C. 
+$\frac{223}{71}$ = $3\frac{10}{71}$
+
+
 9th bit
 
 ## Bit-Level Floating-Point Coding Rules
