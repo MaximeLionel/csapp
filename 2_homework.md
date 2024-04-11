@@ -1758,7 +1758,7 @@ For positive normalized,
 	$V_{min}=(-1)^0\times1.00...00\times2^{-126}=2^{-126}$
 For positive denormalized,  
 	E = 1 - bias = -126
-	M = f = $0.111...111_2$
+	M = 0.f = $0.111...111_2$
 	$V_{max}\approx 2^{-126}$
 	$M_{min}=f_{min}=0.000...001_2$
 	$V_{min}=(-1)^0\times 0.00...001\times 2^{1-127}=2^{-149}$
@@ -1766,10 +1766,12 @@ For positive denormalized,
 0 -> $2^{-149}$ -> $2^{-126}$ -> $2^{127}$ -> $+\infty$
 1. 0 -> $2^{-149}$ $\approx$ 0.0 then e = 0, f = 0
 2. $2^{-149}$ -> $2^{-126}$ : e = 0, f is in range [00...00] and [11...10]
-	if x = -140, our target is $2^{-140}$
-	$2^{-140}$ = $2^{-126} \times 2^{-14}$, then f = $2^{-14}\times 2^{23}$ = $2^{9}$
+	we know $E = 2^{-126}$
+	in denormalized form, M = 0.f
 	$2^x$ = $2^{-126}\times 2^{x+126}$, then f = $2^{x+126}\times 2^{23}$ = $2^{x+149}$ = 1 << (x + 149)
-3. $2^{-126}$ -> $2^{127}$: f = 0, e is in range [0000 0001] to [1111 1110] 
+3. $2^{-126}$ -> $2^{127}$: 
+	we wanna do $2^x$,in normalized case, $M = 1 + 0.f$ cannot be represented into $2^x$, so f have to be 0. 
+	f = 0, e is in range [0000 0001] to [1111 1110] 
 	for $2^x$ = $2^{x+bias-bias}$, then e = x + bias = x + 127
 4. $2^{127}$ -> $+\infty$: e = [1111 1111], f = 0
 
