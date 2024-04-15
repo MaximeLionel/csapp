@@ -1955,7 +1955,7 @@ float_bits float_negate(float_bits f)
 int main()
 {
     unsigned x = 0;
-    while (x < UINT_MAX)
+    while (x <= UINT_MAX)
     {
         assert(-u2f(x) == u2f(float_negate(x)));
         x++;
