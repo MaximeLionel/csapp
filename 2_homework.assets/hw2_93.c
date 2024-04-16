@@ -35,11 +35,11 @@ float_bits float_absval(float_bits f)
 int main()
 {
     unsigned x = 0;
-    while (x < UINT_MAX)
+    while (x <= UINT_MAX)
     {
         assert(fabs(u2f(x)) == u2f(float_absval(x)));
         x++;
-        printf("0x%X ", x);
+        printf("0x%X \n", x);
     }
     return 0;
 }

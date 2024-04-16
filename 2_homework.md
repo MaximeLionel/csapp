@@ -2016,11 +2016,11 @@ float_bits float_absval(float_bits f)
 int main()
 {
     unsigned x = 0;
-    while (x < UINT_MAX)
+    while (x <= UINT_MAX)
     {
-        assert(fabs(u2f(x)) == u2f(float_absval(x)));
+        assert(fabs(u2f(x)) == u2f(float_absval(x))); // fabs() - calculate the absolute value of a floating-point value.
         x++;
-        printf("0x%X ", x);
+        printf("0x%X \n", x);
     }
     return 0;
 }
@@ -2036,7 +2036,7 @@ float_bits float_twice(float_bits f);
 
 For floating-point number f , this function computes $2.0\times f$ . If f is NaN , your function should simply return f .
 
-Test your function by evaluating it for all $2^{32}$ values of argument f and com- paring the result to what would be obtained using your machine’s floating-point operations.
+Test your function by evaluating it for all $2^{32}$ values of argument f and comparing the result to what would be obtained using your machine’s floating-point operations.
 
 **Solution**:
 ```C
