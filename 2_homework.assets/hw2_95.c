@@ -55,7 +55,7 @@ int main()
     {
         assert((u2f(x)) / 2 == u2f(float_half(x)));
         x++;
-        printf("0x%X ", x);
+        printf("0x%X \n", x);
     }
     return 0;
 }

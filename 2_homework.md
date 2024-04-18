@@ -2197,7 +2197,7 @@ float_bits float_half(float_bits f)
     else if (exp == 0x1)
     {
         exp = 0;
-        frac = ((frac >> 1) | 0x400000) + carrybit;
+        frac = ((frac >> 1) | 0x400000) + carrybit; 
     }
     else exp -= 1;
 
