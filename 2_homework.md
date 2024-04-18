@@ -2039,6 +2039,9 @@ For floating-point number f , this function computes $2.0\times f$ . If f is NaN
 Test your function by evaluating it for all $2^{32}$ values of argument f and comparing the result to what would be obtained using your machine’s floating-point operations.
 
 **Solution**:
+
+
+if frac = 100011..11
 ```C
 #include <stdio.h>
 #include <limits.h>
