@@ -2120,6 +2120,9 @@ In denormalized mode:
 * because of rounding-to-even rule, we need to consider last 2 bits of f
 	* if f = ...11, after f>>1, we need to add 1 to make it be even.
 	* else, we just f >> 1, no need to add 1.
+		* if f = ...10, after f >>1, f = ...1
+		* if f = ...00, after f >>1, f = ...0
+		* if f = ...01, after f >>1, f = ...0
 ```C
 /* Denormalized value */
     if (exp == 0)
@@ -2129,12 +2132,12 @@ In denormalized mode:
     }
 ```
 In normalized mode when e = 1:
-* there's one exception that is e=1, when do the halving, it will transit to the denormalized mode.
+* there's one exception that is e=0..01, when do the halving, it will transit to the denormalized mode.
 * in normalized mode: $V_n=(1+0.f_n)\times 2^{1-bias}$ when e = 1
 * in denormalized mode: $V_d = 0.f_d\times 2^{1-bias}$
 * so we get that, if we wanna do the halving, we only need to do 
 	* firstly e >> 1 which makes e = 0.
-	* secondly $1.f_n >> 1 = f_d$  to make $M_n\times 0.5$ = $M_d$
+	* secondly $1.f_n >> 1 = 0.f_d$  to make $M_n\times 0.5$ = $M_d$
 * Also we need to consider the round-to-even rule on  $1.f_n >> 1 = f_d$
 ```C
  /* Normalized transit to denormalized */
