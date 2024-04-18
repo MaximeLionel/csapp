@@ -2039,9 +2039,6 @@ For floating-point number f , this function computes $2.0\times f$ . If f is NaN
 Test your function by evaluating it for all $2^{32}$ values of argument f and comparing the result to what would be obtained using your machine’s floating-point operations.
 
 **Solution**:
-
-
-if frac = 100011..11
 ```C
 #include <stdio.h>
 #include <limits.h>
@@ -2081,8 +2078,7 @@ float_bits float_twice(float_bits f)
     /* infinity */
     else if (exp == 0xFE)
     {
-        exp = 0xFF;
-        frac = 0;
+        return f;
     }
     else exp += 1;
 
@@ -2113,7 +2109,7 @@ float_bits float_half(float_bits f);
 ```
 For floating-point number f , this function computes $0.5\times f$ . If f is NaN , your function should simply return f.
 
-Test your function by evaluating it for all $2^{32}$ values of argument f and com- paring the result to what would be obtained using your machine’s floating-point operations.
+Test your function by evaluating it for all $2^{32}$ values of argument f and comparing the result to what would be obtained using your machine’s floating-point operations.
 
 **Solution**:
 We will use rounding to even rule when we need to do rounding.

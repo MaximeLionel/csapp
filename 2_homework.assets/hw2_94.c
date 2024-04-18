@@ -36,8 +36,7 @@ float_bits float_twice(float_bits f)
     /* infinity */
     else if (exp == 0xFE)
     {
-        exp = 0xFF;
-        frac = 0;
+        return f;
     }
     else exp += 1;
 
