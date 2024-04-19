@@ -2404,7 +2404,7 @@ exp = frac_width + bias;
 For fraction bits (f), we need:
 * f should be the i removing the MSB.
 * some special conditions:
-	* if frac_width > n, we need to take rounding (round-to-even) into consideration.
+	* if frac_width > n which is 23 in single-floating representation, we need to take rounding (round-to-even) into consideration.
 	* when doing round-to-even, in some cases, exp also need to add 1.
 ```C
 if (frac_width < 24) // n = 23 is the precision of single-floating representation. No rounding required.
