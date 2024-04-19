@@ -2225,12 +2225,11 @@ Following the bit-level floating-point coding rules, implement the function with
  * Compute (int) f.
  * If conversion causes overflow or f is NaN, return 0x80000000
  */
-
 int float_f2i(float_bits f);
 ```
 For floating-point number f , this function computes (int) f . Your function should round toward zero. If f cannot be represented as an integer (e.g., it is out of range, or it is NaN), then the function should return 0x80000000.
 
-Test your function by evaluating it for all $2^{32}$ values of argument f and com- paring the result to what would be obtained using your machine’s floating-point operations.
+Test your function by evaluating it for all $2^{32}$ values of argument f and comparing the result to what would be obtained using your machine’s floating-point operations.
 
 **Solution**:
 Case 1: Normalized Values
@@ -2247,14 +2246,19 @@ Case 3: Special Values
 
 Then we need to think about set checkpoint of 1 and $+\infty$
 * \[-1,1\]: return 0 based on rounding to zero rule.
-* \[1,INT_MAX\] or \[-1,INT_MIN\]: return based on rounding to zero rule.
-* \[INT_MAX,$+\infty$\] or \[INT_MIN,$-\infty$\]: return 0x80000000
+* \[1,INT_MAX\] or \[INT_MIN,-1\]: return based on rounding to zero rule.
+* \[INT_MAX,$+\infty$\] or \[$-\infty$,INT_MIN\]: return 0x80000000
 Checkpoint values on floating representations:
 * Value 1 or -1: f = 0 and e = bias = 0x7F
-* INT_MAX: $0x7FFFFFFF \approx 1.1...1\times2^{30} \approx 2^{31}$
-* INT_MIN: $0x80000000 = 2^{31}$
-* So when exp >= 31, it's overflow and we should return 0x80000000
-* when $v==+\infty$, f=0 and e = 0xFF
+	* M = 1 + 0.f = 1
+	* E = e - bias = 0
+	* thus V = 1 or -1 based on your sign bit.
+* INT_MAX or INT_MIN
+	* INT_MAX: $0x7FFFFFFF \approx 1.1...1_2\times2^{30} \approx 2^{31}$
+	* INT_MIN: $0x80000000 = 2^{31}$
+	* So when E >= 31, it's overflow and we should return 0x80000000, then in this case that e >= bias + 31.
+* Infinity
+	* when $v==+\infty$ or $-\infty$, f=0 and e = 0xFF
 Some ideas we get:
 * value from -1 to +1 (all denormalized values and part of normalized values):
 ```C
