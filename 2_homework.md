@@ -2389,7 +2389,7 @@ if ((INT_MIN & i) == 0)
     }
 else{
         sign = 1;
-        u = (unsigned)(~i + 1);
+        u = (unsigned)(~i + 1); // to transite from 2's complement to unsigned encoding.
     }
 ```
 For exponent bits, we need:
