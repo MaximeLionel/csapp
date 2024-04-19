@@ -2394,6 +2394,7 @@ else{
 ```
 For exponent bits, we need:
 * calculate the bit width of the integer (width).
+	* For example: 1111's width 4, $1.111 \times 2^3$
 * then f width (frac_width) should be width - 1.
 * E = exp - bias = width - 1, then exp = width - 1 + bias.
 * because the range of floating representation is far beyond the the range of integer, we do not need to talk about overflow.
