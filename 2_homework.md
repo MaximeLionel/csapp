@@ -2472,6 +2472,7 @@ Full code:
 /* Access bit-level representation floating-point number */
 typedef unsigned float_bits;
 
+// Caculate the binary width of ux
 unsigned bit_width(unsigned ux)
 {
     if ((ux & INT_MIN) != 0)
@@ -2488,6 +2489,7 @@ unsigned bit_width(unsigned ux)
     return width;
 }
 
+// Generate the bit mast of x bits.
 unsigned bit_mask(unsigned x)
 {
     unsigned w = sizeof(unsigned) << 3;
@@ -2536,6 +2538,7 @@ float_bits float_i2f(int i)
     unsigned rounding_part, rounding_mask, rounding_halfflag;
     float_bits result;
 
+	// get the sign bit and transite 2's complement encoding to unsigned encoding.
     if ((INT_MIN & i) == 0)
     {
         sign = 0;
