@@ -2281,10 +2281,11 @@ if(e > bias && e < bias + 31)
 	E = e - bias;
 	M = 0x800000 | f; // this M already shift n=23 bits
 	//result = M >> 23 << E = M << E-23;
-	if(E > 23) M << E - 23;
-	else M >> 23 - E;
+	if(E > 23) result = M << (E - 23);
+	else result = M >> (23 - E);
 }
 ```
+* Note: 	M x $2^{-23}$ x $2^E$ = M x $2^{E-23}$
 
 Integrate all code:
 ```C
@@ -2340,8 +2341,8 @@ int float_f2i(float_bits f)
         E = exp - bias;
         M = 0x800000 | frac; // this M already shift n=23 bits
         //result = M >> 23 << E = M << E-23;
-        if (E > 23) result = M << E - 23;
-        else result = M >> 23 - E;
+        if (E > 23) result = M << (E - 23);
+        else result = M >> (23 - E);
     }
 
 
