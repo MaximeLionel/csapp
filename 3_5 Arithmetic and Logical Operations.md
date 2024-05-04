@@ -405,7 +405,7 @@ Modify the assembly code shown for signed division to implement this function.
 
 **Solution**:
 Firstly, we get the asm code for current C code:
-```
+```z80
 ; void remdiv(long x, long y, long *qp, long *rp)
 ; x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
 	endbr64

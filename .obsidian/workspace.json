@@ -25,13 +25,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_4.md",
+                "file": "3_2 Program Encodings.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -60,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "show_bytes",
+                "query": "endbr",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -77,7 +78,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -97,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "3_2 Program Encodings.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "3_2 Program Encodings.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md"
+                "file": "3_2 Program Encodings.md"
               }
             }
           }
@@ -159,23 +161,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "6111b7a6d963737b",
   "lastOpenFiles": [
-    "3_4 Accessing Information.md",
+    "3_5 Arithmetic and Logical Operations.md",
     "3_2 Program Encodings.md",
+    "2_4.md",
+    "3_4 Accessing Information.md",
     "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
     "2_homework.assets/hw2_95",
     "2_homework.assets/hw2_94",
-    "2_4.md",
     "2_homework.assets/hw2_93",
     "2_homework.assets/hw2_92",
     "2_homework.assets/hw2_90",
     "2_homework.assets/hw2_97wintest/hw2_97wintest.vcxproj.filters",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.read.1.tlog",
-    "3_5 Arithmetic and Logical Operations.md",
     "2_homework.assets/image-20240105154108139.png",
     "2_homework.assets/image-20240105154036003.png",
     "2_homework.assets/image-20240104160405394.png",
