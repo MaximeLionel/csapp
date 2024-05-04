@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "mode": "source",
                 "source": false
               }
@@ -81,8 +81,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -98,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_homework.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
@@ -162,21 +161,20 @@
   },
   "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_4 Accessing Information.md",
+    "3_2 Program Encodings.md",
+    "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
     "2_homework.assets/hw2_95",
     "2_homework.assets/hw2_94",
     "2_4.md",
-    "2_homework.md",
     "2_homework.assets/hw2_93",
     "2_homework.assets/hw2_92",
     "2_homework.assets/hw2_90",
     "2_homework.assets/hw2_97wintest/hw2_97wintest.vcxproj.filters",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.read.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.command.1.tlog",
-    "3_2 Program Encodings.md",
-    "3_4 Accessing Information.md",
     "3_5 Arithmetic and Logical Operations.md",
     "2_homework.assets/image-20240105154108139.png",
     "2_homework.assets/image-20240105154036003.png",
