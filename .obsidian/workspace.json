@@ -78,8 +78,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -161,7 +160,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "6111b7a6d963737b",
+  "active": "3ed9e5b4077e51b8",
   "lastOpenFiles": [
     "3_5 Arithmetic and Logical Operations.md",
     "3_2 Program Encodings.md",
