@@ -26,3 +26,72 @@
 	![[3_6 Control.assets/image-20240510160218283.png|500]]
 
 
+# 3.6.2 Accessing the Condition Codes
+* 3 common ways of using the condition codes:
+	1. set a single byte to 0 or 1 depending on some combination of the condition codes 
+		* `set` instruction
+	2. conditionally jump to some other part of the program 
+	3. conditionally transfer data
+* The `set` instructions. Each instruction sets a single byte to 0 or 1 based on some combination of the condition codes.
+	![[3_6 Control.assets/image-20240510161458720.png]]
+* Example:
+	* code
+	```z80
+	# int comp(data_t a, data_t b)
+	# a in %rdi, b in %rsi
+	comp:
+		cmpq %rsi, %rdi  # Compare a:b
+		setl %al         # Set low-order byte of %eax to 0 or 1
+		movzbl %al, %eax # Clear rest of %eax (and rest of %rax)
+		ret
+	```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
