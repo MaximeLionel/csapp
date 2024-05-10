@@ -356,7 +356,10 @@ C.
 * If the dividend is a 64-bit value: 
 	* the value should be stored in register `%rax`.
 	* The bits of `%rdx` should then be set to either all zeros (unsigned arithmetic) or the sign bit of `%rax` (signed arithmetic); - can be done by cqto instruction.
-* di'v
+* div
+![[3_5 Arithmetic and Logical Operations.assets/image-20240510103453545.png]]
+
+
 ## cqto operation
 * cqto - no operands. it implicitly reads the sign bit from `%rax` and copies it across all of `%rdx`.
 
