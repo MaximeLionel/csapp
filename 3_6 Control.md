@@ -45,7 +45,11 @@
 		movzbl %al, %eax # Clear rest of %eax (and rest of %rax)
 		ret
 	```
-
+	* The comparison order of the `cmpq` instruction. Although the arguments are listed in the order %rsi (b), then %rdi (a), the comparison is really between a and b.
+	* `movzbl` instruction clears not just the high-order 3 bytes of `%eax`, but the upper 4 bytes of the entire register, %rax, as well.
+	* `sete` or `setz`: set when a == b
+	* `setl`: set when a < b if sf^of
+	* `setge`: set when a >= b if sf ~(sf^of)
 
 
 
