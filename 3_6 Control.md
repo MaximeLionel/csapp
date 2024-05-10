@@ -87,10 +87,17 @@ setbe %al
 
 D.
 cmpq %rsi, %rdi
-setne %a
+setne %al
 
 **Solution**:
 A. 
+int, a < b
+B.
+short, a >= b
+C.
+unsigned char, a <= b
+D.
+long or unsigned long, a != b
 
 
 
