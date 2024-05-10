@@ -72,7 +72,7 @@ Fill in the following table showing the values for the indicated operands:
 * We group the many different instructions into instruction classes, where the instructions in a class perform the same operation but with different operand sizes.
 ## Simple data movement instructions
 * `MOV` class - copy data from a source location to a destination location, without any transformation.
-![[image-20240313113955282.png|width=500]]
+![[image-20240313113955282.png|500]]
 * Details:
 	* All 4 instructions have similar effects; they differ primarily in that they operate on data of different sizes: 1, 2, 4, and 8 bytes, respectively.
 	* S - the source operand designates a value that is ==immediate, stored in a register, or stored in memory==.
@@ -96,7 +96,7 @@ Fill in the following table showing the values for the indicated operands:
 
 ## Zero-extending data movement instructions
 * `MOVZ` class - copy a smaller source value to a larger destination and fill out the remaining bytes of the destination with zeros.
-![[image-20240313151547204.png|width=500]]
+![[image-20240313151547204.png|500]]
 * Observe that each instruction name has size designators as its final two characters—the first specifying the source size, and the second specifying the destination size.
 * The absence of an explicit instruction to zero-extend a 4-byte source value to an 8-byte destination, why?
 	* This type of data movement can be implemented using a `movl` instruction having a register as the destination.
@@ -106,7 +106,7 @@ Fill in the following table showing the values for the indicated operands:
 
 ## Sign-extending data movement instructions
 * `MOVS` class - copy a smaller source value to a larger destination and fill out the remaining bytes of the destination with sign extension.
-![[image-20240313151813128.png|width=500]]
+![[image-20240313151813128.png|500]]
 * `cltq` - no operands. uses register `%eax` as its source and `%rax` as the destination for the sign-extended result. 
 	* exactly same function as `movslq %eax, %rax`.
 	* `cltq` - convert long to quad.

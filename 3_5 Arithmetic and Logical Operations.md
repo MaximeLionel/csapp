@@ -1,5 +1,5 @@
 **Integer arithmetic operations**:
-![[image-20240315162520655.png]]
+![[image-20240315162520655.png|500]]
 * The operations are divided into four groups: 
 	* load effective address
 	* unary (一元运算)  - one operand
@@ -102,7 +102,7 @@ short scale3(short x, short y, short z) {
 
 # Practice Problem 3.8
 Assume the following values are stored at the indicated memory addresses and registers:
-![[image-20240318093143070.png]]
+![[image-20240318093143070.png|400]]
 Fill in the following table showing the effects of the following instructions, in terms of both the register or memory location that will be updated and the resulting value:
 
 | Instruction               | Destination | Value |
@@ -225,7 +225,7 @@ Based on this assembly code, fill in the missing portions of the C code.
 
 **Solution**:
 Firstly, we look into the assembly code:
-```
+```z80
 	short arith3(short x, short y, short z)
 	x in %rdi, y in %rsi, z in %rdx
 arith3:

@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "41839d74b5864604",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -146,21 +159,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "41839d74b5864604",
   "lastOpenFiles": [
+    "3_5 Arithmetic and Logical Operations.md",
+    "conflict-files-obsidian-git.md",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.read.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.command.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/hw2_97wintest.lastbuildstate",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.write.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.read.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.command.1.tlog",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/vc143.pdb",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.vcxproj.FileListAbsolute.txt",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/vc143.idb",
     "3_5 Arithmetic and Logical Operations.assets/image-20240510103453545.png",
     "3_5 Arithmetic and Logical Operations.assets/image-20240510103449458.png",
     "2_4.md",
-    "2_homework.assets/hw2_66.c",
-    "2_homework.assets/hw2_66.nssyncsc",
-    "2_homework.assets/hw2_66wintest.c",
-    "2_homework.assets/hw2_65wintest/hw2_65wintest/x64/Debug/hw2_65wintest.ilk",
-    "2_homework.assets/hw2_65wintest/hw2_65wintest/x64/Debug/hw2_65wintest.nssyncsc",
-    "2_homework.assets/hw2_65wintest/hw2_65wintest/x64/Debug/hw2_65wintest.tlog/unsuccessfulbuild",
-    "2_homework.assets/hw2_65wintest/hw2_65wintest/x64/Debug/hw2_65wintest.tlog/unsuccessfulbuild.nssyncsc",
-    "2_homework.assets/hw2_66wintest/x64/Debug/hw2_66wintest.pdb",
-    "2_homework.assets/hw2_66wintest/x64/Debug/hw2_66wintest.exe",
-    "2_homework.assets/hw2_66wintest/hw2_66wintest/x64/Debug/hw2_66wintest.log",
     "2_homework.md",
     "2_homework.assets/image-20240105154108139.png",
     "2_homework.assets/image-20240105154036003.png",
