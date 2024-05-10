@@ -18,21 +18,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "41839d74b5864604",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "conflict-files-obsidian-git.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "conflict-files-obsidian-git.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
@@ -159,10 +146,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "41839d74b5864604",
+  "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
-    "3_5 Arithmetic and Logical Operations.md",
     "conflict-files-obsidian-git.md",
+    "3_5 Arithmetic and Logical Operations.md",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.read.1.tlog",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.command.1.tlog",
