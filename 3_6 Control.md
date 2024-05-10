@@ -50,9 +50,11 @@
 	* `sete` or `setz`: set when a == b
 	* `setl`: set when a < b if sf^of
 		* case1 (sf == 1, of == 0): $a-^t_wb<0$ 
-		* case2 (of == 0, sf == 1): 
+		* case2 (sf == 0, of == 1): $a-^t_wb>0$ means a<0, b>0, negative overflow
 	* `setge`: set when a >= b if ~(sf^of)
-
+		* case1 (sf == 0, of == 0): $a-^t_wb>0$ 
+		* case2 (sf == 1, of == 1): $a-^t_wb<0$ means a>0, b<0, positve overflow
+	* `sete`: set when a == b if ~zf
 
 
 
