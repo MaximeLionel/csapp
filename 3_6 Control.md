@@ -49,7 +49,9 @@
 	* `movzbl` instruction clears not just the high-order 3 bytes of `%eax`, but the upper 4 bytes of the entire register, %rax, as well.
 	* `sete` or `setz`: set when a == b
 	* `setl`: set when a < b if sf^of
-	* `setge`: set when a >= b if sf ~(sf^of)
+		* case1 (sf == 1, of == 0): $a-^t_wb<0$ -> 
+		* case2 (of == 0, sf == 1): 
+	* `setge`: set when a >= b if ~(sf^of)
 
 
 
