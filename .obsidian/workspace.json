@@ -61,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "show_bytes",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +78,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -159,7 +160,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "ce35682ad25f02d9",
+  "active": "6111b7a6d963737b",
   "lastOpenFiles": [
     "3_6 Control.assets/image-20240510171846633.png",
     "3_5 Arithmetic and Logical Operations.md",

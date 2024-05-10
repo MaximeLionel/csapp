@@ -72,7 +72,7 @@ int comp(data_t a, data_t b) {
 shows a general comparison between arguments a and b, where data_t, the data type of the arguments, is defined (via typedef) to be one of the integer data types listed below and either signed or unsigned. The comparison COMP is defined via #define.
 ![[3_6 Control.assets/image-20240510171846633.png|500]]
 
-Suppose a is in some portion of %rdx while b is in some portion of %rsi. For each of the following instruction sequences, determine which data types data_t and which comparisons COMP could cause the compiler to generate this code. (There can be multiple correct answers; you should list them all.)
+Suppose a is in some portion of %rdi while b is in some portion of %rsi. For each of the following instruction sequences, determine which data types data_t and which comparisons COMP could cause the compiler to generate this code. (There can be multiple correct answers; you should list them all.)
 A.
 cmpl %esi, %edi
 setl %al
@@ -89,6 +89,8 @@ D.
 cmpq %rsi, %rdi
 setne %a
 
+**Solution**:
+A. 
 
 
 
