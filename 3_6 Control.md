@@ -8,3 +8,10 @@
 	* ZF: Zero flag. The most recent operation yielded zero.
 	* SF: Sign flag. The most recent operation yielded a negative value.
 	* OF: Overflow flag. The most recent operation caused ==a two’s-complement overflow—either negative or positive==.
+* Example:
+	* suppose: `t = a + b` using `add` instruction
+	* CF (unsigned) t < (unsigned) a: Unsigned overflow
+	* ZF (t == 0): Zero
+	* SF (t < 0): Negative
+	* OF (a < 0 == b < 0) && (t < 0 != a < 0): Signed overflow
+* `leaq` instruction does not alter any condition codes, since it is intended to be used in address computations.
