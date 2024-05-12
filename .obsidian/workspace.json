@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_2 Program Encodings.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
