@@ -174,8 +174,19 @@ jmp .L1.         # Goto .L1
 .L2:
 	testq %rax, %rax   # if %rax != 0, repeat to L3
 jg .L3
-	rep; ret
+	rep; ret # why?
 ```
+
+```
+rep; ret
+recommend using the combination of rep followed by ret to avoid making the ret instruction the destination of a conditional jump instruction.
+Without the rep instruction, the jg instruction (line 7 of the assembly code) would proceed to the ret instruction when the branch is not taken. 
+According to AMD, their processors cannot properly predict the destination of a ret instruction when it is reached from a jump instruction. 
+The rep instruction serves as a form of no-operation here,
+```
+
+Reversed C code probably here:
+
 
 
 
