@@ -161,7 +161,10 @@ jmp .L1.         # Goto .L1
 # 3.6.4 Jump Instruction Encodings
 * In assembly code, jump targets are written using symbolic labels.
 	* The assembler, and later the linker, generate the proper encodings of the jump targets.
-* different encodings for jump
+* different encodings for jump:
+	* PC relative - encode the difference between the address of the target instruction and the address of the instruction immediately following the jump.
+	* absolute address - using 4 bytes to directly specify the target.
+	* The assembler and linker select the appropriate encodings of the jump destinations.
 
 
 
