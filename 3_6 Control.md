@@ -170,9 +170,9 @@ jmp .L1.         # Goto .L1
 	movq %rdi, %rax
 	jmp .L2
 .L3:
-	sarq %rax
+	sarq %rax。         # right shift 1 bit arithmetically
 .L2:
-	testq %rax, %rax
+	testq %rax, %rax   # if %rax != 0, repeat to L3
 jg .L3
 	rep; ret
 ```
