@@ -136,7 +136,7 @@ int, a <= 0
 * A `jump` instruction can cause the execution to switch to a completely new position in the program.
 	* `jump` destinations are generally indicated in assembly code by a label.
 ![[3_6 Control.assets/image-20240512095009257.png|500]]
-* Example:
+
 ```z80
 	movq $0,%rax # Set %rax to 0
 jmp .L1.         # Goto .L1
@@ -144,8 +144,24 @@ jmp .L1.         # Goto .L1
 .L1:
 	popq %rdx    # Jump target
 ```
+* Example:
+	* The instruction `jmp` .L1 will cause the program to skip over the `movq` instruction and instead resume execution with the popq instruction.
+	* In generating the object-code file, the assembler **determines the addresses of all labeled instructions** and **encodes the jump targets** (the addresses of the destination instructions) as part of the jump instructions.
+* Unconditional jump:
+	* direct jump - the jump target is encoded as part of the instruction.
+	* indirect jump - the jump target is read from a register or a memory location.
+		* Indirect jumps are written using `*` followed by an operand specifier using one of the memory operand formats.
+		```z80
+		jmp *%rax   # uses the value in register %rax as the jump target
+		
+		jmp *(%rax) # reads the jump target from memory, using the value in %rax as the read address
+		```
+* Conditional jumps can only be direct.
 
-
+# 3.6.4 Jump Instruction Encodings
+* In assembly code, jump targets are written using symbolic labels.
+	* The assembler, and later the linker, generate the proper encodings of the jump targets.
+* different encodings for jump
 
 
 
