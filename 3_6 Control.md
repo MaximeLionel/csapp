@@ -136,7 +136,14 @@ int, a <= 0
 * A `jump` instruction can cause the execution to switch to a completely new position in the program.
 	* `jump` destinations are generally indicated in assembly code by a label.
 ![[3_6 Control.assets/image-20240512095009257.png|500]]
-
+* Example:
+```z80
+	movq $0,%rax # Set %rax to 0
+jmp .L1.         # Goto .L1
+	movq (%rax),%rdx # Null pointer dereference (skipped)
+.L1:
+	popq %rdx    # Jump target
+```
 
 
 
