@@ -165,6 +165,17 @@ jmp .L1.         # Goto .L1
 	* PC relative - encode the difference between the address of the target instruction and the address of the instruction immediately following the jump.
 	* absolute address - using 4 bytes to directly specify the target.
 	* The assembler and linker select the appropriate encodings of the jump destinations.
+* Example:
+```z80
+	movq %rdi, %rax
+	jmp .L2
+.L3:
+	sarq %rax
+.L2:
+	testq %rax, %rax
+jg .L3
+	rep; ret
+```
 
 
 
