@@ -172,7 +172,7 @@ jmp .L1.         # Goto .L1
 .L3:
 	sarq %rax。         # right shift 1 bit arithmetically
 .L2:
-	testq %rax, %rax   # if %rax != 0, repeat to L3
+	testq %rax, %rax   # if rax&rax > 0, jump L3
 jg .L3
 	rep; ret # why?
 ```
@@ -185,7 +185,7 @@ According to AMD, their processors cannot properly predict the destination of a 
 The rep instruction serves as a form of no-operation here,
 ```
 
-Reversed C code probably here:
+* Reversed C code probably here:
 
 
 
