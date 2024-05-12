@@ -147,8 +147,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -162,6 +161,7 @@
   },
   "active": "d115a6c3982c0db9",
   "lastOpenFiles": [
+    "3_6 Control.assets/image-20240512095009257.png",
     "3_2 Program Encodings.md",
     "conflict-files-obsidian-git.md",
     "3_6 Control.md",

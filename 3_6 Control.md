@@ -98,7 +98,7 @@ C.
 unsigned char, a <= b
 D.
 long or unsigned long, a != b
-# Practice Problem 3.13
+# Practice Problem 3.14
 The C code
 ```c
 int test(data_t a) {
@@ -126,28 +126,16 @@ setle %al
 A.
 long, a >= 0
 B.
-short or unisigned short, a == 0
+short or unsigned short, a == 0
 C.
 unsigned char, a > 0
 D.
 int, a <= 0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 3.6.3 Jump Instructions
+* A `jump` instruction can cause the execution to switch to a completely new position in the program.
+	* `jump` destinations are generally indicated in assembly code by a label.
+![[3_6 Control.assets/image-20240512095009257.png|500]]
 
 
 
