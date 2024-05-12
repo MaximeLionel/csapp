@@ -185,7 +185,19 @@ According to AMD, their processors cannot properly predict the destination of a 
 The rep instruction serves as a form of no-operation here,
 ```
 
-* Reversed C code probably here:
+* Object file:
+![[3_6 Control.assets/image-20240512222356179.png|500]]
+* The target of the first jump instruction is encoded (in the second byte) as 0x03. 
+* Adding this to 0x5, the address of the following instruction, we get jump target address 0x8.
+* The target of the second jump instruction is encoded as 0xf8.
+* Adding this to 0xd (decimal 13), the address of the instruction on line 6, we get 0x5, the address of the instruction on line 3.
+* The value of the program counter when performing PC-relative addressing is the address of **the instruction following the jump**, not that of the jump itself.
+	* the processor would update the program counter as its first step in executing an instruction.
+* the disassembled version of the program after linking:
+![[3_6 Control.assets/image-20240512222857761.png|500]]
+* The instructions have been relocated to different addresses, but the encodings of the jump targets in lines 2 and 5 remain ==unchanged==.
+
+
 
 
 
