@@ -2,10 +2,19 @@
   "obsidian-git:commit": [
     {
       "modifiers": [
-        "Alt",
+        "Mod",
         "Shift"
       ],
       "key": "A"
+    }
+  ],
+  "obsidian-git:push2": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "Z"
     }
   ]
 }
