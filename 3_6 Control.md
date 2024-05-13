@@ -419,9 +419,9 @@ jge .L4
 # x in %rdi, y in %rsi, z in %rdx
 
 test:
-	leaq (%rdx,%rsi), %rax
-	subq %rdi, %rax
-	cmpq $5, %rdx
+	leaq (%rdx,%rsi), %rax. # rax = rdx + rsi = x + y
+	subq %rdi, %rax.        # rax = rax - rdi = x + y - x = y
+	cmpq $5, %rdx           # compare 5 and rdx / z
 jle .L2
 	cmpq $2, %rsi
 jle .L3
