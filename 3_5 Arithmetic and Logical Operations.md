@@ -409,8 +409,13 @@ void uremdiv(unsigned long x, unsigned long y, unsigned long *qp, unsigned long 
 Modify the assembly code shown for signed division to implement this function.
 
 **Solution**:
+<<<<<<< HEAD
+Firstly, we get the asm code for current C code:
+```z80
+=======
 * Firstly, we get the asm code for current C code:
 ```
+>>>>>>> origin/main
 ; void remdiv(long x, long y, long *qp, long *rp)
 ; x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
 uremdiv:

@@ -20,7 +20,7 @@
             }
           },
           {
-            "id": "ce35682ad25f02d9",
+            "id": "d115a6c3982c0db9",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -61,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "endbr",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,12 +78,12 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -148,7 +148,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -160,34 +160,36 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "6111b7a6d963737b",
+  "active": "d115a6c3982c0db9",
   "lastOpenFiles": [
-    "3_6 Control.assets/image-20240510171846633.png",
-    "3_5 Arithmetic and Logical Operations.md",
+    "3_6 Control.assets/image-20240513124203080.png",
+    "3_6 Control.assets/image-20240513124106617.png",
+    "3_6 Control.assets/image-20240512222857761.png",
+    "3_6 Control.assets/image-20240512222356179.png",
+    "3_6 Control.assets/image-20240512095009257.png",
+    "3_2 Program Encodings.md",
+    "conflict-files-obsidian-git.md",
     "3_6 Control.md",
+    "3_5 Arithmetic and Logical Operations.md",
+    "3_6 Control.assets/image-20240510171846633.png",
     "3_6 Control.assets/image-20240510161458720.png",
     "3_6 Control.assets/image-20240510160218283.png",
     "3_6 Control.assets/image-20240510155445965.png",
     "3_6 Control.assets",
     "3_5 Arithmetic and Logical Operations.assets/image-20240510111032549.png",
-    "conflict-files-obsidian-git.md",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.read.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.command.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/hw2_97wintest.lastbuildstate",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.write.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.read.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/CL.command.1.tlog",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/vc143.pdb",
-    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.vcxproj.FileListAbsolute.txt",
     "3_5 Arithmetic and Logical Operations.assets/image-20240510103453545.png",
-    "3_5 Arithmetic and Logical Operations.assets/image-20240510103449458.png",
     "2_4.md",
+    "3_4 Accessing Information.md",
     "2_homework.md",
-    "2_homework.assets/image-20240105154108139.png",
-    "2_homework.assets/image-20240105154036003.png",
-    "2_homework.assets/image-20240104160405394.png",
-    "2_homework.assets/image-20240103153431948.png",
+    "2_homework.assets/hw2_97",
+    "2_homework.assets/hw2_96",
+    "2_homework.assets/hw2_95",
+    "2_homework.assets/hw2_94",
+    "2_homework.assets/hw2_93",
+    "2_homework.assets/hw2_92",
+    "2_homework.assets/hw2_90",
+    "2_homework.assets/hw2_97wintest/hw2_97wintest.vcxproj.filters",
+    "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
     "2_1.md",
     "2_3.md"
   ]

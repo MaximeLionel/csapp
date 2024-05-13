@@ -98,7 +98,7 @@ C.
 unsigned char, a <= b
 D.
 long or unsigned long, a != b
-# Practice Problem 3.13
+# Practice Problem 3.14
 The C code
 ```c
 int test(data_t a) {
@@ -126,27 +126,153 @@ setle %al
 A.
 long, a >= 0
 B.
-short or unisigned short, a == 0
+short or unsigned short, a == 0
 C.
 unsigned char, a > 0
 D.
 int, a <= 0
 
+# 3.6.3 Jump Instructions
+* A `jump` instruction can cause the execution to switch to a completely new position in the program.
+	* `jump` destinations are generally indicated in assembly code by a label.
+![[3_6 Control.assets/image-20240512095009257.png|500]]
 
+```z80
+	movq $0,%rax # Set %rax to 0
+jmp .L1.         # Goto .L1
+	movq (%rax),%rdx # Null pointer dereference (skipped)
+.L1:
+	popq %rdx    # Jump target
+```
+* Example:
+	* The instruction `jmp` .L1 will cause the program to skip over the `movq` instruction and instead resume execution with the popq instruction.
+	* In generating the object-code file, the assembler **determines the addresses of all labeled instructions** and **encodes the jump targets** (the addresses of the destination instructions) as part of the jump instructions.
+* Unconditional jump:
+	* direct jump - the jump target is encoded as part of the instruction.
+	* indirect jump - the jump target is read from a register or a memory location.
+		* Indirect jumps are written using `*` followed by an operand specifier using one of the memory operand formats.
+		```z80
+		jmp *%rax   # uses the value in register %rax as the jump target
+		
+		jmp *(%rax) # reads the jump target from memory, using the value in %rax as the read address
+		```
+* Conditional jumps can only be direct.
 
+# 3.6.4 Jump Instruction Encodings
+* In assembly code, jump targets are written using symbolic labels.
+	* The assembler, and later the linker, generate the proper encodings of the jump targets.
+* different encodings for jump:
+	* PC relative - encode the difference between the address of the target instruction and the address of the instruction immediately following the jump.
+	* absolute address - using 4 bytes to directly specify the target.
+	* The assembler and linker select the appropriate encodings of the jump destinations.
+* Example:
+```z80
+	movq %rdi, %rax
+	jmp .L2
+.L3:
+	sarq %rax。         # right shift 1 bit arithmetically
+.L2:
+	testq %rax, %rax   # if rax&rax > 0, jump L3
+jg .L3
+	rep; ret # why?
+```
 
+```
+rep; ret
+recommend using the combination of rep followed by ret to avoid making the ret instruction the destination of a conditional jump instruction.
+Without the rep instruction, the jg instruction (line 7 of the assembly code) would proceed to the ret instruction when the branch is not taken. 
+According to AMD, their processors cannot properly predict the destination of a ret instruction when it is reached from a jump instruction. 
+The rep instruction serves as a form of no-operation here,
+```
 
+* Object file:
+![[3_6 Control.assets/image-20240512222356179.png|500]]
+* The target of the first jump instruction is encoded (in the second byte) as 0x03. 
+* Adding this to 0x5, the address of the following instruction, we get jump target address 0x8.
+* The target of the second jump instruction is encoded as 0xf8.
+* Adding this to 0xd (decimal 13), the address of the instruction on line 6, we get 0x5, the address of the instruction on line 3.
+* The value of the program counter when performing PC-relative addressing is the address of **the instruction following the jump**, not that of the jump itself.
+	* the processor would update the program counter as its first step in executing an instruction.
+* the disassembled version of the program after linking:
+![[3_6 Control.assets/image-20240512222857761.png|500]]
+* The instructions have been relocated to different addresses, but the encodings of the jump targets in lines 2 and 5 remain ==unchanged==.
+# Practice Problem 3.15
+In the following excerpts from a disassembled binary, some of the information has been replaced by X’s. Answer the following questions about these instructions.
 
+A. What is the target of the `je` instruction below? (You do not need to know anything about the `callq` instruction here.)
+```
+	4003fa: 74 02   je XXXXXX
+	4003fc: ff d0   callq *%rax
+```
+B. What is the target of the `je` instruction below?
+```
+	40042f: 74 f4   je XXXXXX
+	400431: 5d      pop %rbp
+```
+C. What is the address of the ja and pop instructions?
+```
+	XXXXXX: 77 02   ja 400547
+	XXXXXX: 5d      pop %rbp
+```
+D. In the code that follows, the jump target is encoded in PC-relative form as a 4-byte two’s-complement number. The bytes are listed from least significant to most, reflecting the little-endian byte ordering of x86-64. What is the address of the jump target?
+```
+	4005e8: e9 73 ff ff ff jmpq XXXXXXX
+	4005ed: 90             nop
+```
 
+**Solution**:
+A. `4003fc + 2 = 4003fe`
+B. `400431 - c = 400425`
+C. `2ndXXXXXX + 2 = 400547` -> `2ndXXXXXX = 400545`
+	`1stXXXXXX = 400545 - 2 = 400543`
+D. We extract the number: 0xffffff73 = -0x8d
+	Then, 0x4005ed - 0x8d = 0x400560
 
+# 3.6.5 Implementing Conditional Branches with Conditional Control
+* The most general way to translate conditional expressions and statements from C into machine code is to use combinations of conditional and unconditional jumps.
+* Example:
+* Original C code:
+```c
+long lt_cnt = 0;
+long ge_cnt = 0;
 
-
-
-
-
-
-
-
+long absdiff_se(long x, long y)
+{
+	long result;
+	if (x < y) {
+		lt_cnt++;
+		result = y - x;
+	}
+	else {
+		ge_cnt++;
+		result = x - y;
+	}
+	return result;
+}
+```
+* Equivalent goto version:
+![[3_6 Control.assets/image-20240513124106617.png|300]]
+* Generated assembly code:
+![[3_6 Control.assets/image-20240513124203080.png|400]]
+* The control flow of the assembly code generated for `absdiff_se` closely follows the goto code of `gotodiff_se`.
+* The general form of an if-else statement in C is given by the template:
+```c
+if (test-expr)
+	then-statement
+else
+	else-statement
+```
+* C syntax to describe the control flow:
+```
+	t = test-expr;
+	if (!t)
+	goto false;
+	then-statement
+	goto done;
+false:
+	else-statement
+done:
+```
 
 
 
