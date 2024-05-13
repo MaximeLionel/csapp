@@ -225,6 +225,39 @@ A. `4003fc + 2 = 4003fe`
 B. `400431 - c = 400425`
 C. `2ndXXXXXX + 2 = 400547` -> `2ndXXXXXX = 400545`
 	`1stXXXXXX = 400545 - 2 = 400543`
+D. We extract the number: 0xffffff73 = -0x8d
+	Then, 0x4005ed - 0x8d = 0x400560
+
+# 3.6.5 Implementing Conditional Branches with Conditional Control
+* The most general way to translate conditional expressions and statements from C into machine code is to use combinations of conditional and unconditional jumps.
+* Example:
+* Original C code:
+```c
+long lt_cnt = 0;
+long ge_cnt = 0;
+
+long absdiff_se(long x, long y)
+{
+	long result;
+	if (x < y) {
+		lt_cnt++;
+		result = y - x;
+	}
+	else {
+		ge_cnt++;
+		result = x - y;
+	}
+	return result;
+}
+```
+* Equivalent goto version:
+![[3_6 Control.assets/image-20240513124106617.png|300]]
+* Generated assembly code:
+![[3_6 Control.assets/image-20240513124203080.png|400]]
+
+
+
+
 
 
 
