@@ -355,14 +355,19 @@ long absdiff_se(long x, long y)
 ```
 long absdiff_se(long x, long y)
 {
-	t = test-expr;
-	if (t)
+	long result;
+	if (x < y)
 		goto true;
 	else-statement
 		goto done;
 true:
-	then-statement
+	lt_cnt++;
+	result = y - x;
+	return result;
 done:
+	ge_cnt++;
+	result = x - y;
+	return result;
 }
 ```
 
