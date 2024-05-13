@@ -358,16 +358,31 @@ long absdiff_se(long x, long y)
 	long result;
 	if (x < y)
 		goto true;
-	else-statement
-		goto done;
+	ge_cnt++;
+	result = x - y;
+	return result;
 true:
 	lt_cnt++;
 	result = y - x;
 	return result;
-done:
-	ge_cnt++;
-	result = x - y;
-	return result;
+}
+```
+
+B. Same
+
+# Practice Problem 3.18
+Starting with C code of the form:
+```c
+short test(short x, short y, short z) {
+	short val = ______ ;
+	if (______) {
+		if (______)
+			val = ______ ;
+		else
+			val = ______ ;
+	} else if ( ______ )
+		val = ______ ;
+	return val;
 }
 ```
 
