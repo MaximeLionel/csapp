@@ -2,7 +2,7 @@
   "obsidian-git:commit": [
     {
       "modifiers": [
-        "Mod",
+        "Alt",
         "Shift"
       ],
       "key": "A"
@@ -11,7 +11,7 @@
   "obsidian-git:push2": [
     {
       "modifiers": [
-        "Mod",
+        "Alt",
         "Shift"
       ],
       "key": "Z"

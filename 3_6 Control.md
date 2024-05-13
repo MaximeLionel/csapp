@@ -274,6 +274,129 @@ false:
 done:
 ```
 
+# Practice Problem 3.16
+When given the C code:
+```c
+void cond(short a, short *p)
+{
+	if (a && *p < a)
+		*p = a;
+}
+```
+gcc generates the following assembly code:
+![[3_6 Control.assets/image-20240513130005518.png|250]]
+A. Write a goto version in C that performs the same computation and mimics the control flow of the assembly code, in the style shown in Figure 3.16(b). You might find it helpful to first annotate the assembly code as we have done in our examples.
+
+B. Explain why the assembly code contains two conditional branches, even though the C code has only one if statement.
+
+**Solution**:
+A.
+```c
+void cond(short a, short *p)
+{
+	if (a && *p < a)
+		*p = a;
+}
+```
+
+```
+void cond(short a, short *p){
+	t = test-expr;
+	if (!a)
+		goto done;
+	if (*p >= a)
+		goto done;
+	*p = a;
+done:
+	return;
+}
+```
+
+B.
+It exactly follows the executing sequence, which examine a firstly and test (\*p >= a) secondly.
+
+# Practice Problem 3.17
+An alternate rule for translating if statements into goto code is as follows:
+```
+	t = test-expr;
+	if (t)
+		goto true;
+	else-statement
+		goto done;
+true:
+	then-statement
+done:
+```
+A. Rewrite the goto version of absdiff_se based on this alternate rule.
+
+B. Can you think of any reasons for choosing one rule over the other?
+
+**Solution**:
+A. 
+```c
+long lt_cnt = 0;
+long ge_cnt = 0;
+
+long absdiff_se(long x, long y)
+{
+	long result;
+	if (x < y) {
+		lt_cnt++;
+		result = y - x;
+	}
+	else {
+		ge_cnt++;
+		result = x - y;
+	}
+	return result;
+}
+```
+
+```
+long absdiff_se(long x, long y)
+{
+	t = test-expr;
+	if (t)
+		goto true;
+	else-statement
+		goto done;
+true:
+	then-statement
+done:
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
