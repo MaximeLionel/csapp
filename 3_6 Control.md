@@ -254,7 +254,25 @@ long absdiff_se(long x, long y)
 ![[3_6 Control.assets/image-20240513124106617.png|300]]
 * Generated assembly code:
 ![[3_6 Control.assets/image-20240513124203080.png|400]]
-
+* The control flow of the assembly code generated for `absdiff_se` closely follows the goto code of `gotodiff_se`.
+* The general form of an if-else statement in C is given by the template:
+```c
+if (test-expr)
+	then-statement
+else
+	else-statement
+```
+* C syntax to describe the control flow:
+```
+	t = test-expr;
+	if (!t)
+	goto false;
+	then-statement
+	goto done;
+false:
+	else-statement
+done:
+```
 
 
 
