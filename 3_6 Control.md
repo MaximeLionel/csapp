@@ -221,7 +221,10 @@ D. In the code that follows, the jump target is encoded in PC-relative form as a
 ```
 
 **Solution**:
-
+A. `4003fc + 2 = 4003fe`
+B. `400431 - c = 400425`
+C. `2ndXXXXXX + 2 = 400547` -> `2ndXXXXXX = 400545`
+	`1stXXXXXX = 400545 - 2 = 400543`
 
 
 
