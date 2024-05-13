@@ -196,7 +196,31 @@ The rep instruction serves as a form of no-operation here,
 * the disassembled version of the program after linking:
 ![[3_6 Control.assets/image-20240512222857761.png|500]]
 * The instructions have been relocated to different addresses, but the encodings of the jump targets in lines 2 and 5 remain ==unchanged==.
+# Practice Problem 3.15
+In the following excerpts from a disassembled binary, some of the information has been replaced by X’s. Answer the following questions about these instructions.
 
+A. What is the target of the `je` instruction below? (You do not need to know anything about the `callq` instruction here.)
+```
+	4003fa: 74 02   je XXXXXX
+	4003fc: ff d0   callq *%rax
+```
+B. What is the target of the `je` instruction below?
+```
+	40042f: 74 f4   je XXXXXX
+	400431: 5d      pop %rbp
+```
+C. What is the address of the ja and pop instructions?
+```
+	XXXXXX: 77 02   ja 400547
+	XXXXXX: 5d      pop %rbp
+```
+D. In the code that follows, the jump target is encoded in PC-relative form as a 4-byte two’s-complement number. The bytes are listed from least significant to most, reflecting the little-endian byte ordering of x86-64. What is the address of the jump target?
+```
+	4005e8: e9 73 ff ff ff jmpq XXXXXXX
+	4005ed: 90             nop
+```
+
+**Solution**:
 
 
 
