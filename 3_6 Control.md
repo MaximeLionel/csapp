@@ -504,6 +504,7 @@ short test(short x, short y, short z)
 	if(z>2 && z<=5) return rax;
 	if(z>5 && y<=2) return x/y;
 	if(z>5 && y>2) return x/z;
+	if(z<=2) return z/y;
 }
 
 ```
