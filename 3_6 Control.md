@@ -462,13 +462,15 @@ test:
         cmpw    $2, %si            # if(signed) dx(z) > 5,
 		                           # compare 2 and si(y)
         jle     .L3                # if(signed) si(y) <= 2, go to .L3
-        movswl  %di, %eax          
-        movswl  %dx, %ecx
+
+		# if(signed) si(y) > 2
+        movswl  %di, %eax          # eax = di(x)
+        movswl  %dx, %ecx          # ecx = dx(z)
         cltd
         idivl   %ecx
         ret
 .L3:
-        movswl  %di, %eax          # eax = x
+        movswl  %di, %eax          # eax = di(x)
         movswl  %si, %esi          # esi = y
         cltd
         idivl   %esi
@@ -484,7 +486,8 @@ test:
 .L1:
         ret
 ```
-* movsw - Move Signed Word to Long. move and sign-extend a 16-bit word to a 32-bit long value.
+* `movsw` - Move Signed Word to Long. Move and sign-extend a 16-bit word to a 32-bit long value.
+* `cltd` - Convert Long to Double. 
 
 
 * draft:
