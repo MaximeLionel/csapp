@@ -511,14 +511,14 @@ short test(short x, short y, short z)
 * final:
 ```c
 short test(short x, short y, short z) {
-	short val = ______ ;
-	if (______) {
-		if (______)
-			val = ______ ;
+	short val = y + z - x ;
+	if (z > 5) {
+		if (y <= 2)
+			val = x/y ;
 		else
-			val = ______ ;
-	} else if ( ______ )
-		val = ______ ;
+			val = x/z ;
+	} else if ( z <= 2 )
+		val = z/y ;
 	return val;
 }
 ```
