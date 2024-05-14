@@ -1,5 +1,10 @@
 {
   "newLinkFormat": "relative",
   "newFileLocation": "current",
-  "attachmentFolderPath": "./3_6 Control.assets"
+  "attachmentFolderPath": "./3_6 Control.assets",
+  "spellcheck": true,
+  "autoPairBrackets": true,
+  "autoPairMarkdown": true,
+  "showLineNumber": true,
+  "smartIndentList": false
 }
