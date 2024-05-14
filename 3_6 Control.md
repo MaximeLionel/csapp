@@ -412,41 +412,87 @@ jge .L4
 .L4:
 	rep; ret
 ```
+* Actually, the assembly code is wrong, because `idivq` instruction only has 1 operand in law. 
+* Therefore, I re-compile and get the code below. We will process the practice problem with the code below as well.
+```z80
+# short test(short x, short y, short z)
+# x in %rdi, y in %rsi, z in %rdx
+
+.globl  test
+test:
+        leal    (%rdx,%rsi), %eax
+        subl    %edi, %eax
+        cmpw    $5, %dx
+        jle     .L2
+        cmpw    $2, %si
+        jle     .L3
+        movswl  %di, %eax
+        movswl  %dx, %ecx
+        cltd
+        idivl   %ecx
+        ret
+.L3:
+        movswl  %di, %eax
+        movswl  %si, %esi
+        cltd
+        idivl   %esi
+        ret
+.L2:
+        cmpw    $2, %dx
+        jg      .L1
+        movswl  %dx, %eax
+        movswl  %si, %esi
+        cltd
+        idivl   %esi
+.L1:
+        ret
+```
 
 **Solution**:
 ```z80
 # short test(short x, short y, short z)
 # x in %rdi, y in %rsi, z in %rdx
 
+.globl  test
 test:
-	leaq  (%rdx,%rsi), %rax  # rax = rdx + rsi = z + y
-	subq  %rdi, %rax         # rax = rax - rdi = z + y - x = y
-	cmpq  $5, %rdx           # compare 5 and rdx(z)
-jle .L2                      # if (signed) rdx(z) <= 5, go to .L2
-	cmpq  $2, %rsi           # if (signed) rdx(z) > 5, 
-	                         # then compare 2 and y
-jle .L3                      # if (signed) rsi(y) <= 2, go to .L3
-	movq  %rdi, %rax         # 
-	idivq %rdx, %rax     
-	ret
+        leal    (%rdx,%rsi), %eax  # eax = rdx(z) + rsi(y) = z + y
+        subl    %edi, %eax         # eax = z + y - x
+        cmpw    $5, %dx            # compare 5 and dx(z)
+        jle     .L2                # if(signed) dx(z) <= 5, go to .L2
+        cmpw    $2, %si            # if(signed) dx(z) > 5,
+		                           # compare 2 and si(y)
+        jle     .L3                # if(signed) si(y) <= 2, go to .L3
+        movswl  %di, %eax          
+        movswl  %dx, %ecx
+        cltd
+        idivl   %ecx
+        ret
 .L3:
-	movq  %rdi, %rax         # rax = rdi(x) = x
-	idivq %rsi         # x/y 
-	ret
+        movswl  %di, %eax          # eax = x
+        movswl  %si, %esi          # esi = y
+        cltd
+        idivl   %esi
+        ret
 .L2:
-	cmpq  $3, %rdx           # compare 3 and rdx(z)
-jge .L4                      # if (signed) rdx(z) >= 3, go to .L4
-	movq  %rdx, %rax         
-	idivq %rsi, %rax
-.L4:
-	rep; ret
+        cmpw    $2, %dx            # compare dx(z) and 2
+        jg      .L1                # if(signed) dx(z) > 2, go to .L1
+		                           # return rax(z+y-x)
+        movswl  %dx, %eax
+        movswl  %si, %esi
+        cltd
+        idivl   %esi
+.L1:
+        ret
 ```
+* movsw - Move Signed Word to Long. move and sign-extend a 16-bit word to a 32-bit long value.
+
+
 * draft:
 ```c
 short test(short x, short y, short z)
 {
 	short rax = y + z - x;
-	if(z>=3 && z <=5) return rax;
+	if(z>2 && z <=5) return rax;
 }
 
 ```

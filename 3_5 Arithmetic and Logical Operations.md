@@ -1,5 +1,5 @@
 **Integer arithmetic operations**:
-![[image-20240315162520655.png]]
+![[image-20240315162520655.png|500]]
 * The operations are divided into four groups: 
 	* load effective address
 	* unary (一元运算)  - one operand
@@ -102,7 +102,7 @@ short scale3(short x, short y, short z) {
 
 # Practice Problem 3.8
 Assume the following values are stored at the indicated memory addresses and registers:
-![[image-20240318093143070.png]]
+![[image-20240318093143070.png|400]]
 Fill in the following table showing the effects of the following instructions, in terms of both the register or memory location that will be updated and the resulting value:
 
 | Instruction               | Destination | Value |
@@ -225,7 +225,7 @@ Based on this assembly code, fill in the missing portions of the C code.
 
 **Solution**:
 Firstly, we look into the assembly code:
-```
+```z80
 	short arith3(short x, short y, short z)
 	x in %rdi, y in %rsi, z in %rdx
 arith3:
@@ -356,11 +356,6 @@ C.
 * If the dividend is a 64-bit value: 
 	* the value should be stored in register `%rax`.
 	* The bits of `%rdx` should then be set to either all zeros (unsigned arithmetic) or the sign bit of `%rax` (signed arithmetic); - can be done by cqto instruction.
-![[3_5 Arithmetic and Logical Operations.assets/image-20240510111032549.png]]
-
-* div
-![[3_5 Arithmetic and Logical Operations.assets/image-20240510103453545.png]]
-
 
 ## cqto operation
 * cqto - no operands. it implicitly reads the sign bit from `%rax` and copies it across all of `%rdx`.
@@ -409,112 +404,20 @@ void uremdiv(unsigned long x, unsigned long y, unsigned long *qp, unsigned long 
 Modify the assembly code shown for signed division to implement this function.
 
 **Solution**:
-<<<<<<< HEAD
 Firstly, we get the asm code for current C code:
 ```z80
-=======
-* Firstly, we get the asm code for current C code:
-```
->>>>>>> origin/main
 ; void remdiv(long x, long y, long *qp, long *rp)
 ; x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
-uremdiv:
-.LFB0:
-        .cfi_startproc
-        endbr64
-        movq    %rdi, %rax
-        movq    %rdx, %r8
-        movl    $0, %edx
-        divq    %rsi
-        movq    %rax, (%r8)
-        movq    %rdx, (%rcx)
-        ret
-        .cfi_endproc
-```
-* Then we make it into a complete x64 assembly program and run:
-```main.s
-.extern remdiv
-.extern printf
-.extern exit
-
-.section .data
-        dividend:
-                .quad   100
-        divisor:
-                .quad   3
-
-        div_fmt:
-                .asciz  "%llu / %llu: q = %llu, r = %llu\n"
-
-.section .bss
-        .comm   quotient        8
-        .comm   remainder       8
-
-.section .text
-.global _start
-_start:
-        # Calculate
-        movq    dividend, %rdi
-        movq    divisor, %rsi
-        movq    $quotient, %rdx
-        movq    $remainder, %rcx
-        call    remdiv
-
-        # Print the result 100/3
-        movq    $div_fmt, %rdi
-        movq    dividend, %rsi
-        movq    divisor, %rdx
-        movq    quotient, %rcx
-        movq    remainder, %r8
-        call    printf
-
-        movq    $60, %rax
-        call    exit
+	endbr64
+	movq	%rdi, %rax
+	movq	%rdx, %r8
+	cqto                  ; replace by `movq $0,%rdx` or `movl $0,%edx`
+	idivq	%rsi          ; replace by `divq %rsi`
+	movq	%rax, (%r8)
+	movq	%rdx, (%rcx)
+	ret
 ```
 
-```remdiv
-# void remdiv(long x, long y, long *qp, long *rp)
-# x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
-
-.global remdiv
-remdiv:
-
-.section .text
-        pushq   %rbp
-        movq    %rsp, %rbp
-
-        movq    %rdi, %rax
-        movq    %rdx, %r8
-        xor     %rdx, %rdx
-        divq    %rsi          # replace by `divq %rsi`
-        movq    %rax, (%r8)
-        movq    %rdx, (%rcx)
-
-        leave
-        ret
-```
-
-```makefile
-div_op: main.o remdiv.o
-        ld -dynamic-linker /lib64/ld-linux-x86-64.so.2 main.o remdiv.o -o div_op -lc
-main.o: main.s
-        as --64 -gstabs main.s -o main.o
-remdiv.o: remdiv.s
-        as --64 -gstabs remdiv.s -o remdiv.o
-clean:
-        rm -f *.o div_op
-```
-
-```shell
-root@ml:~/csapp/chap3/prac3_12# make
-as --64 -gstabs main.s -o main.o
-as --64 -gstabs remdiv.s -o remdiv.o
-ld -dynamic-linker /lib64/ld-linux-x86-64.so.2 main.o remdiv.o -o div_op -lc
-root@ml:~/csapp/chap3/prac3_12# ./div_op 
-100 / 3: q = 33, r = 1
-```
-
-* Now we modify the code to make it suitabel for signed division operation:
 
 
 
