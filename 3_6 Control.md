@@ -419,36 +419,38 @@ jge .L4
 # x in %rdi, y in %rsi, z in %rdx
 
 test:
-	leaq (%rdx,%rsi), %rax  # rax = rdx + rsi = z + y
-	subq %rdi, %rax         # rax = rax - rdi = x + y - x = y
-	cmpq $5, %rdx           # compare 5 and rdx(z)
-jle .L2                     # if (signed) rdx(z) <= 5, go to .L2
-	cmpq $2, %rsi
-jle .L3
-	movq %rdi, %rax         # 
+	leaq  (%rdx,%rsi), %rax  # rax = rdx + rsi = z + y
+	subq  %rdi, %rax         # rax = rax - rdi = z + y - x = y
+	cmpq  $5, %rdx           # compare 5 and rdx(z)
+jle .L2                      # if (signed) rdx(z) <= 5, go to .L2
+	cmpq  $2, %rsi           # if (signed) rdx(z) > 5, 
+	                         # then compare 2 and y
+jle .L3                      # if (signed) rsi(y) <= 2, go to .L3
+	movq  %rdi, %rax         # 
 	idivq %rdx, %rax     
 	ret
 .L3:
-	movq %rdi, %rax
-	idivq %rsi, %rax
+	movq  %rdi, %rax         # rax = rdi(x) = x
+	idivq %rsi         # x/y 
 	ret
 .L2:
-	cmpq $3, %rdx           # compare 3 and rdx(z)
-jge .L4                     # if (signed) rdx(z) >= 3, go to .L4
-	movq %rdx, %rax         
+	cmpq  $3, %rdx           # compare 3 and rdx(z)
+jge .L4                      # if (signed) rdx(z) >= 3, go to .L4
+	movq  %rdx, %rax         
 	idivq %rsi, %rax
 .L4:
 	rep; ret
 ```
-
+* draft:
 ```c
 short test(short x, short y, short z)
 {
-	if(z>=3 && z <=5) return y;
+	short rax = y + z - x;
+	if(z>=3 && z <=5) return rax;
 }
 
 ```
-
+* final:
 ```c
 short test(short x, short y, short z) {
 	short val = ______ ;
