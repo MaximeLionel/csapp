@@ -23,7 +23,7 @@
 * The compiler does most of the work in the overall compilation sequence, transforming programs expressed in the relatively abstract execution model provided by C into the very elementary instructions that the processor executes.
 * The assembly-code representation is very close to machine code.
 * The machine code for x86-64 differs greatly from the original C code. Parts of the processor state are visible that normally are hidden from the C programmer:
-	* program counter: PC is called %rip in x86-64, which - indicates the address in memory of the next instruction to be executed.
+	* program counter: PC is called %rip in x86-64, which indicates the address in memory of the **next** instruction to be executed.
 	* integer register file: contains 16 named locations storing 64-bit values.
 		* The registers can hold addresses (corresponding to C pointers) or integer data.
 	* condition code registers: hold status information about the most recently executed arithmetic or logical instruction.
