@@ -459,35 +459,41 @@ test:
         subl    %edi, %eax         # eax = z + y - x
         cmpw    $5, %dx            # compare 5 and dx(z)
         jle     .L2                # if(signed) dx(z) <= 5, go to .L2
-        cmpw    $2, %si            # if(signed) dx(z) > 5,
-		                           # compare 2 and si(y)
+		
+		                           # if(signed) dx(z) > 5,
+        cmpw    $2, %si            # compare 2 and si(y)
         jle     .L3                # if(signed) si(y) <= 2, go to .L3
 
-		# if(signed) si(y) > 2
+		                           # if(signed) si(y) > 2
         movswl  %di, %eax          # eax = di(x)
         movswl  %dx, %ecx          # ecx = dx(z)
-        cltd
-        idivl   %ecx
+        cltd                       # Sign-extend EAX(x) into EDX:EAX
+        idivl   %ecx               # EDX:EAX / ecx: x/z
+		                           # eax - quotient
         ret
 .L3:
         movswl  %di, %eax          # eax = di(x)
-        movswl  %si, %esi          # esi = y
-        cltd
-        idivl   %esi
+        movswl  %si, %esi          # esi = si(y)
+        cltd                       # Sign-extend EAX(x) into EDX:EAX
+        idivl   %esi               # EDX:EAX / esi: x/y
+		                           # eax - quotient
         ret
 .L2:
         cmpw    $2, %dx            # compare dx(z) and 2
         jg      .L1                # if(signed) dx(z) > 2, go to .L1
 		                           # return rax(z+y-x)
-        movswl  %dx, %eax
-        movswl  %si, %esi
-        cltd
-        idivl   %esi
+
+								   # if(signed) dx(z) <= 2
+        movswl  %dx, %eax          # eax = dx(z)
+        movswl  %si, %esi          # esi = si(y)
+        cltd                       # Sign-extend EAX(z) into EDX:EAX
+        idivl   %esi               # EDX:EAX / esi: z/y
+		                           # eax - quotient
 .L1:
         ret
 ```
 * `movsw` - Move Signed Word to Long. Move and sign-extend a 16-bit word to a 32-bit long value.
-* `cltd` - Convert Long to Double. 
+* `cltd` - Convert Long to Double. Sign-extend the value from the `EAX` register (32-bit) into the `EDX:EAX` register pair.
 
 
 * draft:
@@ -495,7 +501,9 @@ test:
 short test(short x, short y, short z)
 {
 	short rax = y + z - x;
-	if(z>2 && z <=5) return rax;
+	if(z>2 && z<=5) return rax;
+	if(z>5 && y<=2) return x/y;
+	if(z>5 && y>2) return x/z;
 }
 
 ```
