@@ -672,22 +672,29 @@ GCC generates the following assembly code:
 ```z80
 # short test(short x, short y)
 # x in %rdi, y in %rsi
+.globl  test
 test:
-	leaq 12(%rsi), %rbx
-	testq %rdi, %rdi
-	jge .L2
-	movq %rdi, %rbx
-	imulq %rsi, %rbx
-	movq %rdi, %rdx
-	orq %rsi, %rdx
-	cmpq %rsi, %rdi
-	cmovge %rdx, %rbx
-	ret
-.L2:
-	idivq %rsi, %rdi
-	cmpq $10, %rsi
-	cmovge %rdi, %rbx
-	ret
+        leal    12(%rsi), %eax
+        testw   %di, %di
+        js      .L5
+        cmpw    $10, %si
+        jle     .L1
+        movswl  %di, %eax
+        movswl  %si, %esi
+        cltd
+        idivl   %esi
+.L1:
+        ret
+.L5:
+        cmpw    %di, %si
+        jle     .L3
+        movl    %edi, %eax
+        imull   %esi, %eax
+        ret
+.L3:
+        movl    %esi, %eax
+        orl     %edi, %eax
+        ret
 ```
 Fill in the missing expressions in the C code.
 
@@ -695,22 +702,39 @@ Fill in the missing expressions in the C code.
 ```z80
 # short test(short x, short y)
 # x in %rdi, y in %rsi
+.globl  test
 test:
-	leaq 12(%rsi), %rbx  # rbx = rsi(y) + 12
-	testq %rdi, %rdi     
-	jge .L2              # if x >= 0, go to .L2
-	movq %rdi, %rbx
-	imulq %rsi, %rbx
-	movq %rdi, %rdx
-	orq %rsi, %rdx
-	cmpq %rsi, %rdi
-	cmovge %rdx, %rbx
-	ret
-.L2:
-	idivq %rsi, %rdi    # 
-	cmpq $10, %rsi
-	cmovge %rdi, %rbx
-	ret
+        leal    12(%rsi), %eax   # eax = 12 + rsi(y)
+        testw   %di, %di
+        js      .L5              # if di(x) < 0, go to .L5
+		                         # if di(x) >= 0
+        cmpw    $10, %si         # compare si(x) and 10
+        jle     .L1              # if x <= 10, go to .L1(return)
+        movswl  %di, %eax
+        movswl  %si, %esi
+        cltd
+        idivl   %esi
+.L1:
+        ret
+.L5:
+        cmpw    %di, %si         # compare si(y) and di(x)
+        jle     .L3              # if y<=x, go to .L3
+        movl    %edi, %eax
+        imull   %esi, %eax
+        ret
+.L3:
+        movl    %esi, %eax       # eax = y
+        orl     %edi, %eax       # eax = x | y
+        ret
+```
+
+```c
+short test(short x, short y)
+{
+	if(x>=0 && x<=10) return 12+y;
+	if(x<0 && y<=x) return x | y;
+
+}
 ```
 
 
