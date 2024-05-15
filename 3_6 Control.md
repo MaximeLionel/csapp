@@ -538,9 +538,37 @@ short test(short x, short y, short z) {
 			* For x86-64 code with conditional jumps, it takes:
 				* 8 clock cycles per call when the branching pattern is easily predictable.
 				* around 17.50 clock cycles per call when the branching pattern is random.
-				* so the branch misprediction penalty is around 19 clock cycles: (17.5 - 8) x 2 = 19
+				* so the branch misprediction penalty is around 19 clock cycles: (17.5 - 8) x 2 = 19.
+				* it means time required by the function ranges between around 8 and 27 cycles.
+			* The code compiled using conditional moves requires around 8 clock cycles regardless of the data being tested.
+* How to determine the penalty?
+	* Formula - $T_{avg}(p) = (1− p)T_{OK} + p(T_{OK} + T_{MP}) = T_{OK} + pT_{MP}$
+	* p - the probability of misprediction
+	* $T_{OK}$ - the time to execute the code without misprediction
+	* $T_{MP}$ - the misprediction penalty.
+	* $T_{avg}$ - the average time to execute the code.
+
+# Practice Problem 3.19
+Running on a new processor model, our code required around 45 cycles when the branching pattern was random, and around 25 cycles when the pattern was highly predictable.
+
+A. What is the approximate miss penalty?
+
+B. How many cycles would the function require when the branch is mispredicted?
+
+**Solution**:
+A.
+When the branching pattern was random, p = 0.5
+We know $T_{OK}=25$
+$45 = 0.5 \times 25 + 0.5 \times (25 + T_{MP})$
+$T_{MP} = 40$
+
+B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 
 
+![[3_6 Control.assets/image-20240515125554967.png|700]]
+* Each of these instructions has two operands: a source register or memory location S, and a destination register R.
+	* The source value is read from either memory or the source register, but it is copied to the destination only if the specified condition holds.
+	* The source and destination values can be 16, 32, or 64 bits long.
 
 
 
