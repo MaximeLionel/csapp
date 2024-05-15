@@ -674,6 +674,9 @@ GCC generates the following assembly code:
 
 南非重点市场国，各种合作
 重点业务
+高温气冷堆有基础，核燃料
+
+加纳
 
 浓缩，核不扩散
 
