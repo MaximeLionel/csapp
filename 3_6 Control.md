@@ -707,7 +707,7 @@ test:
 	cmovge %rdx, %rbx
 	ret
 .L2:
-	idivq %rsi, %rdi
+	idivq %rsi, %rdi    # 
 	cmpq $10, %rsi
 	cmovge %rdi, %rbx
 	ret
