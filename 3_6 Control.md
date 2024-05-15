@@ -710,10 +710,12 @@ test:
 		                         # if di(x) >= 0
         cmpw    $10, %si         # compare si(x) and 10
         jle     .L1              # if x <= 10, go to .L1(return)
-        movswl  %di, %eax
-        movswl  %si, %esi
+		                         # if x > 10
+        movswl  %di, %eax        # eax = x
+        movswl  %si, %esi        # y = y 
         cltd
-        idivl   %esi
+        idivl   %esi             # x / y
+		                         # eax = quotient
 .L1:
         ret
 .L5:
@@ -727,6 +729,7 @@ test:
         orl     %edi, %eax       # eax = x | y
         ret
 ```
+* `cltd` - Convert Long to Double. Sign-extend the value from the `EAX` register (32-bit) into the `EDX:EAX` register pair.
 
 ```c
 short test(short x, short y)
