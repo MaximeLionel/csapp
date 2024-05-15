@@ -648,8 +648,26 @@ short arith(short x)
 	return rbx;
 }
 ```
-We easily find it's a Two’s-complement division by a power of 2.
+$x/2^4=(x<0? x+(1<<4)-1 : x)>>4$
 
+We easily find it's a Two’s-complement division by a power of 2.
+So we get the operation is `/`.
+
+# Practice Problem 3.21
+Starting with C code of the form
+```c
+short test(short x, short y) {
+	short val = ________ ;
+	if ( _______ ) {
+		if ( _______ )
+			val = _______ ;
+		else
+			val = _______ ;
+	} else if ( _______ )
+		val = _______ ;
+	return val;
+}
+```
 
 
 
