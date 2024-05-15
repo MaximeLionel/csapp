@@ -668,6 +668,16 @@ short test(short x, short y) {
 	return val;
 }
 ```
+GCC generates the following assembly code:
+![[3_6 Control.assets/image-20240515171401571.png|300]]
+![[3_6 Control.assets/image-20240515171501731.png|250]]
+
+南非重点市场国，各种合作
+重点业务
+
+浓缩，核不扩散
+
+
 
 
 
