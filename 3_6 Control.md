@@ -523,6 +523,24 @@ short test(short x, short y, short z) {
 }
 ```
 
+# 3.6.6 Implementing Conditional Branches with Conditional Moves
+* The conventional way to implement conditional operations is through a conditional transfer of control.
+* An alternate strategy is through a **conditional transfer of data**, which is implemented by a simple **conditional move** instruction.
+![[3_6 Control.assets/image-20240515122043471.png|700]]
+* `cmovge` - Move if greater or equal (SF=OF).
+* why code based on conditional data transfers can outperform code based on conditional control transfers？
+	* Processors achieve high performance through ==pipelining==.
+	* To do this requires being able to determine the sequence of instructions to be executed well ahead of time in order to **keep the pipeline full of instructions to be executed**.
+	* If a conditional jump, the branch will only go until it has evaluated the branch condition. 
+		* Processors employ sophisticated branch prediction logic to try to guess whether or not each jump instruction will be followed.
+		* Mispredicting a jump, on the other hand, requires that the processor discard much of the work it has already done on future instructions and then begin filling the pipeline with instructions starting at the correct location.
+		* Example:
+			* For x86-64 code with conditional jumps, it takes:
+				* 8 clock cycles per call when the branching pattern is easily predictable.
+				* around 17.50 clock cycles per call when the branching pattern is random.
+				* so the branch misprediction penalty is around 19 clock cycles: (17.5 - 8) x 2 = 19
+
+
 
 
 
