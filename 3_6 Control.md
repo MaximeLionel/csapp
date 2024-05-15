@@ -669,16 +669,30 @@ short test(short x, short y) {
 }
 ```
 GCC generates the following assembly code:
-![[3_6 Control.assets/image-20240515171401571.png|300]]
-![[3_6 Control.assets/image-20240515171501731.png|250]]
+```z80
+# short test(short x, short y)
+# x in %rdi, y in %rsi
+test:
+	leaq 12(%rsi), %rbx
+	testq %rdi, %rdi
+	jge .L2
+	movq %rdi, %rbx
+	imulq %rsi, %rbx
+	movq %rdi, %rdx
+	orq %rsi, %rdx
+	cmpq %rsi, %rdi
+	cmovge %rdx, %rbx
+	ret
+.L2:
+	idivq %rsi, %rdi
+	cmpq $10, %rsi
+	cmovge %rdi, %rbx
+	ret
 
-南非重点市场国，各种合作
-重点业务
-高温气冷堆有基础，核燃料
+```
+Fill in the missing expressions in the C code.
 
-加纳 最有希望落地 政治稳定 意愿强烈
 
-浓缩，核不扩散
 
 
 
