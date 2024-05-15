@@ -638,7 +638,17 @@ arith:
 	sarq    $4, %rbx        # rbx >> 4
 	ret
 ```
-
+So we get:
+```c
+short arith(short x)
+{
+	int rbx = 15 + x;
+	if(x >= 0) rbx = x;
+	rbx = rbx / 16;
+	return rbx;
+}
+```
+We easily find it's a Two’s-complement division by a power of 2.
 
 
 
