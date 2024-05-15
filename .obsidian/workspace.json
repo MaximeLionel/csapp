@@ -148,7 +148,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -162,6 +163,7 @@
   },
   "active": "d115a6c3982c0db9",
   "lastOpenFiles": [
+    "3_6 Control.assets/image-20240515162529473.png",
     "3_6 Control.assets/image-20240515125554967.png",
     "3_6 Control.assets/image-20240515122210403.png",
     "3_6 Control.assets/image-20240515122043471.png",
@@ -176,7 +178,6 @@
     "3_6 Control.assets/image-20240512095009257.png",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets/image-20240510171846633.png",
-    "3_6 Control.assets/image-20240510161458720.png",
     "3_6 Control.assets",
     "2_4.md",
     "3_4 Accessing Information.md",

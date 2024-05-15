@@ -587,9 +587,57 @@ B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 	t = test-expr;
 	if (!t) v = ve; //implemented with a conditional move
 	```
+	* The final statement in this sequence is implemented with a conditional move — value ve is copied to v only if test condition t does not hold.
 
+* Not all conditional expressions can be compiled using conditional moves. Example:
+	```c
+	long cread(long *xp) {
+		return (xp ? *xp : 0);
+	}
+	```
+	* compile using conditional move:
+		![[3_6 Control.assets/image-20240515162529473.png]]
+	* The dereferencing of `xp` by the `movq` instruction (line 2) occurs even when the test fails, causing a null pointer dereferencing error.
 
+* Using conditional moves also does not always improve code efficiency.
+	* if either the then-expr or the else-expr evaluation requires a significant computation, then this effort is wasted when the corresponding condition does not hold.
 
+# Practice Problem 3.20
+In the following C function, we have left the definition of operation OP incomplete:
+```c
+#define OP ____________ /* Unknown operator */
+
+short arith(short x) {
+	return x OP 16;
+}
+```
+When compiled, gcc generates the following assembly code:
+```z80
+# short arith(short x)
+# x in %rdi
+
+arith:
+	leaq    15(%rdi), %rbx
+	testq   %rdi, %rdi
+	cmovns  %rdi, %rbx
+	sarq    $4, %rbx
+	ret
+```
+A. What operation is OP?
+B. Annotate the code to explain how it works.
+
+**Solution**:
+```z80
+# short arith(short x)
+# x in %rdi
+
+arith:
+	leaq    15(%rdi), %rbx  # rbx = 15 + rdi(x)
+	testq   %rdi, %rdi      # test rdi & rdi
+	cmovns  %rdi, %rbx      # if rdi(x) >= 0, rbx = rdi(x)
+	sarq    $4, %rbx        # rbx >> 4
+	ret
+```
 
 
 
