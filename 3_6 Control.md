@@ -676,7 +676,7 @@ GCC generates the following assembly code:
 重点业务
 高温气冷堆有基础，核燃料
 
-加纳
+加纳 最有希望落地 政治稳定 意愿强烈
 
 浓缩，核不扩散
 
