@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_3.md",
+                "file": "3_2 Program Encodings.md",
                 "mode": "source",
                 "source": false
               }
@@ -148,8 +148,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -165,13 +164,12 @@
   "lastOpenFiles": [
     "3_6 Control.assets/image-20240515171501731.png",
     "3_6 Control.assets/image-20240515171401571.png",
-    "2_3.md",
-    "3_6 Control.md",
-    "3_2 Program Encodings.md",
     "3_6 Control.assets/image-20240515162529473.png",
     "3_6 Control.assets/image-20240515125554967.png",
     "3_6 Control.assets/image-20240515122210403.png",
     "3_6 Control.assets/image-20240515122043471.png",
+    "3_2 Program Encodings.md",
+    "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets/image-20240513130005518.png",
     "3_6 Control.assets/image-20240513124203080.png",
@@ -192,6 +190,7 @@
     "2_homework.assets/hw2_90",
     "2_homework.assets/hw2_97wintest/hw2_97wintest.vcxproj.filters",
     "2_homework.assets/hw2_97wintest/arm64/Debug/hw2_97wintest.tlog/link.write.1.tlog",
-    "2_1.md"
+    "2_1.md",
+    "2_3.md"
   ]
 }
