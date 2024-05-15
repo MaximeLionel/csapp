@@ -721,8 +721,9 @@ test:
 .L5:
         cmpw    %di, %si         # compare si(y) and di(x)
         jle     .L3              # if y<=x, go to .L3
-        movl    %edi, %eax
-        imull   %esi, %eax
+		                         # if y>x
+        movl    %edi, %eax       # eax = x
+        imull   %esi, %eax       # eax = x * y
         ret
 .L3:
         movl    %esi, %eax       # eax = y
@@ -736,7 +737,22 @@ short test(short x, short y)
 {
 	if(x>=0 && x<=10) return 12+y;
 	if(x<0 && y<=x) return x | y;
+	if(x<0 && y>x) return x*y;
+    if(x>10) return x/y;
+}
+```
 
+```c
+short test(short x, short y) {
+	short val = ________ ;
+	if ( _______ ) {
+		if ( _______ )
+			val = _______ ;
+		else
+			val = _______ ;
+	} else if ( _______ )
+		val = _______ ;
+	return val;
 }
 ```
 
