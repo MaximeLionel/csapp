@@ -569,6 +569,25 @@ B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 * Each of these instructions has two operands: a source register or memory location S, and a destination register R.
 	* The source value is read from either memory or the source register, but it is copied to the destination only if the specified condition holds.
 	* The source and destination values can be 16, 32, or 64 bits long.
+* General form of conditional expression and assignment: `v = test-expr ? then-expr : else-expr`
+	* The standard way to compile this expression:
+	```c
+	if (!test-expr)
+		goto false;
+	v = then-expr;
+	goto done;
+	false:
+		v = else-expr;
+	done:
+	```
+	* Based on conditional move, it can also be:
+	```c
+	v = then-expr;
+	ve = else-expr;
+	t = test-expr;
+	if (!t) v = ve; //implemented with a conditional move
+	```
+
 
 
 
