@@ -841,6 +841,30 @@ _start:
         movl    $1, %eax
         int     $0x80
 ```
+* test_a.s
+```z80
+# int test_a(int n)
+# Parameters:
+#       - edi: n
+# Return: eax
+
+.globl test_a
+test_a:
+
+.section .text
+        pushl   %ebp
+        movl    %esp, %ebp
+        movl    $1, %eax
+
+.loop:
+        imull   %edi, %eax
+        decl    %edi
+        testl   %edi, %edi
+        jg      .loop
+
+        leave 
+        ret
+```
 * makefile
 ```shell
 a: a.o test_a.o
@@ -870,7 +894,7 @@ value:
         .quad   14
 
 output:
-        .asciz  "The result is 0x %016x\n"
+        .asciz  "The result is 0x %016llx\n"
 
 error_stat:
         .asciz  "Overflow detected!\n"
@@ -915,6 +939,30 @@ _start:
         movq    $60, %rax
         syscall
 ```
+* Code (test_b.s)
+```z80
+# longlong test_b(longlong n)
+# Parameters:
+#       - rdi: n
+# Return: rax
+
+.globl test_b
+test_b:
+
+.section .text
+        pushq   %rbp
+        movq    %rsp, %rbp
+        movq    $1, %rax
+
+.loop:
+        imulq   %rdi, %rax
+        decq    %rdi
+        testq   %rdi, %rdi
+        jg      .loop
+
+        leave 
+        ret
+```
 * makefile:
 ```z80
 b: b.o test_b.o
@@ -927,7 +975,10 @@ clean:
         rm -f *.o b
 ```
 * run
-
+```shell
+root@ml:~/csapp/chap3/prac3_22/b# ./b
+The result is 0x 000000144c3b2800
+```
 
 
 
