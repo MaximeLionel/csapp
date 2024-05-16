@@ -774,6 +774,13 @@ loop:
 	if (t)
 		goto loop;
 ```
+* Example:
+	![[3_6 Control.assets/image-20240516105259745.png]]
+
+# Practice Problem 3.22
+A. Try to calculate 14! with a 32-bit int. Verify whether the computation of 14! overflows.
+
+B. What if the computation is done with a 64-bit long int?
 
 
 
