@@ -782,6 +782,83 @@ A. Try to calculate 14! with a 32-bit int. Verify whether the computation of 14!
 
 B. What if the computation is done with a 64-bit long int?
 
+**Solution**:
+A.
+* Code
+```z80
+.extern test_a
+.extern printf
+
+.section .data
+value:
+        .int 14
+
+output:
+        .asciz  "The result is 0x %08x\n"
+
+error_stat:
+        .asciz  "Overflow detected!\n"
+
+.section .bss
+        .lcomm  result, 4
+        .lcomm  ofvalue1, 4
+        .lcomm  ofvalue2, 4
+
+.section .text
+.globl _start
+_start:
+        nop
+        movl    value, %edi
+        call    test_a
+        movl    %eax, result
+
+        pushl   %eax
+        pushl   $output
+        call    printf
+
+        # compute 14! / 14
+        movl    result, %eax
+        cdq     # signed expand eax to edx:eax
+        movl    value, %edi
+        idivl   %edi
+        movl    %eax, ofvalue1  # save quotient on stack
+
+        # compute 13!
+        movl    value, %edi
+        decl    %edi
+        call    test_a
+        movl    %eax, ofvalue2
+
+        movl    ofvalue1, %edi  # pop quotient to stack
+        movl    ofvalue2, %eax
+        cmpl    %edi, %eax
+        je      .done
+        pushl   $error_stat
+        call    printf
+
+.done:
+        movl    $0, %ebx
+        movl    $1, %eax
+        int     $0x80
+```
+* makefile
+```shell
+a: a.o test_a.o
+        ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 a.o test_a.o -o a -lc
+a.o: a.s
+        as --32 -gstabs a.s -o a.o
+test_a.o: test_a.s
+        as --32 -gstabs test_a.s -o test_a.o
+clean:
+        rm -f *.o a
+```
+* run
+```shell
+root@ml:~/csapp/chap3/prac3_22/a # ./a
+The result is 0x 4c3b2800
+Overflow detected!
+```
+
 
 
 
