@@ -766,7 +766,14 @@ do
 	body-statement
 	while (test-expr);
 ```
-
+* Translate into conditionals and goto statements:
+```c
+loop:
+	body-statement
+	t = test-expr;
+	if (t)
+		goto loop;
+```
 
 
 
