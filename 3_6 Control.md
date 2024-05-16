@@ -744,20 +744,28 @@ short test(short x, short y)
 
 ```c
 short test(short x, short y) {
-	short val = ________ ;
-	if ( _______ ) {
-		if ( _______ )
-			val = _______ ;
+	short val = 12 + y ;
+	if ( x < 0 ) {
+		if ( y <= x )
+			val = x|y ;
 		else
-			val = _______ ;
-	} else if ( _______ )
-		val = _______ ;
+			val = x*y ;
+	} else if ( x > 10 )
+		val = x/y ;
 	return val;
 }
 ```
 
 
-
+# 3.6.7 Loops
+* Combinations of conditional tests and jumps are used to implement the effect of loops.
+## Do-While Loops
+* General form of a do-while statement:
+```c
+do
+	body-statement
+	while (test-expr);
+```
 
 
 
