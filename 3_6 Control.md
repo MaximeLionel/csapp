@@ -784,7 +784,7 @@ B. What if the computation is done with a 64-bit long int?
 
 **Solution**:
 A.
-* Code
+* Code(a.s)
 ```z80
 .extern test_a
 .extern printf
@@ -858,6 +858,76 @@ root@ml:~/csapp/chap3/prac3_22/a # ./a
 The result is 0x 4c3b2800
 Overflow detected!
 ```
+
+B.
+* Code (b.s)
+```z80
+.extern test_b
+.extern printf
+
+.section .data
+value:
+        .quad   14
+
+output:
+        .asciz  "The result is 0x %016x\n"
+
+error_stat:
+        .asciz  "Overflow detected!\n"
+
+.section .bss
+        .lcomm  result, 8
+        .lcomm  ofvalue1, 8
+        .lcomm  ofvalue2, 8
+
+.section .text
+.globl _start
+_start:
+        movq    value, %rdi
+        call    test_b
+        movq    %rax, result
+
+        movq    %rax, %rsi
+        movq    $output, %rdi
+        call    printf
+
+        # compute 14! / 14
+        movq    result, %rax
+        cqo     # signed expand rax to rdx:rax
+        movq    value, %rdi
+        idivq   %rdi
+        movq    %rax, ofvalue1  # save quotient on stack
+
+        # compute 13!
+        movq    value, %rdi
+        decq    %rdi
+        call    test_b
+        movq    %rax, ofvalue2
+
+        movq    ofvalue1, %rdi  # pop quotient to stack
+        movq    ofvalue2, %rax
+        cmpq    %rdi, %rax
+        je      .done
+        movq    $error_stat, %rdi
+        call    printf
+
+.done:
+        movq    $60, %rax
+        syscall
+```
+* makefile:
+```z80
+b: b.o test_b.o
+        ld -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 b.o test_b.o -o b -lc
+b.o: b.s
+        as --64 -gstabs b.s -o b.o
+test_b.o: test_b.s
+        as --64 -gstabs test_b.s -o test_b.o
+clean:
+        rm -f *.o b
+```
+* run
+
 
 
 
