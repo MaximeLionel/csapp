@@ -1126,15 +1126,41 @@ loop_while:
 	movl $0, %eax     # eax = 0
 	jmp .L2
 .L3:
-	leaq (,%rsi,%rdi), %rdx # rdx = rdi(a) + rsi(b)
-	addq %rdx, %rax         # rax = rax + rdx = rax + a + b
+	leaq (,%rsi,%rdi), %rdx # rdx = rdi(a) * rsi(b)
+	addq %rdx, %rax         # rax = rax + rdx = rax + a * b
 	subq $1, %rdi           # rdi = rdi - 1 = a - 1
 .L2:
 	cmpq %rsi, %rdi   # compare rdi(a) and rsi(b)
 	jg .L3            # if rdi(a) > rsi(b), go to .L3
 	rep; ret
 ```
-
+* then we get below:
+```
+short loop_while(short a, short b)
+{
+	int eax = 0;
+	while(a > b)
+	{
+		rax += (a*b);
+		a--;
+	}
+	return eax;
+}
+```
+* fill in the code below:
+```c
+```c
+short loop_while(short a, short b)
+{
+	short result = 0;
+	while ( a > b ) {
+		result = result + a * b;
+		a = a - 1;
+	}
+	return result;
+}
+```
+```
 
 
 
