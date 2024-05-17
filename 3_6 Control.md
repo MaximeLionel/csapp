@@ -1085,6 +1085,10 @@ test:
 ```
 	![[3_6 Control.assets/image-20240517144442908.png|500]]
 
+### 2nd translation method:
+
+
+
 # Practice Problem 3.24
 For C code having the general form
 ```c
@@ -1149,7 +1153,6 @@ short loop_while(short a, short b)
 ```
 * fill in the code below:
 ```c
-```c
 short loop_while(short a, short b)
 {
 	short result = 0;
@@ -1160,7 +1163,7 @@ short loop_while(short a, short b)
 	return result;
 }
 ```
-```
+
 
 
 
