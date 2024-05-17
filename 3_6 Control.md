@@ -980,7 +980,77 @@ root@ml:~/csapp/chap3/prac3_22/b# ./b
 The result is 0x 000000144c3b2800
 ```
 
+# Practice Problem 3.23
+For the C code
+```c
+short dw_loop(short x) {
+	short y = x/9;
+	short *p = &x;
+	short n = 4*x;
 
+	do {
+		x += y;
+		(*p) += 5;
+		n -= 2;
+	} while (n > 0);
+
+	return x;
+}
+```
+gcc generates the following assembly code:
+```z80
+# short dw_loop(short x)
+# x initially in %rdi
+.globl  dw_loop
+.type   dw_loop, @function
+dw_loop:
+        movl    %edi, %edx
+        movswl  %di, %ecx
+        imull   $7282, %ecx, %ecx
+        shrl    $16, %ecx
+        movl    %edi, %eax
+        sarw    $15, %ax
+        subl    %eax, %ecx
+        sall    $2, %edi
+.L2:
+        leal    5(%rcx,%rdx), %edx
+        leal    -2(%rdi), %eax
+        movl    %eax, %edi
+        testw   %ax, %ax
+        jg      .L2
+        movl    %edx, %eax
+        ret
+```
+
+A. Which registers are used to hold program values x, y, and n?
+B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (*p)+=5?
+C. Add annotations to the assembly code describing the operation of the program, similar to those shown in Figure 3.19(c).
+
+**Solution**:
+* Add annotations:
+```z80
+# short dw_loop(short x)
+# x initially in %rdi
+.globl  dw_loop
+.type   dw_loop, @function
+dw_loop:
+	    movl    %edi, %edx  # edx = edi(x)
+        movswl  %di, %ecx   # ecx = di(x)
+        imull   $7282, %ecx, %ecx  # ecx = ecx x 7282 = 7282*x
+        shrl    $16, %ecx   # ecx = ecx/2^{16} = (7282*x)/2^{16}
+        movl    %edi, %eax  # eax = edi(x)
+        sarw    $15, %ax    # ax = 0 or -1
+        subl    %eax, %ecx  # ecx = (7282*x)/2^{16} - x/2^{15} = (7280*x)/2^{16} = 3640/2048 = 910/512 = 455/256 = 
+        sall    $2, %edi
+.L2:
+        leal    5(%rcx,%rdx), %edx
+        leal    -2(%rdi), %eax
+        movl    %eax, %edi
+        testw   %ax, %ax
+        jg      .L2
+        movl    %edx, %eax
+        ret
+```
 
 
 
