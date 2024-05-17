@@ -1055,7 +1055,7 @@ dw_loop:
 	* If we want to realize x/9, it's impossible to find the exact number with only shift operations.
 	* Thus we need to find the closest number using shift operations.
 	* To simplify, we need to find a constant number to make c/2^n $\approx$ 1/9. 
-	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536
+	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536 = 7281.78 $\approx$ 7282
 
 
 
