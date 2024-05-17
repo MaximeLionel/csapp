@@ -1037,11 +1037,11 @@ dw_loop:
 	    movl    %edi, %edx  # edx = edi(x)
         movswl  %di, %ecx   # ecx = di(x)
         imull   $7282, %ecx, %ecx  # ecx = ecx x 7282 = 7282*x
-        shrl    $16, %ecx   # ecx = ecx/2^{16} = (7282*x)/2^{16}
+        shrl    $16, %ecx   # ecx = 1/9 * x = y
         movl    %edi, %eax  # eax = edi(x)
-        sarw    $15, %ax    # ax = 0 or -1
-        subl    %eax, %ecx  # ecx = (7282*x)/2^{16} - x/2^{15} = (7280*x)/2^{16} = 3640/2048 = 910/512 = 455/256 = 
-        sall    $2, %edi
+        sarw    $15, %ax    # ax = 0 or -1: get the sign bit
+        subl    %eax, %ecx  # 
+        sall    $2, %edi    # edi = 4*edi = 4*x = n
 .L2:
         leal    5(%rcx,%rdx), %edx
         leal    -2(%rdi), %eax
@@ -1055,7 +1055,8 @@ dw_loop:
 	* If we want to realize x/9, it's impossible to find the exact number with only shift operations.
 	* Thus we need to find the closest number using shift operations.
 	* To simplify, we need to find a constant number to make c/2^n $\approx$ 1/9. 
-	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536 = 7281.78 $\approx$ 7282
+	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536 = 7281.78 $\approx$ 7282.
+	* therefore, we get that 1/9 is 65536 logically shift right by 16 bits.
 
 
 
