@@ -1123,15 +1123,15 @@ We can see that the compiler used a jump-to-middle translation, using the jmp in
 # a in %rdi, b in %rsi
 
 loop_while:
-	movl $0, %eax
+	movl $0, %eax     # eax = 0
 	jmp .L2
 .L3:
-	leaq (,%rsi,%rdi), %rdx
-	addq %rdx, %rax
-	subq $1, %rdi
+	leaq (,%rsi,%rdi), %rdx # rdx = rdi(a) + rsi(b)
+	addq %rdx, %rax         # rax = rax + rdx = rax + a + b
+	subq $1, %rdi           # rdi = rdi - 1 = a - 1
 .L2:
-	cmpq %rsi, %rdi
-	jg .L3
+	cmpq %rsi, %rdi   # compare rdi(a) and rsi(b)
+	jg .L3            # if rdi(a) > rsi(b), go to .L3
 	rep; ret
 ```
 
