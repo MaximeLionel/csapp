@@ -1034,20 +1034,20 @@ C. Add annotations to the assembly code describing the operation of the program,
 .globl  dw_loop
 .type   dw_loop, @function
 dw_loop:
-	    movl    %edi, %edx  # edx = edi(x)
+	    movl    %edi, %edx  # edx = edi(x) = x
         movswl  %di, %ecx   # ecx = di(x)
         imull   $7282, %ecx, %ecx  # ecx = ecx x 7282 = 7282*x
         shrl    $16, %ecx   # ecx = 1/9 * x = y
         movl    %edi, %eax  # eax = edi(x)
         sarw    $15, %ax    # ax = 0 or -1: get the sign bit
-        subl    %eax, %ecx  # 
+        subl    %eax, %ecx  # adjust the deviation by sign extention and arithmetic shifts, now ecx = y
         sall    $2, %edi    # edi = 4*edi = 4*x = n
 .L2:
-        leal    5(%rcx,%rdx), %edx
-        leal    -2(%rdi), %eax
-        movl    %eax, %edi
+        leal    5(%rcx,%rdx), %edx  # edx = 5 + rcx + rdx = 5+y+x
+        leal    -2(%rdi), %eax      # eax = n - 2
+        movl    %eax, %edi          # edi = eax = n - 2
         testw   %ax, %ax
-        jg      .L2
+        jg      .L2                 # if eax(n-2) > 0, go to .L2
         movl    %edx, %eax
         ret
 ```
