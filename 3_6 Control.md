@@ -1098,7 +1098,7 @@ short loop_while(short a, short b)
 	return result;
 }
 ```
-gcc, run with command-line option -Og, produces the following code:
+GCC, run with command-line option -Og, produces the following code:
 ```z80
 # short loop_while(short a, short b)
 # a in %rdi, b in %rsi
@@ -1116,6 +1116,24 @@ loop_while:
 	rep; ret
 ```
 We can see that the compiler used a jump-to-middle translation, using the jmp instruction on line 3 to jump to the test starting with label .L2. Fill in the missing parts of the C code.
+
+**Solution**:
+```z80
+# short loop_while(short a, short b)
+# a in %rdi, b in %rsi
+
+loop_while:
+	movl $0, %eax
+	jmp .L2
+.L3:
+	leaq (,%rsi,%rdi), %rdx
+	addq %rdx, %rax
+	subq $1, %rdi
+.L2:
+	cmpq %rsi, %rdi
+	jg .L3
+	rep; ret
+```
 
 
 
