@@ -1115,6 +1115,7 @@ loop_while:
 	jg .L3
 	rep; ret
 ```
+We can see that the compiler used a jump-to-middle translation, using the jmp instruction on line 3 to jump to the test starting with label .L2. Fill in the missing parts of the C code.
 
 
 
