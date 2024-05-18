@@ -1034,20 +1034,20 @@ C. Add annotations to the assembly code describing the operation of the program,
 .globl  dw_loop
 .type   dw_loop, @function
 dw_loop:
-	    movl    %edi, %edx  # edx = edi(x)
+	    movl    %edi, %edx  # edx = edi(x) = x
         movswl  %di, %ecx   # ecx = di(x)
         imull   $7282, %ecx, %ecx  # ecx = ecx x 7282 = 7282*x
-        shrl    $16, %ecx   # ecx = ecx/2^{16} = (7282*x)/2^{16}
+        shrl    $16, %ecx   # ecx = 1/9 * x = y
         movl    %edi, %eax  # eax = edi(x)
-        sarw    $15, %ax    # ax = 0 or -1
-        subl    %eax, %ecx  # ecx = (7282*x)/2^{16} - x/2^{15} = (7280*x)/2^{16} = 3640/2048 = 910/512 = 455/256 = 
-        sall    $2, %edi
+        sarw    $15, %ax    # ax = 0 or -1: get the sign bit
+        subl    %eax, %ecx  # adjust the deviation by sign extention and arithmetic shifts, now ecx = y
+        sall    $2, %edi    # edi = 4*edi = 4*x = n
 .L2:
-        leal    5(%rcx,%rdx), %edx
-        leal    -2(%rdi), %eax
-        movl    %eax, %edi
+        leal    5(%rcx,%rdx), %edx  # edx = 5 + rcx + rdx = 5+y+x
+        leal    -2(%rdi), %eax      # eax = n - 2
+        movl    %eax, %edi          # edi = eax = n - 2
         testw   %ax, %ax
-        jg      .L2
+        jg      .L2                 # if eax(n-2) > 0, go to .L2
         movl    %edx, %eax
         ret
 ```
@@ -1055,8 +1055,114 @@ dw_loop:
 	* If we want to realize x/9, it's impossible to find the exact number with only shift operations.
 	* Thus we need to find the closest number using shift operations.
 	* To simplify, we need to find a constant number to make c/2^n $\approx$ 1/9. 
-	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536
+	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536 = 7281.78 $\approx$ 7282.
+	* therefore, we get that 1/9 is 65536 logically shift right by 16 bits.
 
+A. Which registers are used to hold program values x, y, and n?
+edx - x
+ecx - y
+edi - n
+B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (*p)+=5?
+It just simply assumes that p always points to x
+C. Add annotations to the assembly code describing the operation of the program, similar to those shown in Figure 3.19(c).
+
+## While Loops
+* General form:
+```c
+while (test-expr)
+	body-statement
+```
+* It differs from do-while in that test-expr is evaluated and the loop is potentially terminated before the first execution of body-statement.
+### 1st translation method:
+```c
+	goto test;
+loop:
+	body-statement
+test:
+	t = test-expr;
+	if (t)
+		goto loop;
+```
+	![[3_6 Control.assets/image-20240517144442908.png|500]]
+
+### 2nd translation method:
+
+
+
+# Practice Problem 3.24
+For C code having the general form
+```c
+short loop_while(short a, short b)
+{
+	short result = ______ ;
+	while ( ______ ) {
+		result = ______ ;
+		a = ______ ;
+	}
+	return result;
+}
+```
+GCC, run with command-line option -Og, produces the following code:
+```z80
+# short loop_while(short a, short b)
+# a in %rdi, b in %rsi
+
+loop_while:
+	movl $0, %eax
+	jmp .L2
+.L3:
+	leaq (,%rsi,%rdi), %rdx
+	addq %rdx, %rax
+	subq $1, %rdi
+.L2:
+	cmpq %rsi, %rdi
+	jg .L3
+	rep; ret
+```
+We can see that the compiler used a jump-to-middle translation, using the jmp instruction on line 3 to jump to the test starting with label .L2. Fill in the missing parts of the C code.
+
+**Solution**:
+```z80
+# short loop_while(short a, short b)
+# a in %rdi, b in %rsi
+
+loop_while:
+	movl $0, %eax     # eax = 0
+	jmp .L2
+.L3:
+	leaq (,%rsi,%rdi), %rdx # rdx = rdi(a) * rsi(b)
+	addq %rdx, %rax         # rax = rax + rdx = rax + a * b
+	subq $1, %rdi           # rdi = rdi - 1 = a - 1
+.L2:
+	cmpq %rsi, %rdi   # compare rdi(a) and rsi(b)
+	jg .L3            # if rdi(a) > rsi(b), go to .L3
+	rep; ret
+```
+* then we get below:
+```
+short loop_while(short a, short b)
+{
+	int eax = 0;
+	while(a > b)
+	{
+		rax += (a*b);
+		a--;
+	}
+	return eax;
+}
+```
+* fill in the code below:
+```c
+short loop_while(short a, short b)
+{
+	short result = 0;
+	while ( a > b ) {
+		result = result + a * b;
+		a = a - 1;
+	}
+	return result;
+}
+```
 
 
 

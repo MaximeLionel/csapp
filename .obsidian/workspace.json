@@ -20,6 +20,18 @@
             }
           },
           {
+            "id": "6a0df7a50f6e0c00",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "d115a6c3982c0db9",
             "type": "leaf",
             "state": {
@@ -31,7 +43,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -98,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_2 Program Encodings.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -159,8 +172,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "6a0df7a50f6e0c00",
   "lastOpenFiles": [
+    "3_6 Control.assets/image-20240517144442908.png",
+    "3_2 Program Encodings.md",
+    "conflict-files-obsidian-git.md",
     "3_6 Control.md",
     "3_6 Control.assets/image-20240516105259745.png",
     "3_6 Control.assets/image-20240515171501731.png",
@@ -169,12 +185,10 @@
     "3_6 Control.assets/image-20240515125554967.png",
     "3_6 Control.assets/image-20240515122210403.png",
     "3_6 Control.assets/image-20240515122043471.png",
-    "3_2 Program Encodings.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets/image-20240513130005518.png",
     "3_6 Control.assets/image-20240513124203080.png",
     "3_6 Control.assets/image-20240513124106617.png",
-    "conflict-files-obsidian-git.md",
     "3_6 Control.assets",
     "2_4.md",
     "3_4 Accessing Information.md",
