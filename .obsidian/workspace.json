@@ -31,8 +31,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_2 Program Encodings.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_2 Program Encodings.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "3_2 Program Encodings.md"
               }
             }
           }
@@ -160,8 +159,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d115a6c3982c0db9",
+  "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_6 Control.md",
     "3_6 Control.assets/image-20240516105259745.png",
     "3_6 Control.assets/image-20240515171501731.png",
     "3_6 Control.assets/image-20240515171401571.png",
@@ -170,12 +170,10 @@
     "3_6 Control.assets/image-20240515122210403.png",
     "3_6 Control.assets/image-20240515122043471.png",
     "3_2 Program Encodings.md",
-    "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets/image-20240513130005518.png",
     "3_6 Control.assets/image-20240513124203080.png",
     "3_6 Control.assets/image-20240513124106617.png",
-    "3_6 Control.assets/image-20240512222857761.png",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets",
     "2_4.md",

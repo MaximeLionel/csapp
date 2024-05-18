@@ -121,6 +121,16 @@ multstore:
 	* `.cfi_offset 3, -16` - `.cfi_offset register, offset` Previous value of register is saved at offset offset from CFA.
 	* `.cfi_endproc` - trigger the CFI table to be emitted.
 	* Canonical Frame Address (CFA). This is the value of the stack pointer just before the CALL instruction in the parent function (RSP value before CALL).
+
+```z80
+	endbr64
+	pushq	%rbx
+	movq	%rdx, %rbx
+	call	mult2@PLT
+	movq	%rax, (%rbx)
+	popq	%rbx
+	ret
+```
 * We just ignore the CFI information first. Go through the instructions one by one:
 	* `pushq %rbx` - the contents of register %rbx is pushed onto the program stack.
 	* `movq %rdx, %rbx` - move the content of register %rdx to %rbx%.
