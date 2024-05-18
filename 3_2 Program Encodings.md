@@ -201,6 +201,14 @@ FI;
         return 0;
 	}
 ```
+
+```c
+long mult2(long a, long b) {
+	long s = a * b;
+	return s;
+}
+```
+
 ```
 parallels@ubuntu-linux-22-04-desktop:/media/psf/csapp/3_2 Program Encodings.assets$ x86_64-linux-gnu-objdump -d prog
 
