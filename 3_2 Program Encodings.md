@@ -403,7 +403,7 @@ Disassembly of section .fini:
 ```
 * Compare with the original one:
 	* The addresses listed along the left are different — the linker has shifted the location of this code to a different range of addresses.
-	* the linker has filled in the address that the callq instruc- tion should use in calling the function mult2 (line 4 of the disassembly).
+	* the linker has filled in the address that the callq instruction should use in calling the function mult2 (line 4 of the disassembly).
 		* `e8 68 00 00 00 call   11de <mult2>` and `e8 00 00 00 00 call   d <multstore+0xd>`
 		* One task for the linker is to match function calls with the locations of the executable code for those functions.
 
