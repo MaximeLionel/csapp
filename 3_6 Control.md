@@ -932,6 +932,22 @@ done:
 			return result;
 		}
 		```
+	* GCC -Og compile:
+		```z80
+		fact_for:
+		        movl    $1, %edx
+		        movl    $2, %eax
+		        jmp     .L2
+		.L3:
+		        imulq   %rax, %rdx
+		        addq    $1, %rax
+		.L2:
+		        cmpq    %rdi, %rax
+		        jle     .L3
+		        movq    %rdx, %rax
+		        ret
+		```
+		* we easily find that gcc actually use jump-to-middle strategy with Og option.
 
 
 # Practice Problem 3.22
@@ -1497,6 +1513,38 @@ short test_one(unsigned short x)
 A. Obviously, jump-to-middle.
 B. Done.
 C. Check the parity of argument x, which means return 1 if there's an odd number of 1s in x, or return 0 if there's an even number of 1s in x.
+
+# Practice Problem 3.27
+Write goto code for a function called fibonacci to print fibonacci numbers using a while loop. Apply the guarded-do transformation.
+
+**Solution**:
+```c
+// void fibo_gd_goto(int n)
+// parameter - n: the number of fibo numbers you want to print
+void fibo_gd_goto(int n)
+{
+	int num1 = 0;
+	int num2 = 1;
+	int i = 3;
+	int new_fibo;
+
+	if(i > n) goto done;
+	print(num1)
+	print(num2)
+
+loop:
+	new_fibo = num1 + num2;
+	num1 = num2;
+	num2 = new_fibo;
+	print(new_fibo);
+	i++;
+	if(i < n) goto loop;
+	
+done:
+	return;
+}
+```
+
 
 
 
