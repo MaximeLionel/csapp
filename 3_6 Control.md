@@ -825,8 +825,20 @@ done:
 ```
 ![[3_6 Control.assets/image-20240519091323183.png|600]]
 
-
-
+## For Loops
+* general form of a for loop：
+```c
+for (init-expr; test-expr; update-expr)
+	body-statement
+```
+* similar `while` loop:
+```c
+init-expr;            // evaluates the initialization expression init-expr
+while (test-expr) {   // enters a loop where it first evaluates the test condition test-expr,
+	body-statement    // executes the body of the loop body-statement
+	update-expr;      // evaluates the update expression update-expr
+}
+```
 
 # Practice Problem 3.22
 A. Try to calculate 14! with a 32-bit int. Verify whether the computation of 14! overflows.
