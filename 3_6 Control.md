@@ -1308,8 +1308,27 @@ test_one:
 .L5:
 	testq %rdi, %rdi
 	jne .L6
-	# andl $0, %eax
+	andl $0, %eax
 	ret
+```
+* This is a problem because `andl $0, %eax` always makes `eax` 0
+* So we rewrite c program and assemble as below:
+```z80
+# short test_one(unsigned short x)
+# x in %rdi
+
+test_one:
+        movl    $0, %eax
+        jmp     .L2
+.L3:
+        movl    %edi, %edx
+        andl    $1, %edx
+        xorl    %edx, %eax
+        shrw    %di
+.L2:
+        testw   %di, %di
+        jne     .L3
+        ret
 ```
 Reverse engineer the operation of this code and then do the following:
 A. Determine what loop translation method was used.
@@ -1322,16 +1341,17 @@ C. Describe in English what this function computes.
 # x in %rdi
 
 test_one:
-	movl $1, %eax    # eax = 1
-	jmp .L5
-.L6:
-	xorq %rdi, %rax  # rax = rax^x
-	shrq %rdi        # x=x>>1
-.L5:
-	testq %rdi, %rdi 
-	jne .L6          # if x != 0, go to .L6
-	                 # if x == 0, 
-	ret
+        movl    $0, %eax    # eax = 0
+        jmp     .L2         # go to .L2
+.L3:
+        movl    %edi, %edx  # edx = edi(x) = x
+        andl    $1, %edx    # edx = x&1
+        xorl    %edx, %eax  # eax = edx^eax
+        shrw    %di         # x = x >>1
+.L2:
+        testw   %di, %di    
+        jne     .L3         # if di(x)!=0, go to .L3
+        ret
 ```
 * Draft code:
 ```c
@@ -1340,14 +1360,13 @@ test_one:
 
 short test_one(unsigned short x)
 {
-	eax = 1;
-	if(x==0) return 0;
+	eax = 0;
 	while(x!=0)
 	{
-		rax=rax^x;
+		eax = eax^(x&1);
 		x = x>>1;
 	}
-	return rax;
+	return eax;
 }
 ```
 * Final code:
@@ -1357,19 +1376,19 @@ short test_one(unsigned short x)
 
 short test_one(unsigned short x)
 {
-	short val = 1;
-	if(x==0) return 0;
-	while(x!=0)
+	short val = 0;
+	while(x!=0)          
 	{
-		val=val^x;
-		x = x>>1;
+		val=val^(x&1);     
+		x = x>>1;      
 	}
 	return val;
 }
 ```
 
 A. Obviously, jump-to-middle.
-
+B. Done.
+C. Check the parity of argument x, which means return 1 if there's an odd number of 1s in x, or return 0 if there's an even number of 1s in x.
 
 
 
