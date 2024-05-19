@@ -1237,16 +1237,16 @@ loop_while2:
 					   # if b>0
 	movq %rsi, %rax    # rax = rsi(b)
 .L7:
-	imulq %rdi, %rax
-	subq %rdi, %rsi
-	testq %rsi, %rsi
-	jg .L7
-	rep; ret
+	imulq %rdi, %rax   # rax = rax*rdi = b*a
+	subq %rdi, %rsi    # rsi = rsi-rdi: b=b-a
+	testq %rsi, %rsi   
+	jg .L7             # if b>0, go to .L7
+	rep; ret           # if b<=0, return
 .L8:                   
 	movq %rsi, %rax    # rax = rsi(b)
 	ret
 ```
-
+* we get the draft code logically:
 ```c
 # long loop_while2(long a, long b)
 # a in %rdi, b in %rsi
@@ -1254,6 +1254,29 @@ loop_while2:
 long loop_while2(long a, long b)
 {
 	if(b<=0) return b;
+	if(b>0)
+	{
+		rax = b;
+		do{
+			rax = b*a;
+			b = b-a;
+		}while(b>0)
+		return rax;
+	}
+}
+```
+* Finalise the final code:
+```c
+# long loop_while2(long a, long b)
+# a in %rdi, b in %rsi
+long loop_while2(long a, long b)
+{
+	long result = b;
+	while (b > 0) {
+		result = b*a;
+		b = b-a;
+	}
+	return result;
 }
 ```
 
