@@ -1258,7 +1258,7 @@ long loop_while2(long a, long b)
 	{
 		rax = b;
 		do{
-			rax = b*a;
+			rax = rax*a;
 			b = b-a;
 		}while(b>0)
 		return rax;
@@ -1273,13 +1273,15 @@ long loop_while2(long a, long b)
 {
 	long result = b;
 	while (b > 0) {
-		result = b*a;
+		result = result*a;
 		b = b-a;
 	}
 	return result;
 }
 ```
 
+# Practice Problem 3.26
+A function test_one has the following overall structure:
 
 
 
