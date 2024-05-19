@@ -1282,7 +1282,74 @@ long loop_while2(long a, long b)
 
 # Practice Problem 3.26
 A function test_one has the following overall structure:
+```c
+short test_one(unsigned short x) {
+	short val = 1;
+	while ( ... ) {
+		.
+		.
+		.
+	}
+	return ...;
+}
+```
+The gcc C compiler generates the following assembly code:
+```z80
+# short test_one(unsigned short x)
+# x in %rdi
 
+test_one:
+	movl $1, %eax
+	jmp .L5
+.L6:
+	xorq %rdi, %rax
+	shrq %rdi        # Shift right by 1
+.L5:
+	testq %rdi, %rdi
+	jne .L6
+	andl $0, %eax
+	ret
+```
+Reverse engineer the operation of this code and then do the following:
+A. Determine what loop translation method was used.
+B. Use the assembly-code version to fill in the missing parts of the C code.
+C. Describe in English what this function computes.
+
+**Solution**:
+```z80
+# short test_one(unsigned short x)
+# x in %rdi
+
+test_one:
+	movl $1, %eax    # eax = 1
+	jmp .L5
+.L6:
+	xorq %rdi, %rax  # rax = rax^x
+	shrq %rdi        # x=x>>1
+.L5:
+	testq %rdi, %rdi 
+	jne .L6          # if x != 0, go to .L6
+	                 # if x == 0, 
+	andl $0, %eax    # eax = 0
+	ret
+```
+* Draft code:
+```c
+# short test_one(unsigned short x)
+# x in %rdi
+
+short test_one(unsigned short x)
+{
+	eax = 1;
+	if(x==0) return 0;
+	if(x!=0)
+	{
+		rax=rax^x;
+		
+	}
+
+}
+```
 
 
 
