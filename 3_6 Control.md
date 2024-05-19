@@ -831,7 +831,7 @@ done:
 for (init-expr; test-expr; update-expr)
 	body-statement
 ```
-* similar `while` loop:
+* Transform to `while` loop:
 ```c
 init-expr;            // evaluates the initialization expression init-expr
 while (test-expr) {   // enters a loop where it first evaluates the test condition test-expr,
@@ -839,6 +839,100 @@ while (test-expr) {   // enters a loop where it first evaluates the test conditi
 	update-expr;      // evaluates the update expression update-expr
 }
 ```
+* Goto code - jump to middle strategy:
+```c
+	init-expr;
+	goto test;
+loop:
+	body-statement
+	update-expr;
+test:
+	t = test-expr;
+	if (t)
+		goto loop;
+```
+* Goto code - guarded-do strategy:
+```c
+	init_expr;
+	t = test-expr;
+	if(!t) 
+		goto done;
+loop:
+	body-statement
+	update-expr;
+	t = test-expr;
+	if(t) goto loop;
+done:
+	return
+```
+* Example:
+	```c
+	long fact_for(long n)
+	{
+		long i;
+		long result = 1;
+		for (i = 2; i <= n; i++)
+			result *= i;
+		return result;
+	}
+	```
+	* Find key element:
+		```
+			init_expr: i = 2
+			test-expr: i <= n
+			body-statement: result *= i
+			update-expr: i++
+		```
+	* Transform to `while` loop:
+		```c
+		long fact_for(long n)
+		{
+			long i = 2;
+			long result = 1;
+			while(i <= n)
+			{
+				result *= i;
+				i++;
+			}
+			return result;
+		}
+		```
+
+	* Goto code - jump to middle strategy:
+		```c
+		long fact_for(long n)
+		{
+			long i = 2;
+			long result = 1;
+			goto test;
+			
+		loop:
+			result *= i;
+			i++;
+			
+		test:
+			if(i <= n) goto loop;
+			return result;
+		}
+		```
+	* Goto code - guarded-do strategy:
+		```c
+		long fact_for(long n)
+		{
+			long i = 2;
+			long result = 1;
+			if(i > n) goto done;
+			
+		loop:
+			result *= i;
+			i++;
+			if(i <= n) goto loop;
+			
+		done:
+			return result;
+		}
+		```
+
 
 # Practice Problem 3.22
 A. Try to calculate 14! with a 32-bit int. Verify whether the computation of 14! overflows.
