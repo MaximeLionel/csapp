@@ -1073,7 +1073,8 @@ while (test-expr)
 	body-statement
 ```
 * It differs from do-while in that test-expr is evaluated and the loop is potentially terminated before the first execution of body-statement.
-### 1st translation method:
+### 1st translation method - jump to middle
+* **Jump to middle** performs the initial test by performing an unconditional **jump to the test at the end of the loop**.
 ```c
 	goto test;
 loop:
@@ -1085,7 +1086,34 @@ test:
 ```
 	![[3_6 Control.assets/image-20240517144442908.png|500]]
 
-### 2nd translation method:
+### 2nd translation method - guarded do
+* Guarded do first transforms the code into a do-while loop by using a conditional branch to **skip over the loop if the initial test fails**.
+* Gcc follows this strategy when compiling with higher levels of optimization, for example, with **command-line option -O1**.
+* Using this implementation strategy, the compiler can often optimize the initial test.
+* General form:
+```c
+t = test-expr;
+if (!t)
+	goto done;
+do
+	body-statement
+while (test-expr);
+done:
+```
+* goto code:
+```c
+t = test-expr;
+if (!t)
+	goto done;
+loop:
+	body-statement
+	t = test-expr;
+	if (t)
+		goto loop;
+done:
+```
+![[3_6 Control.assets/image-20240519091323183.png|600]]
+
 
 
 
@@ -1161,6 +1189,71 @@ short loop_while(short a, short b)
 		a = a - 1;
 	}
 	return result;
+}
+```
+
+# Practice Problem 3.25
+For C code having the general form
+```c
+long loop_while2(long a, long b)
+{
+	long result = ______ ;
+	while ( ______ ) {
+		result = ______ ;
+		b = ______ ;
+	}
+	return result;
+}
+```
+gcc, run with command-line option -O1, produces the following code:
+```z80
+# long loop_while2(long a, long b)
+# a in %rdi, b in %rsi
+
+loop_while2:
+	testq %rsi, %rsi
+	jle .L8
+	movq %rsi, %rax
+.L7:
+	imulq %rdi, %rax
+	subq %rdi, %rsi
+	testq %rsi, %rsi
+	jg .L7
+	rep; ret
+.L8:
+	movq %rsi, %rax
+	ret
+```
+We can see that the compiler used a guarded-do translation, using the `jle` instruction on line 3 to skip over the loop code when the initial test fails. Fill in the missing parts of the C code. Note that the control structure in the assembly code does not exactly match what would be obtained by a direct translation of the C code according to our translation rules. In particular, it has two different ret instructions (lines 10 and 13). However, you can fill out the missing portions of the C code in a way that it will have equivalent behavior to the assembly code.
+
+**Solution**:
+```z80
+# long loop_while2(long a, long b)
+# a in %rdi, b in %rsi
+
+loop_while2:
+	testq %rsi, %rsi
+	jle .L8            # if b <=0, go to .L8
+					   # if b>0
+	movq %rsi, %rax    # rax = rsi(b)
+.L7:
+	imulq %rdi, %rax
+	subq %rdi, %rsi
+	testq %rsi, %rsi
+	jg .L7
+	rep; ret
+.L8:                   
+	movq %rsi, %rax    # rax = rsi(b)
+	ret
+```
+
+```c
+# long loop_while2(long a, long b)
+# a in %rdi, b in %rsi
+
+long loop_while2(long a, long b)
+{
+	if(b<=0) return b;
 }
 ```
 

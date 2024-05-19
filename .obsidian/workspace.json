@@ -31,7 +31,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -98,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "3_6 Control.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "3_6 Control.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_2 Program Encodings.md"
+                "file": "3_6 Control.md"
               }
             }
           }
@@ -159,11 +160,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "d115a6c3982c0db9",
   "lastOpenFiles": [
+    "3_6 Control.assets/image-20240519091323183.png",
+    "3_2 Program Encodings.md",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets/image-20240517144442908.png",
-    "3_2 Program Encodings.md",
     "3_6 Control.md",
     "3_6 Control.assets/image-20240516105259745.png",
     "3_6 Control.assets/image-20240515171501731.png",
