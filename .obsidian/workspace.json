@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_2 Program Encodings.md",
+                "file": "3_4 Accessing Information.md",
                 "mode": "source",
                 "source": false
               }
@@ -31,8 +31,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -82,8 +81,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -99,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_4 Accessing Information.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_4 Accessing Information.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "3_4 Accessing Information.md"
               }
             }
           }
@@ -160,13 +158,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d115a6c3982c0db9",
+  "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
-    "3_6 Control.assets/image-20240519091323183.png",
     "3_2 Program Encodings.md",
+    "3_4 Accessing Information.md",
+    "3_6 Control.md",
+    "3_6 Control.assets/image-20240519091323183.png",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets/image-20240517144442908.png",
-    "3_6 Control.md",
     "3_6 Control.assets/image-20240516105259745.png",
     "3_6 Control.assets/image-20240515171501731.png",
     "3_6 Control.assets/image-20240515171401571.png",
@@ -176,10 +175,8 @@
     "3_6 Control.assets/image-20240515122043471.png",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets/image-20240513130005518.png",
-    "3_6 Control.assets/image-20240513124203080.png",
     "3_6 Control.assets",
     "2_4.md",
-    "3_4 Accessing Information.md",
     "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
