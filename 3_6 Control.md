@@ -1281,6 +1281,7 @@ long loop_while2(long a, long b)
 ```
 
 # Practice Problem 3.26
+* Original problem has a mistake!
 A function test_one has the following overall structure:
 ```c
 short test_one(unsigned short x) {
@@ -1307,7 +1308,7 @@ test_one:
 .L5:
 	testq %rdi, %rdi
 	jne .L6
-	andl $0, %eax
+	# andl $0, %eax
 	ret
 ```
 Reverse engineer the operation of this code and then do the following:
@@ -1330,7 +1331,6 @@ test_one:
 	testq %rdi, %rdi 
 	jne .L6          # if x != 0, go to .L6
 	                 # if x == 0, 
-	andl $0, %eax    # eax = 0
 	ret
 ```
 * Draft code:
@@ -1342,14 +1342,33 @@ short test_one(unsigned short x)
 {
 	eax = 1;
 	if(x==0) return 0;
-	if(x!=0)
+	while(x!=0)
 	{
 		rax=rax^x;
-		
+		x = x>>1;
 	}
-
+	return rax;
 }
 ```
+* Final code:
+```c
+# short test_one(unsigned short x)
+# x in %rdi
+
+short test_one(unsigned short x)
+{
+	short val = 1;
+	if(x==0) return 0;
+	while(x!=0)
+	{
+		val=val^x;
+		x = x>>1;
+	}
+	return val;
+}
+```
+
+A. Obviously, jump-to-middle.
 
 
 
