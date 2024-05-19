@@ -777,6 +777,57 @@ loop:
 * Example:
 	![[3_6 Control.assets/image-20240516105259745.png]]
 
+## While Loops
+* General form:
+```c
+while (test-expr)
+	body-statement
+```
+* It differs from do-while in that test-expr is evaluated and the loop is potentially terminated before the first execution of body-statement.
+### 1st translation method - jump to middle
+* **Jump to middle** performs the initial test by performing an unconditional **jump to the test at the end of the loop**.
+```c
+	goto test;
+loop:
+	body-statement
+test:
+	t = test-expr;
+	if (t)
+		goto loop;
+```
+	![[3_6 Control.assets/image-20240517144442908.png|500]]
+
+### 2nd translation method - guarded do
+* Guarded do first transforms the code into a do-while loop by using a conditional branch to **skip over the loop if the initial test fails**.
+* Gcc follows this strategy when compiling with higher levels of optimization, for example, with **command-line option -O1**.
+* Using this implementation strategy, the compiler can often optimize the initial test.
+* General form:
+```c
+t = test-expr;
+if (!t)
+	goto done;
+do
+	body-statement
+while (test-expr);
+done:
+```
+* goto code:
+```c
+t = test-expr;
+if (!t)
+	goto done;
+loop:
+	body-statement
+	t = test-expr;
+	if (t)
+		goto loop;
+done:
+```
+![[3_6 Control.assets/image-20240519091323183.png|600]]
+
+
+
+
 # Practice Problem 3.22
 A. Try to calculate 14! with a 32-bit int. Verify whether the computation of 14! overflows.
 
@@ -1065,55 +1116,6 @@ edi - n
 B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (*p)+=5?
 It just simply assumes that p always points to x
 C. Add annotations to the assembly code describing the operation of the program, similar to those shown in Figure 3.19(c).
-
-## While Loops
-* General form:
-```c
-while (test-expr)
-	body-statement
-```
-* It differs from do-while in that test-expr is evaluated and the loop is potentially terminated before the first execution of body-statement.
-### 1st translation method - jump to middle
-* **Jump to middle** performs the initial test by performing an unconditional **jump to the test at the end of the loop**.
-```c
-	goto test;
-loop:
-	body-statement
-test:
-	t = test-expr;
-	if (t)
-		goto loop;
-```
-	![[3_6 Control.assets/image-20240517144442908.png|500]]
-
-### 2nd translation method - guarded do
-* Guarded do first transforms the code into a do-while loop by using a conditional branch to **skip over the loop if the initial test fails**.
-* Gcc follows this strategy when compiling with higher levels of optimization, for example, with **command-line option -O1**.
-* Using this implementation strategy, the compiler can often optimize the initial test.
-* General form:
-```c
-t = test-expr;
-if (!t)
-	goto done;
-do
-	body-statement
-while (test-expr);
-done:
-```
-* goto code:
-```c
-t = test-expr;
-if (!t)
-	goto done;
-loop:
-	body-statement
-	t = test-expr;
-	if (t)
-		goto loop;
-done:
-```
-![[3_6 Control.assets/image-20240519091323183.png|600]]
-
 
 
 
