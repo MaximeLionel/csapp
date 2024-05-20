@@ -1657,6 +1657,21 @@ while(i < 10){
 ```
 There's an obviously error that, if i&1 return 1, i++ will not be executed thus lead an infinite loop.
 
+B.
+```c
+long sum = 0;
+long i = 0;
+
+while(i < 10){
+	if (i & 1)
+		goto loop;
+	sum += i;
+loop:
+	i++;
+}
+```
+
+
 
 
 
