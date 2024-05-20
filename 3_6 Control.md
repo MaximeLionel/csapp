@@ -1598,7 +1598,7 @@ test_two:
 	andl $1, %ecx        # ecx = ecx&1 = x&1
 	addq %rax, %rax      # rax = rax+rax = 130 = 0x82
 	orq %rcx, %rax       # rax = rcx|rax = (x&1)|0x82
-	shrq %rdi            # Shift right by 1
+	shrq %rdi            # rdi = rdi>>1(logical)
 	addq $1, %rdx
 	jne .L10
 	rep; ret
