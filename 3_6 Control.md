@@ -1642,19 +1642,19 @@ A. What would we get if we naively applied our rule for translating the for loop
 B. How could you replace the continue statement with a goto statement to ensure that the while loop correctly duplicates the behavior of the for loop?
 
 **Solution**:
+A.
+If translate to `while` loop directly, we get below:
+```c
+long sum = 0;
+long i = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
+while(i < 10){
+	if (i & 1)
+		continue;
+	sum += i;
+	i++;
+}
+```
 
 
 
