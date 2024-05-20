@@ -1655,6 +1655,7 @@ while(i < 10){
 	i++;
 }
 ```
+There's an obviously error that, if i&1 return 1, i++ will not be executed thus lead an infinite loop.
 
 
 
