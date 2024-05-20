@@ -1565,8 +1565,8 @@ The gcc C compiler generates the following assembly code:
 # x in %rdi
 
 test_two:
-	movl $1, %edx
-	movl $65, %eax
+	movl $64, %edx     # mistake on book, should be `64` instead of `1`
+	movl $0, %eax      # mistake on book, should be `0` instead of `65`
 .L10:
 	movq %rdi, %rcx
 	andl $1, %ecx
@@ -1591,17 +1591,29 @@ C. Describe in English what this function computes.
 # x in %rdi
 
 test_two:
-	movl $1, %edx        # edx = 1
-	movl $65, %eax       # eax = 65
+	movl $64, %edx       # edx = 64
+	movl $0, %eax        # eax = 0
 .L10:
 	movq %rdi, %rcx      # rcx = rdi(x) = x
 	andl $1, %ecx        # ecx = ecx&1 = x&1
-	addq %rax, %rax      # rax = rax+rax = 130 = 0x82
-	orq %rcx, %rax       # rax = rcx|rax = (x&1)|0x82
+	addq %rax, %rax      # rax = rax+rax
+	orq %rcx, %rax       # rax = rcx|rax = (x&1)|rax
 	shrq %rdi            # rdi = rdi>>1(logical)
-	addq $1, %rdx
-	jne .L10
+	subq $1, %rdx        # rdx--
+	jne .L10             # if rdx!=0, go to .L10
 	rep; ret
+```
+A.
+```c
+short test_two(unsigned short x) {
+	short val = 0;
+	short i;
+	for ( i = 64 ; i != 0 ; i-- ) {
+		val = (x&1) | (val*2);
+		x = x>>1; // because x is unsigned, right shift is logically by default
+	}
+	return val;
+}
 ```
 
 
