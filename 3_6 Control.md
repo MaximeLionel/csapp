@@ -1597,7 +1597,7 @@ test_two:
 	movq %rdi, %rcx      # rcx = rdi(x) = x
 	andl $1, %ecx        # ecx = ecx&1 = x&1
 	addq %rax, %rax      # rax = rax+rax = 130 = 0x82
-	orq %rcx, %rax       # rax = rcx|rax = (x&1)|130
+	orq %rcx, %rax       # rax = rcx|rax = (x&1)|0x82
 	shrq %rdi            # Shift right by 1
 	addq $1, %rdx
 	jne .L10
