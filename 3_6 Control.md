@@ -1545,6 +1545,22 @@ done:
 }
 ```
 
+# Practice Problem 3.28
+A function test_two has the following overall structure:
+```c
+short test_two(unsigned short x) {
+	short val = 0;
+	short i;
+	for ( ... ; ... ; ... ) {
+		.
+		.
+		.
+	}
+	return val;
+}
+```
+The gcc C compiler generates the following assembly code:
+
 
 
 
