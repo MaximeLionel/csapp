@@ -1596,7 +1596,7 @@ test_two:
 .L10:
 	movq %rdi, %rcx      # rcx = rdi(x) = x
 	andl $1, %ecx        # ecx = ecx&1 = x&1
-	addq %rax, %rax      # rax = rax+rax
+	addq %rax, %rax      # rax = rax+rax = rax<<1
 	orq %rcx, %rax       # rax = rcx|rax = (x&1)|rax
 	shrq %rdi            # rdi = rdi>>1(logical)
 	subq $1, %rdx        # rdx--
@@ -1609,12 +1609,18 @@ short test_two(unsigned short x) {
 	short val = 0;
 	short i;
 	for ( i = 64 ; i != 0 ; i-- ) {
-		val = (x&1) | (val*2);
+		val = (x&1) | (val<<1);
 		x = x>>1; // because x is unsigned, right shift is logically by default
 	}
 	return val;
 }
 ```
+
+B.
+Compiler find it no need. i(edx) is initialized to 64 which is obviously != 0.
+
+C. 
+
 
 
 
