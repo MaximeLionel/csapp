@@ -1573,7 +1573,7 @@ test_two:
 	addq %rax, %rax
 	orq %rcx, %rax
 	shrq %rdi           # Shift right by 1
-	addq $1, %rdx
+	subq $1, %rdx       # mistake on book, should be `subq` instead of `addq`
 	jne .L10
 	rep; ret
 ```
