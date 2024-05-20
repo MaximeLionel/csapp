@@ -1674,6 +1674,7 @@ loop:
 # 3.6.8 Switch Statement
 * A jump table is an array where entry i is the address of a code segment implementing the action the program should take when the switch index equals i.
 	* The advantage of using a jump table over a long sequence of if-else statements is that the time taken to perform the switch is independent of the number of switch cases.
+	* Jump tables are used when there are a number of cases and they span a small range of values.
 
 
 
