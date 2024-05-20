@@ -1622,6 +1622,23 @@ Compiler find it no need. i(edx) is initialized to 64 which is obviously != 0.
 C. 
 Reverse the bits of x and return.
 
+# Practice Problem 3.29
+Executing a continue statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a for loop into a while loop needs some refinement when dealing with continue statements. For example, consider the following code:
+```c
+/* Example of for loop containing a continue statement */
+
+/* Sum even numbers between 0 and 9 */
+
+long sum = 0;
+long i;
+
+for (i = 0; i < 10; i++) {
+	if (i & 1)
+		continue;
+	sum += i;
+}
+```
+
 
 
 
