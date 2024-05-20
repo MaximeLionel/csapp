@@ -1626,7 +1626,6 @@ Reverse the bits of x and return.
 Executing a continue statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a for loop into a while loop needs some refinement when dealing with continue statements. For example, consider the following code:
 ```c
 /* Example of for loop containing a continue statement */
-
 /* Sum even numbers between 0 and 9 */
 
 long sum = 0;
@@ -1638,7 +1637,11 @@ for (i = 0; i < 10; i++) {
 	sum += i;
 }
 ```
+A. What would we get if we naively applied our rule for translating the for loop into a while loop? What would be wrong with this code?
 
+B. How could you replace the continue statement with a goto statement to ensure that the while loop correctly duplicates the behavior of the for loop?
+
+**Solution**:
 
 
 
