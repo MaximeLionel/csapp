@@ -1560,6 +1560,49 @@ short test_two(unsigned short x) {
 }
 ```
 The gcc C compiler generates the following assembly code:
+```z80
+# test fun_b(unsigned test x)
+# x in %rdi
+
+test_two:
+	movl $1, %edx
+	movl $65, %eax
+.L10:
+	movq %rdi, %rcx
+	andl $1, %ecx
+	addq %rax, %rax
+	orq %rcx, %rax
+	shrq %rdi           # Shift right by 1
+	addq $1, %rdx
+	jne .L10
+	rep; ret
+```
+Reverse engineer the operation of this code and then do the following:
+
+A. Use the assembly-code version to fill in the missing parts of the C code.
+
+B. Explain why there is neither an initial test before the loop nor an initial jump to the test portion of the loop.
+
+C. Describe in English what this function computes.
+
+**Solution**:
+```z80
+# test fun_b(unsigned test x)
+# x in %rdi
+
+test_two:
+	movl $1, %edx        # edx = 1
+	movl $65, %eax       # eax = 65
+.L10:
+	movq %rdi, %rcx      # rcx = rdi(x) = x
+	andl $1, %ecx        # ecx = ecx&1 = x&1
+	addq %rax, %rax      # rax = rax+rax = 130 = 0x82
+	orq %rcx, %rax       # rax = rcx|rax = (x&1)|130
+	shrq %rdi            # Shift right by 1
+	addq $1, %rdx
+	jne .L10
+	rep; ret
+```
 
 
 
