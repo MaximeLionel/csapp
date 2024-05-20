@@ -1620,7 +1620,7 @@ B.
 Compiler find it no need. i(edx) is initialized to 64 which is obviously != 0.
 
 C. 
-
+Reverse the bits of x and return.
 
 
 
