@@ -30,9 +30,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "9852f6a9d85ee135",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "3_7 Procedures.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -82,8 +94,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -99,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_7 Procedures.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_7 Procedures.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "3_7 Procedures.md"
               }
             }
           }
@@ -160,8 +171,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d115a6c3982c0db9",
+  "active": "9852f6a9d85ee135",
   "lastOpenFiles": [
+    "3_6 Control.md",
+    "3_7 Procedures.md",
     "3_6 Control.assets/image-20240519091323183.png",
     "3_6 Control.assets/image-20240517144442908.png",
     "3_6 Control.assets/image-20240516105259745.png",
@@ -172,10 +185,8 @@
     "3_6 Control.assets/image-20240515122210403.png",
     "3_6 Control.assets/image-20240515122043471.png",
     "3_2 Program Encodings.md",
-    "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets/image-20240513130005518.png",
-    "3_6 Control.assets/image-20240513124203080.png",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets",
     "2_4.md",
