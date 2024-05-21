@@ -1809,7 +1809,7 @@ switch_eg:
         cmpq    $6, %rsi
         ja      .L8
         leaq    .L4(%rip), %rcx         # rcx = .L4 - rip
-        movslq  (%rcx,%rsi,4), %rax
+        movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 - old_rip)
         addq    %rcx, %rax
         notrack jmp     *%rax
 .section        .rodata
@@ -1842,6 +1842,7 @@ switch_eg:
 ```
 * `leaq .L4(%rip), %rcx` - calculate the address of the label `.L4` relative to the current position of the instruction pointer, `rip`, and load that address into the `rcx` register.
 	* **`(%rip)`** - means that this is an example of RIP-relative addressing.
+* `movslq` - move Signed Long to Quad.
 
 
 
