@@ -1810,7 +1810,7 @@ switch_eg:
         ja      .L8
         leaq    .L4(%rip), %rcx         # rcx = .L4 + rip = .L4 absolute address
         movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 absolute address) = some entry value of jump table
-        addq    %rcx, %rax              # rax = rcx + rax = swtich case absolute address
+        addq    %rcx, %rax              # rax = rcx + rax = switch case absolute address
         notrack                         # pseudo-instruction, just ignore
 		jmp     *%rax                   
 .section        .rodata
