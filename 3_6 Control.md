@@ -1808,12 +1808,12 @@ switch_eg:
         subq    $100, %rsi
         cmpq    $6, %rsi
         ja      .L8
-        leaq    .L4(%rip), %rcx         # rcx = .L4 - rip
-        movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 - old_rip)
+        leaq    .L4(%rip), %rcx         # rcx = .L4 + rip = .L4 absolute address
+        movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 absolute address) = some entry value of jump table
         addq    %rcx, %rax
         notrack jmp     *%rax
 .section        .rodata
-.L4:
+.L4:                                    # jump table
         .long   .L7-.L4
         .long   .L8-.L4
         .long   .L6-.L4
@@ -1840,8 +1840,7 @@ switch_eg:
         movl    $0, %edi
         jmp     .L2
 ```
-* `leaq .L4(%rip), %rcx` - calculate the address of the label `.L4` relative to the current position of the instruction pointer, `rip`, and load that address into the `rcx` register.
-	* **`(%rip)`** - means that this is an example of RIP-relative addressing.
+* `leaq .L4(%rip), %rcx` - calculate the absolute address of the label `.L4`. Now it's only assembly file so `.L4` is only relative address. After adding current instruction address, the result would be absolute address of `.L4`.
 * `movslq` - move Signed Long to Quad.
 
 
