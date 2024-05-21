@@ -2000,12 +2000,12 @@ switcher:
 	jmp .L6 
 	
 .L5: 
-	leaq (%rdx,%rsi), %rdi 
-	salq $2, %rdi 
+	leaq (%rdx,%rsi), %rdi   # rdi = rdx+rsi = c + b
+	salq $2, %rdi            # rdi >>= 2
 	jmp .L6 
 	
 .L2: 
-	movq %rsi, %rdi 
+	movq %rsi, %rdi          # rdi = rsi
 	
 .L6: 
 	movq %rdi, (%rcx) 
@@ -2016,14 +2016,38 @@ switcher:
 .L4:
 	.quad .L3    # rdi = 0: a = 0
 	.quad .L2    # a = 1 - .done
-	.quad .L5    # a = 2
+	.quad .L5    # a = 2 
 	.quad .L2    # a = 3 - .done
 	.quad .L6    # a = 4
 	.quad .L7    # a = 5
 	.quad .L2    # a = 6 - .done
 	.quad .L5    # a = 7
 ```
-
+* Now let's try to fill in:
+```c
+void switcher(long a, long b, long c, long *dest)
+{
+	long val;
+	switch(a) {
+		case 5 : /* Case A */
+			c = b^0x1111;
+			/* Fall through */
+		case 0: /* Case B */
+			val = c + 112;
+			break;
+		case 2: /* Case C */
+		case 7: /* Case D */
+			val = (b+c)>>2;
+			break;
+		case 4: /* Case E */
+			val = a;
+			break;
+		default:
+			val = b;
+	}
+	*dest = val;  // (rcx) = val
+}
+```
 
 
 
