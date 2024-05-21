@@ -1737,6 +1737,10 @@ void switch_eg_impl(long x, long n, long *dest)
 		*dest = val;
 }
 ```
+* This code makes use of **support provided by gcc for jump tables**, as an extension to the C language.
+* The array `jt` contains seven entries, each of which is the address of a block of code.
+* These locations are defined by labels in the code and indicated in the entries in `jt` by code pointers, consisting of the labels prefixed by `&&`.
+	* `&&` - In GCC, `&&label` is a way to get the address of a label.
 
 
 
