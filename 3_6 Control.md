@@ -1843,6 +1843,7 @@ switch_eg:
 ```
 * `leaq .L4(%rip), %rcx` - calculate the absolute address of the label `.L4`. Now it's only assembly file so `.L4` is only relative address. After adding current instruction address, the result would be absolute address of `.L4`.
 * `movslq` - move Signed Long to Quad.
+* **`jmp *%rax`**: The asterisk `*` before the register `%rax` indicates an **indirect jump. The processor will jump to the address contained in the `%rax` register, rather than to a fixed address.
 
 
 
