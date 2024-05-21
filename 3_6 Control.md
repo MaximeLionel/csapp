@@ -1901,6 +1901,20 @@ switch2:
 	                     # if rdi <= 8
 	jmp *.L4(,%rdi,8)    # jump to *(.L4 + 8*rdi)
 ```
+* Easy to guess `.L2` is `.done` label.
+* Let's look into the jump table:
+```z80
+.L4:
+	.quad .L9 # rdi = 0: x = -2
+	.quad .L5 # rdi = 1: x = -1
+	.quad .L6 # x = 0
+	.quad .L7 # x = 1
+	.quad .L2 # x = 2  # .done label and ignore
+	.quad .L7 # x = 3
+	.quad .L8 # x = 4
+	.quad .L2 # x = 5  # .done label and ignore
+	.quad .L5 # x = 6
+```
 
 
 
