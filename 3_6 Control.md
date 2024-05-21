@@ -1677,9 +1677,8 @@ loop:
 	* Jump tables are used when there are a number of cases and they span a small range of values.
 * Example:
 ```c
-void switch_eg(long x, long n,
-
-long *dest)
+# rdi - x, rsi - n, rdx - dest
+void switch_eg(long x, long n, long *dest)
 {
 	long val = x;
 	switch (n) {
@@ -1701,6 +1700,51 @@ long *dest)
 	}
 	*dest = val;
 }
+```
+* assembly code:
+```z80
+# void switch_eg(long x, long n, long *dest)
+# rdi - x, rsi - n, rdx - dest
+        .file   "switch_eg.c"
+.text
+        .globl  switch_eg
+        .type   switch_eg, @function
+switch_eg:
+.LFB0:
+        subq    $100, %rsi
+        cmpq    $6, %rsi
+        ja      .L8
+        leaq    .L4(%rip), %rcx
+        movslq  (%rcx,%rsi,4), %rax
+        addq    %rcx, %rax
+        notrack jmp     *%rax
+.section        .rodata
+.L4:
+        .long   .L7-.L4
+        .long   .L8-.L4
+        .long   .L6-.L4
+        .long   .L5-.L4
+        .long   .L3-.L4
+        .long   .L8-.L4
+        .long   .L3-.L4
+        .text
+.L7:
+        leaq    (%rdi,%rdi,2), %rax
+        leaq    (%rdi,%rax,4), %rdi
+        jmp     .L2
+.L6:
+        addq    $10, %rdi
+.L5:
+        addq    $11, %rdi
+.L2:
+        movq    %rdi, (%rdx)
+        ret
+.L3:
+        imulq   %rdi, %rdi
+        jmp     .L2
+.L8:
+        movl    $0, %edi
+        jmp     .L2
 ```
 
 
