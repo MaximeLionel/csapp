@@ -1955,7 +1955,8 @@ Fill in the missing parts of the C code. Except for the ordering of case labels 
 
 switcher: 
 	cmpq $7, %rdi 
-	ja .L2 jmp *.L4(,%rdi,8) 
+	ja .L2 
+	jmp *.L4(,%rdi,8) 
 	.section .rodata 
 	
 .L7: 
@@ -1977,6 +1978,50 @@ switcher:
 .L6: 
 	movq %rdi, (%rcx) 
 	ret
+```
+
+**Solution**:
+```z80
+# void switcher(long a, long b, long c, long *dest) 
+# a in %rdi, b in %rsi, c in %rdx, d in %rcx 
+
+switcher: 
+	cmpq $7, %rdi            # compare rdi(a) and 7
+	ja .L2                   # if a > 7, jump to .L2(.done)
+	jmp *.L4(,%rdi,8)        # jump to (.L4+8*rdi) = (.L4+8*a)
+	.section .rodata 
+	
+.L7: 
+	xorq $15, %rsi 
+	movq %rsi, %rdx 
+	
+.L3: 
+	leaq 112(%rdx), %rdi 
+	jmp .L6 
+	
+.L5: 
+	leaq (%rdx,%rsi), %rdi 
+	salq $2, %rdi 
+	jmp .L6 
+	
+.L2: 
+	movq %rsi, %rdi 
+	
+.L6: 
+	movq %rdi, (%rcx) 
+	ret
+```
+
+```
+.L4:
+	.quad .L3
+	.quad .L2
+	.quad .L5
+	.quad .L2
+	.quad .L6
+	.quad .L7
+	.quad .L2
+	.quad .L5
 ```
 
 
