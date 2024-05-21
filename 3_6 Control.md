@@ -1859,7 +1859,48 @@ void switch2(short x, short *dest) {
 	*dest = val;
 }
 ```
+In compiling the function, gcc generates the assembly code that follows for the initial part of the procedure, with variable x in %rdi:
+```z80
+# void switch2(short x, short *dest)
+# x in %rdi
 
+switch2:
+	addq $2, %rdi
+	cmpq $8, %rdi
+	ja .L2
+	jmp *.L4(,%rdi,8)
+```
+It generates the following code for the jump table:
+```z80
+.L4:
+	.quad .L9
+	.quad .L5
+	.quad .L6
+	.quad .L7
+	.quad .L2
+	.quad .L7
+	.quad .L8
+	.quad .L2
+	.quad .L5
+```
+Based on this information, answer the following questions:
+
+A. What were the values of the case labels in the switch statement?
+
+B. What cases had multiple labels in the C code?
+
+**Solution**:
+```z80
+# void switch2(short x, short *dest)
+# x in %rdi
+
+switch2:
+	addq $2, %rdi        # rdi = rdi + 2 = x + 2
+	cmpq $8, %rdi        # compare rdi and 8
+	ja .L2               # if rdi > 8, jump to .L2
+	                     # if rdi <= 8
+	jmp *.L4(,%rdi,8)    # jump to *(.L4 + 8*rdi)
+```
 
 
 
