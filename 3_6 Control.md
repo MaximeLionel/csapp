@@ -1812,7 +1812,7 @@ switch_eg:
         movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 absolute address) = some entry value of jump table
         addq    %rcx, %rax              # rax = rcx + rax = switch case absolute address
         notrack                         # pseudo-instruction, just ignore
-		jmp     *%rax                   
+		jmp     *%rax                   # jump to the address contained in rax  
 .section        .rodata
 .L4:                                    # jump table
         .long   .L7-.L4
@@ -1837,7 +1837,7 @@ switch_eg:
 .L3:
         imulq   %rdi, %rdi
         jmp     .L2
-.L8:
+.L8:                               # done
         movl    $0, %edi
         jmp     .L2
 ```
