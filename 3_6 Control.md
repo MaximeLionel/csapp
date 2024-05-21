@@ -1845,7 +1845,20 @@ switch_eg:
 * `movslq` - move Signed Long to Quad.
 * **`jmp *%rax`**: The asterisk `*` before the register `%rax` indicates an **indirect jump**. The processor will jump to the address contained in the `%rax` register, rather than to a fixed address.
 
-
+# Practice Problem 3.30
+In the C function that follows, we have omitted the body of the switch statement. In the C code, the case labels did not span a contiguous range, and some cases had multiple labels.
+```c
+void switch2(short x, short *dest) {
+	short val = 0;
+	switch (x) {
+		.
+		.
+		.
+		Body of switch statement omitted
+	}
+	*dest = val;
+}
+```
 
 
 
