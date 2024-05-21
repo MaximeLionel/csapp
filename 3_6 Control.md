@@ -1921,9 +1921,63 @@ A.
 B.
 .L5, .L7, .L2 (.done label)
 
+# Practice Problem 3.31
+For a C function switcher with the general structure
+```c
+void switcher(long a, long b, long c, long *dest)
+{
+	long val;
+	switch(a) {
+		case ______ : /* Case A */
+			c = ______ ;
+			/* Fall through */
+		case ______ : /* Case B */
+			val = ______ ;
+			break;
+		case ______ : /* Case C */
+		case ______ : /* Case D */
+			val = ______ ;
+			break;
+		case ______ : /* Case E */
+			val = ______ ;
+			break;
+		default:
+			val = ______ ;
+	}
+	*dest = val;
+}
+```
+gcc generates the assembly code and jump table shown in figure below.
+Fill in the missing parts of the C code. Except for the ordering of case labels C and D, there is only one way to fit the different cases into the template.
+```z80
+# void switcher(long a, long b, long c, long *dest) 
+# a in %rsi, b in %rdi, c in %rdx, d in %rcx 
 
-
-
+switcher: 
+	cmpq $7, %rdi 
+	ja .L2 jmp *.L4(,%rdi,8) 
+	.section .rodata 
+	
+.L7: 
+	xorq $15, %rsi 
+	movq %rsi, %rdx 
+	
+.L3: 
+	leaq 112(%rdx), %rdi 
+	jmp .L6 
+	
+.L5: 
+	leaq (%rdx,%rsi), %rdi 
+	salq $2, %rdi 
+	jmp .L6 
+	
+.L2: 
+	movq %rsi, %rdi 
+	
+.L6: 
+	movq %rdi, (%rcx) 
+	ret
+```
 
 
 
