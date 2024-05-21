@@ -1915,6 +1915,10 @@ switch2:
 	.quad .L2 # x = 5  # .done label and ignore
 	.quad .L5 # x = 6
 ```
+A. 
+-2,-1,0,1,3,4,6
+
+B.
 
 
 
