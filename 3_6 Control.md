@@ -1992,11 +1992,11 @@ switcher:
 	.section .rodata 
 	
 .L7: 
-	xorq $15, %rsi 
-	movq %rsi, %rdx 
-	
+	xorq $15, %rsi           # rsi = rsi xor 0x1111 = b^0x1111
+	movq %rsi, %rdx          # rdx = rsi = b^0x1111
+	                         # fall through
 .L3: 
-	leaq 112(%rdx), %rdi 
+	leaq 112(%rdx), %rdi     # rdi = rdx + 112
 	jmp .L6 
 	
 .L5: 
@@ -2014,14 +2014,14 @@ switcher:
 
 ```
 .L4:
-	.quad .L3
-	.quad .L2
-	.quad .L5
-	.quad .L2
-	.quad .L6
-	.quad .L7
-	.quad .L2
-	.quad .L5
+	.quad .L3    # rdi = 0: a = 0
+	.quad .L2    # a = 1 - .done
+	.quad .L5    # a = 2
+	.quad .L2    # a = 3 - .done
+	.quad .L6    # a = 4
+	.quad .L7    # a = 5
+	.quad .L2    # a = 6 - .done
+	.quad .L5    # a = 7
 ```
 
 
