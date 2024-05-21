@@ -1794,15 +1794,8 @@ switch_eg:
 * There should be a sequence of seven “quad” (8-byte) words, where the value of each word is given by the instruction address associated with the indicated assembly-code labels.
 
 
+### Assembly Code in lab
 
-
-
-
-
-
-
-
-assembly code:
 ```z80
 # void switch_eg(long x, long n, long *dest)
 # rdi - x, rsi - n, rdx - dest
@@ -1815,7 +1808,7 @@ switch_eg:
         subq    $100, %rsi
         cmpq    $6, %rsi
         ja      .L8
-        leaq    .L4(%rip), %rcx
+        leaq    .L4(%rip), %rcx         # rcx = .L4 - rip
         movslq  (%rcx,%rsi,4), %rax
         addq    %rcx, %rax
         notrack jmp     *%rax
@@ -1847,6 +1840,8 @@ switch_eg:
         movl    $0, %edi
         jmp     .L2
 ```
+* `leaq .L4(%rip), %rcx` - calculate the address of the label `.L4` relative to the current position of the instruction pointer, `rip`, and load that address into the `rcx` register.
+	* **`(%rip)`** - means that this is an example of RIP-relative addressing.
 
 
 
