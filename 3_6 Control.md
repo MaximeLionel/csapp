@@ -1716,7 +1716,7 @@ void switch_eg_impl(long x, long n, long *dest)
 	if (index > 6)    goto loc_def;
 	/* Multiway branch */
 	
-	goto *jt[index];
+	goto *jt[index]; // Key Step
 	
 	loc_A: /* Case 100 */
 		val = x * 13;
@@ -1740,7 +1740,58 @@ void switch_eg_impl(long x, long n, long *dest)
 * This code makes use of **support provided by gcc for jump tables**, as an extension to the C language.
 * The array `jt` contains seven entries, each of which is the address of a block of code.
 * These locations are defined by labels in the code and indicated in the entries in `jt` by code pointers, consisting of the labels prefixed by `&&`.
-	* `&&` - In GCC, `&&label` is a way to get the address of a label.
+	* `&&` - in GCC, `&&label` is a way to get the address of a label.
+* The compiler first shifts the range to between 0 and 6 by subtracting 100 from n, creating a new program variable that we call `index` in our C version.
+	* treating `index` as an unsigned value.
+* It can therefore test whether index is outside of the range 0–6 by testing whether it is greater than 6.
+* There are five distinct locations to jump to, based on the value of index.
+* The key step in executing a switch statement is to access a code location through the jump table. This occurs in line 16 in the C code, with a goto statement that references the jump table `jt`.
+* Our C code declares the jump table as an array of seven elements, each of which is a pointer to a code location. These elements span values 0–6 of index, corresponding to values 100–106 of n. Observe that the jump table handles duplicate cases by simply having the same code label (loc_D) for entries 4 and 6, and it handles missing cases by using the label for the default case (loc_def) as entries 1 and 5.
+
+### Assembly Code
+```z80
+# void switch_eg(long x, long n, long *dest)
+# x in %rdi, n in %rsi, dest in %rdx
+
+switch_eg:
+	subq $100, %rsi   # Compute index = n-100
+	cmpq $6, %rsi     # Compare index:6
+	ja .L8            # If >, goto loc_def
+	jmp *.L4(,%rsi,8) # Goto *jg[index]
+.L3:                  # loc_A:
+	leaq (%rdi,%rdi,2), %rax # 3*x
+	leaq (%rdi,%rax,4), %rdi # val = 13*x
+	jmp .L2                  # Goto done
+.L5:                         # loc_B:
+	addq $10, %rdi           # x = x + 10
+.L6:                         # loc_C:
+	addq $11, %rdi           # val = x + 11
+	jmp .L2                  # Goto done
+.L7:                         # loc_D:
+	imulq %rdi, %rdi         # val = x * x
+	jmp .L2                  # Goto done
+.L8:                         # loc_def:
+	movl $0, %edi            # val = 0
+.L2:                         # done:
+	movq %rdi, (%rdx)        # *dest = val
+	ret                      # Return
+```
+* Jump table:
+```z80
+.section .rodata
+.align 8             # Align address to multiple of 8
+
+.L4:
+	.quad .L3        # Case 100: loc_A
+	.quad .L8        # Case 101: loc_def
+	.quad .L5        # Case 102: loc_B
+	.quad .L6        # Case 103: loc_C
+	.quad .L7        # Case 104: loc_D
+	.quad .L8        # Case 105: loc_def
+	.quad .L7        # Case 106: loc_D
+```
+* These declarations state that within the segment of the object-code file called `.rodata`.
+* There should be a sequence of seven “quad” (8-byte) words, where the value of each word is given by the instruction address associated with the indicated assembly-code labels.
 
 
 
