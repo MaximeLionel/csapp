@@ -1675,7 +1675,8 @@ loop:
 * A jump table is an array where entry i is the address of a code segment implementing the action the program should take when the switch index equals i.
 	* The advantage of using a jump table over a long sequence of if-else statements is that the time taken to perform the switch is independent of the number of switch cases.
 	* Jump tables are used when there are a number of cases and they span a small range of values.
-* Example:
+## Example:
+### Original C code:
 ```c
 # rdi - x, rsi - n, rdx - dest
 void switch_eg(long x, long n, long *dest)
@@ -1701,7 +1702,52 @@ void switch_eg(long x, long n, long *dest)
 	*dest = val;
 }
 ```
-* assembly code:
+### Translate to extended C form
+```c
+void switch_eg_impl(long x, long n, long *dest)
+{
+	/* Table of code pointers */
+	static void *jt[7] = {
+		&&loc_A, &&loc_def, &&loc_B, &&loc_C, &&loc_D, &&loc_def, &&loc_D 
+	};
+
+	unsigned long index=n- 100;
+	long val;
+	if (index > 6)    goto loc_def;
+	/* Multiway branch */
+	
+	goto *jt[index];
+	
+	loc_A: /* Case 100 */
+		val = x * 13;
+		goto done;
+	
+	loc_B: /* Case 102 */
+		x = x + 10;
+	/* Fall through */
+	loc_C: /* Case 103 */
+		val = x + 11;
+		goto done;
+	loc_D: /* Cases 104, 106 */
+		val = x * x;
+		goto done;
+	loc_def: /* Default case */
+		val = 0;
+	done:
+		*dest = val;
+}
+```
+
+
+
+
+
+
+
+
+
+
+assembly code:
 ```z80
 # void switch_eg(long x, long n, long *dest)
 # rdi - x, rsi - n, rdx - dest
