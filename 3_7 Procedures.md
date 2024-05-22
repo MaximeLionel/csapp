@@ -46,4 +46,31 @@
 ![[3_7 Procedures.assets/image-20240522101614495.png|300]]
 * A call can be either direct or indirect:
 	* Direct call - the target of a direct call is given as a label;
-	* Indirect call - the target of an indirect call is given by `*` followed by an operand specifier
+	* Indirect call - the target of an indirect call is given by `*` followed by an operand specifier.
+## Example
+```c
+#include<stdio.h>
+
+int add(int a, int b)
+{
+        return a+b;
+}
+
+int main()
+{
+        int a = 6;
+        int b = 9;
+        int c = add(a,b);
+
+        printf("%d + %d = %d \n",a,b,c);
+        return 0;
+}
+```
+* Firstly, we check and select the stack frame:
+```shell
+(gdb) backtrace
+#0  main () at main.c:9
+(gdb) frame 0
+#0  main () at main.c:9
+9       {
+```
