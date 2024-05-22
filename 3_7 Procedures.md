@@ -14,4 +14,9 @@
 	* When Q returns, any local storage it has allocated can be freed.
 * A program can manage the storage required by its procedures using a stack:
 	* As P calls Q, control and data information are added to the end of the stack. 
-	* This information gets deallocated when P returns
+	* This information gets deallocated when P returns.
+* Stack management:
+	* The x86-64 stack grows toward lower addresses and the stack pointer `%rsp` points to the top element of the stack.
+	* Data can be stored on and retrieved from the stack using the `pushq` and `popq` instructions.
+	* Space for data with no specified initial value can be allocated on the stack by simply decrementing the stack pointer by an appropriate amount. 
+	* Space can be deallocated by incrementing the stack pointer.
