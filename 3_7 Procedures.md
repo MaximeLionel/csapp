@@ -160,8 +160,8 @@ End of assembler dump.
 	* This instruction pops the value 0x400568 from the stack and jumps to this address, resuming the execution of main just after the call instruction.
 		
 ## Example 2 on book
-![[3_7 Procedures.assets/image-20240522131654513.png|700]]
-![[3_7 Procedures.assets/image-20240522131746300.png|700]]
-
-
+![[3_7 Procedures.assets/image-20240522131654513.png|600]]
+![[3_7 Procedures.assets/image-20240522131746300.png|600]]
+* Each instruction is identified by labels L1–L2 (in leaf), T1–T4 (in top), and M1–M2 in main.
+* main calls top(100), causing top to call leaf(95). Function leaf returns 97 to top, then returns 194 to main.
 
