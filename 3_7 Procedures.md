@@ -47,7 +47,7 @@
 * A call can be either direct or indirect:
 	* Direct call - the target of a direct call is given as a label;
 	* Indirect call - the target of an indirect call is given by `*` followed by an operand specifier.
-## Example
+## Example 0
 ```c
 #include<stdio.h>
 
@@ -150,13 +150,18 @@ End of assembler dump.
 ```
 * We find the `return address` has been popped already.
 
-## Example on book
+## Example 1 on book
 ![[3_7 Procedures.assets/image-20240522130848202.png|600]]
 ![[3_7 Procedures.assets/image-20240522130957356.png|600]]
 
 * Executing call - the call instruction with address 0x400563 in main calls function `multstore`.
 * After call - push the return address 0x400568 onto the stack and to jump to the first instruction in function `multstore`, at address 0x0400540.
-* After ret - 
+* After ret - The execution of function `multstore` continues until it hits the ret instruction at address 0x40054d.
+	* This instruction pops the value 0x400568 from the stack and jumps to this address, resuming the execution of main just after the call instruction.
 		
-	
+## Example 2 on book
+![[3_7 Procedures.assets/image-20240522131654513.png|700]]
+![[3_7 Procedures.assets/image-20240522131746300.png|700]]
+
+
 
