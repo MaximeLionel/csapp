@@ -66,7 +66,7 @@ int main()
         return 0;
 }
 ```
-* Firstly, we check and select the stack frame:
+* Firstly, we check and select the stack frame, also list the frame info and stack 64bits' information:
 ```shell
 (gdb) backtrace
 #0  main () at main.c:9
@@ -74,3 +74,89 @@ int main()
 #0  main () at main.c:9
 9       {
 ```
+
+```shell
+(gdb) info locals
+a = 6
+b = 9
+c = <optimized out>
+(gdb) info args
+No arguments.
+```
+
+```shell
+(gdb) x/10dx $rsp
+0x7fffffffe398: 0xf7da9d90      0x00007fff      0x00000000    0x00000000
+0x7fffffffe3a8: 0x55555151      0x00005555      0x00000000    0x00000001
+0x7fffffffe3b8: 0xffffe4a8      0x00007fff
+(gdb) 
+```
+
+* Secondly, step into the add function and check the same information again:
+```shell
+(gdb) backtrace
+#0  add (a=a@entry=6, b=b@entry=9) at main.c:5
+#1  0x0000555555555168 in main () at main.c:12
+(gdb) frame 0
+#0  add (a=a@entry=6, b=b@entry=9) at main.c:5
+5               return a+b;
+```
+
+```shell
+(gdb) info locals
+No locals.
+(gdb) info args
+a = 6
+b = 9
+```
+
+```shell
+(gdb) x/10dx $rsp
+0x7fffffffe388: 0x55555168      0x00005555      0x00000000    0x00000000
+0x7fffffffe398: 0xf7da9d90      0x00007fff      0x00000000    0x00000000
+0x7fffffffe3a8: 0x55555151      0x00005555
+```
+
+* What we find is that on top of the stack, there's one 64bits number: `0x55555168      0x00005555`. Let's find out what it is. We disassemble the main function.
+```shell
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000555555555151 <+0>:     endbr64 
+   0x0000555555555155 <+4>:     sub    $0x8,%rsp
+   0x0000555555555159 <+8>:     mov    $0x9,%esi
+   0x000055555555515e <+13>:    mov    $0x6,%edi
+   0x0000555555555163 <+18>:    call   0x555555555149 <add>
+   0x0000555555555168 <+23>:    mov    %eax,%r8d
+   0x000055555555516b <+26>:    mov    $0x9,%ecx
+   0x0000555555555170 <+31>:    mov    $0x6,%edx
+   0x0000555555555175 <+36>:    lea    0xe88(%rip),%rsi        # 0x555555556004
+   0x000055555555517c <+43>:    mov    $0x1,%edi
+   0x0000555555555181 <+48>:    mov    $0x0,%eax
+   0x0000555555555186 <+53>:    call   0x555555555050 <__printf_chk@plt>
+   0x000055555555518b <+58>:    mov    $0x0,%eax
+   0x0000555555555190 <+63>:    add    $0x8,%rsp
+   0x0000555555555194 <+67>:    ret    
+End of assembler dump.
+```
+* It's actually the address of the code line below:
+`0x0000555555555168 <+23>:    mov    %eax,%r8d`
+* Thus, it is the `returnn address` after calling add function.
+* Then we step to the end of add function and go back to main function again. We check the stack information again:
+```shell
+(gdb) x/10dx $rsp
+0x7fffffffe390: 0x00000000      0x00000000      0xf7da9d90    0x00007fff
+0x7fffffffe3a0: 0x00000000      0x00000000      0x55555151    0x00005555
+0x7fffffffe3b0: 0x00000000      0x00000001
+```
+* We find the `return address` has been popped already.
+
+## Example on book
+![[3_7 Procedures.assets/image-20240522130848202.png|600]]
+![[3_7 Procedures.assets/image-20240522130957356.png|600]]
+
+* Executing call - the call instruction with address 0x400563 in main calls function `multstore`.
+* After call - push the return address 0x400568 onto the stack and to jump to the first instruction in function `multstore`, at address 0x0400540.
+* After ret - 
+		
+	
+
