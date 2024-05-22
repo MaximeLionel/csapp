@@ -27,5 +27,10 @@
 * When procedure P calls procedure Q, it will push the **return address** onto the stack, indicating where within P the program should resume execution once Q returns.
 	* The return address is part of P’s stack frame, since it holds state relevant to P.
 * Q allocates the space required for its stack frame by extending the current stack boundary.
-	* With the stack fram, Q can save the values of registers, allocate space for local variables, and set up arguments for the procedures it calls.
+	* With the stack fram, Q cAan save the values of registers, allocate space for local variables, and set up arguments for the procedures it calls.
 * The stack frames for most procedures are of fixed size, allocated at the beginning of the procedure.
+* Procedure P can pass up to six integral values on the stack, but if Q requires more arguments, these can be stored by P within its stack frame prior to the call.
+* In the interest of space and time efficiency, x86-64 procedures allocate only the portions of stack frames they require.
+* Some functions do not even require a stack frame. This occurs when all of the local variables can be held in registers and the function does not call any other functions.
+
+# 3.7.2 Control Transfer
