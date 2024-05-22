@@ -10,8 +10,8 @@
 * A key feature of the procedure-calling mechanism of C, and of most other languages, is that it can make use of the **last-in, first-out** memory management discipline provided by a **stack** data structure.
 * Suppose procedure P calling Q:
 	* while Q is executing, P is temporarily suspended.
-	* While Q is running,
-
-only it will need the ability to allocate new storage for its local variables or to set up
-
-a call to another procedure
+	* While Q is running, only it will need the ability to **allocate new storage** for its local variables or to set up a call to another procedure.
+	* When Q returns, any local storage it has allocated can be freed.
+* A program can manage the storage required by its procedures using a stack:
+	* As P calls Q, control and data information are added to the end of the stack. 
+	* This information gets deallocated when P returns
