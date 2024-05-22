@@ -164,4 +164,13 @@ End of assembler dump.
 ![[3_7 Procedures.assets/image-20240522131746300.png|600]]
 * Each instruction is identified by labels L1–L2 (in leaf), T1–T4 (in top), and M1–M2 in main.
 * main calls top(100), causing top to call leaf(95). Function leaf returns 97 to top, then returns 194 to main.
+* Details:
+	* M1 - main calls top. The return address (0x400560) will be push on top of stack, thus the `rsp` will be decreased by 8 to store the return address.
+	* T1 - after executing the operation above.
+	* T2 - top calls leaf. The return address (0x40054E) will be push on top of stack, thus the `rsp` will be decreased by 8 to store the return address.
+	* L1 - after executing the operation above.
+	* L2 - return to top. The return address (0x40054E) will be popped to `rip`, thus the `rsp` will be increased by 8.
+	* T3 - after executing the operation above.
+	* T4 - return to top. The return address (0x400560) will be popped to `rip`, thus the `rsp` will be increased by 8.
+	* M2 - after executing the operation above.
 
