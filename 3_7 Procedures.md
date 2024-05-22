@@ -21,4 +21,11 @@
 	* Space for data with no specified initial value can be allocated on the stack by simply decrementing the stack pointer by an appropriate amount. 
 	* Space can be deallocated by incrementing the stack pointer.
 ## Stack Frame
+![[3_7 Procedures.assets/image-20240522094322604.png|500]]
 * When an x86-64 procedure requires storage beyond what it can hold in registers, it allocates space on the stack, which is the procedure's **stack frame**.
+* The frame for the currently executing procedure is always at the top of the stack.
+* When procedure P calls procedure Q, it will push the **return address** onto the stack, indicating where within P the program should resume execution once Q returns.
+	* The return address is part of P’s stack frame, since it holds state relevant to P.
+* Q allocates the space required for its stack frame by extending the current stack boundary.
+	* With the stack fram, Q can save the values of registers, allocate space for local variables, and set up arguments for the procedures it calls.
+* The stack frames for most procedures are of fixed size, allocated at the beginning of the procedure.
