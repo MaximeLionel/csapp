@@ -34,3 +34,12 @@
 * Some functions do not even require a stack frame. This occurs when all of the local variables can be held in registers and the function does not call any other functions.
 
 # 3.7.2 Control Transfer
+* Passing control from function P to function Q involves simply setting the **program counter (PC)** to the starting address of the code for Q.
+* When later comes time for Q to return, the processor must have some record of the code location where it should resume the execution of P. This information is recorded in x86-64 machines by invoking procedure Q with the instruction `call Q`.
+* `Call Q`:
+	* Pushes an address A onto the stack; 
+		* Address A is referred to as the return address and is computed as the address of the instruction immediately following the call instruction.
+	* Sets the PC to the beginning of Q.
+* `ret`:
+	* Pops an address A off the stack;
+	* Sets the PC to A.
