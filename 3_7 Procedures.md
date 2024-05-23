@@ -356,6 +356,8 @@ long caller()
 int main()
 {
 	int a = caller();
+	printf("The result is %ld\n",a);
+	return 0;
 }
 ```
 
