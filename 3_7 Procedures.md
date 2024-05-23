@@ -208,3 +208,111 @@ Each of these instructions is given a label. Starting with the calling of first(
 |  M2   | 0x400565 |     mov     |  9   |  11  |  99  | 0x7fffffffe820 |    -     |         in main         |
 
 
+# 3.7.3 Data Transfer
+* In addition to passing control to a procedure when called, procedure calls may involve **passing data as arguments**, and returning from a procedure may also involve **returning a value**.
+![[3_7 Procedures.assets/image-20240523090718505.png|400]]
+* With x86-64, up to six integral arguments can be passed via registers.
+* Arguments smaller than 64 bits can be accessed using the appropriate subsection of the 64-bit register.
+* When a function has more than six integral arguments:
+	* Suppose P calls Q with n integral arguments (n > 6):
+	* The code for P must allocate a stack frame with enough storage for arguments 7 through n.
+	* The code for P copies arguments 1–6 into the appropriate registers, and it puts arguments 7 through n onto the stack, with argument 7 at the top of the stack.
+		* When passing parameters on the stack, all data sizes are rounded up to be multiples of eight.
+	* Procedure Q can access its arguments via registers and possibly from the stack.
+
+## Example
+```c
+#include<stdio.h>
+
+void proc(long a1, long *a1p, int a2, int *a2p, short a3, short *a3p, char a4, char *a4p)
+{
+	*a1p += a1;
+	*a2p += a2;
+	*a3p += a3;
+	*a4p += a4;
+}
+
+int main()
+{
+	long a1 = 1;
+	long* a1p = &a1;
+	int a2 = 2;
+	int* a2p = &a2;
+	short a3 = 3;
+	short* a3p = &a3;
+	char a4 = 4;
+	char* a4p = &a4;
+	proc(long a1, long *a1p, int a2, int *a2p, short a3, short *a3p, char a4, char *a4p);
+
+	return 0;
+}
+```
+* After `gcc -Og -S proc.c`, we get the assembly code below:
+```z80
+.globl  proc
+.type   proc, @function
+proc:
+        movq    16(%rsp), %rax
+        addq    %rdi, (%rsi)
+        addl    %edx, (%rcx)
+        addw    %r8w, (%r9)
+        movl    8(%rsp), %edx
+        addb    %dl, (%rax)
+        ret
+
+.globl  main
+.type   main, @function
+main:
+        subq    $40, %rsp
+        movq    %fs:40, %rax
+        movq    %rax, 24(%rsp)
+        xorl    %eax, %eax
+        movq    $1, 16(%rsp)
+        movl    $2, 12(%rsp)
+        movw    $3, 10(%rsp)
+        movb    $4, 9(%rsp)
+        leaq    12(%rsp), %rcx
+        leaq    16(%rsp), %rsi
+        leaq    9(%rsp), %rax
+        pushq   %rax
+        pushq   $4
+        leaq    26(%rsp), %r9
+        movl    $3, %r8d
+        movl    $2, %edx
+        movl    $1, %edi
+        call    proc
+        addq    $16, %rsp
+        .cfi_def_cfa_offset 48
+        movq    24(%rsp), %rax
+        subq    %fs:40, %rax
+        jne     .L5
+        movl    $0, %eax
+        addq    $40, %rsp
+        .cfi_remember_state
+        .cfi_def_cfa_offset 8
+        ret
+.L5:
+        .cfi_restore_state
+        call    __stack_chk_fail@PLT
+        .cfi_endproc
+.LFE24:
+        .size   main, .-main
+        .ident  "GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
+        .section        .note.GNU-stack,"",@progbits
+        .section        .note.gnu.property,"a"
+        .align 8
+        .long   1f - 0f
+        .long   4f - 1f
+        .long   5
+0:
+        .string "GNU"
+1:
+        .align 8
+        .long   0xc0000002
+        .long   3f - 2f
+2:
+        .long   0x3
+3:
+        .align 8
+4:
+```
