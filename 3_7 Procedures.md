@@ -355,10 +355,112 @@ long caller()
 
 int main()
 {
-	int a = caller();
+	long a = caller();
 	printf("The result is %ld\n",a);
 	return 0;
 }
+```
+* Then we do `gcc -Og caller.c -o prog` and 'objdump -d prog'. 
+```z80
+prog:     file format elf64-x86-64
+
+Disassembly of section .text:
+
+# long swap_add(long *xp, long *yp)
+0000000000001169 <swap_add>:
+    116d:       48 8b 07                mov    (%rdi),%rax
+    1170:       48 8b 16                mov    (%rsi),%rdx
+    1173:       48 89 17                mov    %rdx,(%rdi)
+    1176:       48 89 06                mov    %rax,(%rsi)
+    1179:       48 01 d0                add    %rdx,%rax
+    117c:       c3                      ret    
+
+000000000000117d <caller>:
+    1181:       48 83 ec 28             sub    $0x28,%rsp
+    1185:       64 48 8b 04 25 28 00    mov    %fs:0x28,%rax
+    118c:       00 00 
+    118e:       48 89 44 24 18          mov    %rax,0x18(%rsp)
+    1193:       31 c0                   xor    %eax,%eax
+    1195:       48 c7 44 24 08 16 02    movq   $0x216,0x8(%rsp)
+    119c:       00 00 
+    119e:       48 c7 44 24 10 21 04    movq   $0x421,0x10(%rsp)
+    11a5:       00 00 
+    11a7:       48 8d 74 24 10          lea    0x10(%rsp),%rsi
+    11ac:       48 8d 7c 24 08          lea    0x8(%rsp),%rdi
+    11b1:       e8 b3 ff ff ff          call   1169 <swap_add>
+    11b6:       48 8b 54 24 08          mov    0x8(%rsp),%rdx
+    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx
+    11c0:       48 0f af c2             imul   %rdx,%rax
+    11c4:       48 8b 54 24 18          mov    0x18(%rsp),%rdx
+    11c9:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx
+    11d0:       00 00 
+    11d2:       75 05                   jne    11d9 <caller+0x5c>
+    11d4:       48 83 c4 28             add    $0x28,%rsp
+    11d8:       c3                      ret    
+
+00000000000011de <main>:
+    11e2:       48 83 ec 08             sub    $0x8,%rsp
+    11e6:       b8 00 00 00 00          mov    $0x0,%eax
+    11eb:       e8 8d ff ff ff          call   117d <caller>
+    11f0:       48 89 c2                mov    %rax,%rdx
+    11f3:       48 8d 35 0a 0e 00 00    lea    0xe0a(%rip),%rsi        # 2004 <_IO_stdin_used+0x4>
+    11fa:       bf 01 00 00 00          mov    $0x1,%edi
+    11ff:       b8 00 00 00 00          mov    $0x0,%eax
+    1204:       e8 67 fe ff ff          call   1070 <__printf_chk@plt>
+    1209:       b8 00 00 00 00          mov    $0x0,%eax
+    120e:       48 83 c4 08             add    $0x8,%rsp
+    1212:       c3                      ret    
+```
+* Next we do annotation on `caller` and `swap_add` of the assembly code to understand how the local storage works.
+```z80
+prog:     file format elf64-x86-64
+
+Disassembly of section .text:
+
+0000000000001169 <swap_add>:
+    116d:       48 8b 07                mov    (%rdi),%rax
+    1170:       48 8b 16                mov    (%rsi),%rdx
+    1173:       48 89 17                mov    %rdx,(%rdi)
+    1176:       48 89 06                mov    %rax,(%rsi)
+    1179:       48 01 d0                add    %rdx,%rax
+    117c:       c3                      ret    
+
+# long caller()
+000000000000117d <caller>:
+    1181:       48 83 ec 28             sub    $0x28,%rsp           # rsp-=0x28 - expand stack by 0x28 bytes
+    1185:       64 48 8b 04 25 28 00    mov    %fs:0x28,%rax        # store the TLS pointer to rax
+    118c:       00 00 
+    118e:       48 89 44 24 18          mov    %rax,0x18(%rsp)      # save TLS pointer to rsp+0x18
+    1193:       31 c0                   xor    %eax,%eax            # clear eax
+    1195:       48 c7 44 24 08 16 02    movq   $0x216,0x8(%rsp)     # *(rsp+0x8)=0x216  - arg1
+    119c:       00 00 
+    119e:       48 c7 44 24 10 21 04    movq   $0x421,0x10(%rsp)    # *(rsp+0x10)=0x421 - arg2
+    11a5:       00 00 
+    11a7:       48 8d 74 24 10          lea    0x10(%rsp),%rsi      # rsi=rsp+0x10 - &arg2
+    11ac:       48 8d 7c 24 08          lea    0x8(%rsp),%rdi       # rdi=rsp+0x8  - &arg1
+    11b1:       e8 b3 ff ff ff          call   1169 <swap_add>
+    11b6:       48 8b 54 24 08          mov    0x8(%rsp),%rdx
+    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx
+    11c0:       48 0f af c2             imul   %rdx,%rax
+    11c4:       48 8b 54 24 18          mov    0x18(%rsp),%rdx
+    11c9:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx
+    11d0:       00 00 
+    11d2:       75 05                   jne    11d9 <caller+0x5c>
+    11d4:       48 83 c4 28             add    $0x28,%rsp
+    11d8:       c3                      ret    
+
+00000000000011de <main>:
+    11e2:       48 83 ec 08             sub    $0x8,%rsp
+    11e6:       b8 00 00 00 00          mov    $0x0,%eax
+    11eb:       e8 8d ff ff ff          call   117d <caller>
+    11f0:       48 89 c2                mov    %rax,%rdx
+    11f3:       48 8d 35 0a 0e 00 00    lea    0xe0a(%rip),%rsi        # 2004 <_IO_stdin_used+0x4>
+    11fa:       bf 01 00 00 00          mov    $0x1,%edi
+    11ff:       b8 00 00 00 00          mov    $0x0,%eax
+    1204:       e8 67 fe ff ff          call   1070 <__printf_chk@plt>
+    1209:       b8 00 00 00 00          mov    $0x0,%eax
+    120e:       48 83 c4 08             add    $0x8,%rsp
+    1212:       c3                      ret    
 ```
 
 
