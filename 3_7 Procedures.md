@@ -327,3 +327,29 @@ Answer2 - suppose `addq %rdi, (%rdx)` is `*v += b`, then:
 * b is edi, which is a 32bit signed integer.
 * u is rcx, which is a 64bit address.
 * a is sil, because eax = 6 and b is 4bytes, a is a 16bit signed integer.
+
+# 3.7.4 Local Storage on the Stack
+* Local data must be stored in memory.
+* Typically, a procedure allocates space on the stack frame by decrementing the stack pointer.
+## Example:
+```c
+long swap_add(long *xp, long *yp)
+{
+	long x = *xp;
+	long y = *yp;
+	*xp = y;
+	*yp = x;
+	return x + y;
+}
+
+long caller()
+{
+	long arg1 = 534;
+	long arg2 = 1057;
+	long sum = swap_add(&arg1, &arg2);
+	long diff = arg1 - arg2;
+	return sum * diff;
+}
+```
+
+
