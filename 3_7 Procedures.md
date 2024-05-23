@@ -289,3 +289,21 @@ main:
         addq    $40, %rsp
         ret
 ```
+
+# Practice Problem 3.33
+A C function procprob has four arguments u, a, v, and b. Each is either a signed number or a pointer to a signed number, where the numbers have different sizes. The function has the following body:
+```c
+	*u += a;
+	*v += b;
+	return sizeof(a) + sizeof(b);
+```
+It compiles to the following x86-64 code:
+```z80
+procprob:
+	movslq %edi, %rdi
+	addq %rdi, (%rdx)
+	addb %sil, (%rcx)
+	movl $6, %eax
+	ret
+```
+Determine a valid ordering and types of the four parameters. There are two correct answers.
