@@ -333,6 +333,8 @@ Answer2 - suppose `addq %rdi, (%rdx)` is `*v += b`, then:
 * Typically, a procedure allocates space on the stack frame by decrementing the stack pointer.
 ## Example:
 ```c
+#include<stdio.h>
+
 long swap_add(long *xp, long *yp)
 {
 	long x = *xp;
@@ -349,6 +351,11 @@ long caller()
 	long sum = swap_add(&arg1, &arg2);
 	long diff = arg1 - arg2;
 	return sum * diff;
+}
+
+int main()
+{
+	int a = caller();
 }
 ```
 
