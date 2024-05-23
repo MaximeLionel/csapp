@@ -252,35 +252,35 @@ int main()
 .globl  proc
 .type   proc, @function
 proc:
-        movq    16(%rsp), %rax
-        addq    %rdi, (%rsi)
-        addl    %edx, (%rcx)
-        addw    %r8w, (%r9)
-        movl    8(%rsp), %edx
-        addb    %dl, (%rax)
+        movq    16(%rsp), %rax    # 8th arg: rax = rsp + 16 = *a4p
+        addq    %rdi, (%rsi)      # *rsi += rdi: *a1p += a1
+        addl    %edx, (%rcx)      # *rcx += edx: *a2p += a2
+        addw    %r8w, (%r9)       # *r9  += r8w: *a3p += a3
+        movl    8(%rsp), %edx     # edx = *(rsp+8) = a4
+        addb    %dl, (%rax)       # *rax += dl: *a4p += a4
         ret
 
 .globl  main
 .type   main, @function
 main:
         subq    $40, %rsp         # allocate stack frame
-        movq    %fs:40, %rax      # store the TLS pointer into rax      
-        movq    %rax, 24(%rsp)    # save TLS pointer to rsp+24
+        movq    %fs:40, %rax            
+        movq    %rax, 24(%rsp)    
         xorl    %eax, %eax        # clear eax
-        movq    $1, 16(%rsp)
-        movl    $2, 12(%rsp)
-        movw    $3, 10(%rsp)
-        movb    $4, 9(%rsp)
-        leaq    12(%rsp), %rcx
-        leaq    16(%rsp), %rsi
-        leaq    9(%rsp), %rax
-        pushq   %rax
-        pushq   $4
-        leaq    26(%rsp), %r9
-        movl    $3, %r8d
-        movl    $2, %edx
-        movl    $1, %edi
-        call    proc
+        movq    $1, 16(%rsp)      # *(16+rsp) = 1
+        movl    $2, 12(%rsp)      # *(12+rsp) = 2
+        movw    $3, 10(%rsp)      # *(10+rsp) = 3
+        movb    $4, 9(%rsp)       # *(9 +rsp) = 4
+        leaq    12(%rsp), %rcx    # 4th arg: rcx = rsp + 12
+        leaq    16(%rsp), %rsi    # 2nd arg: rsi = rsp + 16
+        leaq    9(%rsp), %rax     # rax = rsp + 9
+        pushq   %rax              # 8th arg: rsp=rsp-8, *rsp = rax
+        pushq   $4                # 7th arg: rsp=rsp-8, *rsp = 4
+        leaq    26(%rsp), %r9     # 6th arg: r9 = 26 + rsp
+        movl    $3, %r8d          # 5th arg: r8d = 3
+        movl    $2, %edx          # 3rd arg: edx = 2
+        movl    $1, %edi          # 1st arg: edi = 1
+        call    proc              # push return address (rsp=rsp-8,*rsp=return address)
         addq    $16, %rsp
         movq    24(%rsp), %rax
         subq    %fs:40, %rax
