@@ -319,6 +319,6 @@ procprob:
 ```
 Suppose `addq %rdi, (%rdx)` is `*u += a`, then:
 * u is rdx, which is a 64bit address.
-* a is rdi, which is 64bit 
-* v is rcx
-* b is sil
+* a is rdi, which is a 64bit signed integer.
+* v is rcx, which is a 64bit address.
+* b is sil, which is a 8bit signed integer.
