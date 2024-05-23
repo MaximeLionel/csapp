@@ -307,3 +307,18 @@ procprob:
 	ret
 ```
 Determine a valid ordering and types of the four parameters. There are two correct answers.
+
+**Solution**:
+```z80
+procprob:
+	movslq %edi, %rdi      # rdi = edi
+	addq %rdi, (%rdx)      # *rdx += rdi
+	addb %sil, (%rcx)      # *rcx +=%sil
+	movl $6, %eax          # eax = 6
+	ret
+```
+Suppose `addq %rdi, (%rdx)` is `*u += a`, then:
+* u is rdx
+* a is rdi
+* v is rcx
+* b is sil
