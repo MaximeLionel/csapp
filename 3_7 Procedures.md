@@ -463,5 +463,21 @@ Disassembly of section .text:
     120e:       48 83 c4 08             add    $0x8,%rsp
     1212:       c3                      ret    
 ```
+* Ok, now let's detect how the program deal with the local variables:
+	* for swap_add function, the program store the local varibles into registers:
+	```
+	116d:       48 8b 07                mov    (%rdi),%rax          # rax = *(rdi) - *xp
+	1170:       48 8b 16                mov    (%rsi),%rdx          # rdx = *(rsi) - *yp
+	```
+	* for caller function, the program store the local variables into stack and also register:
+	```
+	1195:       48 c7 44 24 08 16 02    movq   $0x216,0x8(%rsp)     # *(rsp+0x8)=0x216  - arg1
+    119c:       00 00 
+    119e:       48 c7 44 24 10 21 04    movq   $0x421,0x10(%rsp)    # *(rsp+0x10)=0x421 - arg2
+	```
+
+	```
+    11b1:       e8 b3 ff ff ff          call   1169 <swap_add>      # call swap_add
+	```
 
 
