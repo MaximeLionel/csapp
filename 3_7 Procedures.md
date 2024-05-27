@@ -438,9 +438,9 @@ Disassembly of section .text:
     11a5:       00 00 
     11a7:       48 8d 74 24 10          lea    0x10(%rsp),%rsi      # rsi=rsp+0x10 - &arg2
     11ac:       48 8d 7c 24 08          lea    0x8(%rsp),%rdi       # rdi=rsp+0x8  - &arg1
-    11b1:       e8 b3 ff ff ff          call   1169 <swap_add>
-    11b6:       48 8b 54 24 08          mov    0x8(%rsp),%rdx
-    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx
+    11b1:       e8 b3 ff ff ff          call   1169 <swap_add>      # call swap_add
+    11b6:       48 8b 54 24 08          mov    0x8(%rsp),%rdx       # rdx = *(rsp+0x8) - arg1
+    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx      # rdx = rdx-*(rsp+0x10) - arg2
     11c0:       48 0f af c2             imul   %rdx,%rax
     11c4:       48 8b 54 24 18          mov    0x18(%rsp),%rdx
     11c9:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx
