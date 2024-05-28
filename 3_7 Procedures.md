@@ -488,5 +488,199 @@ Disassembly of section .text:
 		* When procedure P calls procedure Q, Q must preserve the values of these registers, ensuring that they have the same values when Q returns to P as they did when Q was called. 
 		* Procedure Q can preserve a register value by either not changing it at all or by **pushing** the original value on the stack, altering it, and then **popping** the old value from the stack before returning.
 		* The pushing of register values has the effect of creating the portion of the **stack frame labeled “Saved registers”**.
+		![[3_7 Procedures.assets/image-20240528125251661.png|400]]
+		* P can safely store a value in a callee-saved register, call Q, and then use the value in the register without risk of it having been corrupted.
 	* All other registers, except for the stack pointer `%rsp`, are classified as **callersaved registers**.
+		* **callersaved registers** can be modified by any function.
+		* Since Q is free to alter **callersaved registers** register, P needs to first save the data before it makes the call.
+## Example:
+```c
+long P(long x, long y)
+{
+	long u = Q(y);
+	long v = Q(x);
+	return u + v;
+}
+```
+* we do `gcc -Og -S p.c`, get the assembly code below:
+```z80
 
+    .text
+    .globl  P
+        .type   P, @function
+	P:
+        pushq   %rbp        # save rbp - calleesaved registers
+        pushq   %rbx        # save rbx - calleesaved registers
+        subq    $8, %rsp
+        movq    %rdi, %rbp
+        movq    %rsi, %rdi
+        call    Q@PLT
+        movq    %rax, %rbx
+        movq    %rbp, %rdi
+        call    Q@PLT
+        addq    %rbx, %rax
+        addq    $8, %rsp
+        popq    %rbx       # restore rbx - calleesaved registers
+        popq    %rbp       # restore rbp - calleesaved registers
+        ret
+```
+
+# Practice Problem 3.34
+Consider a function P, which generates local values, named `a0–a8`. It then calls function Q using these generated values as arguments. Gcc produces the following code for the first part of P:
+```z80
+# long P(long x)
+# x in %rdi
+P: 
+	pushq %r15 
+	pushq %r14 
+	pushq %r13 
+	pushq %r12 
+	pushq %rbp 
+	pushq %rbx 
+	subq $24, %rsp 
+	movq %rdi, %rbx 
+	leaq 1(%rdi), %r15 
+	leaq 2(%rdi), %r14 
+	leaq 3(%rdi), %r13 
+	leaq 4(%rdi), %r12 
+	leaq 5(%rdi), %rbp 
+	leaq 6(%rdi), %rax 
+	movq %rax, (%rsp) 
+	leaq 7(%rdi), %rdx 
+	movq %rdx, 8(%rsp) 
+	movl $0, %eax 
+	call Q
+	...
+```
+A. Identify which local values get stored in callee-saved registers.
+
+B. Identify which local values get stored on the stack.
+
+C. Explain why the program could not store all of the local values in calleesaved registers.
+
+**Solution**:
+```z80
+# long P(long x)
+# x in %rdi
+P: 
+	pushq %r15          # callee-saved register
+	pushq %r14          # callee-saved register 
+	pushq %r13          # callee-saved register 
+	pushq %r12          # callee-saved register 
+	pushq %rbp          # callee-saved register 
+	pushq %rbx          # callee-saved register 
+	subq $24, %rsp 
+	movq %rdi, %rbx     # rbx = rdi: rbx=x
+	leaq 1(%rdi), %r15  # r15 = rdi+1: r15=x+1
+	leaq 2(%rdi), %r14  # r14 = rdi+2: r14=x+2
+	leaq 3(%rdi), %r13  # r13 = rdi+3: r13=x+3
+	leaq 4(%rdi), %r12  # r12 = rdi+4: r12=x+4
+	leaq 5(%rdi), %rbp  # rbp = rdi+5: rbp=x+5
+	leaq 6(%rdi), %rax  # rax = rdi+6: rax=x+6
+	movq %rax, (%rsp)   # *rsp = rax: *rsp=x+6
+	leaq 7(%rdi), %rdx  # rdx = rdi+7: rdx=x+7
+	movq %rdx, 8(%rsp)  # *(rsp+8) = rdx: *(rsp+8)=x+7
+	movl $0, %eax 
+	call Q
+	...
+```
+A.
+We get in this function, the callee-saved registers are: `rbx rbp r12 r13 r14 r15`
+Thus local values are: `x, x+1, x+2, x+3, x+4, x+5`
+
+B.
+Local values stored on the stack are: `x+6, x+7`
+
+C.
+Limited quantity of callee-saved registers.
+
+# 3.7.6 Recursive Procedures (递归过程)
+* The conventions we have described for using the registers and the stack allow x86-64 procedures to call themselves recursively, and so the local variables of the multiple outstanding calls do not interfere with one another.
+## Example:
+```c
+long rfact(long n)
+{
+	long result;
+	if (n <= 1)
+		result = 1;
+	else
+		result=n* rfact(n-1);
+	return result;
+}
+```
+* We do `gcc -Og -S rfact.c` and get the assembly code below:
+```z80
+.text
+.globl  rfact
+.type   rfact, @function
+rfact:
+        cmpq    $1, %rdi
+        jg      .L8              # if rdi(n)>1, jump to .L8
+        movl    $1, %eax         # eax = 1: result = 1
+        ret
+.L8:
+        pushq   %rbx             # callee-saved register
+        movq    %rdi, %rbx       # rbx = rdi: rbx=n
+        leaq    -1(%rdi), %rdi   # rdi = rdi-1: rdi=n-1
+        call    rfact            # rfact(n-1)
+        imulq   %rbx, %rax       # rax = rax*rbx: rax=n*rfact(n-1)
+        popq    %rbx
+        ret
+```
+* Our stack discipline provides a mechanism where each invocation of a function has its own private storage for state information (saved values of the return location and callee-saved registers).
+	* If need be, it can also provide storage for local variables.
+
+# Practice Problem 3.35
+For a C function having the general structure
+```c
+long rfun(unsigned long x) {
+	if ( ______ ) return;
+	unsigned long nx = ______ ;
+	long rv = rfun(nx);
+	return ______ ;
+}
+```
+gcc generates the following assembly code:
+```z80
+rfun: 
+	pushq %rbx 
+	movq %rdi, %rbx 
+	movl $0, %eax 
+	testq %rdi, %rdi 
+	je .L2 
+	shrq $2, %rdi 
+	call rfun 
+	addq %rbx, %rax 
+.L2: 
+	popq %rbx 
+	ret
+```
+A. What value does `rfun` store in the callee-saved register `%rbx`?
+
+B. Fill in the missing expressions in the C code shown above.
+
+**Solution**:
+```z80
+rfun: 
+	pushq %rbx         # callee-saved register
+	movq %rdi, %rbx    # rbx = rdi: rbx=x
+	movl $0, %eax      # eax = 0
+	testq %rdi, %rdi   
+	je .L2             # if rdi(x) == 0, jump to .L2
+	shrq $2, %rdi      # rdi = rdi >> 2: rdi=x>>2
+	call rfun          # rfun(rdi): rfun(x>>2)
+	addq %rbx, %rax    # rax = rax + rbx: rax=rfun(x>>2)+x
+.L2: 
+	popq %rbx 
+	ret
+```
+A. `x`
+B.
+```c
+long rfun(unsigned long x) {
+	if ( x == 0 ) return;
+	unsigned long nx = x >> 2 ;
+	long rv = rfun(nx);
+	return rv + x ;
+}
+```
