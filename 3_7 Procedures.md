@@ -480,4 +480,13 @@ Disassembly of section .text:
     11b1:       e8 b3 ff ff ff          call   1169 <swap_add>      # call swap_add
 	```
 
+# 3.7.5 Local Storage in Registers
+* The set of program registers acts as a single resource shared by all of the procedures.
+	* When one procedure (the caller) calls another (the callee), the callee must **not overwrite** some register value that the caller planned to use later.
+* By convention: 
+	* Registers `%rbx`, `%rbp`, and `%r12–%r15` are classified as **calleesaved registers**.
+		* When procedure P calls procedure Q, Q must preserve the values of these registers, ensuring that they have the same values when Q returns to P as they did when Q was called. 
+		* Procedure Q can preserve a register value by either not changing it at all or by **pushing** the original value on the stack, altering it, and then **popping** the old value from the stack before returning.
+		* The pushing of register values has the effect of creating the portion of the **stack frame labeled “Saved registers”**.
+	* All other registers, except for the stack pointer `%rsp`, are classified as **callersaved registers**.
 
