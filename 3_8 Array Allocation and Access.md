@@ -1,0 +1,2 @@
+* Arrays in C are one means of aggregating scalar data into larger data types. 
+* C uses a particularly simple implementation of arrays, and hence the translation into machine code is fairly straightforward.
