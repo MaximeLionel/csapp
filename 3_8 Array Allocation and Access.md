@@ -60,11 +60,9 @@ Fill in the following table describing the element size, the total size, and the
 |   T   |      8       |     16     |     $x_T$     | $x_T+8i$  |
 
 # 3.8.2 Pointer Arithmetic
-* if p is a pointer to data
+* If $p$ is a pointer to data of type $T$ , and the value of $p$ is $x_p$, then the expression $p+i$ has value $x_p + L\times i$, where $L$ is the size of data type $T$.
+* The unary operators `&` and `*` allow the generation and dereferencing of pointers.
 
-of type T , and the value of p is xp, then the expression p+i has value xp + L . i,
-
-where L is the size of data type T .
 
 
 
