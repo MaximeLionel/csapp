@@ -56,17 +56,17 @@ Fill in the following table showing the values for the indicated operands:
 | (%rax, %rdx, 4) |       |
 **Solution**:
 
-| Operand         | Value | Comments                                  |
-| --------------- | ----- | ----------------------------------------- |
-| %rax            | 0x100 | the value in rax register                 |
-| 0x104           | 0xAB  | the value stored in address 0x104         |
-| $0x108          | 0x108 | immediate                                 |
-| (%rax)          | 0xFF  | the value of the address stored in rax    |
-| 4(%rax)         | 0xAB  | the value stored in the address rax+4     |
-| 9(%rax,%rdx)    | 0x11  | the value stored in the address 9+rax+rdx |
-| 260(%rcx,%rdx)  |       |                                           |
-| 0xFC(,%rcx,4)   |       |                                           |
-| (%rax, %rdx, 4) |       |                                           |
+| Operand         | Value | Comments                                    |
+| --------------- | ----- | ------------------------------------------- |
+| %rax            | 0x100 | the value in rax register                   |
+| 0x104           | 0xAB  | the value stored in address 0x104           |
+| $0x108          | 0x108 | immediate                                   |
+| (%rax)          | 0xFF  | the value of the address stored in rax      |
+| 4(%rax)         | 0xAB  | the value stored in the address rax+4       |
+| 9(%rax,%rdx)    | 0x11  | the value stored in the address 9+rax+rdx   |
+| 260(%rcx,%rdx)  | 0x13  | the value stored in the address 260+rcx+rdx |
+| 0xFC(,%rcx,4)   | 0xFF  | the value stored in the address rcx\*4+0xFC |
+| (%rax, %rdx, 4) | 0x11  | the value stored in the address rax+rdx*4   |
 
 
 # 3.4.2 Data Movement Instructions - ==MOV==
