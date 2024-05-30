@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "4b773f4d46ca40dd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -86,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_4 Accessing Information.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -147,12 +160,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "4b773f4d46ca40dd",
   "lastOpenFiles": [
+    "3_8 Array Allocation and Access.md",
+    "3_8 Array Allocation and Access.assets/image-20240529152558409.png",
+    "3_8 Array Allocation and Access.assets",
+    "3_4 Accessing Information.md",
+    "conflict-files-obsidian-git.md",
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
     "3_7 Procedures.assets/image-20240528125251661.png",
-    "3_4 Accessing Information.md",
     "Untitled.canvas",
     "3_7 Procedures.assets/image-20240523090718505.png",
     "3_7 Procedures.assets/image-20240522160933277.png",
@@ -164,8 +181,6 @@
     "3_7 Procedures.assets/image-20240522101614495.png",
     "3_7 Procedures.assets/image-20240522094322604.png",
     "3_7 Procedures.assets",
-    "3_6 Control.assets/image-20240519091323183.png",
-    "conflict-files-obsidian-git.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets",
     "2_4.md",
@@ -177,7 +192,6 @@
     "2_homework.assets/hw2_93",
     "2_homework.assets/hw2_92",
     "2_homework.assets/hw2_90",
-    "2_homework.assets/hw2_97wintest/hw2_97wintest.vcxproj.filters",
     "2_1.md",
     "2_3.md"
   ]
