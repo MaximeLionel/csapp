@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_7 Procedures.md",
+                "file": "3_4 Accessing Information.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_7 Procedures.md",
+                "file": "3_4 Accessing Information.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_7 Procedures.md",
+                "file": "3_4 Accessing Information.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_7 Procedures.md"
+                "file": "3_4 Accessing Information.md"
               }
             }
           }
@@ -149,12 +149,13 @@
   },
   "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_2 Program Encodings.md",
+    "3_7 Procedures.md",
     "3_7 Procedures.assets/image-20240528125251661.png",
     "3_4 Accessing Information.md",
     "Untitled.canvas",
     "3_7 Procedures.assets/image-20240523090718505.png",
     "3_7 Procedures.assets/image-20240522160933277.png",
-    "3_7 Procedures.md",
     "3_7 Procedures.assets/image-20240522131746300.png",
     "3_7 Procedures.assets/image-20240522131654513.png",
     "3_7 Procedures.assets/image-20240522130957356.png",
@@ -163,10 +164,8 @@
     "3_7 Procedures.assets/image-20240522101614495.png",
     "3_7 Procedures.assets/image-20240522094322604.png",
     "3_7 Procedures.assets",
-    "3_2 Program Encodings.md",
     "3_6 Control.assets/image-20240519091323183.png",
     "conflict-files-obsidian-git.md",
-    "3_6 Control.assets/image-20240517144442908.png",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets",
     "2_4.md",

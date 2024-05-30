@@ -56,17 +56,18 @@ Fill in the following table showing the values for the indicated operands:
 | (%rax, %rdx, 4) |       |
 **Solution**:
 
-| Operand         | Value | Comment                         |
-| --------------- | ----- | ------------------------------- |
-| %rax            | 0x100 | register                        |
-| 0x104           | 0xAB  | value at absolute address 0x104 |
-| $0x108          | 0x108 | immediate                       |
-| (%rax)          | 0xFF  | value at address 0x100          |
-| 4(%rax)         | 0xAB  | value at address 0x104          |
-| 9(%rax,%rdx)    | 0x11  | value at address 0x10C          |
-| 260(%rcx,%rdx)  | 0x13  | value at address 0x108          |
-| 0xFC(,%rcx,4)   | 0xFF  | value at address 0x100          |
-| (%rax, %rdx, 4) | 0x11  | value at address 0x10C          |
+| Operand         | Value | Comments                                  |
+| --------------- | ----- | ----------------------------------------- |
+| %rax            | 0x100 | the value in rax register                 |
+| 0x104           | 0xAB  | the value stored in address 0x104         |
+| $0x108          | 0x108 | immediate                                 |
+| (%rax)          | 0xFF  | the value of the address stored in rax    |
+| 4(%rax)         | 0xAB  | the value stored in the address rax+4     |
+| 9(%rax,%rdx)    | 0x11  | the value stored in the address 9+rax+rdx |
+| 260(%rcx,%rdx)  |       |                                           |
+| 0xFC(,%rcx,4)   |       |                                           |
+| (%rax, %rdx, 4) |       |                                           |
+
 
 # 3.4.2 Data Movement Instructions - ==MOV==
 * We group the many different instructions into instruction classes, where the instructions in a class perform the same operation but with different operand sizes.
