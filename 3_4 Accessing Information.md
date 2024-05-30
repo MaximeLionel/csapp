@@ -126,12 +126,12 @@ For each of the following lines of assembly language, determine the appropriate 
 	  `mov__     %dx, (%rax)`
 
 **Solution**:
-	  `mov_l_     %eax, (%rsp)`
-	  `mov_w_     (%rax), %dx`
-	  `mov_b_     $0xFF, %bl`
-	  `mov_b_     (%rsp,%rdx,4), %dl`
-	  `mov_q_     (%rdx), %rax
-	  `mov_w_     %dx, (%rax)`
+	  `movl     %eax, (%rsp)`
+	  `movw     (%rax), %dx`
+	  `movb     $0xFF, %bl`
+	  `movb     (%rsp,%rdx,4), %dl`
+	  `movq     (%rdx), %rax
+	  `movw     %dx, (%rax)`
 
 # Aside - Understanding how data movement changes a destination register
 * 2 different conventions regarding whether and how data movement instructions modify the upper bytes of a destination register:
