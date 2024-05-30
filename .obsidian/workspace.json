@@ -18,21 +18,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "4b773f4d46ca40dd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "conflict-files-obsidian-git.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_4 Accessing Information.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_4 Accessing Information.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "conflict-files-obsidian-git.md"
+                "file": "3_4 Accessing Information.md"
               }
             }
           }
@@ -160,13 +147,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4b773f4d46ca40dd",
+  "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
     "3_8 Array Allocation and Access.assets/image-20240529152558409.png",
     "3_8 Array Allocation and Access.assets",
     "3_4 Accessing Information.md",
-    "conflict-files-obsidian-git.md",
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
     "3_7 Procedures.assets/image-20240528125251661.png",

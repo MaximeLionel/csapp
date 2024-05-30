@@ -69,11 +69,11 @@ Fill in the following table showing the values for the indicated operands:
 | (%rax, %rdx, 4) | 0x11  | the value stored in the address rax+rdx*4   |
 
 
-# 3.4.2 Data Movement Instructions - ==MOV==
+# 3.4.2 Data Movement Instructions - MOV
 * We group the many different instructions into instruction classes, where the instructions in a class perform the same operation but with different operand sizes.
 ## Simple data movement instructions
 * `MOV` class - copy data from a source location to a destination location, without any transformation.
-![[image-20240313113955282.png|500]]
+![[image-20240313113955282.png|400]]
 * Details:
 	* All 4 instructions have similar effects; they differ primarily in that they operate on data of different sizes: 1, 2, 4, and 8 bytes, respectively.
 	* S - the source operand designates a value that is ==immediate, stored in a register, or stored in memory==.
