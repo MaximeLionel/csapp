@@ -141,7 +141,7 @@ For each of the following lines of assembly language, determine the appropriate 
 	movw $-1, %ax                     ; %rax = 001122334455FFFF
 ```
 * Convention 1:
-	* The `movb` instruction therefore sets the low-order byte of %rax to FF;
+	* The `movb` instruction therefore sets the low-order byte of %rax to FF with the remaining bytes unchanged;
 	* The `movw` instruction sets the low-order 2 bytes to FFFF, with the remaining bytes unchanged.
 	
 ```
@@ -160,7 +160,7 @@ movb %dl,%al                      ; %rax = 00112233445566AA
 movsbq %dl,%rax                   ; %rax = FFFFFFFFFFFFFFAA
 movzbq %dl,%rax                   ; %rax = 00000000000000AA
 ```
-* The `movsbq` instruction sets the other 7 bytes to either all ones or all zeros depending on the high-order bit of the source byte;
+* The `movsbq` instruction sets the other 7 bytes to either all ones or all zeros depending on the high-order bit of the source byte, which is sign bit;
 * The `movzbq` instruction always sets the other 7 bytes to zero.
 
 # Practice Problem 3.3
