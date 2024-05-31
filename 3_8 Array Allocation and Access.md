@@ -62,7 +62,35 @@ Fill in the following table describing the element size, the total size, and the
 # 3.8.2 Pointer Arithmetic
 * If $p$ is a pointer to data of type $T$ , and the value of $p$ is $x_p$, then the expression $p+i$ has value $x_p + L\times i$, where $L$ is the size of data type $T$.
 * The unary operators `&` and `*` allow the generation and dereferencing of pointers.
+* Example:
+	* For an expression Expr denoting some object, &Expr is a pointer giving the address of the object.
+	* For an expression AExpr denoting an address, *AExpr gives the value at that address.
+	* The expressions Expr and \*&Expr are therefore equivalent.
+	* The array `A[i]` is identical to the expression `*(A+i)`.
+* Suppose the starting address of integer array E and integer index i are stored in registers `%rdx` and `%rcx`:
+	![[image-20240531235948114.png|600]]
 
+# Practice Problem 3.37
+Suppose $x_P$, the address of short integer array P, and long integer index i are stored in registers %rdx and %rcx, respectively. For each of the following expressions, give its type, a formula for its value, and an assembly-code implementation. The result should be stored in register %rax if it is a pointer and register element %ax if it has data type short.
+
+| Expression | Type | Value | Assembly Code |
+| :--------: | ---- | ----- | ------------- |
+|   `P[1]`   |      |       |               |
+|  `P+3+i`   |      |       |               |
+| `P[i*6-5]` |      |       |               |
+|   `P[2]`   |      |       |               |
+| `&P[i+2]`  |      |       |               |
+**Solution**:
+
+| Expression | Type   | Value           | Assembly Code                  |
+| :--------: | ------ | --------------- | ------------------------------ |
+|   `P[1]`   | short  | M[$x_P$+2]      | `movw 2(%rdx), %rax`           |
+|  `P+3+i`   | short* | $x_P$+3*2+2i    | `leaq 6(%rdx,%rcx,2), %rax`    |
+| `P[i*6-5]` | short  | M[$x_P$+12i-10] | `movw -10(%rdx,%rcx,12), %rax` |
+|   `P[2]`   | short  | M[$x_P$+4]      | `movw 4(%rdx), %rax`           |
+| `&P[i+2]`  | short* | $x_P$+2*2+2i    | `leaq 4(%rdx,%rcx,2), %rax`    |
+
+# 3.8.3 Nested Arrays
 
 
 

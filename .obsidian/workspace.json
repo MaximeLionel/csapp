@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_8 Array Allocation and Access.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_8 Array Allocation and Access.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_8 Array Allocation and Access.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_4 Accessing Information.md"
+                "file": "3_8 Array Allocation and Access.md"
               }
             }
           }
@@ -149,11 +149,12 @@
   },
   "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_8 Array Allocation and Access.assets/image-20240531235948114.png",
+    "3_4 Accessing Information.md",
     "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
     "3_8 Array Allocation and Access.assets/image-20240529152558409.png",
     "3_8 Array Allocation and Access.assets",
-    "3_4 Accessing Information.md",
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
     "3_7 Procedures.assets/image-20240528125251661.png",
