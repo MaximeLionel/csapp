@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "endbr",
+                "query": "tag:#define",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -147,8 +148,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "6111b7a6d963737b",
   "lastOpenFiles": [
+    "3_8 Array Allocation and Access.assets/image-20240601100306237.png",
     "3_8 Array Allocation and Access.assets/image-20240531235948114.png",
     "3_4 Accessing Information.md",
     "conflict-files-obsidian-git.md",
@@ -167,7 +169,6 @@
     "3_7 Procedures.assets/image-20240522130848202.png",
     "3_6 Control.md",
     "3_7 Procedures.assets/image-20240522101614495.png",
-    "3_7 Procedures.assets/image-20240522094322604.png",
     "3_7 Procedures.assets",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets",

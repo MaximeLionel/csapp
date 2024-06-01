@@ -91,6 +91,86 @@ Suppose $x_P$, the address of short integer array P, and long integer index i ar
 | `&P[i+2]`  | short* | $x_P$+2*2+2i    | `leaq 4(%rdx,%rcx,2), %rax`    |
 
 # 3.8.3 Nested Arrays
+* A multidimensional array declared as:
+	```c
+	T D[R][C];
+	```
+* Array element `D[i][j]` is at memory address:
+	$\&D[i][j] = x_D + L(C . i + j)$
+	* $L$ is the size of data type T in bytes.
+
+## Example:
+```c
+int A[5][3];
+```
+equals to:
+```c
+typedef int row3_t[3];
+row3_t A[5];
+```
+* Interpretation:
+	* `typedef int row3_t[3]` defines `row3_t` as a new name for an array of 3 integers (`int[3]`).
+	* `row3_t` can be used as a type that represents an array of 3 integers.
+	* `row3_t A[5]` declares `A` as an array of 5 elements, where each element is of type `row3_t`.
+	* Array A contains 5 elements (`row3_t`), each requiring 12 bytes (`row3_t[3]`) to store the three integers. 
+	* The total array size is then $4 \times 5 \times 3 = 60$ bytes.
+* Array A can also be viewed as a two-dimensional array with 5 rows and 3 columns, referenced as `A[0][0]` through `A[4][2]`.
+	* The array elements are ordered in memory in row-major order, meaning all elements of row 0, which can be written `A[0]`, followed by all elements of row 1 (`A[1]`), and so on.
+		![[image-20240601100306237.png|200]]
+	* This ordering is a consequence of our nested declaration. Viewing A as an array of 5 elements, each of which is an array of three int’s, we first have `A[0]`, followed by `A[1]`, and so on.
+* Suppose $x_A$, i, and j are in registers `%rdi`, `%rsi`, and `%rdx`:
+	```
+	# A in %rdi, i in %rsi, and j in %rdx
+	leaq (%rsi,%rsi,2), %rax.     # Compute 3i
+	leaq (%rdi,%rax,4), %rax      # Compute xA + 12i
+	movl (%rax,%rdx,4), %eax      # Read from M[xA + 12i + 4]
+	```
+* The code computes the element’s address as $x_A + 12i + 4j = x_A + 4(3i + j)$.
+
+# Practice Problem 3.38
+Consider the following source code, where M and N are constants declared with `#define`:
+```c
+long P[M][N];
+
+long Q[N][M];
+
+long sum_element(long i, long j) {
+	return P[i][j] + Q[j][i];
+}
+```
+In compiling this program, gcc generates the following assembly code:
+```z80
+# long sum_element(long i, long j)
+# i in %rdi, j in %rsi
+
+sum_element:
+	leaq 0(,%rdi,8), %rdx
+	subq %rdi, %rdx
+	addq %rsi, %rdx
+	leaq (%rsi,%rsi,4), %rax
+	addq %rax, %rdi
+	movq Q(,%rdi,8), %rax
+	addq P(,%rdx,8), %rax
+	ret
+```
+Use your reverse engineering skills to determine the values of M and N based on this assembly code.
+
+**Solution**:
+```z80
+# long sum_element(long i, long j)
+# i in %rdi, j in %rsi
+
+sum_element:
+	leaq 0(,%rdi,8), %rdx
+	subq %rdi, %rdx
+	addq %rsi, %rdx
+	leaq (%rsi,%rsi,4), %rax
+	addq %rax, %rdi
+	movq Q(,%rdi,8), %rax
+	addq P(,%rdx,8), %rax
+	ret
+```
+
 
 
 
