@@ -166,15 +166,100 @@ sum_element:
 	addq %rsi, %rdx            # rdx=rdx+rsi: rdx=7i+j
 	leaq (%rsi,%rsi,4), %rax   # rax=rsi+4*rsi=5*rsi: rax=5j
 	addq %rax, %rdi            # rdi=rdi+rax: rdi=i+5j
-	movq Q(,%rdi,8), %rax      # rax=Q+8*rdi: rax=Q+8(i+5j)=Q+8i+40j
-	addq P(,%rdx,8), %rax      # rax=rax+P+8*rdx: rax=Q+8i+40j+P+8(7i+j) =P+Q+64i+48j
+	movq Q(,%rdi,8), %rax      # rax=*(Q+8*rdi): rax=M(Q+8(i+5j))=M(Q+8i+40j)
+	addq P(,%rdx,8), %rax      # rax=rax+M(P+8*rdx): rax=M(Q+8i+40j)+M(P+56i+8j)
 	ret
 ```
 * Secondly, we analyze the C code:
 	`long P[M][N];`
 	`long Q[N][M];`
-	`P[i][j] + Q[j][i] = P + i*N + j + Q + j*M + i`
-	`= P + Q + (N+1)*i + (M+1)*j`
+	`P[i][j] + Q[j][i] = *(P + 8*i*N + 8*j) + *(Q + 8*j*M + 8*i)`
+* Finally, we get `N = 7, M = 5`
+
+# 3.8.4 Fixed-Size Arrays
+* The C compiler is able to make many optimizations for code operating on multidimensional arrays of fixed size, while we use `-O1` for testing.
+* We try the code below:
+	```c
+	#define N 16
+	typedef int fix_matrix[N][N];
+	
+	/* Compute i,k of fixed matrix product */
+	int fix_prod_ele (fix_matrix A, fix_matrix B, long i, long k) {
+		long j;
+		int result = 0;
+		for (j = 0; j < N; j++)
+			result += A[i][j] * B[j][k];
+		return result;
+	}
+	```
+	* Whenever a program uses some constant as an array dimension or buffer size, it is best to associate a name with it via a #define declaration, and then use this name consistently, rather than the numeric value.
+* No optimization - compile with `-Og`: `gcc -Og -S fix_prod.c` and get the assembly code below:
+	```z80
+	# int fix_prod_ele (fix_matrix A, fix_matrix B, long i, long k)
+	# rdi - fix_matrix A
+	# rsi - fix_matrix B
+	# rdx - long i
+	# rcx - long k
+	.text
+	.globl  fix_prod_ele
+	.type   fix_prod_ele, @function
+	fix_prod_ele:
+	        movq    %rdi, %r9       # r9 =rdi: r9 =A
+	        movq    %rsi, %r10      # r10=rsi: r10=B
+	        movl    $0, %r8d        # r8d=0
+	        movl    $0, %eax        # eax=0
+	        jmp     .L2
+	.L3:
+	        movq    %rdx, %rdi      # rdi=rdx: rdi=i
+	        salq    $6, %rdi        # rdi=rdi<<6: rdi=64i
+	        addq    %r9, %rdi       # rdi=rdi+r9: rdi=A+64i
+	        movq    %rax, %rsi      # rsi=rax: rsi=0
+	        salq    $6, %rsi        # rsi=rsi<<6: 
+	        addq    %r10, %rsi      # 
+	        movl    (%rsi,%rcx,4), %esi
+	        imull   (%rdi,%rax,4), %esi
+	        addl    %esi, %r8d
+	        addq    $1, %rax
+	.L2:
+	        cmpq    $15, %rax
+	        jle     .L3
+	        movl    %r8d, %eax
+	        ret
+	```
+* Compile with `-O1`: `gcc -O1 -S fix_prod.c` and get the assembly code below:
+	```z80
+	.text
+	.globl  fix_prod_ele
+	.type   fix_prod_ele, @function
+	fix_prod_ele:
+	        salq    $6, %rdx
+	        addq    %rdx, %rdi
+	        leaq    (%rsi,%rcx,4), %rax
+	        leaq    1024(%rax), %rsi
+	        movl    $0, %ecx
+	.L2:
+	        movl    (%rdi), %edx
+	        imull   (%rax), %edx
+	        addl    %edx, %ecx
+	        addq    $4, %rdi
+	        addq    $64, %rax
+	        cmpq    %rsi, %rax
+	        jne     .L2
+	        movl    %ecx, %eax
+	        ret
+	```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
