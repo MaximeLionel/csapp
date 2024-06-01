@@ -131,7 +131,6 @@ row3_t A[5];
 Consider the following source code, where M and N are constants declared with `#define`:
 ```c
 long P[M][N];
-
 long Q[N][M];
 
 long sum_element(long i, long j) {
@@ -156,20 +155,23 @@ sum_element:
 Use your reverse engineering skills to determine the values of M and N based on this assembly code.
 
 **Solution**:
+* First, we interpret the assembly code:
 ```z80
 # long sum_element(long i, long j)
 # i in %rdi, j in %rsi
 
 sum_element:
-	leaq 0(,%rdi,8), %rdx
-	subq %rdi, %rdx
-	addq %rsi, %rdx
-	leaq (%rsi,%rsi,4), %rax
-	addq %rax, %rdi
-	movq Q(,%rdi,8), %rax
-	addq P(,%rdx,8), %rax
+	leaq 0(,%rdi,8), %rdx      # rdx=0+8*rdi: rdx=8i
+	subq %rdi, %rdx            # rdx=rdx-rdi: rdx=8i-i=7i
+	addq %rsi, %rdx            # rdx=rdx+rsi: rdx=7i+j
+	leaq (%rsi,%rsi,4), %rax   # rax=rsi+4*rsi=5*rsi: rax=5j
+	addq %rax, %rdi            # rdi=rdi+rax: rdi=i+5j
+	movq Q(,%rdi,8), %rax      # rax=Q+8*rdi: rax=Q+8(i+5j)=Q+8i+40j
+	addq P(,%rdx,8), %rax      # rax=rax+P+8*rdx: rax=Q+8i+40j+P+8(7i+j) =P+Q+64i+48j
 	ret
 ```
+* Secondly, we analyze the C code:
+	 `P[i][j] + Q[j][i]`
 
 
 
