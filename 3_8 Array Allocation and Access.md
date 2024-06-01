@@ -171,7 +171,9 @@ sum_element:
 	ret
 ```
 * Secondly, we analyze the C code:
-	 `P[i][j] + Q[j][i]`
+	`long P[M][N];`
+	`long Q[N][M];`
+	`P[i][j] + Q[j][i]` = P + i*(N-1) + 
 
 
 
