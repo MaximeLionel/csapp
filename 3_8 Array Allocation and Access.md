@@ -173,7 +173,8 @@ sum_element:
 * Secondly, we analyze the C code:
 	`long P[M][N];`
 	`long Q[N][M];`
-	`P[i][j] + Q[j][i]` = P + i*(N-1) + 
+	`P[i][j] + Q[j][i] = P + i*N + j + Q + j*M + i`
+	`= P + Q + (N+1)*i + (M+1)*j`
 
 
 
