@@ -178,6 +178,49 @@ sum_element:
 
 # 3.8.4 Fixed-Size Arrays
 * The C compiler is able to make many optimizations for code operating on multidimensional arrays of fixed size, while we use `-O1` for testing.
+## Differences between `-Og` and `-O1`
+In GCC, `-Og` and `-O1` are both optimization levels, but they serve different purposes and enable different sets of optimizations. Here are the key differences between `-Og` and `-O1`:
+### `-O1` Optimization Level
+- **Purpose:** `-O1` is intended to provide a moderate level of optimization, improving the performance and size of the generated code without significantly increasing compilation time.
+- **Optimizations Enabled:** `-O1` enables a range of optimizations that improve execution speed and reduce code size. Some of these optimizations include:
+    - Dead code elimination
+    - Common subexpression elimination
+    - Basic inlining of functions
+    - Simple loop optimizations
+    - Constant propagation
+    - Basic block reordering
+- **Usage Scenario:** `-O1` is suitable for situations where you want better performance than unoptimized code (`-O0`) but do not want to wait for the longer compile times associated with higher optimization levels like `-O2` or `-O3`. It strikes a balance between optimization and compilation time.
+
+### `-Og` Optimization Level
+- **Purpose:** `-Og` is designed specifically for ==debugging==. It provides a good level of optimization while ensuring that debugging information remains accurate and the debugging experience is not compromised.
+- **Optimizations Enabled:** `-Og` enables optimizations that do not interfere with debugging. The goal is to make the code run faster while still being easy to debug. The optimizations typically enabled include:
+    - Minimal inlining of functions
+    - Local variable optimization
+    - Basic optimizations that do not reorder code significantly
+- **Usage Scenario:** `-Og` is ideal during the development and debugging phase. It allows you to debug your program with accurate variable tracking and line number information, making it easier to diagnose issues without dealing with heavily optimized and possibly harder-to-debug code.
+
+### Key Differences
+- **Debugging Experience:**
+    - `-Og` focuses on preserving the debugging experience by enabling only those optimizations that do not interfere with the ability to debug the code effectively.
+    - `-O1` applies more aggressive optimizations that can sometimes make debugging harder.
+- **Performance and Code Size:**
+    - `-O1` generally provides better performance and smaller code size compared to `-Og` because it enables a broader range of optimizations.
+    - `-Og` provides less optimization compared to `-O1`, focusing more on maintaining debuggability.
+
+### When to Use Which
+- Use `-Og` when you are actively **developing and debugging your code**. It allows you to catch bugs more easily without sacrificing too much performance.
+- Use `-O1` when you need a **reasonably optimized build** that performs better than no optimization (`-O0`) but do not need the full debugging capabilities of `-Og`.
+
+### Example
+If you are compiling a C program and want to optimize for debugging:
+`gcc -Og -g -o myprogram myprogram.c`
+If you are compiling for a slightly optimized release build where debugging is not a priority:
+`gcc -O1 -o myprogram myprogram.c`
+In summary, `-Og` is tailored for development and debugging, ensuring the code remains easy to debug, while `-O1` provides a balanced optimization for performance and size, suitable for more general use cases where debugging is less of a concern.
+
+
+## Example
+### The C Code
 * We try the code below:
 	```c
 	#define N 16
@@ -193,6 +236,8 @@ sum_element:
 	}
 	```
 	* Whenever a program uses some constant as an array dimension or buffer size, it is best to associate a name with it via a #define declaration, and then use this name consistently, rather than the numeric value.
+
+### The `-Og` Assembly Code
 * No optimization - compile with `-Og`: `gcc -Og -S fix_prod.c` and get the assembly code below:
 	```z80
 	# int fix_prod_ele (fix_matrix A, fix_matrix B, long i, long k)
@@ -227,6 +272,8 @@ sum_element:
 	        movl    %r8d, %eax      # return result
 	        ret
 	```
+
+### The `-O1` Assembly Code
 * `-O1` optimization - compile with `-O1`: `gcc -O1 -S fix_prod.c` and get the assembly code below:
 	```z80
 	# int fix_prod_ele (fix_matrix A, fix_matrix B, long i, long k)
@@ -256,6 +303,29 @@ sum_element:
 	        ret
 	```
 	* Suppose: `&A[i][0]` is `A_ptr`, `&B[0][k]` is `B_ptr`, `&B[N][k]` is `B_end`.
+		* Generating a pointer, which we have named `Aptr`, that points to successive elements in row i of A.
+		* Generating a pointer, which we have named `Bptr`, that points to successive elements in column k of B. 
+		* Generating a pointer, which we have named `Bend`, that equals the value `Bptr` will have when it is time to terminate the loop.
+	* It removes the integer index `j` and converts all array references to pointer dereferences.
+		* The initial value for `Aptr` is the address of the first element of row i of A, given by the C expression `&A[i][0]`. 
+		* The initial value for `Bptr` is the address of the first element of column k of B, given by the C expression `&B[0][k]`. 
+		* The value for Bend is the index of what would be the `(n + 1)st` element in column j of B, given by the C expression `&B[N][k]`.
+* Optimized C code:
+	![[image-20240602211651509.png|600]]
+
+# Practice Problem 3.39
+Use Equation 3.1 to explain how the computations of the initial values for `Aptr`, `Bptr`, and `Bend` in the C code of Figure 3.37(b) (lines 3–5) correctly describe their computations in the assembly code generated for `fix_prod_ele` (lines 3–5).
+
+**Solution**:
+Equation 3.1: $\&D[i][j] = x_D + L(C \times i + j)$
+C = 16 because of `#define N 16`.
+L = 4  because of integer type.
+
+$Aptr = \&A[i][0] = x_A+4(16 \times i+0)=x_A+64i$
+$Bptr=\&B[0][k]=x_B+4(16 \times 0+k)=x_B+4k$
+$Bend=\&B[N][k]=x_B+4(16 \times 16 + k)=x_B+4k+1024$
+
+
 
 
 
