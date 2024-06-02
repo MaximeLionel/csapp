@@ -380,6 +380,10 @@ void fix_set_diag_opt(fix_matrix A, int val)
 	                        // jne .L13
 }
 ```
+Thirdly, 
+Suppose N is `int A[N][N]`, then we get the equation below:
+	4(N+1)=68 -> N=16
+
 
 
 
