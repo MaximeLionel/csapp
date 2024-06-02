@@ -350,10 +350,31 @@ fix_set_diag:
 	jne .L13
 	rep; ret
 ```
-Create a C code program `fix_set_diag_opt` that uses optimizations similar to those in the assembly code, in the same style as the code in Figure 3.37(b). Use expressions involving the parameter N rather than integer constants, so that your code will work correctly if N is redefined.
+Create a C code program `fix_set_diag_opt` that uses optimizations similar to those in the assembly code, in the same style as the code in Optimized C Code. Use expressions involving the parameter N rather than integer constants, so that your code will work correctly if N is redefined.
 
 **Solution**:
+Firstly, we interpret the assembly code below:
+```z80
+# void fix_set_diag(fix_matrix A, int val)
+# A in %rdi, val in %rsi
 
+fix_set_diag:
+	movl $0, %eax             # eax=0
+.L13:
+	movl %esi, (%rdi,%rax)    # M(rax+rdi)=esi: *(rax+A)=val
+	addq $68, %rax            # rax+=68
+	cmpq $1088, %rax          # compare rax and 1088
+	jne .L13                  # if rax <= 1088, jump to .L13
+	rep; ret
+```
+Secondly, we introduce `int* Abase` and construct the C code below:
+```C
+void fix_set_diag_opt(fix_matrix A, int val)
+{
+	int* Abase = &A[0][0];
+	
+}
+```
 
 
 
