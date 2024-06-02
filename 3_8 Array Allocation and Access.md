@@ -325,11 +325,34 @@ $Aptr = \&A[i][0] = x_A+4(16 \times i+0)=x_A+64i$
 $Bptr=\&B[0][k]=x_B+4(16 \times 0+k)=x_B+4k$
 $Bend=\&B[N][k]=x_B+4(16 \times 16 + k)=x_B+4k+1024$
 
+# Practice Problem 3.40
+The following C code sets the diagonal elements of one of our fixed-size arrays to `val`:
+```c
+/* Set all diagonal elements to val */
 
+void fix_set_diag(fix_matrix A, int val) {
+	long i;
+	for (i = 0; i < N; i++)
+		A[i][i] = val;
+}
+```
+When compiled with optimization level `-O1`, gcc generates the following assembly code:
+```z80
+# void fix_set_diag(fix_matrix A, int val)
+# A in %rdi, val in %rsi
 
+fix_set_diag:
+	movl $0, %eax
+.L13:
+	movl %esi, (%rdi,%rax)
+	addq $68, %rax
+	cmpq $1088, %rax
+	jne .L13
+	rep; ret
+```
+Create a C code program `fix_set_diag_opt` that uses optimizations similar to those in the assembly code, in the same style as the code in Figure 3.37(b). Use expressions involving the parameter N rather than integer constants, so that your code will work correctly if N is redefined.
 
-
-
+**Solution**:
 
 
 
