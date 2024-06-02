@@ -367,12 +367,17 @@ fix_set_diag:
 	jne .L13                  # if rax <= 1088, jump to .L13
 	rep; ret
 ```
-Secondly, we introduce `int* Abase` and construct the C code below:
+Secondly, we introduce `char* Abase` and construct the C code below:
 ```C
 void fix_set_diag_opt(fix_matrix A, int val)
 {
-	int* Abase = &A[0][0];
-	
+	char* Abase = &A[0][0];
+	int i = 0;              // movl $0, %eax
+	do{
+		*(Abase + i) = val;
+		i+=68;
+	}while(i<=1088)         // cmpq $1088, %rax
+	                        // jne .L13
 }
 ```
 
