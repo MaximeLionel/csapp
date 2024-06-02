@@ -215,33 +215,39 @@ sum_element:
 	        salq    $6, %rdi        # rdi=rdi<<6: rdi=64i
 	        addq    %r9, %rdi       # rdi=rdi+r9: rdi=A+64i
 	        movq    %rax, %rsi      # rsi=rax: rsi=0
-	        salq    $6, %rsi        # rsi=rsi<<6: 
-	        addq    %r10, %rsi      # 
-	        movl    (%rsi,%rcx,4), %esi
-	        imull   (%rdi,%rax,4), %esi
-	        addl    %esi, %r8d
-	        addq    $1, %rax
+	        salq    $6, %rsi        # rsi=rsi<<6: rsi=64*rsi
+	        addq    %r10, %rsi      # rsi=rsi+r10: rsi=rsi+B
+	        movl    (%rsi,%rcx,4), %esi  # esi=M(rsi+4*rcx): B[j][k]
+	        imull   (%rdi,%rax,4), %esi  # esi=M(rdi+4*rax)*esi: A[i][j] * B[j][k]
+	        addl    %esi, %r8d      # r8d=esi+r8d: result
+	        addq    $1, %rax        # rax+=1: j++
 	.L2:
-	        cmpq    $15, %rax
-	        jle     .L3
-	        movl    %r8d, %eax
+	        cmpq    $15, %rax       # 
+	        jle     .L3             # if(rax<=15) jump to .L3: j<N
+	        movl    %r8d, %eax      # return result
 	        ret
 	```
-* Compile with `-O1`: `gcc -O1 -S fix_prod.c` and get the assembly code below:
+* `-O1` optimization - compile with `-O1`: `gcc -O1 -S fix_prod.c` and get the assembly code below:
 	```z80
+	# int fix_prod_ele (fix_matrix A, fix_matrix B, long i, long k)
+	# rdi - fix_matrix A
+	# rsi - fix_matrix B
+	# rdx - long i
+	# rcx - long k
+	
 	.text
 	.globl  fix_prod_ele
 	.type   fix_prod_ele, @function
 	fix_prod_ele:
-	        salq    $6, %rdx
-	        addq    %rdx, %rdi
-	        leaq    (%rsi,%rcx,4), %rax
-	        leaq    1024(%rax), %rsi
-	        movl    $0, %ecx
+	        salq    $6, %rdx             # rdx=rdx*64:    rdx=64i
+	        addq    %rdx, %rdi           # rdi=rdi+rdx:   rdi=A+64i=&A[i][0]
+	        leaq    (%rsi,%rcx,4), %rax  # rax=rsi+4*rcx: rax=B+4k=&B[0][k]
+	        leaq    1024(%rax), %rsi     # rsi=rax+1024:  rsi=B+4k+1024=&B[N][k]
+	        movl    $0, %ecx             # ecx=0
 	.L2:
-	        movl    (%rdi), %edx
-	        imull   (%rax), %edx
-	        addl    %edx, %ecx
+	        movl    (%rdi), %edx         # edx=M(A+64i): edx=A[i][0]
+	        imull   (%rax), %edx         # edx=M(A+64i)*M(B+4k): edx=A[i][0]*B[0][k]
+	        addl    %edx, %ecx           # 
 	        addq    $4, %rdi
 	        addq    $64, %rax
 	        cmpq    %rsi, %rax
