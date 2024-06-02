@@ -200,6 +200,7 @@ sum_element:
 	# rsi - fix_matrix B
 	# rdx - long i
 	# rcx - long k
+	
 	.text
 	.globl  fix_prod_ele
 	.type   fix_prod_ele, @function
