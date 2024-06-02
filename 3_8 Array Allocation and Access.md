@@ -240,21 +240,22 @@ sum_element:
 	.type   fix_prod_ele, @function
 	fix_prod_ele:
 	        salq    $6, %rdx             # rdx=rdx*64:    rdx=64i
-	        addq    %rdx, %rdi           # rdi=rdi+rdx:   rdi=A+64i=&A[i][0]
-	        leaq    (%rsi,%rcx,4), %rax  # rax=rsi+4*rcx: rax=B+4k=&B[0][k]
-	        leaq    1024(%rax), %rsi     # rsi=rax+1024:  rsi=B+4k+1024=&B[N][k]
+	        addq    %rdx, %rdi           # rdi=rdi+rdx:   rdi=A+64i=&A[i][0] -> A_ptr
+	        leaq    (%rsi,%rcx,4), %rax  # rax=rsi+4*rcx: rax=B+4k=&B[0][k] -> B_ptr
+	        leaq    1024(%rax), %rsi     # rsi=rax+1024:  rsi=B+4k+1024=&B[N][k] -> B_end
 	        movl    $0, %ecx             # ecx=0
 	.L2:
 	        movl    (%rdi), %edx         # edx=M(A+64i): edx=A[i][0]
 	        imull   (%rax), %edx         # edx=M(A+64i)*M(B+4k): edx=A[i][0]*B[0][k]
-	        addl    %edx, %ecx           # 
-	        addq    $4, %rdi
-	        addq    $64, %rax
-	        cmpq    %rsi, %rax
+	        addl    %edx, %ecx           # ecx=ecx+edx: ecx=result+A[i][0]*B[0][k]
+	        addq    $4, %rdi             # rdi+=4: A_ptr++
+	        addq    $64, %rax            # rax+=64: B_ptr+=N
+	        cmpq    %rsi, %rax           # Compare B_ptr and B_end
 	        jne     .L2
 	        movl    %ecx, %eax
 	        ret
 	```
+	* Suppose: `&A[i][0]` is `A_ptr`, `&B[0][k]` is `B_ptr`, `&B[N][k]` is `B_end`.
 
 
 
