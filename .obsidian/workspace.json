@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#define",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -150,13 +150,13 @@
   },
   "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_4 Accessing Information.md",
+    "3_8 Array Allocation and Access.md",
     "3_8 Array Allocation and Access.assets/image-20240603110542601.png",
     "3_8 Array Allocation and Access.assets/image-20240602211651509.png",
     "3_8 Array Allocation and Access.assets/image-20240601100306237.png",
     "3_8 Array Allocation and Access.assets/image-20240531235948114.png",
-    "3_4 Accessing Information.md",
     "conflict-files-obsidian-git.md",
-    "3_8 Array Allocation and Access.md",
     "3_8 Array Allocation and Access.assets/image-20240529152558409.png",
     "3_8 Array Allocation and Access.assets",
     "3_2 Program Encodings.md",
@@ -167,7 +167,6 @@
     "3_7 Procedures.assets/image-20240522160933277.png",
     "3_7 Procedures.assets/image-20240522131746300.png",
     "3_7 Procedures.assets/image-20240522131654513.png",
-    "3_7 Procedures.assets/image-20240522130957356.png",
     "3_6 Control.md",
     "3_7 Procedures.assets",
     "3_5 Arithmetic and Logical Operations.md",

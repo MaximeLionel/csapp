@@ -400,6 +400,58 @@ Suppose N is `int A[N][N]`, then we get the equation below:
 		![[image-20240603110542601.png|400]]
 	* The code computes the address of element i, j as $x_A + 4(n \times i) + 4j = x_A + 4(n \times i + j)$.
 
+* When variable-size arrays are referenced within a loop, the compiler can often optimize the index computations by exploiting the regularity of the access patterns.
+
+## Example
+### C Code
+```C
+/* Compute i,k of variable matrix product */
+
+int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k) {
+	long j;
+	int result = 0;
+	for (j = 0; j < n; j++)
+		result += A[i][j] * B[j][k];
+	return result;
+}
+```
+
+### Assembly Code - `-Og`
+```z80
+# int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k)
+# rdi - n
+# rsi - A
+# rdx - B
+# rcx - i
+# r8  - k
+
+.text
+.globl  var_prod_ele
+var_prod_ele:
+        movq    %rsi, %r10           # r10=rsi: r10=A
+        movq    %rdx, %r11           # r11=rdx: r11=B
+        movl    $0, %esi             # esi=0
+        movl    $0, %eax             # eax=0
+        jmp     .L2
+.L3:
+        movq    %rcx, %rdx
+        imulq   %rdi, %rdx
+        leaq    (%r10,%rdx,4), %r9
+        movq    %rax, %rdx
+        imulq   %rdi, %rdx
+        leaq    (%r11,%rdx,4), %rdx
+        movl    (%rdx,%r8,4), %edx
+        imull   (%r9,%rax,4), %edx
+        addl    %edx, %esi
+        addq    $1, %rax
+.L2:
+        cmpq    %rdi, %rax
+        jl      .L3
+        movl    %esi, %eax
+        ret
+```
+
+
 
 
 
