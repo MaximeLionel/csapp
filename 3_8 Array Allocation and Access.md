@@ -384,6 +384,23 @@ Thirdly,
 Suppose N is `int A[N][N]`, then we get the equation below:
 	4(N+1)=68 -> N=16
 
+# 3.8.5 Variable-Size Arrays
+* In the C version of variable-size arrays, we can declare an array：
+	```c
+	int A[expr1][expr2]
+	```
+* Example - access element i, j of an n × n array:
+	```c
+	int var_ele(long n, int A[n][n], long i, long j) {
+		return A[i][j];
+	}
+	```
+	* The parameter n must precede the parameter `A[n][n]`, so that the function can compute the array dimensions as the parameter is encountered.
+	* Assembly code:
+		![[image-20240603110542601.png|400]]
+
+
+
 
 
 
