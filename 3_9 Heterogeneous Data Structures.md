@@ -27,3 +27,4 @@
 	* Since the offset of field i is 0, the address of this field is simply the value of r. 
 	* To store into field j, the code adds offset 4 to the address of r.
 * To generate a pointer to an object within a structure, we can simply add the field’s offset to the structure address.
+	* we can generate the pointer `&(r->a[1])` by adding offset 8+4x1=12.
