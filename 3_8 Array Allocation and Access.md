@@ -487,14 +487,14 @@ var_prod_ele:
         leaq    0(,%rdi,4), %r9       # r9=4*rdi: r9=4n
         leaq    (%rdx,%r8,4), %rcx    # rcx=rdx+4*r8: rcx=B+4k
         movl    $0, %esi              # esi=0: result=0
-        movl    $0, %eax              # eax=0: i=0
+        movl    $0, %eax              # eax=0: j=0
 .L3:
-        movl    (%r10,%rax,4), %edx   # edx=M(r10+4*rax): edx=*(A+4i+4*rax)
-        imull   (%rcx), %edx          # edx=edx*M(rcx): *(A+4i+4*rax) * *(B+4k)
+        movl    (%r10,%rax,4), %edx   # edx=M(r10+4*rax): edx=*(A+4i+4*j)
+        imull   (%rcx), %edx          # edx=edx*M(rcx): *(A+4i+4*j) * *(B+4k)
         addl    %edx, %esi            # esi+=edx: result = result +  *(A+4i+4*j) * *(B+4k)
         addq    $1, %rax              # rax+=1: j++
-        addq    %r9, %rcx
-        cmpq    %rax, %rdi
+        addq    %r9, %rcx             # rcx+=r9: rcx=(B+4k)+4n
+        cmpq    %rax, %rdi            # compare rax and rdi
         jne     .L3
 .L1:
         movl    %esi, %eax
@@ -503,9 +503,23 @@ var_prod_ele:
         movl    $0, %esi
         jmp     .L1
 ```
+* Transform to C code:
+```C
+int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k)
+{
+	int* Aptr = &A[i][0];
+	int* Bptr = &B[0][k];
+	int result = 0;
+	int j = 0;
+	do{
+		result += (*(Aptr+j))*(*Bptr);
+		Bptr+=n;
+	}while(j!=n)
+	return result;
+}
+```
 
-
-
+* We have seen that, with optimizations enabled, gcc is able to recognize patterns that arise when a program steps through the elements of a multidimensional array.
 
 
 
