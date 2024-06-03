@@ -33,3 +33,17 @@
 	# Registers: r in %rdi, i %rsi
 	leaq 8(%rdi,%rsi,4), %rax             # Set %rax to &r->a[i]
 	```
+	* The assembly code of `r->p = &r->a[r->i + r->j]`:
+	```z80
+	# Registers: r in %rdi
+	movl 4(%rdi), %eax          # Get r->j
+	addl (%rdi), %eax           # Add r->i
+	cltq                        # Extend to 8 bytes
+	leaq 8(%rdi,%rax,4), %rax    # Compute &r->a[r->i + r->j]
+
+5
+
+movq %rax, 16(%rdi)
+
+Store in r->p
+	```
