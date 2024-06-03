@@ -456,10 +456,10 @@ int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k)
 {
 	char* Abase = &A[0][0];
 	char* Bbase = &B[0][0];
-	int i = 0;
+	int j = 0;
 	int result = 0;
 
-	while(i < n)
+	while(j < n)
 	{
 		result += A[i][j] * B[j][k];
 	}
@@ -491,8 +491,8 @@ var_prod_ele:
 .L3:
         movl    (%r10,%rax,4), %edx   # edx=M(r10+4*rax): edx=*(A+4i+4*rax)
         imull   (%rcx), %edx          # edx=edx*M(rcx): *(A+4i+4*rax) * *(B+4k)
-        addl    %edx, %esi            # esi+=edx: result =
-        addq    $1, %rax
+        addl    %edx, %esi            # esi+=edx: result = result +  *(A+4i+4*j) * *(B+4k)
+        addq    $1, %rax              # rax+=1: j++
         addq    %r9, %rcx
         cmpq    %rax, %rdi
         jne     .L3
