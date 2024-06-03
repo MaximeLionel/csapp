@@ -18,7 +18,7 @@
 	* Array a is embedded within the structure.
 * To access the fields of a structure, the compiler generates code that adds the appropriate offset to the address of the structure.
 * Example - access struct element:
-	* suppose variable r of type struct rec* is in register %rdi. Then the following code copies element r->i to element r->j:
+	* suppose variable r of type struct `rec*` is in register %rdi. Then the following code copies element r->i to element r->j:
 		```z80
 		# Registers: r in %rdi
 		movl (%rdi), %eax              # Get r->i
@@ -28,3 +28,8 @@
 	* To store into field j, the code adds offset 4 to the address of r.
 * To generate a pointer to an object within a structure, we can simply add the field’s offset to the structure address.
 	* we can generate the pointer `&(r->a[1])` by adding offset 8+4x1=12.
+	* For pointer r in register `%rdi` and long integer variable i in register `%rsi`, we can generate the pointer value `&(r->a[i])` with the single instruction.
+	```z80
+	# Registers: r in %rdi, i %rsi
+	leaq 8(%rdi,%rsi,4), %rax             # Set %rax to &r->a[i]
+	```
