@@ -18,4 +18,11 @@
 	* Array a is embedded within the structure.
 * To access the fields of a structure, the compiler generates code that adds the appropriate offset to the address of the structure.
 * Example - access struct element:
-
+	* suppose variable r of type struct rec* is in register %rdi. Then the following code copies element r->i to element r->j:
+		```z80
+		# Registers: r in %rdi
+		movl (%rdi), %eax              # Get r->i
+		movl %eax, 4(%rdi)             # Store in r->j
+		```
+		* Since the offset of field i is 0, the address of this field is simply the value of r. 
+		* To store into field j, the code adds offset 4 to the address of r.
