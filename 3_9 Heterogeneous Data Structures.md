@@ -24,5 +24,6 @@
 		movl (%rdi), %eax              # Get r->i
 		movl %eax, 4(%rdi)             # Store in r->j
 		```
-		* Since the offset of field i is 0, the address of this field is simply the value of r. 
-		* To store into field j, the code adds offset 4 to the address of r.
+	* Since the offset of field i is 0, the address of this field is simply the value of r. 
+	* To store into field j, the code adds offset 4 to the address of r.
+* To generate a pointer to an object within a structure, we can simply add the field’s offset to the structure address.
