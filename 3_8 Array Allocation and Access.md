@@ -486,12 +486,12 @@ var_prod_ele:
         leaq    (%rsi,%rcx,4), %r10   # r10=rsi+4*rcx: r10=A+4i
         leaq    0(,%rdi,4), %r9       # r9=4*rdi: r9=4n
         leaq    (%rdx,%r8,4), %rcx    # rcx=rdx+4*r8: rcx=B+4k
-        movl    $0, %esi              # esi=0
-        movl    $0, %eax              # eax=0
+        movl    $0, %esi              # esi=0: result=0
+        movl    $0, %eax              # eax=0: i=0
 .L3:
         movl    (%r10,%rax,4), %edx   # edx=M(r10+4*rax): edx=*(A+4i+4*rax)
         imull   (%rcx), %edx          # edx=edx*M(rcx): *(A+4i+4*rax) * *(B+4k)
-        addl    %edx, %esi
+        addl    %edx, %esi            # esi+=edx: result =
         addq    $1, %rax
         addq    %r9, %rcx
         cmpq    %rax, %rdi
