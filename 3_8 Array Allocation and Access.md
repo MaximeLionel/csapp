@@ -434,21 +434,74 @@ var_prod_ele:
         movl    $0, %eax             # eax=0
         jmp     .L2
 .L3:
-        movq    %rcx, %rdx
-        imulq   %rdi, %rdx
-        leaq    (%r10,%rdx,4), %r9
-        movq    %rax, %rdx
-        imulq   %rdi, %rdx
-        leaq    (%r11,%rdx,4), %rdx
-        movl    (%rdx,%r8,4), %edx
-        imull   (%r9,%rax,4), %edx
-        addl    %edx, %esi
-        addq    $1, %rax
+        movq    %rcx, %rdx           # rdx=rcx: rdx=i
+        imulq   %rdi, %rdx           # rdx=rdi*rdx: rdx=n*i
+        leaq    (%r10,%rdx,4), %r9   # r9=r10+4*rdx: r9=A+4*n*i
+        movq    %rax, %rdx           # rdx=rax: rdx=0
+        imulq   %rdi, %rdx           # rdx=rdx*rdi: rdx=rdx*n
+        leaq    (%r11,%rdx,4), %rdx  # rdx=r11+4*rdx: B+4*n*rdx
+        movl    (%rdx,%r8,4), %edx   # edx=M(rdx+4*r8): edx=*(B+4*n*rdx+4*k)
+        imull   (%r9,%rax,4), %edx   # edx=edx*M(r9+4*rax): edx=*(B+4*n*rdx+4*k) * *(A+4*n*i+4*rax)
+        addl    %edx, %esi           # esi=esi+edx: result += A[i][j] * B[j][k]
+        addq    $1, %rax             # rax+=1: j++
 .L2:
         cmpq    %rdi, %rax
         jl      .L3
         movl    %esi, %eax
         ret
+```
+* Transform to C code:
+```C
+int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k)
+{
+	char* Abase = &A[0][0];
+	char* Bbase = &B[0][0];
+	int i = 0;
+	int result = 0;
+
+	while(i < n)
+	{
+		result += A[i][j] * B[j][k];
+	}
+	return result;
+}
+```
+
+
+### Assembly Code - `-O1`
+```z80
+# int var_prod_ele(long n, int A[n][n], int B[n][n], long i, long k)
+# rdi - n
+# rsi - A
+# rdx - B
+# rcx - i
+# r8  - k
+
+.text
+.globl  var_prod_ele
+var_prod_ele:
+        testq   %rdi, %rdi            # test n&n
+        jle     .L4                   # if n<=0, jump to .L4
+        imulq   %rdi, %rcx            # rcx=rcx*rdi: rcx=i*n
+        leaq    (%rsi,%rcx,4), %r10   # r10=rsi+4*rcx: r10=A+4i
+        leaq    0(,%rdi,4), %r9       # r9=4*rdi: r9=4n
+        leaq    (%rdx,%r8,4), %rcx    # rcx=rdx+4*r8: rcx=B+4k
+        movl    $0, %esi              # esi=0
+        movl    $0, %eax              # eax=0
+.L3:
+        movl    (%r10,%rax,4), %edx   # edx=M(r10+4*rax): edx=*(A+4i+4*rax)
+        imull   (%rcx), %edx          # edx=edx*M(rcx): *(A+4i+4*rax) * *(B+4k)
+        addl    %edx, %esi
+        addq    $1, %rax
+        addq    %r9, %rcx
+        cmpq    %rax, %rdi
+        jne     .L3
+.L1:
+        movl    %esi, %eax
+        ret
+.L4:
+        movl    $0, %esi
+        jmp     .L1
 ```
 
 
