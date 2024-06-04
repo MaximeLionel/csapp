@@ -36,9 +36,94 @@
 	* The assembly code of `r->p = &r->a[r->i + r->j]`:
 	```z80
 	# Registers: r in %rdi
-	movl 4(%rdi), %eax          # Get r->j
-	addl (%rdi), %eax           # Add r->i
-	cltq                        # Extend to 8 bytes
-	leaq 8(%rdi,%rax,4), %rax   # Compute &r->a[r->i + r->j]
-	movq %rax, 16(%rdi)         # Store in r->p
+	movl 4(%rdi), %eax          # eax=M(rdi+4): eax=*(r+4) - Get r->j
+	addl (%rdi), %eax           # eax=eax+M(rdi): eax=*(r+4)+(*r) - Add r->i which is (r->j)+(r->i)
+	cltq                        # eax to rax: Extend to 8 bytes
+	leaq 8(%rdi,%rax,4), %rax   # rax=rdi+4*rax+8: rax=r+4*rax+8 - Compute &r->a[r->i + r->j]
+	movq %rax, 16(%rdi)         # M(rdi+16)=rax: r->p=rax - Store in r->p
 	```
+
+# Practice Problem 3.41
+Consider the following structure declaration:
+```C
+struct test {
+	short *p;
+	struct {
+		short x;
+		short y;
+	} s;
+
+	struct test *next;
+};
+```
+This declaration illustrates that one structure can be embedded within another, just as arrays can be embedded within structures and arrays can be embedded within arrays.
+
+The following procedure (with some expressions omitted) operates on this structure:
+```C
+void st_init(struct test *st) {
+	st->s.y = ______ ;
+	st->p = ______ ;
+	st->next = ______ ;
+}
+```
+A. What are the offsets (in bytes) of the following fields?
+```C
+	p: ______
+	s.x: ______
+	s.y: ______
+	next: ______
+```
+B. How many total bytes does the structure require?
+
+C. The compiler generates the following assembly code for st_init:
+```z80
+# void st_init(struct test *st)
+# st in %rdi
+
+st_init:
+	movl 8(%rdi), %eax
+	movl %eax, 10(%rdi)
+	leaq 10(%rdi), %rax
+	movq %rax, (%rdi)
+	movq %rdi, 12(%rdi)
+	ret
+```
+On the basis of this information, fill in the missing expressions in the code for `st_init`.
+
+**Solution**:
+A. offsets (in bytes) of the following fields:
+```C
+struct test {
+	short *p;
+	struct {
+		short x;
+		short y;
+	} s;
+
+	struct test *next;
+};
+
+
+	p: 0
+	s.x: 0x8
+	s.y: 0xA
+	next: 0xC
+```
+
+B.
+Total bytes of the structure required: 8+2+2+8=0x14
+
+C. 
+```z80
+# void st_init(struct test *st)
+# st in %rdi
+
+st_init:
+	movl 8(%rdi), %eax    # eax=M(rdi+8): eax=*(st+8)
+	movl %eax, 10(%rdi)
+	leaq 10(%rdi), %rax
+	movq %rax, (%rdi)
+	movq %rdi, 12(%rdi)
+	ret
+```
+
