@@ -297,4 +297,50 @@ For each DIE(debugging information entry), it's like:
 - `DW_AT_type`: point to another DIE, which describe the element type
 - `DW_AT_data_member_location`: offset to the start of the structure
 
+For example, let's analyze the size of `s`
+* we get the size of test is 24 bytes:
+	```
+	<1><53>: Abbrev Number: 6 (DW_TAG_structure_type)
+	    <54>   DW_AT_name        : (indirect string, offset: 0xa9): test
+	    <58>   DW_AT_byte_size   : 24
+	```
+* the offset of `s` in structure test is 8:
+	```
+	 <2><6a>: Abbrev Number: 1 (DW_TAG_member)
+	    <6b>   DW_AT_name        : s
+	    <6d>   DW_AT_decl_file   : 1
+	    <6d>   DW_AT_decl_line   : 6
+	    <6e>   DW_AT_decl_column : 4
+	    <6f>   DW_AT_type        : <0x2e>
+	    <73>   DW_AT_data_member_location: 8   # offset
+	```
+* the offset of `next` in structure test is 16:
+	```
+	<2><74>: Abbrev Number: 7 (DW_TAG_member)
+	    <75>   DW_AT_name        : (indirect string, offset: 0xa4): next
+	    <79>   DW_AT_decl_file   : 1
+	    <7a>   DW_AT_decl_line   : 8
+	    <7b>   DW_AT_decl_column : 15
+	    <7c>   DW_AT_type        : <0x87>
+	    <80>   DW_AT_data_member_location: 16  # offset
+	```
+* Thus we know the size of `s` is 8 bytes. 
+* Then we check the element in `s` struct:
+	```
+	 <2><37>: Abbrev Number: 1 (DW_TAG_member)
+	    <38>   DW_AT_name        : x
+	    <3a>   DW_AT_decl_file   : 1
+	    <3a>   DW_AT_decl_line   : 4
+	    <3b>   DW_AT_decl_column : 9
+	    <3c>   DW_AT_type        : <0x4c>
+	    <40>   DW_AT_data_member_location: 0    # offset
+	 <2><41>: Abbrev Number: 1 (DW_TAG_member)
+	    <42>   DW_AT_name        : y
+	    <44>   DW_AT_decl_file   : 1
+	    <44>   DW_AT_decl_line   : 5
+	    <45>   DW_AT_decl_column : 9
+	    <46>   DW_AT_type        : <0x4c>
+	    <4a>   DW_AT_data_member_location: 2    # offset
+	```
+* We get the `x` and `y` only take 4 bytes, so the 4 bytes left is like for 8 bytes alignment requirement.
 
