@@ -137,7 +137,164 @@ st_init:
         movw    %ax, 10(%rdi)       # M(rdi+10)=ax: st->y=st->x
         leaq    10(%rdi), %rax      # rax=rdi+10: rax=&(st->y)
         movq    %rax, (%rdi)        # M(rdi)=rax: st->p=&(st->y)
-        movq    %rdi, 16(%rdi)      # M(rdi+16)=rdi: st
+        movq    %rdi, 16(%rdi)      # M(rdi+16)=rdi: st->next=st
         ret
 ```
+Then we try to fill in:
+```C
+void st_init(struct test *st) {
+	st->s.y = st->s.x;
+	st->p = &(st->s.y);
+	st->next = st;
+}
+```
+Pretty easy.
+
+# Analyze memory layout of structure element (take Practice Problem 3.41 as example) 
+Firstly, compile the source C code (st_init.c):
+```
+struct test {
+	short *p;
+	struct {
+		short x;
+		short y;
+	} s;
+
+	struct test *next;
+};
+
+void st_init(struct test *st) {
+	st->s.y = st->s.x;
+	st->p = &(st->s.y);
+	st->next = st;
+}
+```
+
+`gcc -Og -g -c st_init.c`
+
+Secondly, use objdump to view the debugging information and get the long information below:
+`objdump --dwarf=info st_init.o`
+
+```
+root@ml:~/csapp/chap3/prac3_41# objdump --dwarf=info st_init.o
+
+st_init.o:     file format elf64-x86-64
+
+Contents of the .debug_info section:
+
+  Compilation Unit @ offset 0x0:
+   Length:        0xb1 (32-bit)
+   Version:       5
+   Unit Type:     DW_UT_compile (1)
+   Abbrev Offset: 0x0
+   Pointer Size:  8
+ <0><c>: Abbrev Number: 3 (DW_TAG_compile_unit)
+    <d>   DW_AT_producer    : (indirect string, offset: 0x0): GNU C17 11.4.0 -mtune=generic -march=x86-64 -g -Og -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection
+    <11>   DW_AT_language    : 29       (C11)
+    <12>   DW_AT_name        : (indirect line string, offset: 0x0): st_init.c
+    <16>   DW_AT_comp_dir    : (indirect line string, offset: 0xa): /root/csapp/chap3/prac3_41
+    <1a>   DW_AT_low_pc      : 0x0
+    <22>   DW_AT_high_pc     : 0x18
+    <2a>   DW_AT_stmt_list   : 0x0
+ <1><2e>: Abbrev Number: 4 (DW_TAG_structure_type)
+    <2f>   DW_AT_byte_size   : 4
+    <30>   DW_AT_decl_file   : 1
+    <31>   DW_AT_decl_line   : 3
+    <32>   DW_AT_decl_column : 2
+    <33>   DW_AT_sibling     : <0x4c>
+ <2><37>: Abbrev Number: 1 (DW_TAG_member)
+    <38>   DW_AT_name        : x
+    <3a>   DW_AT_decl_file   : 1
+    <3a>   DW_AT_decl_line   : 4
+    <3b>   DW_AT_decl_column : 9
+    <3c>   DW_AT_type        : <0x4c>
+    <40>   DW_AT_data_member_location: 0
+ <2><41>: Abbrev Number: 1 (DW_TAG_member)
+    <42>   DW_AT_name        : y
+    <44>   DW_AT_decl_file   : 1
+    <44>   DW_AT_decl_line   : 5
+    <45>   DW_AT_decl_column : 9
+    <46>   DW_AT_type        : <0x4c>
+    <4a>   DW_AT_data_member_location: 2
+ <2><4b>: Abbrev Number: 0
+ <1><4c>: Abbrev Number: 5 (DW_TAG_base_type)
+    <4d>   DW_AT_byte_size   : 2
+    <4e>   DW_AT_encoding    : 5        (signed)
+    <4f>   DW_AT_name        : (indirect string, offset: 0x9a): short int
+ <1><53>: Abbrev Number: 6 (DW_TAG_structure_type)
+    <54>   DW_AT_name        : (indirect string, offset: 0xa9): test
+    <58>   DW_AT_byte_size   : 24
+    <59>   DW_AT_decl_file   : 1
+    <5a>   DW_AT_decl_line   : 1
+    <5b>   DW_AT_decl_column : 8
+    <5c>   DW_AT_sibling     : <0x82>
+ <2><60>: Abbrev Number: 1 (DW_TAG_member)
+    <61>   DW_AT_name        : p
+    <63>   DW_AT_decl_file   : 1
+    <63>   DW_AT_decl_line   : 2
+    <64>   DW_AT_decl_column : 9
+    <65>   DW_AT_type        : <0x82>
+    <69>   DW_AT_data_member_location: 0
+ <2><6a>: Abbrev Number: 1 (DW_TAG_member)
+    <6b>   DW_AT_name        : s
+    <6d>   DW_AT_decl_file   : 1
+    <6d>   DW_AT_decl_line   : 6
+    <6e>   DW_AT_decl_column : 4
+    <6f>   DW_AT_type        : <0x2e>
+    <73>   DW_AT_data_member_location: 8
+ <2><74>: Abbrev Number: 7 (DW_TAG_member)
+    <75>   DW_AT_name        : (indirect string, offset: 0xa4): next
+    <79>   DW_AT_decl_file   : 1
+    <7a>   DW_AT_decl_line   : 8
+    <7b>   DW_AT_decl_column : 15
+    <7c>   DW_AT_type        : <0x87>
+    <80>   DW_AT_data_member_location: 16
+ <2><81>: Abbrev Number: 0
+ <1><82>: Abbrev Number: 2 (DW_TAG_pointer_type)
+    <83>   DW_AT_byte_size   : 8
+    <83>   DW_AT_type        : <0x4c>
+ <1><87>: Abbrev Number: 2 (DW_TAG_pointer_type)
+    <88>   DW_AT_byte_size   : 8
+    <88>   DW_AT_type        : <0x53>
+ <1><8c>: Abbrev Number: 8 (DW_TAG_subprogram)
+    <8d>   DW_AT_external    : 1
+    <8d>   DW_AT_name        : (indirect string, offset: 0x92): st_init
+    <91>   DW_AT_decl_file   : 1
+    <92>   DW_AT_decl_line   : 11
+    <93>   DW_AT_decl_column : 6
+    <94>   DW_AT_prototyped  : 1
+    <94>   DW_AT_low_pc      : 0x0
+    <9c>   DW_AT_high_pc     : 0x18
+    <a4>   DW_AT_frame_base  : 1 byte block: 9c         (DW_OP_call_frame_cfa)
+    <a6>   DW_AT_call_all_calls: 1
+ <2><a6>: Abbrev Number: 9 (DW_TAG_formal_parameter)
+    <a7>   DW_AT_name        : st
+    <aa>   DW_AT_decl_file   : 1
+    <ab>   DW_AT_decl_line   : 11
+    <ac>   DW_AT_decl_column : 27
+    <ad>   DW_AT_type        : <0x87>
+    <b1>   DW_AT_location    : 1 byte block: 55         (DW_OP_reg5 (rdi))
+ <2><b3>: Abbrev Number: 0
+ <1><b4>: Abbrev Number: 0
+```
+
+Thirdly, analyze the structure element:
+we know the struct in C:
+```
+struct test {
+	short *p;
+	struct {
+		short x;
+		short y;
+	} s;
+
+	struct test *next;
+};
+```
+
+For each DIE(debugging information entry), it's like:
+- `DW_AT_name`: element name
+- `DW_AT_type`: point to another DIE, which describe the element type
+- `DW_AT_data_member_location`: offset to the start of the structure
+
 
