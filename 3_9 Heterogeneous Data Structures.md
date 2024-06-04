@@ -39,11 +39,6 @@
 	movl 4(%rdi), %eax          # Get r->j
 	addl (%rdi), %eax           # Add r->i
 	cltq                        # Extend to 8 bytes
-	leaq 8(%rdi,%rax,4), %rax    # Compute &r->a[r->i + r->j]
-
-5
-
-movq %rax, 16(%rdi)
-
-Store in r->p
+	leaq 8(%rdi,%rax,4), %rax   # Compute &r->a[r->i + r->j]
+	movq %rax, 16(%rdi)         # Store in r->p
 	```
