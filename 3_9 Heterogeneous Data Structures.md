@@ -88,11 +88,23 @@ st_init:
 	movq %rdi, 12(%rdi)
 	ret
 ```
+NOTE: the assembly code above is wrong! Please refer to the correct one below:
+```
+.text
+.globl  st_init
+st_init:
+        movzwl  8(%rdi), %eax
+        movw    %ax, 10(%rdi)
+        leaq    10(%rdi), %rax
+        movq    %rax, (%rdi)
+        movq    %rdi, 16(%rdi)
+        ret
+```
 On the basis of this information, fill in the missing expressions in the code for `st_init`.
 
 **Solution**:
 A. offsets (in bytes) of the following fields:
-```C
+```
 struct test {
 	short *p;
 	struct {
@@ -118,12 +130,14 @@ C.
 # void st_init(struct test *st)
 # st in %rdi
 
+.text
+.globl  st_init
 st_init:
-	movl 8(%rdi), %eax    # eax=M(rdi+8): eax=*(st+8)
-	movl %eax, 10(%rdi)
-	leaq 10(%rdi), %rax
-	movq %rax, (%rdi)
-	movq %rdi, 12(%rdi)
-	ret
+        movzwl  8(%rdi), %eax       # eax=M(rdi+8): eax=st->x
+        movw    %ax, 10(%rdi)       # M(rdi+10)=ax: st->y=st->x
+        leaq    10(%rdi), %rax      # rax=rdi+10: rax=&(st->y)
+        movq    %rax, (%rdi)        # M(rdi)=rax: st->p=&(st->y)
+        movq    %rdi, 16(%rdi)      # M(rdi+16)=rdi: st
+        ret
 ```
 
