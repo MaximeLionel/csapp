@@ -489,6 +489,89 @@ struct node_t {
 		* u will have the same bit representation as d, including fields for the sign bit, the exponent, and the significand.
 
 ## Example - byte-ordering issues
+* When using unions to combine data types of different sizes, byte-ordering issues can become important.
+```C
+double uu2double(unsigned word0, unsigned word1)
+{
+	union {
+		double d;
+		unsigned u[2];
+	} temp;
+	temp.u[0] = word0;
+	temp.u[1] = word1;
+	return temp.d;
+}
+```
+* On a little-endian machine, such as an x86-64 processor, argument `word0` will become the low-order 4 bytes of d, while `word1` will become the high-order 4 bytes. 
+* On a big-endian machine, the role of the two arguments will be reversed.
+
+# Practice Problem 3.43
+Suppose you are given the job of checking that a C compiler generates the proper code for structure and union access. You write the following structure declaration:
+```C
+typedef union {
+	struct {
+		long u;
+		short v;
+		char w;
+	} t1;
+	
+	struct {
+		int a[2];
+		char *p;
+	} t2;
+} u_type;
+```
+You write a series of functions of the form:
+```C
+void get(u_type *up, type *dest) {
+	*dest = expr;
+}
+```
+with different access expressions `expr` and with destination data type type set according to type associated with `expr`. You then examine the code generated when compiling the functions to see if they match your expectations.
+
+Suppose in these functions that `up` and `dest` are loaded into registers `%rdi` and `%rsi`, respectively. Fill in the following table with data type type and sequences of one to three instructions to compute the expression and store the result at dest.
+
+|        expr        | type |                    Code                    |
+| :----------------: | :--: | :----------------------------------------: |
+|      up->t1.u      | long | `movq (%rdi), %rax`<br>`movq %rax, (%rsi)` |
+|      up->t1.v      |      |                                            |
+|     &up->t1.w      |      |                                            |
+|      up->t2.a      |      |                                            |
+| up->t2.a[up->t1.u] |      |                                            |
+|     *up->t2.p      |      |                                            |
+**Solution**:
+```C
+typedef union {
+	struct {
+		long u;
+		short v;
+		char w;
+	} t1;
+	
+	struct {
+		int a[2];
+		char *p;
+	} t2;
+} u_type;
+```
+
+```C
+void get(u_type *up, type *dest) {
+	*dest = expr;
+}
+```
+
+|        expr        | type  |                     Code                     |
+| :----------------: | :---: | :------------------------------------------: |
+|      up->t1.u      | long  |  `movq (%rdi), %rax`<br>`movq %rax, (%rsi)`  |
+|      up->t1.v      | short |  `movw 8(%rdi), %ax`<br>`movw %ax, (%rsi)`   |
+|     &up->t1.w      | char* | `leaq 10(%rdi), %rax`<br>`movq %rax, (%rsi)` |
+|      up->t2.a      | int*  |             `movq %rdi, (%rsi)`              |
+| up->t2.a[up->t1.u] |       |                                              |
+|     *up->t2.p      |       |                                              |
+
+
+
 
 
 
