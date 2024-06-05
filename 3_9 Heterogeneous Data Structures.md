@@ -351,5 +351,7 @@ struct ACE {
 	short v;
 	struct ACE *p;
 };
+short test(struct ACE *ptr);
 ```
+
 
