@@ -445,6 +445,8 @@ union node_u {
 	double data[2];
 };
 ```
+* For `node_s`, every node requires 32 bytes, with half the bytes wasted for each type of node.
+* For `node_u`, every node will require just 16 bytes.
 
 
 
