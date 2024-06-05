@@ -353,5 +353,64 @@ struct ACE {
 };
 short test(struct ACE *ptr);
 ```
+When the code for fun is compiled, gcc generates the following assembly code:
+```z80
+# short test(struct ACE* ptr)
+# ptr in %rdi
+
+test:
+	movl $1, %eax
+	jmp .L2
+	.L3:
+	imulq (%rdi), %rax
+	movq 2(%rdi), %rdi
+	.L2:
+	testq %rdi, %rdi
+	jne .L3
+	rep; ret
+```
+A. Use your reverse engineering skills to write C code for test.
+
+B. Describe the data structure that this structure implements and the operation performed by test.
+
+**Solution**:
+A.
+```z80
+# short test(struct ACE* ptr)
+# ptr in %rdi
+
+test:
+	movl $1, %eax            # eax=1
+	jmp .L2
+	.L3:
+	imulq (%rdi), %rax      # rax=rax*M(rdi): rax=rax*(*ptr)
+	movq 2(%rdi), %rdi      # rdi=M(rdi+2): rdi=*(rdi+2)
+	.L2:
+	testq %rdi, %rdi
+	jne .L3                 # if(rdi!=0), jump to .L3
+	rep; ret
+```
+* Reversed C code:
+```C
+short test(struct ACE* ptr)
+{
+	int result = 1;
+	while(ptr != 0)
+	{
+		result = result * (ptr->v);
+		ptr = ptr->p;
+	}
+}
+```
+
+B.
+The function is to compute the cumulative product of the element values in a singly linked list.
+
+
+
+
+
+
+
 
 
