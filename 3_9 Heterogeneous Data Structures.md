@@ -447,7 +447,48 @@ union node_u {
 ```
 * For `node_s`, every node requires 32 bytes, with half the bytes wasted for each type of node.
 * For `node_u`, every node will require just 16 bytes.
+* If n is a pointer to a node of type union `node_u *`, we would reference the data of a leaf node as `n->data[0]` and `n->data[1]`, and the children of an internal node as `n->internal.left` and `n->internal.right`.
+* With this encoding, however, there is no way to determine whether a given node is a leaf or an internal node.
+## Example - introduce an enumerated type
+* A common method is to introduce an enumerated type defining the different possible choices for the union, and then create a structure containing a tag field and the union:
+```C
+typedef enum { N_LEAF, N_INTERNAL } nodetype_t;
 
+struct node_t {
+	nodetype_t type;
+	union {
+		struct {
+			struct node_t *left;
+			struct node_t *right;
+		} internal;
+	double data[2];
+	} info;
+};
+```
+* This structure requires a total of 24 bytes: 4 for type, and either 8 each for `info.internal.left` and `info.internal.right` or 16 for `info.data`.
+* An additional 4 bytes of padding is required between the field for type and the union elements, bringing the total structure size to 4 + 4 + 16 = 24, which we will talk about on data alignment part.
+
+## Example - access bit patterns
+* Suppose we use a simple cast to convert a value d of type double to a value u of type unsigned long:
+	```C
+	unsigned long u = (unsigned long) d;
+	```
+	* Value u will be an integer representation of d.
+* Consider the following code to generate a value of type unsigned long from a double:
+	```C
+	unsigned long double2bits(double d) {
+		union {
+			double d;
+			unsigned long u;
+		} temp;
+		temp.d = d;
+		return temp.u;
+	};
+	```
+	* In this code, we store the argument in the union using one data type and access it using another.
+		* u will have the same bit representation as d, including fields for the sign bit, the exponent, and the significand.
+
+## Example - byte-ordering issues
 
 
 
