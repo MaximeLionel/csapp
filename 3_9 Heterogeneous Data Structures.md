@@ -409,8 +409,9 @@ The function is to compute the cumulative product of the element values in a sin
 
 # 3.9.2 Unions
 * Unions provide a way to circumvent the type system of C, allowing a single object to be referenced according to multiple types.
-* Example:
-	```C
+## Example - compare struct and union:
+
+```C
 	struct S3 {
 		char c;
 		int i[2];
@@ -422,20 +423,28 @@ The function is to compute the cumulative product of the element values in a sin
 		int i[2];
 		double v;
 	};
-	```
-	* When compiled on an x86-64 Linux machine, the offsets of the fields, as well as the total size of data types S3 and U3, are as shown in the following table:
+```
+* When compiled on an x86-64 Linux machine, the offsets of the fields, as well as the total size of data types S3 and U3, are as shown in the following table:
 		![[image-20240605095905508.png|200]]
-	* For pointer p of type union `U3*`, references `p->c`, `p->i[0]`, and `p->v` would all reference the beginning of the data structure.
-	* The overall size of a union equals the maximum size of any of its fields.
+* For pointer p of type union `U3*`, references `p->c`, `p->i[0]`, and `p->v` would all reference the beginning of the data structure.
+* The overall size of a union equals the maximum size of any of its fields.
+## Example - 2 mutually exclusive fields in a union to save space:
 * One application is when we know in advance that the use of two different fields in a data structure will be mutually exclusive. Then, declaring these two fields as part of a union rather than a structure will reduce the total space allocated.
-* Example:
-	```C
-	struct node_s {
-		struct node_s *left;
-		struct node_s *right;
-		double data[2];
-	};
-	```
+```C
+struct node_s {
+	struct node_s *left;
+	struct node_s *right;
+	double data[2];
+};
+
+union node_u {
+	struct {
+		union node_u *left;
+		union node_u *right;
+	} internal;
+	double data[2];
+};
+```
 
 
 
