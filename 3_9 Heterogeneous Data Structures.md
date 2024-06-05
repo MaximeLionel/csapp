@@ -344,3 +344,12 @@ For example, let's analyze the size of `s`
 	```
 * We get the `x` and `y` only take 4 bytes, so the 4 bytes left is like for 8 bytes alignment requirement.
 
+# Practice Problem 3.42
+The following code shows the declaration of a structure of type ACE and the prototype for a function test:
+```C
+struct ACE {
+	short v;
+	struct ACE *p;
+};
+```
+
