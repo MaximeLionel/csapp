@@ -561,16 +561,49 @@ void get(u_type *up, type *dest) {
 }
 ```
 
-|        expr        | type  |                     Code                     |
-| :----------------: | :---: | :------------------------------------------: |
-|      up->t1.u      | long  |  `movq (%rdi), %rax`<br>`movq %rax, (%rsi)`  |
-|      up->t1.v      | short |  `movw 8(%rdi), %ax`<br>`movw %ax, (%rsi)`   |
-|     &up->t1.w      | char* | `leaq 10(%rdi), %rax`<br>`movq %rax, (%rsi)` |
-|      up->t2.a      | int*  |             `movq %rdi, (%rsi)`              |
-| up->t2.a[up->t1.u] |       |                                              |
-|     *up->t2.p      |       |                                              |
+| expr               | type  | Code                                                                     | Actual compiled asm code                                                          |
+| :----------------- | :---- | :----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| up->t1.u           | long  | `movq (%rdi), %rax`<br>`movq %rax, (%rsi)`                               | `movq    (%rdi), %rax`<br>`movq    %rax, (%rsi)`                                  |
+| up->t1.v           | short | `movw 8(%rdi), %ax`<br>`movw %ax, (%rsi)`                                | `movzwl  8(%rdi), %eax`<br>`movw    %ax, (%rsi)`                                  |
+| &up->t1.w          | char* | `leaq 10(%rdi), %rax`<br>`movq %rax, (%rsi)`                             | `addq    $10, %rdi`<br>`movq    %rdi, (%rsi)`                                     |
+| up->t2.a           | int*  | `movq %rdi, (%rsi)`                                                      | `movq    %rdi, (%rsi)`                                                            |
+| up->t2.a[up->t1.u] | int   | `movq (%rdi), %rax`<br>`movl (%rdi,%rax,4), %eax`<br>`movl %eax, (%rsi)` | `movq    (%rdi), %rax`<br>`movl    (%rdi,%rax,4), %eax`<br>`movl    %eax, (%rsi)` |
+| *up->t2.p          | char  | `movq 8(%rdi), %rax`<br>`movb (%rax), %al`<br>`movb %al, (%rsi)`         | `movq    8(%rdi), %rax`<br>`movzbl  (%rax), %eax`<br>`movb    %al, (%rsi)`        |
 
+# 3.9.3 Data Alignment - 数据对齐
+* Many computer systems place restrictions on the allowable addresses for the primitive data types, requiring that the address for some objects must be a multiple of some value K (typically 2, 4, or 8).
+	![[image-20240605170724672.png|150]]
+* Such alignment restrictionssimplify the design of the hardware forming the interface between the processor and the memory system.
+	* For example, suppose a processor always fetches 8 bytes from memory with an address that must be a multiple of 8.
+* Alignment is enforced by making sure that every data type is organized and allocated in such a way that every object within the type satisfies its alignment restrictions.
+* The compiler places directives in the assembly code indicating the desired alignment for global data：
+	```
+	.align 8
+	```
+	* This ensures that the data following it (in this case the start of the jump table) will start with an address that is a multiple of 8.
+## Example 1
+```C
+struct S1 {
+	int i;
+	char c;
+	int j;
+};
+```
+* Suppose the compiler used the minimal 9-byte allocation:
+	![[image-20240605171856098.png|200]]
+* To satisfy the 4-byte alignment requirement, it will be:
+	![[image-20240605171942336.png|200]]
+	* The compiler inserts a 3-byte gap between fields c and j.
+	* The overall structure size is 12 bytes.
 
+## Example 2
+```C
+struct S2 {
+	int i;
+	int j;
+	char c;
+};
+```
 
 
 
