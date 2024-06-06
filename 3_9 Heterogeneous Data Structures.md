@@ -670,3 +670,39 @@ E. `struct P5 { struct P4 a[2]; struct P1 t }`
 | t     | 64     | take 24\*1 bytes |
 Alignment: 8 bytes
 Total Size: 88 bytes
+
+# Practice Problem 3.45
+Answer the following for the structure declaration：
+```C
+struct {
+	int *a;
+	float b;
+	char c;
+	short d;
+	long e;
+	double f;
+	int g;
+	char *h;
+} rec;
+```
+A. What are the byte offsets of all the fields in the structure?
+
+B. What is the total size of the structure?
+
+C. Rearrange the fields of the structure to minimize wasted space, and then show the byte offsets and total size for the rearranged structure.
+
+**Solution**:
+A.
+
+| Field | Offset | Comment                                              |
+| ----- | ------ | ---------------------------------------------------- |
+| a     | 0      | pointer                                              |
+| b     | 8      | take 4 bytes for `float` type                        |
+| c     | 12     | take 1 byte for `char` type                          |
+| d     | 13     | take 2 bytes for `short` type and 1 byte for padding |
+| e     | 16     | take 8 bytes for `long` type                         |
+| f     | 24     | take 8 bytes for `double` type                       |
+| g     | 32     | take 4 bytes for `int` type and 4 bytes for padding  |
+| h     | 40     | take 8 bytes for `char*` type                        |
+B.
+Totally, 48 bytes.
