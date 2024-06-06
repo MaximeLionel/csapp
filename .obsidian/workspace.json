@@ -13,26 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "3b0f21c534bc6c50",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_4 Accessing Information.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_4 Accessing Information.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_4 Accessing Information.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md"
+                "file": "3_4 Accessing Information.md"
               }
             }
           }
@@ -160,8 +147,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3b0f21c534bc6c50",
+  "active": "c94b5241f6c6799f",
   "lastOpenFiles": [
+    "3_8 Array Allocation and Access.md",
+    "3_9 Heterogeneous Data Structures.md",
     "3_9 Heterogeneous Data Structures.assets/image-20240606102920272.png",
     "3_9 Heterogeneous Data Structures.assets/image-20240605171942336.png",
     "3_9 Heterogeneous Data Structures.assets/image-20240605171856098.png",
@@ -169,15 +158,12 @@
     "3_9 Heterogeneous Data Structures.assets/image-20240605095905508.png",
     "3_9 Heterogeneous Data Structures.assets/image-20240603164441657.png",
     "3_9 Heterogeneous Data Structures.assets",
-    "3_9 Heterogeneous Data Structures.md",
-    "3_8 Array Allocation and Access.md",
     "3_4 Accessing Information.md",
     "3_8 Array Allocation and Access.assets/image-20240603110542601.png",
     "3_8 Array Allocation and Access.assets/image-20240602211651509.png",
     "3_8 Array Allocation and Access.assets/image-20240601100306237.png",
     "3_8 Array Allocation and Access.assets/image-20240531235948114.png",
     "conflict-files-obsidian-git.md",
-    "3_8 Array Allocation and Access.assets/image-20240529152558409.png",
     "3_8 Array Allocation and Access.assets",
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
