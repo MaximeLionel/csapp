@@ -621,8 +621,52 @@ D. `struct P4 { char w[16]; char *c[2] }`;
 
 E. `struct P5 { struct P4 a[2]; struct P1 t }`;
 
+**Solution**:
+A.`struct P1 { short i; int c; int *j; short *d; }` // the answer on book is wrong.
 
+| Field | Offset | Comment                 |
+| ----- | ------ | ----------------------- |
+| i     | 0      |                         |
+| c     | 2      | padding byte6 and byte7 |
+| j     | 8      |                         |
+| d     | 16     |                         |
+Alignment: 8 bytes
+Total Size: 24 bytes
 
+B. `struct P2 { int i[2]; char c[8]; short s[4]; long *j; }`
 
+| Field | Offset | Comment |
+| ----- | ------ | ------- |
+| i     | 0      |         |
+| c     | 8      |         |
+| s     | 16     |         |
+| j     | 24     |         |
+Alignment: 8 bytes
+Total Size: 32 bytes
 
+C. `struct P3 { long w[2]; int *c[2] }`
 
+| Field | Offset | Comment         |
+| ----- | ------ | --------------- |
+| w     | 0      |                 |
+| c     | 16     | take 2\*8 bytes |
+Alignment: 8 bytes
+Total Size: 32 bytes
+
+D. `struct P4 { char w[16]; char *c[2] }`
+
+| Field | Offset | Comment         |
+| ----- | ------ | --------------- |
+| w     | 0      |                 |
+| c     | 16     | take 2\*8 bytes |
+Alignment: 8 bytes
+Total Size: 32 bytes
+
+E. `struct P5 { struct P4 a[2]; struct P1 t }`
+
+| Field | Offset | Comment          |
+| ----- | ------ | ---------------- |
+| a     | 0      | take 32\*2 bytes |
+| t     | 64     | take 24\*1 bytes |
+Alignment: 8 bytes
+Total Size: 88 bytes
