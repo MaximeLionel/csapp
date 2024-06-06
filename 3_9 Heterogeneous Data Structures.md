@@ -694,15 +694,22 @@ C. Rearrange the fields of the structure to minimize wasted space, and then show
 **Solution**:
 A.
 
-| Field | Offset | Comment                                              |
-| ----- | ------ | ---------------------------------------------------- |
-| a     | 0      | pointer                                              |
-| b     | 8      | take 4 bytes for `float` type                        |
-| c     | 12     | take 1 byte for `char` type                          |
-| d     | 13     | take 2 bytes for `short` type and 1 byte for padding |
-| e     | 16     | take 8 bytes for `long` type                         |
-| f     | 24     | take 8 bytes for `double` type                       |
-| g     | 32     | take 4 bytes for `int` type and 4 bytes for padding  |
-| h     | 40     | take 8 bytes for `char*` type                        |
+| Field | Offset | Comment                                                                                                                        |
+| ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| a     | 0      | pointer                                                                                                                        |
+| b     | 8      | take 4 bytes for `float` type                                                                                                  |
+| c     | 12     | take 1 byte for `char` type and 1 byte for padding                                                                             |
+| d     | 14     | take 2 bytes for `short` type, because `short` is 2 bytes and `K` will 2, which means the address of d must be multiples of 2. |
+| e     | 16     | take 8 bytes for `long` type                                                                                                   |
+| f     | 24     | take 8 bytes for `double` type                                                                                                 |
+| g     | 32     | take 4 bytes for `int` type and 4 bytes for padding                                                                            |
+| h     | 40     | take 8 bytes for `char*` type                                                                                                  |
+We may check through `objdump --dwarf=info struct.o`
+
 B.
 Totally, 48 bytes.
+
+C.
+Logically, because the alignment is 8 bytes, we use blocks of 8 bytes as few as possible. It's partly like tetris (俄罗斯方块) .
+
+Considering the total size, it's already the best optimization which is 48 bytes.
