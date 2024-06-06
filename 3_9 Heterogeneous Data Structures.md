@@ -604,6 +604,22 @@ struct S2 {
 	char c;
 };
 ```
+* For `struct S2 d[4]`, the compiler allocates 12 bytes for structure S2, with the final 3 bytes being wasted space:
+	![[image-20240606102920272.png|250]]
+	* The elements of d will have addresses $x_d$, $x_d + 12$, $x_d + 24$, and $x_d + 36$.
+
+# Practice Problem 3.44
+For each of the following structure declarations, determine the offset of each field, the total size of the structure, and its alignment requirement for x86-64:
+
+A. `struct P1 { short i; int c; int *j; short *d; }`;
+
+B. `struct P2 { int i[2]; char c[8]; short s[4]; long *j; }`;
+
+C. `struct P3 { long w[2]; int *c[2] }`;
+
+D. `struct P4 { char w[16]; char *c[2] }`;
+
+E. `struct P5 { struct P4 a[2]; struct P1 t }`;
 
 
 
