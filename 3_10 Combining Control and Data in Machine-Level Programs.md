@@ -84,6 +84,32 @@
 	* Function `gets` then copies this string to the location designated by argument `s` and terminates the string with a `null` character.
 	* Function `echo` using `gets` simply reads a line from standard input and echos it back to standard output.
 	* In our echo example, we have purposely made the buffer very small—just eight characters long. Any string longer than seven characters will cause an out-of-bounds write.
+* Assembly Code:
+	```z80
+	# void echo()
+	echo:
+		subq $24, %rsp     # Allocate 24 bytes on stack
+		movq %rsp, %rdi    # Compute buf as %rsp
+		call gets
+		movq %rsp, %rdi    # Compute buf as %rsp
+		call puts
+		addq $24, %rsp     # Deallocate stack space
+		ret
+	```
+	![[image-20240607174112881.png|400]]
+* Details on Assembly Code:
+	* The program allocates 24 bytes on the stack by subtracting 24 from the stack pointer - `subq $24, %rsp`.
+	* Character `buf` is positioned at the top of the stack, as can be seen by the fact that `%rsp` is copied to `%rdi` to be used as the argument to the calls to both `gets` and `puts`.
+	* The 16 bytes between `buf` and the stored return pointer are not used.
+	* As long as the user types at most seven characters, the string returned by `gets` (including the terminating null) will fit within the space allocated for `buf`.
+	* A longer string, however, will cause `gets` to overwrite some of the information stored on the stack.
+		![[image-20240607175320293.png|300]]
+	* No serious consequence occurs for strings of up to 23 characters, but beyond that, the value of the return pointer, and possibly additional saved state, will be corrupted.
+	* If the stored value of the return address is corrupted, then the `ret` instruction will cause the program to jump to a totally unexpected location.
+* A better version involves using the function `fgets`, which includes as an argument a count on the maximum number of bytes to read.
+
+
+
 
 
 
