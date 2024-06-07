@@ -29,6 +29,30 @@
 			* For example, if `p` is a pointer of type `char*` having value `p`, then the expression `(int*)p+7` computes `p+28`, while `(int*)(p+7)` computes `p+7`.
 	* **Pointers can also point to functions**.
 		* For example, if we have a function defined by the prototype: `int fun(int x, int *p)`;
+		* We can declare and assign a pointer `fp` to this function:
+			```C
+			int (*fp)(int, int *); # the syntax for declaring function pointers
+			fp = fun;
+			```
+		* We can then invoke the function using this pointer:
+			```C
+			int y = 1;
+			int result = fp(3, &y);
+			```
+		* The value of a function pointer is the address of the first instruction in the machine-code representation of the function.
+
+# 3.10.2 Life in the Real World: Using the gdb Debugger
+* The GNU debugger gdb provides a number of useful features to support the run-time evaluation and analysis of machine-level programs.
+* Some GDB commands:
+	![[image-20240607130614162.png|550]]
+* Start gdb: `linux> gdb prog`
+* The general scheme is to set breakpoints near points of interest in the program. 
+	* These can be set to just after the entry of a function or at a program address.
+
+# 3.10.3 Out-of-Bounds Memory References and Buffer Overflow
+* We have seen that C does not perform any bounds checking for array references, and that local variables are stored on the stack along with state information such as saved register values and return addresses.
+	* The state stored on the stack can be corrupted by a write to an out-of-bounds array element.
+	* When the program then tries to reload the register or execute a ret instruction with this corrupted state, things will be unpredictable.
 
 
 
