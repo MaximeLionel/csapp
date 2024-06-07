@@ -53,6 +53,38 @@
 * We have seen that C does not perform any bounds checking for array references, and that local variables are stored on the stack along with state information such as saved register values and return addresses.
 	* The state stored on the stack can be corrupted by a write to an out-of-bounds array element.
 	* When the program then tries to reload the register or execute a ret instruction with this corrupted state, things will be unpredictable.
+* A particularly common source of state corruption is known as **buffer overflow**.
+## Example:
+```C
+	/* Implementation of library function gets() */
+	char *gets(char *s)
+	{
+		int c;
+		char *dest = s;
+		while ((c = getchar()) != ’\n’ && c != EOF)
+			*dest++ = c;
+			
+		if (c == EOF && dest == s) /* No characters read */
+			return NULL;
+	
+		*dest++ = ’\0’; /* Terminate string */
+		return s;
+	}
+	
+	/* Read input line and write it back */
+	void echo()
+	{
+		char buf[8]; /* Way too small! */
+		gets(buf);
+		puts(buf);
+	}
+```
+* Some interpretations:
+	* Function `gets` reads a line from the standard input, stopping when either a terminating newline character or some error condition is encountered.
+	* Function `gets` then copies this string to the location designated by argument `s` and terminates the string with a `null` character.
+	* Function `echo` using `gets` simply reads a line from standard input and echos it back to standard output.
+	* In our echo example, we have purposely made the buffer very small—just eight characters long. Any string longer than seven characters will cause an out-of-bounds write.
+
 
 
 
