@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "c94b5241f6c6799f",
+            "id": "bfe513e8dfa30160",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md"
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
               }
             }
           }
@@ -147,11 +147,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c94b5241f6c6799f",
+  "active": "bfe513e8dfa30160",
   "lastOpenFiles": [
+    "3_9 Heterogeneous Data Structures.md",
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_4 Accessing Information.md",
     "3_8 Array Allocation and Access.md",
-    "3_9 Heterogeneous Data Structures.md",
     "3_9 Heterogeneous Data Structures.assets/image-20240606102920272.png",
     "3_9 Heterogeneous Data Structures.assets/image-20240605171942336.png",
     "3_9 Heterogeneous Data Structures.assets/image-20240605171856098.png",
