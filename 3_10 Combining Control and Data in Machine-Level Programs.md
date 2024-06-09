@@ -108,7 +108,40 @@
 	* If the stored value of the return address is corrupted, then the `ret` instruction will cause the program to jump to a totally unexpected location.
 * A better version involves using the function `fgets`, which includes as an argument a count on the maximum number of bytes to read.
 
+# Practice Problem 3.46
+Figure below shows a (low-quality) implementation of a function that reads a line from standard input, copies the string to newly allocated storage, and returns a pointer to the result.
 
+Consider the following scenario. Procedure `get_line` is called with the return address equal to `0x400776` and register `%rbx` equal to `0x0123456789ABCDEF`. You type in the string `0123456789012345678901234`
+(a) C code
+```C
+/* This is very low-quality code.
+It is intended to illustrate bad programming practices.
+See Practice Problem 3.46. */
+
+char *get_line()
+{
+	char buf[4];
+	char *result;
+	gets(buf);
+	result = malloc(strlen(buf));
+	strcpy(result, buf);
+	return result;
+}
+```
+
+(b) Disassembly up through call to gets
+```
+# char *get_line()
+0000000000400720 <get_line>:
+	400720: 53              push %rbx
+	400721: 48 83 ec 10     sub $0x10,%rsp
+
+	# Diagram stack at this point
+	400725: 48 89 e7        mov %rsp,%rdi
+	400728: e8 73 ff ff ff  callq 4006a0 <gets>
+
+Modify diagram to show stack contents at this point
+```
 
 
 
