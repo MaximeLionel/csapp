@@ -140,8 +140,27 @@ char *get_line()
 	400725: 48 89 e7        mov %rsp,%rdi
 	400728: e8 73 ff ff ff  callq 4006a0 <gets>
 
-Modify diagram to show stack contents at this point
+    # Modify diagram to show stack contents at this point
 ```
+
+The program terminates with a segmentation fault. You run gdb and determine that the error occurs during the execution of the ret instruction of `get_line`.
+
+A. Fill in the diagram that follows, indicating as much as you can about the stack just after executing the instruction at line 3 in the disassembly. Label the quantities stored on the stack (e.g., “Return address”) on the right, and their hexadecimal values (if known) within the box. Each box represents 8 bytes. Indicate the position of `%rsp`. Recall that the ASCII codes for characters 0–9 are `0x30–0x39`.
+
+| Return Address          |
+| ----------------------- |
+| 00 00 00 00 00 40 00 76 |
+|                         |
+|                         |
+|                         |
+|                         |
+B. Modify your diagram to show the effect of the call to gets (line 5).
+
+C. To what address does the program attempt to return?
+
+D. What register(s) have corrupted value(s) when get_line returns?
+
+E. Besides the potential for buffer overflow, what two other things are wrong with the code for get_line?
 
 
 
