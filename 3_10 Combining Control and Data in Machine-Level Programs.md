@@ -107,6 +107,10 @@
 	* No serious consequence occurs for strings of up to 23 characters, but beyond that, the value of the return pointer, and possibly additional saved state, will be corrupted.
 	* If the stored value of the return address is corrupted, then the `ret` instruction will cause the program to jump to a totally unexpected location.
 * A better version involves using the function `fgets`, which includes as an argument a count on the maximum number of bytes to read.
+* A more pernicious use of buffer overflow is to get a program to perform a function that it would otherwise be unwilling to do. 
+	* This is one of the most common methods to attack the security of a system over a computer network.
+	* Typically, the program is fed with a string that contains the byte encoding of some executable code, called the exploit code, plus some extra bytes that overwrite the return address with a pointer to the exploit code. 
+	* The effect of executing the `ret` instruction is then to jump to the exploit code.
 
 # Practice Problem 3.46
 Figure below shows a (low-quality) implementation of a function that reads a line from standard input, copies the string to newly allocated storage, and returns a pointer to the result.
