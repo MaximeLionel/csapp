@@ -297,18 +297,21 @@ Let's try to do this problem in real GDB.
 0x7fffffffe380: 0x0000000000000000      
 				0x00007ffff7da9d90
 ```
-* Then we try longer string again:
+* Then we try longer string again: `012345678901234567890123456789012345678901234`
+```
+0x7fffffffe340: 0x3332313000000000      
+				0x3130393837363534
+0x7fffffffe350: 0x3938373635343332      
+				0x3736353433323130
+0x7fffffffe360: 0x3534333231303938      
+				0x3332313039383736         # the return address has been broken
+0x7fffffffe370: 0x0000000000000034      
+				0x00007ffff7da9d90
+```
 
 
 
-	```
-	(gdb) layout asm                // open assembly window 
-	(gdb) break get_line            // set bp on get_line function
 
-	```
-	```
-	
-	```
 
 
 
