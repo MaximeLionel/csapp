@@ -311,8 +311,11 @@ Let's try to do this problem in real GDB.
 
 
 
+# 3.10.4 Thwarting Buffer Overflow Attacks
+* Modern compilers and operating systems have implemented mechanisms to make it more difficult to mount these attacks and to limit the ways by which an intruder can seize control of a system via a **buffer overflow attack**.
 
-
+## Stack Randomization
+* The idea of stack randomization is to make the position of the stack vary from one run of a program to another.
 
 
 
