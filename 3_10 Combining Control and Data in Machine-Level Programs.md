@@ -229,6 +229,86 @@ E.
 The call to malloc should have had `strlen(buf)+1` as its argument, and the code should also check that the returned value is not equal to `NULL`.
 
 # 3.46 in real GDB
+Let's try to do this problem in real GDB.
+* Firstly, use GDB to open executable program and disassemble the `get_line` function:
+	```
+	root@ml:~/csapp/chap3/prac3_46# gdb get_line
+	(gdb) disassemble get_line
+	Dump of assembler code for function get_line:
+	   0x000000000000121b <+0>:     endbr64 
+	   0x000000000000121f <+4>:     push   %rbp
+	   0x0000000000001220 <+5>:     push   %rbx
+	   0x0000000000001221 <+6>:     sub    $0x18,%rsp                  # line 3
+	   0x0000000000001225 <+10>:    mov    %fs:0x28,%rax
+	   0x000000000000122e <+19>:    mov    %rax,0x8(%rsp)
+	   0x0000000000001233 <+24>:    xor    %eax,%eax
+	   0x0000000000001235 <+26>:    lea    0x4(%rsp),%rbp
+	   0x000000000000123a <+31>:    mov    %rbp,%rdi
+	   0x000000000000123d <+34>:    call   0x11c9 <gets>               # line 5
+	   0x0000000000001242 <+39>:    mov    %rbp,%rdi
+	   0x0000000000001245 <+42>:    call   0x10a0 <strlen@plt>
+	   0x000000000000124a <+47>:    mov    %rax,%rdi
+	   0x000000000000124d <+50>:    call   0x10c0 <malloc@plt>
+	   0x0000000000001252 <+55>:    mov    %rax,%rbx
+	   0x0000000000001255 <+58>:    mov    %rbp,%rsi
+	   0x0000000000001258 <+61>:    mov    %rax,%rdi
+	   0x000000000000125b <+64>:    call   0x1090 <strcpy@plt>
+	   0x0000000000001260 <+69>:    mov    0x8(%rsp),%rax
+	   0x0000000000001265 <+74>:    sub    %fs:0x28,%rax
+	   0x000000000000126e <+83>:    jne    0x127a <get_line+95>
+	   0x0000000000001270 <+85>:    mov    %rbx,%rax
+	   0x0000000000001273 <+88>:    add    $0x18,%rsp
+	   0x0000000000001277 <+92>:    pop    %rbx
+	   0x0000000000001278 <+93>:    pop    %rbp
+	   0x0000000000001279 <+94>:    ret    
+	   0x000000000000127a <+95>:    call   0x10b0 <__stack_chk_fail@plt>
+	End of assembler dump.
+	```
+	* We find it's not actually same as it in PracticeProblem3.46, but we can still find the `line 3` and `line 5` required.
+	* Sometimes, we need to open the assembly window: 
+	```shell
+	(gdb) layout asm
+	```
+* Secondly, let's analyze and run to `line 3`.
+	* When just enter `get_line` function (`0x000000000000121f <+4>:     push   %rbp`), the stack is like:
+		![[image-20240611144015558.png|350]]
+	* When finish `line3`, the stack is like:
+		![[image-20240611144257065.png||350]]
+	* Analyze as below:
+	```
+	0x7fffffffe350: 0x0000000000000000      # extended stack
+					0x0000000000000000      # extended stack
+	0x7fffffffe360: 0x0000000000000000      # extended stack
+					0x0000000000000000      # saved %rbx
+	0x7fffffffe370: 0x0000000000000001      # saved %rbp
+					0x0000555555555291      # return address to main
+	0x7fffffffe380: 0x0000000000000000      
+					0x00007ffff7da9d90
+	```
+* let's run to `line 5` and input `0123456789012345678901234`, then analyze:
+	![[image-20240611145133085.png|350]]
+```
+0x7fffffffe350: 0x3332313000000000      
+				0x3130393837363534
+0x7fffffffe360: 0x3938373635343332      
+				0x0000003433323130
+0x7fffffffe370: 0x0000000000000001      
+				0x0000555555555291        # return address to main - still safe
+0x7fffffffe380: 0x0000000000000000      
+				0x00007ffff7da9d90
+```
+* Then we try longer string again:
+
+
+
+	```
+	(gdb) layout asm                // open assembly window 
+	(gdb) break get_line            // set bp on get_line function
+
+	```
+	```
+	
+	```
 
 
 
