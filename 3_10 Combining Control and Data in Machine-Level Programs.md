@@ -328,14 +328,15 @@ Let's try to do this problem in real GDB.
 	}
 	```
 	* This code simply prints the address of a local variable in the main function.
+	* Running the code 10,000 times on a Linux machine in 32-bit mode, the addresses ranged from 0xff7fc59c to 0xffffd09c, a range of around $2^{23}$. 
+	* Running in 64-bit mode on the newer machine, the addresses ranged from 0x7fff0001b698 to 0x7ffffffaa4a8, a range of nearly $2^{32}$.
 
-Running the code 10,000 times on a Linux machine in 32-bit mode, the addresses
+# Practice Problem 3.47
+Running our stack-checking code 10,000 times on a system running Linux version 2.6.16, we obtained addresses ranging from a minimum of 0xffffb754 to a maximum of 0xffffd754.
 
-ranged from 0xff7fc59c to 0xffffd09c, a range of around 223. Running in 64-
+A. What is the approximate range of addresses?
 
-bit mode on the newer machine, the addresses ranged from 0x7fff0001b698 to
-
-0x7ffffffaa4a8, a range of nearly 232.
+B. If we attempted a buffer overrun with a 128-byte `nop` sled, about how many attempts would it take to test all starting addresses?
 
 
 
