@@ -228,6 +228,9 @@ D.
 E. 
 The call to malloc should have had `strlen(buf)+1` as its argument, and the code should also check that the returned value is not equal to `NULL`.
 
+# 3.46 in real GDB
+
+
 
 
 
