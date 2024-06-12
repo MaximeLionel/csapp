@@ -344,6 +344,13 @@ Let's try to do this problem in real GDB.
 		![[image-20240612110009008.png|300]]
 	* Guard value is generated randomly each time the program runs, and so there is no easy way for an attacker to determine what it is.
 	* Before restoring the register state and returning from the function, the program checks if the canary has been altered by some operation of this function or one that it has called. If so, the program aborts with an error.
+* Recent versions of gcc try to determine whether a function is vulnerable to a stack overflow and insert this type of overflow detection automatically.
+	* The command-line option `-fno-stack-protector` to prevent gcc from inserting this code.
+	* Compiling the function echo without this option, and hence with the stack protector enabled, gives the following assembly code:
+		![[image-20240612112045247.png|400]]
+		* The instruction argument `%fs:40` is an indication that the canary value is read from memory using `segmented addressing`.
+		* By storing the canary in a special segment, it can be marked as “read only,” so that an attacker cannot overwrite the stored canary value.
+
 
 
 
