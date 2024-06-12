@@ -335,6 +335,25 @@ Let's try to do this problem in real GDB.
 	* As long as the attacker can guess an address somewhere within this sequence, the program will run through the sequence and then hit the exploit code.
 	* Example: If we set up a 256-byte `nop` sled, then the randomization over $n = 2^{23}$ can be cracked by enumerating $2^{15} = 32,768$ starting addresses, which is entirely feasible for a determined attacker.
 
+## Stack Corruption Detection
+* We saw in the example of the echo function below (Figure 3.40) that the corruption typically occurs when the program overruns the bounds of a local buffer.
+	![[image-20240612104851161.png|500]]
+* In C, there is no reliable way to prevent writing beyond the bounds of an array.
+* Recent versions of gcc incorporate a mechanism known as a **stack protector** into the generated code to detect buffer overruns.
+	* The idea is to store a special **guard value/canary value** in the stack frame between any local buffer and the rest of the stack state as below:
+		![[image-20240612110009008.png|300]]
+	* Guard value is generated randomly each time the program runs, and so there is no easy way for an attacker to determine what it is.
+	* Before restoring the register state and returning from the function, the program checks if the canary has been altered by some operation of this function or one that it has called. If so, the program aborts with an error.
+
+
+
+
+
+
+
+
+
+
 # Practice Problem 3.47
 Running our stack-checking code 10,000 times on a system running Linux version 2.6.16, we obtained addresses ranging from a minimum of 0xffffb754 to a maximum of 0xffffd754.
 
