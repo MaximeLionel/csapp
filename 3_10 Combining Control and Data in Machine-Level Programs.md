@@ -349,18 +349,11 @@ Let's try to do this problem in real GDB.
 	* Compiling the function echo without this option, and hence with the stack protector enabled, gives the following assembly code:
 		![[image-20240612112045247.png|400]]
 		* The instruction argument `%fs:40` is an indication that the canary value is read from memory using `segmented addressing`.
+			* **Segmented addressing** - an addressing mechanism that dates back to the 80286 and is seldom found in programs running on modern systems.
 		* By storing the canary in a special segment, it can be marked as “read only,” so that an attacker cannot overwrite the stored canary value.
-
-
-
-
-
-
-
-
-
-
-
+		* Before restoring the register state and returning, the function compares the value stored at the stack location with the canary value.
+			* If the two are identical, the xorq instruction will yield zero, and the function will complete in the normal fashion. 
+			* A nonzero value indicates that the canary on the stack has been modified, and so the code will call an error routine.
 # Practice Problem 3.47
 Running our stack-checking code 10,000 times on a system running Linux version 2.6.16, we obtained addresses ranging from a minimum of 0xffffb754 to a maximum of 0xffffd754.
 
@@ -373,6 +366,102 @@ A. $2^{13}$
 B. 
 $128=2^7$
 Thus we only need $2^6$ attempts.
+
+# Practice Problem 3.48
+The functions `intlen`, `len`, and `iptoa` provide a very convoluted way to compute the number of decimal digits required to represent an integer. We will use this as a way to study some aspects of the gcc stack protector facility.
+```C
+int len(char *s) {
+	return strlen(s);
+}
+
+void iptoa(char *s, long *p) {
+	long val = *p;
+	sprintf(s, "%ld", val);
+}
+
+int intlen(long x) {
+	long v;
+	char buf[12];
+	v = x;
+	iptoa(buf, &v);
+	return len(buf);
+}
+```
+
+The following show portions of the code for intlen, compiled both with and without stack protector:
+(a) Without protector
+```
+# int intlen(long x)
+# x in %rdi
+
+intlen:
+	subq $40, %rsp
+	movq %rdi, 24(%rsp)
+	leaq 24(%rsp), %rsi
+	movq %rsp, %rdi
+	call iptoa
+```
+
+(b) With protector
+```
+# int intlen(long x)
+# x in %rdi
+
+intlen:
+	subq $56, %rsp
+	movq %fs:40, %rax
+	movq %rax, 40(%rsp)
+	xorl %eax, %eax
+	movq %rdi, 8(%rsp)
+	leaq 8(%rsp), %rsi
+	leaq 16(%rsp), %rdi
+	call iptoa
+```
+
+A. For both versions: What are the positions in the stack frame for buf, v, and (when present) the canary value?
+
+B. How does the rearranged ordering of the local variables in the protected code provide greater security against a buffer overrun attack?
+
+**Solution**:
+A. 
+Analyze one by one.
+For unprotected version:
+```
+# int intlen(long x)
+# x in %rdi
+
+intlen:
+	subq $40, %rsp          # rsp-=40: extend stack
+	movq %rdi, 24(%rsp)     # *(rsp+24)=x: 
+	leaq 24(%rsp), %rsi     # rsi=rsp+24: &v
+	movq %rsp, %rdi         # rdi=rsp: buf
+	call iptoa
+```
+So, 
+buf = rsp
+v = \*(rsp+24)
+
+For protected version:
+```
+# int intlen(long x)
+# x in %rdi
+
+intlen:
+	subq $56, %rsp          # rsp -= 56
+	movq %fs:40, %rax       # rax = canary value
+	movq %rax, 40(%rsp)     # *(rsp+40) = canary value
+	xorl %eax, %eax
+	movq %rdi, 8(%rsp)      # *(rsp+8) = x
+	leaq 8(%rsp), %rsi      # rsi=rsp+8: &v
+	leaq 16(%rsp), %rdi     # rdi=rsp+16: buf
+	call iptoa
+```
+So,
+buf = rsp+16
+v = \*(rsp+8)
+canary value = \*(rsp+40)
+
+B.
 
 
 
