@@ -463,6 +463,25 @@ canary value = \*(rsp+40)
 
 B.
 
+| Unprotected Stack | Comment |
+| ----------------- | ------- |
+| rsp+24            | &v      |
+| ...               | ...     |
+| rsp+12            | buf+12  |
+| ...               | ...     |
+| rsp               | buf     |
+
+
+| Protected Stack | Comment          |
+| --------------- | ---------------- |
+| rsp+40          | **canary value** |
+| ...             |                  |
+| rsp+28          | buf+12           |
+| ...             | ...              |
+| rsp+16          | buf              |
+| rsp+8           | &v               |
+| rsp             |                  |
+
 
 
 
