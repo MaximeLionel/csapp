@@ -649,6 +649,13 @@ vframe:
 	* `andq $-16, %rax`: clear the low 4 bits to meet 16 bytes' alignment.
 		* -16 = 0x FFFF FFFF FFFF FFF0
 	* `subq %rax, %rsp`: allocate space for array `p` while the size is rax.
+	```
+	leaq 7(%rsp), %rax   # rax=rsp+7: 
+	shrq $3, %rax 
+	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0]
+	```
+	* 
+		
 
 
 
