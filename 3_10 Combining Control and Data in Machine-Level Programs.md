@@ -646,8 +646,9 @@ vframe:
 			* after `andq $-16, %rax`, rax=48;
 			* `subq %rax, %rsp` will allocate 48 bytes on stack for array `p`
 			* 48 can both meet enough space for array `p` and also 16 bytes' memory alignment requirement.
-	* `andq $-16, %rax`: clear the low 4 bits
+	* `andq $-16, %rax`: clear the low 4 bits to meet 16 bytes' alignment.
 		* -16 = 0x FFFF FFFF FFFF FFF0
+	* `subq %rax, %rsp`: allocate space for array `p` while the size is rax.
 
 
 
