@@ -630,8 +630,8 @@ vframe:
 	```
 * Allocates space for array `p`:
 	```
-	leaq 22(,%rdi,8), %rax 
-	andq $-16, %rax 
+	leaq 22(,%rdi,8), %rax     # rax=8n+22
+	andq $-16, %rax      # 
 	subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
 	leaq 7(%rsp), %rax 
 	shrq $3, %rax 
