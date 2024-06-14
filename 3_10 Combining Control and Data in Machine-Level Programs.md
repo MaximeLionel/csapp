@@ -576,7 +576,7 @@ For protected stack, if there's a buffer overrun attack, the `v` value will neve
 * The program must be able to access both local variable `i` and the elements of array `p`.
 * On returning, the function must deallocate the stack frame and set the stack pointer to the position of the stored return address.
 
-## Generated assembly code
+## Generated assembly code on book
 ```
 	# long vframe(long n, long idx, long *q)
 	# n in %rdi, idx in %rsi, q in %rdx
@@ -657,6 +657,70 @@ vframe:
 	![[image-20240614215310752.png|400]]
 	* after the 3 lines, r8 will equal to p.
 	* By now, the whole array p will be showed above.
+
+* Restore frame pointer - `leave` instruction.
+	* `leave` equal to the instructions below:
+	```
+	movq %rbp, %rsp         # Set stack pointer to beginning of frame
+	popq %rbp               # Restore saved %rbp and set stack ptr to end of caller’s frame
+	```
+	* `leave` instruction has the effect of deallocating the entire stack frame.
+* With x86-64 code, the frame pointer is used only in cases where the stack frame may be of **variable size**.
+
+## Generated assembly code in real life
+```
+# long vframe(long n, long idx, long *q)
+# n in %rdi, idx in %rsi, q in %rdx
+		.text
+        .globl  vframe
+        .type   vframe, @function
+vframe:
+        pushq   %rbp
+        movq    %rsp, %rbp         # rbp=rsp: frame pointer
+        subq    $16, %rsp          # rsp=rsp-0x10
+        movq    %rdi, %rcx         # rcx=rdi: rcx=n
+        movq    %rsi, %rdi         # rdi=rsi: rdi=idx
+        leaq    15(,%rcx,8), %rax  # rax=8*rcx+0xf: rax=8n+0xf
+        movq    %rax, %r8          # r8=rax: r8=8n+0xf
+        andq    $-16, %r8          # clear low 4 bits
+        andq    $-4096, %rax       # clear low 12 bits
+        movq    %rsp, %rsi         # rsi=rsp
+        subq    %rax, %rsi         # rsi=rsi-rax:
+.L2:
+        cmpq    %rsi, %rsp
+        je      .L3
+        subq    $4096, %rsp
+        orq     $0, 4088(%rsp)
+        jmp     .L2
+.L3:
+        movq    %r8, %rax
+        andl    $4095, %eax
+        subq    %rax, %rsp
+        testq   %rax, %rax
+        je      .L4
+        orq     $0, -8(%rsp,%rax)
+.L4:
+        leaq    7(%rsp), %rsi
+        movq    %rsi, %rax
+        shrq    $3, %rax
+        andq    $-8, %rsi
+        leaq    -8(%rbp), %r8
+        movq    %r8, 0(,%rax,8)
+        movq    $1, -8(%rbp)
+        jmp     .L5
+.L6:
+        movq    %rdx, (%rsi,%rax,8)
+        addq    $1, -8(%rbp)
+.L5:
+        movq    -8(%rbp), %rax
+        cmpq    %rcx, %rax
+        jl      .L6
+        movq    (%rsi,%rdi,8), %rax
+        movq    (%rax), %rax
+        leave
+        ret
+```
+# Practice Problem 3.49
 
 		
 
