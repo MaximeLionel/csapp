@@ -633,11 +633,14 @@ vframe:
 	leaq 22(,%rdi,8), %rax     # rax=8n+22
 	andq $-16, %rax      # rax=rax&0xFFFF FFFF FFFF FFF0: clear the low 4 bits
 	subq %rax, %rsp      # rsp=rsp-rax: allocate space for array p 
-	leaq 7(%rsp), %rax   
+	leaq 7(%rsp), %rax   # rax=rsp+7: 
 	shrq $3, %rax 
 	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
 	movq %r8, %rcx       # Set %rcx to &p[0] (%rcx = p)
 	```
+	* why 22? Compiler decided this, which is to make sure:
+		* 16 bytes' memory alignment;
+		* Allocates proper stack space for use.
 
 
 
