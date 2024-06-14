@@ -641,6 +641,13 @@ vframe:
 	* why 22? Compiler decided this, which is to make sure:
 		* 16 bytes' memory alignment;
 		* Allocates proper stack space for use.
+		* For example: 
+			* if n=4, then rax=8n+22=54;
+			* after `andq $-16, %rax`, rax=48;
+			* `subq %rax, %rsp` will allocate 48 bytes on stack for array `p`
+			* 48 can both meet enough space for array `p` and also 16 bytes' memory alignment requirement.
+	* `andq $-16, %rax`: clear the low 4 bits
+		* -16 = 0x FFFF FFFF FFFF FFF0
 
 
 
