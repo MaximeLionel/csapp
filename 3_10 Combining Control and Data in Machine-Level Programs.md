@@ -631,9 +631,9 @@ vframe:
 * Allocates space for array `p`:
 	```
 	leaq 22(,%rdi,8), %rax     # rax=8n+22
-	andq $-16, %rax      # 
-	subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
-	leaq 7(%rsp), %rax 
+	andq $-16, %rax      # rax=rax&0xFFFF FFFF FFFF FFF0: clear the low 4 bits
+	subq %rax, %rsp      # rsp=rsp-rax: allocate space for array p 
+	leaq 7(%rsp), %rax   
 	shrq $3, %rax 
 	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
 	movq %r8, %rcx       # Set %rcx to &p[0] (%rcx = p)
