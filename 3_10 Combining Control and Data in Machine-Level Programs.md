@@ -680,17 +680,17 @@ vframe:
         subq    $16, %rsp          # rsp=rsp-0x10
         movq    %rdi, %rcx         # rcx=rdi: rcx=n
         movq    %rsi, %rdi         # rdi=rsi: rdi=idx
-        leaq    15(,%rcx,8), %rax  # rax=8*rcx+0xf: rax=8n+0xf
+        leaq    15(,%rcx,8), %rax  # rax=8*rcx+0xf: rax=8n+15
         movq    %rax, %r8          # r8=rax: r8=8n+0xf
         andq    $-16, %r8          # clear low 4 bits
         andq    $-4096, %rax       # clear low 12 bits
         movq    %rsp, %rsi         # rsi=rsp
-        subq    %rax, %rsi         # rsi=rsi-rax:
+        subq    %rax, %rsi         # rsi=rsi-rax: rsi=rsp-(8n+15)
 .L2:
         cmpq    %rsi, %rsp
         je      .L3
-        subq    $4096, %rsp
-        orq     $0, 4088(%rsp)
+        subq    $4096, %rsp        # rsp=rsp-0x1000
+        orq     $0, 4088(%rsp)     # 0xFF8
         jmp     .L2
 .L3:
         movq    %r8, %rax
