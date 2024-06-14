@@ -651,10 +651,13 @@ vframe:
 	* `subq %rax, %rsp`: allocate space for array `p` while the size is rax.
 	```
 	leaq 7(%rsp), %rax   # rax=rsp+7: 
-	shrq $3, %rax 
-	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0]
+	shrq $3, %rax        # rax=rax>>3
+	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
 	```
-	* 
+	![[image-20240614215310752.png|400]]
+	* after the 3 lines, r8 will equal to p.
+	* By now, the whole array p will be showed above.
+
 		
 
 
