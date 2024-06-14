@@ -611,14 +611,18 @@ vframe:
 
 * Sets up the stack frame:
 	```
-		pushq %rbp           # Save old %rbp 
-		movq %rsp, %rbp      # Set frame pointer 
+	pushq %rbp           # Save old %rbp 
+	movq %rsp, %rbp      # Set frame pointer 
 	```
 	* x86-64 code uses register `%rbp` to serve as a **frame pointer** (sometimes referred to as a base pointer).
 	* `%rbp` is a **callee-saved** register. 
 	* It starts by pushing the current value of `%rbp` onto the stack and setting `%rbp` to point to this stack position.
 	* It then keeps `%rbp` pointing to this position throughout the execution of the function, and it references fixed-length local variables, such as `i`, at offsets relative to `%rbp`.
-* 
+* Allocates space for `i`:
+	```
+	subq $16, %rsp
+	```
+	* Allocates 16 bytes on the stack, the first 8 of which are used to store local variable `i`, and the second 8 of which are unused.
 
 
 
