@@ -554,6 +554,77 @@ For protected stack, if there's a buffer overrun attack, the `v` value will neve
 
 
 
+# 3.10.5 Supporting Variable-Size Stack Frames
+* For functions with fixed amount of local storage, the compiler can determine in advance the amount of space that must be allocated for their stack frames.
+* Some functions, however, require a variable amount of local storage. For example, when the function calls `alloca`, a standard library function that can allocate an arbitrary number of bytes of storage on the stack.
+## C code
+```c
+	long vframe(long n, long idx, long *q) {
+		long i;
+		long *p[n];             
+		p[0] = &i;
+		for (i = 1; i < n; i++)
+			p[i] = q;
+		return *p[idx];
+	}
+```
+* `long *p[n]`
+	* Declares local array `p` of `n` pointers, where `n` is given by the first argument.
+	* Requires allocating `8n` bytes on the stack, where the value of `n` may vary from one call of the function to another.
+* `p[0] = &i`
+	* Generates a reference to the address of local variable `i`, and so this variable must also be stored on the stack.
+* The program must be able to access both local variable `i` and the elements of array `p`.
+* On returning, the function must deallocate the stack frame and set the stack pointer to the position of the stored return address.
+
+## Generated assembly code
+```
+	# long vframe(long n, long idx, long *q)
+	# n in %rdi, idx in %rsi, q in %rdx
+	# Only portions of code shown
+vframe: 
+	pushq %rbp           # Save old %rbp 
+	movq %rsp, %rbp      # Set frame pointer 
+	subq $16, %rsp       # Allocate space for i (%rsp = s1) 
+	leaq 22(,%rdi,8), %rax 
+	andq $-16, %rax 
+	subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
+	leaq 7(%rsp), %rax 
+	shrq $3, %rax 
+	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
+	movq %r8, %rcx       # Set %rcx to &p[0] (%rcx = p) 
+	... 
+	# Code for initialization loop 
+	# i in %rax and on stack, n in %rdi, p in %rcx, q in %rdx 
+.L3:                     # loop: 
+	movq %rdx, (%rcx,%rax,8) # Set p[i] to q 
+	addq $1, %rax # Increment i 
+	movq %rax, -8(%rbp)  # Store on stack 
+.L2: 
+	movq -8(%rbp), %rax  # Retrieve i from stack 
+	cmpq %rdi, %rax      # Compare i:n 
+	jl .L3               # If <, goto loop 
+	... 
+	# Code for function exit 
+	leave                # Restore %rbp and %rsp 
+	ret                  # Return
+```
+
+* Sets up the stack frame:
+	```
+		pushq %rbp           # Save old %rbp 
+		movq %rsp, %rbp      # Set frame pointer 
+	```
+	* x86-64 code uses register `%rbp` to serve as a **frame pointer** (sometimes referred to as a base pointer).
+	* `%rbp` is a **callee-saved** register. 
+	* It starts by pushing the current value of `%rbp` onto the stack and setting `%rbp` to point to this stack position.
+	* It then keeps `%rbp` pointing to this position throughout the execution of the function, and it references fixed-length local variables, such as `i`, at offsets relative to `%rbp`.
+* 
+
+
+
+
+
+
 
 
 
