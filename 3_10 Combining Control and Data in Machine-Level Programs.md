@@ -597,7 +597,7 @@ vframe:
 	# i in %rax and on stack, n in %rdi, p in %rcx, q in %rdx 
 .L3:                     # loop: 
 	movq %rdx, (%rcx,%rax,8) # Set p[i] to q 
-	addq $1, %rax # Increment i 
+	addq $1, %rax        # Increment i 
 	movq %rax, -8(%rbp)  # Store on stack 
 .L2: 
 	movq -8(%rbp), %rax  # Retrieve i from stack 
@@ -623,6 +623,21 @@ vframe:
 	subq $16, %rsp
 	```
 	* Allocates 16 bytes on the stack, the first 8 of which are used to store local variable `i`, and the second 8 of which are unused.
+	* How we decide it's space for `i`? 
+	```
+	addq $1, %rax        # Increment i 
+	movq %rax, -8(%rbp)  # Store on stack 
+	```
+* Allocates space for array `p`:
+	```
+	leaq 22(,%rdi,8), %rax 
+	andq $-16, %rax 
+	subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
+	leaq 7(%rsp), %rax 
+	shrq $3, %rax 
+	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
+	movq %r8, %rcx       # Set %rcx to &p[0] (%rcx = p)
+	```
 
 
 
