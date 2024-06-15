@@ -282,23 +282,24 @@ Write C code for decode1 that will have an effect equivalent to the assembly cod
 ```
  ; void decode1(long *xp, long *yp, long *zp)
  ; xp in %rdi, yp in %rsi, zp in %rdx
+
 decode1:
-  movq    (%rdi), %r8    ; r8  = *xp
-  movq    (%rsi), %rcx   ; rcx = *yp
-  movq    (%rdx), %rax   ; rax = *zp
-  movq    %r8, (%rsi)    ; *yp = r8  
-  movq    %rcx, (%rdx)   ; *zp = rcx 
-  movq    %rax, (%rdi)   ; *xp = rax 
+  movq    (%rdi), %r8     # r8  = M(rdi): r8  = *xp
+  movq    (%rsi), %rcx    # rcx = M(rsi): rcx = *yp
+  movq    (%rdx), %rax    # rax = M(rdx): rax = *zp
+  movq    %r8, (%rsi)     # M(rsi) = r8:  *yp = r8  = original *xp
+  movq    %rcx, (%rdx)    # M(rdx) = rcx: *zp = rcx = original *yp
+  movq    %rax, (%rdi)    # M(rdi) = rax: *xp = rax = original *zp
   ret
 ```
-Therefore:
-```C
+
+```c
 void decode1(long *xp, long *yp, long *zp)
 {
-	long x = *xp;
-	long y = *yp;
-	long z = *zp;
-
+	long x = *xp; // r8
+	long y = *yp; // rcx
+	long z = *zp; // rax
+	
 	*yp = x;
 	*zp = y;
 	*xp = z;
