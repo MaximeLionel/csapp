@@ -721,7 +721,7 @@ vframe:
         ret
 ```
 # Practice Problem 3.49
-In this problem, we will explore the logic behind the code in lines 5–11 of Figure 3.43(b), where space is allocated for variable-size array p. As the annotations of the code indicate, let us let s1 denote the address of the stack pointer after executing the `subq` instruction of line 4. This instruction allocates the space for local variable i. Let s2 denote the value of the stack pointer after executing the `subq` instruction of line 7. This instruction allocates the storage for local array p. Finally, let p denote the value assigned to registers %r8 and %rcx in the instructions of lines 10–11. Both of these registers are used to reference array p. The right-hand side of Figure 3.44 diagrams the positions of the locations indicated by s1, s2, and p. It also shows that there may be an offset of e2 bytes between the values of s1 and p. This space will not be used. There may also be an offset of e1 bytes between the end of array p and the position indicated by s1.
+In this problem, we will explore the logic behind the code in lines 8–14 of Figure below, where space is allocated for variable-size array p. As the annotations of the code indicate, let us let s1 denote the address of the stack pointer after executing the `subq` instruction of line 7. This instruction allocates the space for local variable i. Let s2 denote the value of the stack pointer after executing the `subq` instruction of line 10. This instruction allocates the storage for local array p. Finally, let p denote the value assigned to registers `%r8` and `%rcx` in the instructions of lines 13–14. Both of these registers are used to reference array p. The right-hand side of Figure below diagrams the positions of the locations indicated by s1, s2, and p. It also shows that there may be an offset of e2 bytes between the values of s1 and p. This space will not be used. There may also be an offset of e1 bytes between the end of array p and the position indicated by s1.
 
 ```
 	# long vframe(long n, long idx, long *q)
@@ -754,10 +754,11 @@ vframe:
 	leave                # Restore %rbp and %rsp 
 	ret                  # Return
 ```
+![[image-20240614215310752.png|300]]
 
-A. Explain, in mathematical terms, the logic in the computation of s2 on lines 5–7. Hint: Think about the bit-level representation of −16 and its effect in the `andq` instruction of line 6.
+A. Explain, in mathematical terms, the logic in the computation of s2 on lines 8–10. Hint: Think about the bit-level representation of −16 and its effect in the `andq` instruction of line 9.
 
-B. Explain, in mathematical terms, the logic in the computation of p on lines 8–10. Hint: You may want to refer to the discussion on division by powers of 2 in Section 2.3.7.
+B. Explain, in mathematical terms, the logic in the computation of p on lines 11–13. Hint: You may want to refer to the discussion on division by powers of 2 in Section 2.3.7.
 
 C. For the following values of n and s1, trace the execution of the code to determine what the resulting values would be for s2, p, e1, and e2.
 		
