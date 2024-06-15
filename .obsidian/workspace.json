@@ -31,8 +31,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_4 Accessing Information.md"
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
               }
             }
           }
@@ -160,8 +159,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "bfe513e8dfa30160",
   "lastOpenFiles": [
+    "3_4 Accessing Information.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240614215310752.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612112045247.png",
@@ -175,7 +175,6 @@
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240607130614162.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
-    "3_4 Accessing Information.md",
     "3_8 Array Allocation and Access.md",
     "3_9 Heterogeneous Data Structures.assets",
     "conflict-files-obsidian-git.md",
