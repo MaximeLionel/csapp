@@ -761,7 +761,13 @@ A. Explain, in mathematical terms, the logic in the computation of s2 on lines 8
 B. Explain, in mathematical terms, the logic in the computation of p on lines 11–13. Hint: You may want to refer to the discussion on division by powers of 2 in Section 2.3.7.
 
 C. For the following values of n and s1, trace the execution of the code to determine what the resulting values would be for s2, p, e1, and e2.
-		
+
+**Solution**:
+A. 
+Firstly, -16 = 0x FFFF FFFF FFFF FFF0
+Then, `andq $-16, %rax` is to clear the last 4 bits, to meet 16 bytes' alignment.
+Next, from `leaq 22(,%rdi,8), %rax`, we get `rax=8n+22`.
+
 
 
 
