@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "bfe513e8dfa30160",
+            "id": "2540482438bddfaa",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_11 Floating-Point Code.md",
                 "mode": "source",
                 "source": false
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_11 Floating-Point Code.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_11 Floating-Point Code.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
+                "file": "3_11 Floating-Point Code.md"
               }
             }
           }
@@ -159,10 +159,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "bfe513e8dfa30160",
+  "active": "3ed9e5b4077e51b8",
   "lastOpenFiles": [
-    "3_4 Accessing Information.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
+    "3_11 Floating-Point Code.md",
+    "3_4 Accessing Information.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240614215310752.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612112045247.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612110009008.png",
