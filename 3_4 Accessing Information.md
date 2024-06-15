@@ -244,15 +244,16 @@ Recall that when performing a cast that involves both a size change and a change
 **Solution**:
 We know that the values of `sp` and `dp` are stored in registers `%rdi` and `%rsi`
 
-| src_t         | dest_t        | Instruction                                                  | Comment                                                                                                                                                                             |
-| ------------- | ------------- | :----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| long          | long          | `movq(%rdi),%rax`                    <br>`movq %rax, (%rsi)` |                                                                                                                                                                                     |
-| char          | int           | `movsbl(%rdi),%eax`<br>`movl %eax, (%rsi)`                   |                                                                                                                                                                                     |
-| char          | unsigned      | `movsbl(%rdi),%eax`  <br>`movl %eax, (%rsi)`                 | Do the extension first then convert, which means we extend char to 32bits first, then convert int to unsigned, because the source type is signed char.                              |
-| unsigned char | long          | `movzbq(%rdi),%rax` <br>`movq %rax, (%rsi)`                  | Do the extension first then convert, which means we zero extend unsigned char to unsigned long first, then convert unsigned long to long, because the source type is unsigned long. |
-| int           | char          | `movl (%rdi), %eax` <br>`movb %al, (%rsi)`                   | read 32bits from \*sp and then store to \*dp                                                                                                                                        |
-| unsigned      | unsigned char | `movl (%rdi), %eax` <br>`movb %al, (%rsi)`                   |                                                                                                                                                                                     |
-| char          | short         | `movsbw (%rdi), %ax` <br>`movw %ax, (%rsi)`                  | read byte from \*sp and sign-extend<br>store to \*dp                                                                                                                                |
+| src_t         | dest_t        | Instruction                                    |
+| ------------- | ------------- | ---------------------------------------------- |
+| long          | long          | `movq (%rdi), %rax` <br>`movq %rax, (%rsi)`    |
+| char          | int           | `movsbl (%rdi), %eax`<br>`movl   %eax, (%rsi)` |
+| char          | unsigned      | `movsbl (%rdi), %eax`<br>`movl   %eax, (%rsi)` |
+| unsigned char | long          | `movzbq (%rdi), %rax`<br>`movq   %rax, (%rsi)` |
+| int           | char          | `movl  (%rdi), %eax`<br>`movb   al, (%rsi)`    |
+| unsigned      | unsigned char | `movl   (%rdi), %eax`<br>`movb   al, (%rsi)`   |
+| char          | short         | `movsbw  (%rdi), %ax`<br>`movw   %ax, (%rsi)`  |
+
 
 # Practice Problem 3.5
 You are given the following information. A function with prototype

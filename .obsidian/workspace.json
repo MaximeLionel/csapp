@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "836547798358ffed",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "3_4 Accessing Information.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -86,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_4 Accessing Information.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_4 Accessing Information.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
+                "file": "3_4 Accessing Information.md"
               }
             }
           }
@@ -147,8 +160,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "bfe513e8dfa30160",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240614215310752.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612112045247.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612110009008.png",
@@ -161,10 +175,8 @@
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240607130614162.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
-    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_4 Accessing Information.md",
     "3_8 Array Allocation and Access.md",
-    "3_9 Heterogeneous Data Structures.assets/image-20240606102920272.png",
     "3_9 Heterogeneous Data Structures.assets",
     "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.assets",
