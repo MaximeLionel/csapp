@@ -654,7 +654,7 @@ vframe:
 	shrq $3, %rax        # rax=rax>>3
 	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
 	```
-	![[image-20240614215310752.png|400]]
+	![[image-20240614215310752.png|350]]
 	* after the 3 lines, r8 will equal to p.
 	* By now, the whole array p will be showed above.
 
@@ -762,13 +762,53 @@ B. Explain, in mathematical terms, the logic in the computation of p on lines 11
 
 C. For the following values of n and s1, trace the execution of the code to determine what the resulting values would be for s2, p, e1, and e2.
 
+|  n  |  s1  | s2  |  p  | e1  | e2  |
+| :-: | :--: | :-: | :-: | :-: | :-: |
+|  5  | 2065 |     |     |     |     |
+|  6  | 2064 |     |     |     |     |
+
+D. We can see that s2 is computed in a way that preserves whatever offset s1 has with the nearest multiple of 16. We can also see that p will be aligned on a multiple of 8, as is recommended for an array of 8-byte elements.
+
 **Solution**:
 A. 
 Firstly, -16 = 0x FFFF FFFF FFFF FFF0
 Then, `andq $-16, %rax` is to clear the last 4 bits, to meet 16 bytes' alignment.
 Next, from `leaq 22(,%rdi,8), %rax`, we get `rax=8n+22`.
+So, it's to clear last 4 bits of `rax=8n+22`.
+Therefore, `subq %rax, %rsp` is to subtract from s1 to s2 on stack.
 
+B.
+```
+leaq 7(%rsp), %rax   # rax=rsp+7
+shrq $3, %rax        # rax=rax>>3
+leaq 0(,%rax,8), %r8 # r8 =8*rax: Set %r8 to &p[0] 
+```
+so this 3 lines will round up to multiples of 8, which means to p in figure.
 
+C.
+if n = 5, 
+`leaq 22(,%rdi,8), %rax`: rax=8n+22=62
+`andq $-16, %rax`: rax=48
+`subq %rax, %rsp`: s2 = s1 - 48 = 2017
+`leaq 7(%rsp), %rax`: rax = 2024
+`shrq $3, %rax`: rax = 253
+`leaq 0(,%rax,8), %r8`: r8 = 2024
+e2 = p - s2 = 7
+e1 = s1 - (p+8\*n) = 2065 - (2024 + 40) = 1
+
+|  n  |  s1  |  s2  |  p   | e1  | e2  |
+| :-: | :--: | :--: | :--: | :-: | :-: |
+|  5  | 2065 | 2017 | 2024 |  1  |  7  |
+|  6  | 2064 | 2000 | 2000 | 16  |  0  |
+if n = 6,
+`leaq 22(,%rdi,8), %rax`: rax=8n+22=70
+`andq $-16, %rax`: rax=64
+`subq %rax, %rsp`: s2 = s1 - 64 = 2000
+`leaq 7(%rsp), %rax`: rax = 2007
+`shrq $3, %rax`: rax = 250
+`leaq 0(,%rax,8), %r8`: r8 = 2000
+e2 = p - s2 = 0
+e1 = s1 - (p+8\*n) = 2064 - (2000 + 48) = 16
 
 
 
