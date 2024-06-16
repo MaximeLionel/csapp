@@ -17,5 +17,12 @@
 ![[image-20240616115619888.png|500]]
 * AVX floating-point architecture allows data to be stored in 16 YMM registers, named `%ymm0–%ymm15`. 
 	* Each YMM register is 256 bits (32 bytes) long.
-* When operating on scalar data, these registers only hold floating-point data, and only the low-order 32 bits (for float) or 64 bits (for double) are used.
-* The assembly code refers to the registers by their SSE XMM register names %xmm0–%xmm15, where each XMM register is the low-order 128 bits (16 bytes) of the corresponding YMM register.
+* Dealing with scalar data:
+	* When operating on scalar data, these registers only hold floating-point data, and only the low-order 32 bits (for float) or 64 bits (for double) are used.
+	* The assembly code refers to the registers by their SSE XMM register names %xmm0–%xmm15, where each XMM register is the low-order 128 bits (16 bytes) of the corresponding YMM register.
+
+# 3.11.1 Floating-Point Movement and Conversion Operations
+## Floating-point movement instructions
+![[image-20240616135320260.png|500]]
+* These operations above transfer values between memory and XMM registers, as well as between pairs of XMM registers.
+
