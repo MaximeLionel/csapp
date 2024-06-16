@@ -25,4 +25,6 @@
 ## Floating-point movement instructions
 ![[image-20240616135320260.png|500]]
 * These operations above transfer values between memory and XMM registers, as well as between pairs of XMM registers.
+* The first 4 instructions (`vmovss`,`vmovsd`) that reference memory above are **scalar instructions**, meaning that they operate on individual, rather than packed, data values.
+	* The data are held either in memory (indicated in the table as $M_{32}$ and $M_{64}$) or in XMM registers (shown in the table as X).
 
