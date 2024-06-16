@@ -25,6 +25,25 @@
 ## Floating-point movement instructions
 ![[image-20240616135320260.png|500]]
 * These operations above transfer values between memory and XMM registers, as well as between pairs of XMM registers.
-* The first 4 instructions (`vmovss`,`vmovsd`) that reference memory above are **scalar instructions**, meaning that they operate on individual, rather than packed, data values.
+### vmovss and vmovsd
+* Memory and XMM registers data movement - The first 4 instructions (`vmovss`,`vmovsd`) that reference memory above are **scalar instructions**, meaning that they operate on individual, rather than packed, data values.
 	* The data are held either in memory (indicated in the table as $M_{32}$ and $M_{64}$) or in XMM registers (shown in the table as X).
+	* These instructions will work correctly regardless of the alignment of data, although the code optimization guidelines recommend that 32-bit memory data satisfy a 4-byte alignment and that 64-bit data satisfy an 8-byte alignment.
+	* Memory references are specified in the same way as for the integer `mov` instructions, with all of the different possible combinations of displacement, base register, index register, and scaling factor.
+### vmovaps and vmovapd
+* `vmovaps` for single precision and `vmovapd` for double-precision values.
+* When used for XMM registers and XMM registers data movements:
+	* For these cases, whether the program copies the entire register or just the low-order value affects neither the program functionality nor the execution speed, and so using these instructions rather than ones specific to scalar data makes no real difference.
+* When used for XMM registers and memory data movements:
+	* The letter ‘a’ in these instruction names stands for “aligned”.
+	* When used to read and write memory, they will cause an exception if the address does not satisfy a 16-byte alignment.
+
+### Example
+```c
+float float_mov(float v1, float *src, float *dst) {
+	float v2 = *src;
+	*dst = v1;
+	return v2;
+}
+```
 
