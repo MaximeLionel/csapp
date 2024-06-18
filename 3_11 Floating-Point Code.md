@@ -22,7 +22,7 @@
 	* The assembly code refers to the registers by their SSE XMM register names %xmm0–%xmm15, where each XMM register is the low-order 128 bits (16 bytes) of the corresponding YMM register.
 
 # 3.11.1 Floating-Point Movement and Conversion Operations
-## Floating-point movement instructions
+## Floating-point Movement IAnstructions
 ![[image-20240616135320260.png|500]]
 * These operations above transfer values between memory and XMM registers, as well as between pairs of XMM registers.
 ### vmovss and vmovsd
@@ -60,7 +60,7 @@ float float_mov(float v1, float *src, float *dst) {
 	* `vmovaps` - copy data from xmm0 to xmm1;
 	* `vmovss` - copy data from memory (M(rdi)) to an xmm0 register and from an xmm1 register to memory (M(rsi)).
 
-## Floating point and Integer data types Convertion
+## Converting between Floating point and Integer
 * Convert from a floating-point value read from either an XMM register or memory and write the result to a general-purpose register (e.g., %rax, %ebx, etc.):
 	![[image-20240618093046427.png|600]]
 	* When converting floating-point values to integers, they perform ==truncation==, rounding values toward zero.
@@ -78,6 +78,8 @@ float float_mov(float v1, float *src, float *dst) {
 		* Reads a long integer from register `%rax`. 
 		* Converts it to data type double. 
 		* Stores the result in the lower bytes of XMM register `%xmm1`.
+
+## Converting between 2 different floating-point formats
 
 
 
