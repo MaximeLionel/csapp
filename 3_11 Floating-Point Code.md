@@ -152,6 +152,59 @@ fcvt:
 	ret                        # Return f in xmm0
 ```
 
+# Practice Problem 3.50
+For the following C code, the expressions val1 – val4 all map to the program values i, f, d, and l:
+```c
+double fcvt2(int *ip, float *fp, double *dp, long l)
+{
+	int i = *ip; float f = *fp; double d = *dp;
+	*ip = (int) val1;
+	*fp = (float) val2;
+	*dp = (double) val3;
+	return (double) val4;
+}
+```
+Determine the mapping, based on the following x86-64 code for the function:
+```
+# double fcvt2(int *ip, float *fp, double *dp, long l)
+# ip in %rdi, fp in %rsi, dp in %rdx, l in %rcx
+# Result returned in %xmm0
+
+fcvt2:
+	movl (%rdi), %eax
+	vmovss (%rsi), %xmm0
+	vcvttsd2si (%rdx), %r8d
+	movl %r8d, (%rdi)
+	vcvtsi2ss %eax, %xmm1, %xmm1
+	vmovss %xmm1, (%rsi)
+	vcvtsi2sdq %rcx, %xmm1, %xmm1
+	vmovsd %xmm1, (%rdx)
+	vunpcklps %xmm0, %xmm0, %xmm0
+	vcvtps2pd %xmm0, %xmm0
+	ret
+```
+
+**Solution**:
+Firstly, go though all asm instructions:
+```
+# double fcvt2(int *ip, float *fp, double *dp, long l)
+# ip in %rdi, fp in %rsi, dp in %rdx, l in %rcx
+# Result returned in %xmm0
+
+fcvt2:
+	movl (%rdi), %eax                # eax=M(rdi):  eax = *ip
+	vmovss (%rsi), %xmm0             # xmm0=M(rsi): xmm0= *fp
+	vcvttsd2si (%rdx), %r8d          # r8d=M(rdx):  r8d = (int)(*dp)
+	movl %r8d, (%rdi)                # M(rdi)=r8d:  *ip = r8d
+	vcvtsi2ss %eax, %xmm1, %xmm1     # xmm1=(float)eax=(float)(*ip)
+	vmovss %xmm1, (%rsi)             # M(rsi)=xmm1: (*fp) = xmm1 = (float)(*ip)
+	vcvtsi2sdq %rcx, %xmm1, %xmm1    # xmm1=(double)rcx: xmm1=(double)l
+	vmovsd %xmm1, (%rdx)             # M(rdx)=xmm1: (*dp)=xmm1=(double)l
+	vunpcklps %xmm0, %xmm0, %xmm0    # convert float in xmm0 to double
+	vcvtps2pd %xmm0, %xmm0
+	ret
+```
+
 
 
 
