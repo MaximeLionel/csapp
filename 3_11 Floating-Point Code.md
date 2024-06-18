@@ -106,6 +106,53 @@ float float_mov(float v1, float *src, float *dst) {
 		```
 	* The single precision value `x0` has been converted to double precision value `dx0` successfully.
 
+## Converting from Double Precision to Single Precision
+* Logically, we use `vcvtsd2ss` - convert a double-precision value to a single-precision value:
+```
+vcvtsd2ss %xmm0, %xmm0, %xmm0
+```
+* In reality, GCC generate code below:
+	```
+	# Conversion from double to single precision
+	vmovddup %xmm0, %xmm0       # Replicate first vector element
+	vcvtpd2psx %xmm0, %xmm0     # Convert two vector elements to single
+	```
+	* Suppose register `%xmm0` holding two double-precision values `[dx1, dx0]`. 
+	* `vmovddup %xmm0, %xmm0` - set `%xmm0` to `[dx0, dx0]`. 
+	* `vcvtpd2psx %xmm0, %xmm0` - convert to single precision, pack them into the low-order half of the register, and set the upper half to 0, yielding a result `[0.0, 0.0, sx0, sx0]`.
+* Example:
+	* C code:
+	```c
+	double fcvt(int i, float *fp, double *dp, long *lp)
+	{
+		float f = *fp; double d = *dp; long l = *lp;
+		*lp = (long) d;
+		*fp = (float) i;
+		*dp = (double) l;
+		return (double) f;
+	}
+	```
+	* Assembly code:
+```
+# double fcvt(int i, float *fp, double *dp, long *lp)
+# i in %edi, fp in %rsi, dp in %rdx, lp in %rcx
+fcvt:
+	vmovss (%rsi), %xmm0       # xmm0=M(rsi):       Get f = *fp
+	movq (%rcx), %rax          # rax=M(rcx):        Get l = *lp
+	vcvttsd2siq (%rdx), %r8    # r8=(long)M(rdx):   Get d = *dp and convert to long
+	movq %r8, (%rcx)           # M(rcx)=r8:         Store at lp
+	vcvtsi2ss %edi, %xmm1, %xmm1   # xmm1=(float)edi:    Convert i to float
+	vmovss %xmm1, (%rsi)       # M(rsi)=xmm1:       Store at fp
+	vcvtsi2sdq %rax, %xmm1, %xmm1  # xmm1=(double)rax:   Convert l to double
+	vmovsd %xmm1, (%rdx)       # M(rdx)=xmm1:       Store at dp
+
+    # The following two instructions convert f to double
+	vunpcklps %xmm0, %xmm0, %xmm0
+	vcvtps2pd %xmm0, %xmm0
+	ret                        # Return f in xmm0
+```
+
+
 
 
 
