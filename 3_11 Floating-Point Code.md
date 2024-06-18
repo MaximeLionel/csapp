@@ -22,7 +22,7 @@
 	* The assembly code refers to the registers by their SSE XMM register names %xmm0–%xmm15, where each XMM register is the low-order 128 bits (16 bytes) of the corresponding YMM register.
 
 # 3.11.1 Floating-Point Movement and Conversion Operations
-## Floating-point Movement IAnstructions
+## Floating-point Movement Instructions
 ![[image-20240616135320260.png|500]]
 * These operations above transfer values between memory and XMM registers, as well as between pairs of XMM registers.
 ### vmovss and vmovsd
@@ -80,7 +80,19 @@ float float_mov(float v1, float *src, float *dst) {
 		* Stores the result in the lower bytes of XMM register `%xmm1`.
 
 ## Converting between 2 different floating-point formats
-
+* Logically, we use `vcvtss2sd` - convert a single-precision value to a double-precision value:
+	* suppose the low-order 4 bytes of %xmm0 hold a single-precision value
+		```
+		vcvtss2sd %xmm0, %xmm0, %xmm0
+		```
+		* convert a single-precision value in `%xmm0` to a double-precision value and store the result in the lower 8 bytes of register `%xmm0`.
+* In reality, GCC generate code below:
+	```
+	# Conversion from single to double precision
+	vunpcklps %xmm0, %xmm0, %xmm0             # Replicate first vector element
+	vcvtps2pd %xmm0, %xmm0                    # Convert two vector elements to double
+	```
+	* `vunpcklps` instruction is normally used to interleave the values in two XMM registers and store them in a third.
 
 
 
