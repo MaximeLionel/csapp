@@ -46,4 +46,47 @@ float float_mov(float v1, float *src, float *dst) {
 	return v2;
 }
 ```
+* Reversed assembly code:
+	```
+	# float float_mov(float v1, float *src, float *dst)
+	# v1 in %xmm0, src in %rdi, dst in %rsi
+	
+	float_mov:
+		vmovaps %xmm0, %xmm1       # Copy v1
+		vmovss (%rdi), %xmm0       # Read v2 from src
+		vmovss %xmm1, (%rsi)       # Write v1 to dst
+		ret                        # Return v2 in %xmm0
+	```
+	* `vmovaps` - copy data from xmm0 to xmm1;
+	* `vmovss` - copy data from memory (M(rdi)) to an xmm0 register and from an xmm1 register to memory (M(rsi)).
+
+## Floating point and Integer data types Convertion
+* Convert from a floating-point value read from either an XMM register or memory and write the result to a general-purpose register (e.g., %rax, %ebx, etc.):
+	![[image-20240618093046427.png|600]]
+	* When converting floating-point values to integers, they perform ==truncation==, rounding values toward zero.
+* Convert from integer to floating point:
+	![[image-20240618093310969.png|600]]
+	* Three-operand format, with two sources and a destination.
+	* These instructions above convert from the data type of the first source to the data type of the destination. The second source value has no effect on the low-order bytes of the result.
+	* For our purposes, we can ignore the second operand, since its value only affects the upper bytes of the result.
+	* The destination must be an XMM register. 
+	* In common usage, both the second source and the destination operands are identical.
+	* Example:
+		```
+		vcvtsi2sdq %rax, %xmm1, %xmm1
+		```
+		* Reads a long integer from register `%rax`. 
+		* Converts it to data type double. 
+		* Stores the result in the lower bytes of XMM register `%xmm1`.
+
+
+
+
+
+
+
+
+
+
+
 
