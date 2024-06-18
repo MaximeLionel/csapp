@@ -79,7 +79,7 @@ float float_mov(float v1, float *src, float *dst) {
 		* Converts it to data type double. 
 		* Stores the result in the lower bytes of XMM register `%xmm1`.
 
-## Converting between 2 different floating-point formats
+## Converting from Single Precision to Double Precision
 * Logically, we use `vcvtss2sd` - convert a single-precision value to a double-precision value:
 	* suppose the low-order 4 bytes of %xmm0 hold a single-precision value
 		```
@@ -93,7 +93,18 @@ float float_mov(float v1, float *src, float *dst) {
 	vcvtps2pd %xmm0, %xmm0                    # Convert two vector elements to double
 	```
 	* `vunpcklps` instruction is normally used to interleave the values in two XMM registers and store them in a third.
-
+		* Example - if register `%src0` contains words `[s3, s2, s1, s0]` and the other register `src1` contains words `[d3, d2, d1, d0]`, then after `vunpcklps %src0, %src1, %dest`, the value of the destination register `dest` will be `[s1, d1, s0, d0]`.
+		* So, if the original register `%xmm0` held values `[x3, x2, x1, x0]`, then after `vunpcklps %xmm0, %xmm0, %xmm0`, the instruction will update the register to hold values `[x1, x1, x0, x0]`.
+			* Please notice that x0,x1,x2 and x3 are all single precision value.
+	* `vcvtps2pd` instruction expands the two low-order singleprecision values in the source XMM register to be the two double-precision values in the destination XMM register.
+		* If the original register `%xmm0` held values `[x3, x2, x1, x0]`, then after `vcvtps2pd %xmm0, %xmm0`, `%xmm0` will be `[dx0,dx0]`, while `dx0` is the result of converting `x` to double precision.
+	* Therefore, suppose `%xmm0` held values `[x3, x2, x1, x0]`, the `%xmm0` value will update as below:
+		```
+		# Conversion from single to double precision
+		vunpcklps %xmm0, %xmm0, %xmm0             # xmm0 = [x1,x1,x0,x0]
+		vcvtps2pd %xmm0, %xmm0                    # xmm0 = [dx0,dx0]
+		```
+	* The single precision value `x0` has been converted to double precision value `dx0` successfully.
 
 
 
