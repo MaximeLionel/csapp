@@ -25,13 +25,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -98,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_11 Floating-Point Code.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
@@ -159,23 +160,22 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
+    "3_4 Accessing Information.md",
     "3_11 Floating-Point Code.assets/image-20240619155051303.png",
     "3_11 Floating-Point Code.assets/image-20240619155030256.png",
     "3_11 Floating-Point Code.assets/image-20240619154607449.png",
+    "3_11 Floating-Point Code.md",
     "3_11 Floating-Point Code.assets/image-20240618093310969.png",
     "3_11 Floating-Point Code.assets/image-20240618093046427.png",
     "3_11 Floating-Point Code.assets/image-20240616135320260.png",
     "3_11 Floating-Point Code.assets/image-20240616115619888.png",
     "3_11 Floating-Point Code.assets",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
-    "3_11 Floating-Point Code.md",
-    "3_4 Accessing Information.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240614215310752.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612112045247.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612110009008.png",
-    "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240612104851161.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
     "3_8 Array Allocation and Access.md",

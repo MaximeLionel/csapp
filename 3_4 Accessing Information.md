@@ -308,11 +308,11 @@ void decode1(long *xp, long *yp, long *zp)
 
 # 3.4.4 ==Pushing== and ==Popping== Stack Data
 
-![[image-20240315151439877.png|width=100]]
+![[image-20240315151439877.png|300]]
 * The final two data movement operations are used to push data onto and pop data from the program stack;
 * A stack is a data structure where values can be added or deleted, but only according to a “last-in, first-out” discipline.
 	* push operation - add data to a stack;
-	* pop  operation - remove data from a stack;
+	* pop  operation - pop data from a stack to an operand;
 * A stack can be implemented as an array, where we always insert and remove elements from one end of the array.
 	* The top of the stack - the end of the array;
 	* The stack pointer `%rsp` holds the address of the top stack element.
@@ -321,7 +321,7 @@ void decode1(long *xp, long *yp, long *zp)
 ## pushq instruction
 * `pushq %rbp` is equivalent to the instructions:
 ```
-	subq $8,%rsp     ; Decrement stack pointer 
+	subq $8,%rsp     ; Expand the stack by descreasing %rsp 
 	movq %rbp,(%rsp) ; Store %rbp on stack
 ```
 * The pushq instruction is encoded in the machine code as a single byte
@@ -331,15 +331,15 @@ void decode1(long *xp, long *yp, long *zp)
 ## popq instruction
 * `popq %rax` is equivalent to the instructions:
 ```
-	movq (%rsp),%rax ; Read %rax from stack 
-	addq $8,%rsp     ; Increment stack pointer
+	movq (%rsp),%rax ; Pop the data on topmost stack to %rax 
+	addq $8,%rsp     ; Shrink stack by increasing stack pointer
 ```
 
 
 ![[image-20240315151819248.png]]
 * The first two columns illustrate the effect of executing the instruction `pushq %rax` when `%rsp` is 0x108 and `%rax` is 0x123. 
-* Firstly `%rsp` is decremented by 8, giving 0x100, and then 0x123 is stored at memory address 0x100.
-* Secondly, value 0x123 is read from memory and written to register `%rdx`. Register `%rsp` is incremented back to 0x108.
+* Firstly `%rsp` is decremented by 8, giving 0x100, and then 0x123 is stored at memory address 0x100, by executing `pushq %rax`.
+* Secondly, value 0x123 is read from memory and written to register `%rdx`. Register `%rsp` is incremented back to 0x108, by executing `popq %rdx`.
 
 
 

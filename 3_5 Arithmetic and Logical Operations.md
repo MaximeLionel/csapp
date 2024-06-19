@@ -1,5 +1,5 @@
 **Integer arithmetic operations**:
-![[image-20240315162520655.png|500]]
+![[image-20240315162520655.png|400]]
 * The operations are divided into four groups: 
 	* load effective address
 	* unary (一元运算)  - one operand
