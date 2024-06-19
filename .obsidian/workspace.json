@@ -32,24 +32,6 @@
             }
           }
         ]
-      },
-      {
-        "id": "eb9468c154ce525d",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "2c9926fdcf010df0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "3_11 Floating-Point Code.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"

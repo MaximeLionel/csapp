@@ -242,15 +242,19 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 | float  | long   |                          |
 **Solution**:
 
-| $T_x$  | $T_y$  | Instructions                    |
-| ------ | ------ | ------------------------------- |
-| long   | double | `vcvtsi2sdq %rdi, %xmm0`        |
-| double | int    | `vcvttsd2si %xmm0, %eax`        |
-| double | float  | `vcvtsd2ss %xmm0, %xmm0, %xmm`  |
-| long   | float  | `vcvtsi2ssq %rdi, %xmm0, %xmm0` |
-| float  | long   | `vcvttss2siq %xmm0, %rax`       |
+| $T_x$  | $T_y$  | Instructions                                                                                                  |
+| ------ | ------ | ------------------------------------------------------------------------------------------------------------- |
+| long   | double | `vcvtsi2sdq %rdi, %xmm0`                                                                                      |
+| double | int    | `vcvttsd2si %xmm0, %eax`                                                                                      |
+| double | float  | `vcvtsd2ss %xmm0, %xmm0, %xmm0`<br>In gcc, it's like:<br>`vmovddup %xmm0, %xmm0      vcvtpd2psx %xmm0, %xmm0` |
+| long   | float  | `vcvtsi2ssq %rdi, %xmm0, %xmm0`                                                                               |
+| float  | long   | `vcvttss2siq %xmm0, %rax`                                                                                     |
 
-
+# 3.11.2 Floating-Point Code in Procedures
+* With x86-64, the XMM registers are used for passing floating-point arguments to functions and for returning floating-point values from them.
+* The following conventions are observed:
+	* Up to eight floating-point arguments can be passed in XMM registers `%xmm0–%xmm7`.
+	* Additional floating-point arguments can be passed on the stack.
 
 
 
