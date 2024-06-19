@@ -272,6 +272,86 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 	```
 	* x in `%xmm0`, y in `%rdi`, and z in `%rsi`.
 
+# Practice Problem 3.52
+For each of the following function declarations, determine the register assignments for the arguments:
+A. double g1(double a, long b, float c, int d);
+
+B. double g2(int a, double \*b, float \*c, long d);
+
+C. double g3(double \*a, double b, int c, float d);
+
+D. double g4(float a, int \*b, float c, double d);
+
+**Solution**:
+A.
+```c
+double g1(double a, long b, float c, int d);
+a - %xmm0
+b - %rdi
+c - %xmm1
+d - %esi
+```
+B.
+```c
+double g2(int a, double *b, float *c, long d);
+a - %edi
+b - %rsi
+c - %rcx
+d - %rdx
+```
+C.
+```c
+double g3(double *a, double b, int c, float d);
+a - %rdi
+b - %xmm0
+c - %esi
+d - %xmm1
+```
+D.
+```c
+double g4(float a, int *b, float c, double d);
+a - %xmm0
+b - %rdi
+c - %xmm1
+d - %xmm2
+```
+
+# 3.11.3 Floating-Point Arithmetic Operations
+* A set of scalar AVX2 floating-point instructions that perform arithmetic operations:
+	![[image-20240619154607449.png|400]]
+	* $S_1$ can be either an XMM register or a memory location.
+	* $S_2$ and $D$ must be XMM registers.
+	* Each operation has an instruction for single precision and an instruction for double precision. 
+	* The result is stored in the destination register.
+* Example:
+	```c
+	double funct(double a, float x, double b, int i)
+	{
+		return a*x - b/i;
+	}
+	```
+	* Assembly code on book:
+		![[image-20240619155030256.png|400]]
+		![[image-20240619155051303.png|400]]
+		* a, x, and b are passed in XMM registers `%xmm0–%xmm2`, while i is passed in register `%edi`.
+		* lines 2–3: standard two-instruction sequence is used to convert argument x to double.
+		* line 5: convert argument i to double.
+		* Return in register `%xmm0`.
+	* In real life, it's like:
+```
+        cvtss2sd        %xmm1, %xmm1
+        mulsd   %xmm0, %xmm1
+        pxor    %xmm0, %xmm0
+        cvtsi2sdl       %edi, %xmm0
+        divsd   %xmm0, %xmm2
+        subsd   %xmm2, %xmm1
+        movapd  %xmm1, %xmm0
+        ret
+```
+
+
+
+
 
 
 
