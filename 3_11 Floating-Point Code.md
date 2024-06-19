@@ -254,7 +254,10 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 * With x86-64, the XMM registers are used for passing floating-point arguments to functions and for returning floating-point values from them.
 * The following conventions are observed:
 	* Up to eight floating-point arguments can be passed in XMM registers `%xmm0–%xmm7`.
-	* Additional floating-point arguments can be passed on the stack.
+	* Additional floating-point arguments can be passed on the **stack**.
+	* A function that returns a floating-point value does so in register `%xmm0`.
+	* All XMM registers are caller saved.
+	* When a function contains a combination of pointer, integer, and floating point arguments, the pointers and integers are passed in general-purpose registers, while the floating-point values are passed in XMM registers.
 
 
 
