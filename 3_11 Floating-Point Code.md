@@ -206,8 +206,32 @@ fcvt2:
 ```
 
 Secondly, 
-1. From `*ip = (int) val1` , we need to find out `*ip`, 
-
+* val1
+	From `*ip = (int) val1` , we need to find out `*ip`.
+	From line 8 and 9, `*ip` is from `*dp` by converting to `int`.
+	So `val1 = d`.
+* val2
+	From `*fp = (float) val2`, we need to find out `*fp`.
+	From line 11, `*fp` is from `*ip` by converting to `float`.
+	So `val2 = i`.
+* val3
+	From `*dp = (double) val3`, we need to find out `*dp`.
+	From line 13, `*dp` is from `l` by converting to `double`.
+	So `val3 = d`.
+* val4
+	The funtion returns `double` type, so the return value is stored in `xmm0`. From line 7, `xmm0` is from `f`.
+	So `val4 = f`.
+	
+# Practice Problem 3.51
+The following C function converts an argument of type `src_t` to a return value of type `dst_t`, where these two types are defined using typedef:
+```c
+dest_t cvt(src_t x)
+{
+	dest_t y = (dest_t) x;
+	return y;
+}
+```
+For execution on x86-64, assume that argument x is either in %xmm0 or in the appropriately named portion of register `%rdi` (i.e., `%rdi` or `%edi`). One or two instructions are to be used to perform the type conversion and to copy the value to the appropriately named portion of register `%rax` (integer result) or `%xmm0` (floating-point result). Show the instruction(s), including the source and destination registers.
 
 
 
