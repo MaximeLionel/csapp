@@ -245,7 +245,7 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 | $T_x$  | $T_y$  | Instructions             |
 | ------ | ------ | ------------------------ |
 | long   | double | `vcvtsi2sdq %rdi, %xmm0` |
-| double | int    | `vcvttsd2si %rdi, %xmm0` |
+| double | int    | `vcvttsd2si %xmm0, %edi` |
 | double | float  |                          |
 | long   | float  |                          |
 | float  | long   |                          |
