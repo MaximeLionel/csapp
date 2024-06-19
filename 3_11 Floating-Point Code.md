@@ -242,13 +242,13 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 | float  | long   |                          |
 **Solution**:
 
-| $T_x$  | $T_y$  | Instructions                   |
-| ------ | ------ | ------------------------------ |
-| long   | double | `vcvtsi2sdq %rdi, %xmm0`       |
-| double | int    | `vcvttsd2si %xmm0, %edi`       |
-| double | float  | `vcvtsd2ss %xmm0, %xmm0, %xmm` |
-| long   | float  |                                |
-| float  | long   |                                |
+| $T_x$  | $T_y$  | Instructions                    |
+| ------ | ------ | ------------------------------- |
+| long   | double | `vcvtsi2sdq %rdi, %xmm0`        |
+| double | int    | `vcvttsd2si %xmm0, %eax`        |
+| double | float  | `vcvtsd2ss %xmm0, %xmm0, %xmm`  |
+| long   | float  | `vcvtsi2ssq %rdi, %xmm0, %xmm0` |
+| float  | long   | `vcvttss2siq %xmm0, %rax`       |
 
 
 
