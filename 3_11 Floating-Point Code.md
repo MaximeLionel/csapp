@@ -60,7 +60,7 @@ float float_mov(float v1, float *src, float *dst) {
 	* `vmovaps` - copy data from xmm0 to xmm1;
 	* `vmovss` - copy data from memory (M(rdi)) to an xmm0 register and from an xmm1 register to memory (M(rsi)).
 
-## Converting between Floating point and Integer
+## Converting between Floating/Double point and Integer
 * Convert from a floating-point value read from either an XMM register or memory and write the result to a general-purpose register (e.g., %rax, %ebx, etc.):
 	![[image-20240618093046427.png|600]]
 	* When converting floating-point values to integers, they perform ==truncation==, rounding values toward zero.
@@ -232,6 +232,23 @@ dest_t cvt(src_t x)
 }
 ```
 For execution on x86-64, assume that argument x is either in %xmm0 or in the appropriately named portion of register `%rdi` (i.e., `%rdi` or `%edi`). One or two instructions are to be used to perform the type conversion and to copy the value to the appropriately named portion of register `%rax` (integer result) or `%xmm0` (floating-point result). Show the instruction(s), including the source and destination registers.
+
+| $T_x$  | $T_y$  | Instructions             |
+| ------ | ------ | ------------------------ |
+| long   | double | `vcvtsi2sdq %rdi, %xmm0` |
+| double | int    |                          |
+| double | float  |                          |
+| long   | float  |                          |
+| float  | long   |                          |
+**Solution**:
+
+| $T_x$  | $T_y$  | Instructions             |
+| ------ | ------ | ------------------------ |
+| long   | double | `vcvtsi2sdq %rdi, %xmm0` |
+| double | int    | `vcvttsd2si %rdi, %xmm0` |
+| double | float  |                          |
+| long   | float  |                          |
+| float  | long   |                          |
 
 
 

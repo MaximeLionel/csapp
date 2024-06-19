@@ -32,6 +32,24 @@
             }
           }
         ]
+      },
+      {
+        "id": "eb9468c154ce525d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2c9926fdcf010df0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "3_11 Floating-Point Code.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -159,7 +177,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "2c9926fdcf010df0",
   "lastOpenFiles": [
     "3_11 Floating-Point Code.assets/image-20240618093310969.png",
     "3_11 Floating-Point Code.assets/image-20240618093046427.png",
