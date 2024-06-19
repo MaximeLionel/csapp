@@ -205,6 +205,9 @@ fcvt2:
 	ret
 ```
 
+Secondly, 
+1. From `*ip = (int) val1` , we need to find out `*ip`, 
+
 
 
 
