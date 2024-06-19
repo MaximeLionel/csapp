@@ -258,6 +258,19 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 	* A function that returns a floating-point value does so in register `%xmm0`.
 	* All XMM registers are caller saved.
 	* When a function contains a combination of pointer, integer, and floating point arguments, the pointers and integers are passed in general-purpose registers, while the floating-point values are passed in XMM registers.
+* Examples:
+	```c
+	double f1(int x, double y, long z);
+	```
+	* x in `%edi`, y in `%xmm0`, and z in `%rsi`.
+	```c
+	double f2(double y, int x, long z);
+	```
+	* y in `%xmm0`, x in `%edi`, and z in `%rsi`. Same as above.
+	```c
+	double f1(float x, double *y, long *z);
+	```
+	* x in `%xmm0`, y in `%rdi`, and z in `%rsi`.
 
 
 
