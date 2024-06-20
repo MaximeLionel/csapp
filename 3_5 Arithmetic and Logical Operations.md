@@ -3,12 +3,12 @@
 * The operations are divided into four groups: 
 	* load effective address
 	* unary (一元运算)  - one operand
-	* binary (二元运算) - two operand
+	* binary (二元运算) - two operands
 	* shifts (位移)
 # 3.5.1 Load Effective Address
-![[image-20240318095849425.png|500]]
+![[image-20240318095849425.png|400]]
 * `leaq` (load effective address) - reads from memory to a register, but it does not reference memory at all. Actually, it only **copies the effective address to the destination**.
-* Example0: if register `%rdx` contains value x, then the instruction `leaq 7(%rdx,%rdx,4)`, `%rax` will set register `%rax` to `5x + 7`.
+* Example0: if register `%rdx` contains value x, then the instruction `leaq 7(%rdx,%rdx,4), %rax` which equals `%rax=rdx*4+rdx+7`=`4*x+x+7`, `%rax` will set register `%rax` to `5x + 7`.
 * Example1:
 	* consider the following C program:
 	```C
@@ -23,9 +23,9 @@
   ; x in %rdi, y in %rsi, z in %rdx
 
 scale:
-  leaq    (%rdi,%rsi,4), %rax   ; x + 4*y
-  leaq    (%rdx,%rdx,2), %rdx   ; z + 2*z = 3*z
-  leaq    (%rax,%rdx,4), %rax   ; (x+4*y) + 4*(3*z) = x + 4*y + 12*z
+  leaq    (%rdi,%rsi,4), %rax   ; rax=rdi+4*rsi: rax = x + 4y
+  leaq    (%rdx,%rdx,2), %rdx   ; rdx=rdx+2*rdx: rdx = z + 2*z = 3*z
+  leaq    (%rax,%rdx,4), %rax   ; rax=rax+4*rdx: rax = (x+4y) + 4*(3z) = x + 4y + 12z
   ret
 ```
 # Practice Problem 3.6
@@ -43,14 +43,14 @@ Suppose register `%rbx` holds value p and `%rdx` holds value q. Fill in the tabl
 
 **Solution**:
 
-| Instruction                 | Result  |
-| --------------------------- | ------- |
-| `leaq 9(%rdx), %rax`        | 9+q     |
-| `leaq (%rdx,%rbx), %rax`    | q+p     |
-| `leaq (%rdx,%rbx,3), %rax`  | q+3*p   |
-| `leaq 2(%rbx,%rbx,7), %rax` | p+7*q+2 |
-| `leaq 0xE(,%rdx,3), %rax`   | 14+3*q  |
-| `leaq 6(%rbx,%rdx,7), %rax` | 6+p+7*q |
+| Instruction                 | Result                               |
+| --------------------------- | ------------------------------------ |
+| `leaq 9(%rdx), %rax`        | `rax = 9 + rdx = 9 + q`              |
+| `leaq (%rdx,%rbx), %rax`    | `rax = rdx + rbx = q + p`            |
+| `leaq (%rdx,%rbx,3), %rax`  | `rax = rdx + rbx*3 = q + 3p`         |
+| `leaq 2(%rbx,%rbx,7), %rax` | `rax = 2 + rbx + rbx*7 = 2 + 8p`     |
+| `leaq 0xE(,%rdx,3), %rax`   | `rax = 14 + rdx*3 = 14 + 3q`         |
+| `leaq 6(%rbx,%rdx,7), %rax` | `rax = 6 + rbx + rdx*7 = 6 + p + 7q` |
 
 # Practice Problem 3.7
 Consider the following code, in which we have omitted the expression being computed:
@@ -74,27 +74,27 @@ scale3:
 Fill in the missing expression in the C code.
 
 **Solution**:
-`; short scale3(short x, short y, short z)`
-`; x in %rdi, y in %rsi, z in %rdx`
-  `leaq (%rsi,%rsi,9), %rbx`: $rbx = y + 9*y = 10*y$
-  `leaq (%rbx,%rdx), %rbx`: $rbx = rbx +z=10*y+z$
-  `leaq (%rbx,%rdi,%rsi), %rbx`: $rbx = 10*y+z+x*y$
-Therefore, we get this:
-```C
-short scale3(short x, short y, short z) { 
-	short t = 10*y+z+x*y;  
-	return t;
-}
+
 ```
+; short scale3(short x, short y, short z)
+; x in %rdi, y in %rsi, z in %rdx
+
+scale3:
+  leaq (%rsi,%rsi,9), %rbx      # rbx=rsi+rsi*9: rbx = 10y
+  leaq (%rbx,%rdx), %rbx        # rbx=rbx+rdx: rbx = 10y + z
+  leaq (%rbx,%rdi,%rsi), %rbx   # rbx=rbx+rdi*rsi: rbx = 10y + z + x*y
+  ret
+```
+Easily to find out that the missing expression is `short t = 10y+z+xy;`.
 
 # 3.5.2 Unary and Binary Operations
-![[image-20240318094815538.png|400]]
+![[image-20240318094815538.png|300]]
 * **Unary** operation - with the single operand serving as both source and destination.
 	* This operand can be either a register or a memory location.
 	* Example: `incq (%rsp)` causes the 8-byte element on the top of the stack to be incremented.
 
 
-![[image-20240318095802686.png|400]]
+![[image-20240318095802686.png|300]]
 * **Binary** operation - the second operand is used as both a source and a destination. 
 	* Example: `subq %rax,%rdx` decrements register `%rdx` by the value in `%rax`
 		* The first operand can be either an immediate value, a register, or a memory location. 
