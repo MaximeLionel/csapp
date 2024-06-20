@@ -323,6 +323,7 @@ d - %xmm2
 	* $S_2$ and $D$ must be XMM registers.
 	* Each operation has an instruction for single precision and an instruction for double precision. 
 	* The result is stored in the destination register.
+	* Syntax: `vsubsd S1, S2, D` means `D = S2 - S1`
 * Example:
 	```c
 	double funct(double a, float x, double b, int i)
@@ -390,14 +391,23 @@ Determine the possible combinations of types of the four arguments (there may be
 # double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
 
 funct1:
-	vcvtsi2ssq      %rsi, %xmm2, %xmm2
-	vaddss          %xmm0, %xmm2, %xmm0
-	vcvtsi2ss       %edi, %xmm2, %xmm2
-	vdivss          %xmm0, %xmm2, %xmm0
+	vcvtsi2ssq      %rsi, %xmm2, %xmm2   # xmm2=(float)rsi: rsi - type long
+	vaddss          %xmm0, %xmm2, %xmm0  # xmm0=xmm0+xmm2=xmm0+(float)rsi refer to (q+r)
+	                                     # so q and r can be xmm0 or rsi while type is float or long
+	vcvtsi2ss       %edi, %xmm2, %xmm2   # xmm2=(float)edi: 
+	                                     # p can only be edi which type is int
+	vdivss          %xmm0, %xmm2, %xmm0  # xmm0=xmm2/xmm0=((float)edi)/xmm0: xmm0=(float)p/(q+r)
 	vunpcklps       %xmm0, %xmm0, %xmm0
-	vcvtps2pd       %xmm0, %xmm0
-	vsubsd          %xmm1, %xmm0, %xmm0
+	vcvtps2pd       %xmm0, %xmm0         # xmm0 = (double)xmm0
+	vsubsd          %xmm1, %xmm0, %xmm0  # xmm0=xmm0-xmm1
+	                                     # s = xmm1 - type double
 	ret
+```
+Therefore, there's 2 possibilities:
+```C
+double funct1(int p, float q, long r, double s);
+or
+double funct1(int p, long q, float r, double s);
 ```
 
 
