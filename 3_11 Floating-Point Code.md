@@ -485,6 +485,20 @@ cel2fahr:
 	.long 1077936128       # High-order 4 bytes of 32.0
 ```
 
+* Firstly, review the representation of double precision floating.
+	* Easy to find that `1.8` and `32.0` are normalized form of double precision floating-point.
+	* The equation is like:
+		$V = (−1)^s × (1+0.f_{51}...f_1f_0) × 2^{[e_{10}...e_1e_0]-(2^{11-1}-1)} = (−1)^s × 1.f_{51}...f_1f_0 × 2^{[e_{10}...e_1e_0]-1023_{10}}$
+		(e != [0...0] or [1...1])
+	* If $V=1.8$, $V=(−1)^0 × 1.f_{51}...f_1f_0 × 2^{[e_{10}...e_1e_0]-1023_{10}}$
+		* If $1.f_{51}...f_1f_0$ = 1.8, then f = 0b 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1101 = 0x ccccccccccccd
+		* If $E = [e_{10}...e_1e_0]-1023_{10} = 0$, then e = 1023 = 0b 011 1111 1111 = 0x 3ff
+		* s = 0
+		* So, the full representation 
+			= 0b 0011 1111 1111 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1101 
+			= 0x 3ffc cccc cccc cccd
+	* If $V=32.0$, $V=(−1)^0 × 1.f_{51}...f_1f_0 × 2^{[e_{10}...e_1e_0]-1023_{10}}$
+
 
 
 
