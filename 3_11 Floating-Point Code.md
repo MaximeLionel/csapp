@@ -4,12 +4,12 @@
 	* The conventions used for passing floating-point values as arguments to functions and for returning them as results.
 	* The conventions for how registers are preserved during function calls.
 
-| Float Architecture Revision                | Register Name | Register Size |
-| ------------------------------------------ | ------------- | ------------- |
-| MMX - Multi Media Extensions               | MM            | 64 bits       |
-| SSE - Streaming SIMD Extensions            | XMM           | 128 bits      |
-| AVX - Advanced Vector Extensions (on book) | YMM           | 256 bits      |
-| AVX-512 -（Advanced Vector Extensions 512）  | ZMM           | 512 bits      |
+| Float Architecture Revision                    | Register Name | Register Size |
+| ---------------------------------------------- | ------------- | ------------- |
+| MMX - Multi Media Extensions                   | MM            | 64 bits       |
+| SSE - Streaming SIMD Extensions                | XMM           | 128 bits      |
+| ==AVX - Advanced Vector Extensions (on book)== | YMM           | 256 bits      |
+| AVX-512 -（Advanced Vector Extensions 512）      | ZMM           | 512 bits      |
 * Gcc will generate AVX2 code when given the command-line parameter `-mavx2`.
 * The scalar AVX instructions (标量AVX指令) intend for operating on entire data vectors arise.
 	* Scalar data - a **single value or element**, as opposed to a collection of values or elements (such as arrays, vectors, or matrices). Scalar data types represent individual quantities and are the simplest form of data in programming and computer science.
@@ -338,18 +338,67 @@ d - %xmm2
 		* line 5: convert argument i to double.
 		* Return in register `%xmm0`.
 	* In real life, it's like:
-```
-        cvtss2sd        %xmm1, %xmm1
-        mulsd   %xmm0, %xmm1
-        pxor    %xmm0, %xmm0
-        cvtsi2sdl       %edi, %xmm0
-        divsd   %xmm0, %xmm2
-        subsd   %xmm2, %xmm1
-        movapd  %xmm1, %xmm0
-        ret
+		* AXV - Compile in avx code with `-mavx` option: `gcc -mavx -Og -fno-stack-protector -S funct.c -o funct_avx.s`
+		```
+		vcvtss2sd       %xmm1, %xmm1, %xmm1      # convert xmm1 from float to double
+		vmulsd  %xmm0, %xmm1, %xmm1              # xmm1=xmm0*xmm1: xmm1=a*x
+		vxorps  %xmm0, %xmm0, %xmm0              # clear xmm0
+		vcvtsi2sdl      %edi, %xmm0, %xmm0       # convert edi from int to double, store it in xmm0
+		vdivsd  %xmm0, %xmm2, %xmm2              # xmm2=xmm2/xmm0: xmm2=b/(double)i
+		vsubsd  %xmm2, %xmm1, %xmm0              # xmm0=xmm1-xmm2: xmm0=a*x-b/i
+		ret
+		```
+		* SSE2 - Compile in sse2 code with `-mavx` option: `gcc -msse2 -Og -fno-stack-protector -S funct.c -o funct_sse2.s`
+		```
+		cvtss2sd        %xmm1, %xmm1       # xmm1=(double)x
+		mulsd   %xmm0, %xmm1               # xmm1=a*x
+		pxor    %xmm0, %xmm0               # clear xmm0
+		cvtsi2sdl       %edi, %xmm0        # xmm0=(double)i
+		divsd   %xmm0, %xmm2               # xmm2=b/(double)i
+		subsd   %xmm2, %xmm1               # xmm1=a*x-b/i
+		movapd  %xmm1, %xmm0               # xmm0=a*x-b/i
+		ret
+		```
+
+# Practice Problem 3.53
+For the following C function, the types of the four arguments are defined by typedef:
+```c
+double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
+{
+	return p/(q+r) - s;
+}
 ```
 
+When compiled, gcc generates the following code:
+```
+# double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
 
+funct1:
+	vcvtsi2ssq      %rsi, %xmm2, %xmm2
+	vaddss          %xmm0, %xmm2, %xmm0
+	vcvtsi2ss       %edi, %xmm2, %xmm2
+	vdivss          %xmm0, %xmm2, %xmm0
+	vunpcklps       %xmm0, %xmm0, %xmm0
+	vcvtps2pd       %xmm0, %xmm0
+	vsubsd          %xmm1, %xmm0, %xmm0
+	ret
+```
+Determine the possible combinations of types of the four arguments (there may be more than one).
+
+**Solution**:
+```
+# double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
+
+funct1:
+	vcvtsi2ssq      %rsi, %xmm2, %xmm2
+	vaddss          %xmm0, %xmm2, %xmm0
+	vcvtsi2ss       %edi, %xmm2, %xmm2
+	vdivss          %xmm0, %xmm2, %xmm0
+	vunpcklps       %xmm0, %xmm0, %xmm0
+	vcvtps2pd       %xmm0, %xmm0
+	vsubsd          %xmm1, %xmm0, %xmm0
+	ret
+```
 
 
 

@@ -31,8 +31,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "3_11 Floating-Point Code.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "3_11 Floating-Point Code.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md"
+                "file": "3_11 Floating-Point Code.md"
               }
             }
           }
@@ -160,8 +159,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "2540482438bddfaa",
   "lastOpenFiles": [
+    "3_5 Arithmetic and Logical Operations.md",
     "3_4 Accessing Information.md",
     "3_11 Floating-Point Code.assets/image-20240619155051303.png",
     "3_11 Floating-Point Code.assets/image-20240619155030256.png",
@@ -187,7 +187,6 @@
     "Untitled.canvas",
     "3_6 Control.md",
     "3_7 Procedures.assets",
-    "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.assets",
     "2_4.md",
     "2_homework.md",
