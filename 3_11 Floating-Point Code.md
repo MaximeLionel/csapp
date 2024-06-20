@@ -498,7 +498,18 @@ cel2fahr:
 			= 0b 0011 1111 1111 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1100 1101 
 			= 0x 3ffc cccc cccc cccd
 	* If $V=32.0$, $V=(−1)^0 × 1.f_{51}...f_1f_0 × 2^{[e_{10}...e_1e_0]-1023_{10}}$
+		* If $1.f_{51}...f_1f_0$ = 1.0, then f = 0b 0.
+		* If $E = [e_{10}...e_1e_0]-1023_{10} = 5$, then e = 1028 = 0b 100 0000 0100 = 0x 404
+		* s = 0
+		* So, the full representation 
+			= 0b 0100 0000 0100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+			= 0x 4040 0000 0000 0000
+* The machine uses little-endian byte ordering, the first value gives the low-order 4 bytes, while the second gives the high-order 4 bytes.
 
+# Practice Problem 3.55
+Show how the numbers declared at label .LC3 encode the number 32.0.
+
+**Solution**: already showed above.
 
 
 
