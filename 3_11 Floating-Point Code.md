@@ -410,6 +410,80 @@ or
 double funct1(int p, long q, float r, double s);
 ```
 
+# Practice Problem 3.54
+Function funct2 has the following prototype:
+```C
+double funct2(double w, int x, float y, long z);
+```
+Gcc generates the following code for the function:
+```
+# double funct2(double w, int x, float y, long z)
+# w in %xmm0, x in %edi, y in %xmm1, z in %rsi
+
+funct2:
+	vcvtsi2ss    %edi, %xmm2, %xmm2
+	vmulss       %xmm1, %xmm2, %xmm1
+	vunpcklps    %xmm1, %xmm1, %xmm1
+	vcvtps2pd    %xmm1, %xmm2
+	vcvtsi2sdq   %rsi, %xmm1, %xmm1
+	vdivsd       %xmm1, %xmm0, %xmm0
+	vsubsd       %xmm0, %xmm2, %xmm0
+	ret
+```
+Write a C version of funct2.
+
+**Solution**:
+Firstly, analyze assembly code:
+```
+# double funct2(double w, int x, float y, long z)
+# w in %xmm0, x in %edi, y in %xmm1, z in %rsi
+
+funct2:
+	vcvtsi2ss    %edi, %xmm2, %xmm2         # xmm2=(float)edi: xmm2 = (float)x
+	vmulss       %xmm1, %xmm2, %xmm1        # xmm1=xmm1*xmm2: xmm1 = y*(float)x
+	vunpcklps    %xmm1, %xmm1, %xmm1        
+	vcvtps2pd    %xmm1, %xmm2               # xmm2=(double)xmm1: xmm2 = (double)(y*(float)x)
+	vcvtsi2sdq   %rsi, %xmm1, %xmm1         # xmm1=(double)rsi: xmm1 = (double)z
+	vdivsd       %xmm1, %xmm0, %xmm0        # xmm0=xmm0/xmm1: xmm0 = w/(double)z
+	vsubsd       %xmm0, %xmm2, %xmm0        # xmm0=xmm2-xmm0: xmm0 = (double)(y*(float)x) - w/(double)z
+	ret
+```
+Secondly, easily get the function code below:
+```c
+double funct2(double w, int x, float y, long z)
+{
+	return y*x - w/z;
+}
+```
+
+# 3.11.4 Defining and Using Floating-Point Constants
+* Unlike integer arithmetic operations, AVX floating-point operations **cannot have immediate values as operands**.
+* For AVX floating-point operations, the compiler must allocate and initialize storage for any constant values. The code then reads the values from memory.
+* Example:
+	* C code:
+		```c
+		double cel2fahr(double temp)
+		{
+			return 1.8 * temp + 32.0;
+		}
+		```
+	* Assembly Code:
+```
+# double cel2fahr(double temp)
+# temp in %xmm0
+
+cel2fahr:
+	vmulsd .LC2(%rip), %xmm0, %xmm0     # Multiply by 1.8
+	vaddsd .LC3(%rip), %xmm0, %xmm0     # Add 32.0
+	ret
+
+.LC2:
+	.long 3435973837       # Low-order 4 bytes of 1.8
+	.long 1073532108       # High-order 4 bytes of 1.8
+.LC3:
+	.long 0                # Low-order 4 bytes of 32.0
+	.long 1077936128       # High-order 4 bytes of 32.0
+```
 
 
 
