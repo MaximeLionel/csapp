@@ -622,7 +622,7 @@ So, the result is like:
 ## Example:
 * C code:
 ```c
-typedef enum {NEG, ZERO, POS, OTHER} range_t;
+typedef enum {NEG, ZERO, POS, OTHER} range_t; // 0 (NEG), 1 (ZERO), 2 (POS), and 3 (OTHER)
 
 range_t find_range(float x)
 {
@@ -638,6 +638,109 @@ range_t find_range(float x)
 	return result;
 }
 ```
+* Assembly code:
+```
+# range_t find_range(float x)
+# x in %xmm0
 
+find_range:
+	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
+	vucomiss %xmm0, %xmm1               # Compare 0:x
+	ja .L5                              # If >, goto neg
+	vucomiss %xmm1, %xmm0               # Compare x:0
+	jp .L8                              # If NaN, goto posornan
+	movl $1, %eax                       # result = ZERO
+	je .L3                              # If =, goto done
+
+.L8:                                    # posornan:
+	vucomiss .LC0(%rip), %xmm0          # Compare x:0
+	setbe %al                           # Set result = NaN?1:0
+	movzbl %al, %eax                    # Zero-extend
+	addl $2, %eax                       # result += 2 (POS for > 0, OTHER for NaN)
+	ret                                 # Return
+
+.L5:                                    # neg:
+	movl $0, %eax                       # result = NEG
+
+.L3:                                    # done:
+	rep; ret                            # Return
+```
+
+* 4 possible comparison results:
+	* x < 0.0 The `ja` branch on line  will be taken, jumping to the end with a return value of 0.
+	* x = 0.0 The `ja` (line 7) and `jp` branch (line 9) will not be taken, but the `je `will, returning with %eax equal to 1.
+	* x > 0.0 None of the three branches will be taken. The setbe (line 15) will yield 0, and this will be incremented by the addl instruction (line 17) to give a return value of 2.
+	* x = NaN The jp branch (line 9) will be taken. The third vucomiss (line 14) will set both the carry and the zero flag, and so the instruction setbe instruction (line 15) and the following instruction will set %eax to 1. This gets incremented by the addl instruction (line 17) to give a return value of 3.
+
+# Practice Problem 3.57
+Function funct3 has the following prototype:
+```c
+double funct3(int *ap, double b, long c, float *dp);
+```
+For this function, gcc generates the following code:
+```
+# double funct3(int *ap, double b, long c, float *dp)
+# ap in %rdi, b in %xmm0, c in %rsi, dp in %rdx
+
+funct3:
+	vmovss       (%rdx), %xmm1
+	vcvtsi2sd    (%rdi), %xmm2, %xmm2
+	vucomisd     %xmm2, %xmm0
+	jbe          .L8
+	vcvtsi2ssq   %rsi, %xmm0, %xmm0
+	vmulss       %xmm1, %xmm0, %xmm1
+	vunpcklps    %xmm1, %xmm1, %xmm1
+	vcvtps2pd    %xmm1, %xmm0
+	ret
+
+.L8:
+	vaddss       %xmm1, %xmm1, %xmm1
+	vcvtsi2ssq   %rsi, %xmm0, %xmm0
+	vaddss       %xmm1, %xmm0, %xmm0
+	vunpcklps    %xmm0, %xmm0, %xmm0
+	vcvtps2pd    %xmm0, %xmm0
+	ret
+```
+Write a C version of funct3.
+
+**Solution**:
+```
+# double funct3(int *ap, double b, long c, float *dp)
+# ap in %rdi, b in %xmm0, c in %rsi, dp in %rdx
+
+funct3:
+	vmovss       (%rdx), %xmm1         # xmm1=M(rdx): xmm1 = (float)(*dp)
+	vcvtsi2sd    (%rdi), %xmm2, %xmm2  # xmm2=(double)M(rdi): xmm2 = (double)(*ap)
+	vucomisd     %xmm2, %xmm0          # cmp xmm0:xmm2: compare b:(double)(*ap)
+	jbe          .L8                   # if xmm0<=xmm2: b<=(double)(*ap), goto .L8
+	vcvtsi2ssq   %rsi, %xmm0, %xmm0    # xmm0=(float)rsi: xmm0 = (float)c
+	vmulss       %xmm1, %xmm0, %xmm1   # xmm1=xmm0*xmm1: xmm1 = (float)c * (float)(*dp)
+	vunpcklps    %xmm1, %xmm1, %xmm1
+	vcvtps2pd    %xmm1, %xmm0          # xmm0=(double)xmm1: xmm0 = (double)((float)c * (float)(*dp))
+	ret
+
+.L8:
+	vaddss       %xmm1, %xmm1, %xmm1   # xmm1=xmm1+xmm1: xmm1 = 2*(float)(*dp)
+	vcvtsi2ssq   %rsi, %xmm0, %xmm0    # xmm0=(float)rsi: xmm0 = (float)c
+	vaddss       %xmm1, %xmm0, %xmm0   # xmm0=xmm0+xmm1: xmm0 = (float)c + 2*(float)(*dp)
+	vunpcklps    %xmm0, %xmm0, %xmm0
+	vcvtps2pd    %xmm0, %xmm0          # xmm0 = (double)((float)c + 2*(float)(*dp))
+	ret
+```
+
+Thus, we may easily get the c code below:
+```c
+double funct3(int *ap, double b, long c, float *dp)
+{
+	if(b <= (double)(*ap))
+	{
+		return (double)((float)c + 2*(*dp));
+	}
+	else
+	{
+		return (double)((float)c * (*dp));
+	}
+}
+```
 
 
