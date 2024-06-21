@@ -584,9 +584,60 @@ So the result:
 # define EXPR(x) 0.0
 ```
 
+C.
+Firstly, convert to hex representation:
+-2147483648 = 0x FFFF FFFF 8000 0000
+Secondly, analyze the assembly code:
+```
+	vmovsd .LC2(%rip), %xmm1       # xmm1 = 0x 8000 0000 0000 0000
+	vxorpd %xmm1, %xmm0, %xmm0     # xmm0 = x ^ 0x 8000 0000 0000 0000
+.LC2:
+	.long 0
+	.long -2147483648
+	.long 0
+	.long 0
+```
+Thirdly, we find that `xmm0 = x ^ 0x 8000 0000 0000 0000` is to simply change the sign bit.
+So, the result is like:
+```c
+# define EXPR(x) -x
+```
 
+# 3.11.6 Floating-Point Comparison Operations
+* AVX2 provides two instructions for comparing floating-point values:
+	![[image-20240621093758169.png|400]]
+	* As with `cmpq`, they follow the ATT-format convention of listing the operands in reverse order.
+	* $S_2$ must be in an XMM register, while $S_1$ can be either in an XMM register or in memory.
+* The floating-point comparison instructions set three condition codes: the zero flag ZF, the carry flag CF, and the parity flag PF.
+	![[image-20240621093952917.png|200]]
+	* PF flag:
+		* For integer operations, PF flag is set when the most recent arithmetic or logical operation yielded a value where the least significant byte has even parity (i.e., an even number of ones in the byte).
+		* For floating-point comparisons, however, the flag is set when either operand is `NaN`.
+			* For example, even the comparison x == x yields 0 when x is `NaN`.
+			* The unordered case occurs when either operand is NaN. This can be detected with the parity flag.
+				* Example: the jp (for “jump on parity”) instruction is used to conditionally jump when a floating-point comparison yields an unordered result.
+	* ZF is set when the two operands are equal.
+	* CF is set when S2 < S1. 
+		* Instructions such as ja and jb are used to conditionally jump on various combinations of these flags.
+## Example:
+* C code:
+```c
+typedef enum {NEG, ZERO, POS, OTHER} range_t;
 
-
+range_t find_range(float x)
+{
+	int result;
+	if (x < 0)
+		result = NEG;
+	else if (x == 0)
+		result = ZERO;
+	else if (x > 0)
+		result = POS;
+	else
+		result = OTHER;
+	return result;
+}
+```
 
 
 
