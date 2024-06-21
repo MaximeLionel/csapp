@@ -511,6 +511,79 @@ Show how the numbers declared at label .LC3 encode the number 32.0.
 
 **Solution**: already showed above.
 
+# 3.11.5 Using Bitwise Operations in Floating-Point Code
+* Bitwise operations on packed data：
+	![[image-20240621083926082.png|350]]
+	* These instructions perform Boolean operations on all 128 bits in an XMM register.
+	* These operations all act on packed data, meaning that they update the entire destination XMM register, applying the bitwise operation to all the data in the two source registers.
+
+# Practice Problem 3.56
+Consider the following C function, where EXPR is a macro defined with #define:
+```c
+double simplefun(double x) {
+	return EXPR(x);
+}
+```
+Below, we show the AVX2 code generated for different definitions of EXPR, where value x is held in `%xmm0`. All of them correspond to some useful operation on floating-point values. Identify what the operations are. Your answers will require you to understand the bit patterns of the constant words being retrieved from memory.
+
+A.
+```
+	vmovsd .LC1(%rip), %xmm1
+	vandpd %xmm1, %xmm0, %xmm0
+.LC1:
+	.long 4294967295
+	.long 2147483647
+	.long 0
+	.long 0
+```
+
+B.
+```
+	vxorpd %xmm0, %xmm0, %xmm0
+```
+
+C.
+```
+	vmovsd .LC2(%rip), %xmm1
+	vxorpd %xmm1, %xmm0, %xmm0
+.LC2:
+	.long 0
+	.long -2147483648
+	.long 0
+	.long 0
+```
+
+**Solution**:
+A.
+Firstly, convert to hex representation:
+	2147483647 = 0x 7FFF FFFF
+	4294967295 = 0x FFFF FFFF
+Secondly, analyze the assembly code:
+```
+	vmovsd .LC1(%rip), %xmm1         # xmm1 = 0x 7FFF FFFF FFFF FFFF
+	vandpd %xmm1, %xmm0, %xmm0       # xmm0=xmm0&xmm1: xmm0 = x & 0x 7FFF FFFF FFFF FFFF
+.LC1:
+	.long 4294967295
+	.long 2147483647
+	.long 0
+	.long 0
+```
+Thirdly, we find that `xmm0 = x & 0x 7FFF FFFF FFFF FFFF` is to clear the sign bit to get the absolute value.
+So the result is like:
+```c
+#include <math.h>
+# define EXPR(x) fabs(x)
+```
+
+B.
+```
+	vxorpd %xmm0, %xmm0, %xmm0      # xmm0 = xmm0^xmm0 is to clear xmm0
+```
+So the result:
+```c
+# define EXPR(x) 0.0
+```
+
 
 
 
