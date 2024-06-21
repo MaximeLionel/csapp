@@ -106,7 +106,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -183,7 +184,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3ed9e5b4077e51b8",
+  "active": "418c762d490b84cb",
   "lastOpenFiles": [
     "3_11 Floating-Point Code.md",
     "3_homework.md",
