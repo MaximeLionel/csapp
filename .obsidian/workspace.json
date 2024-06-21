@@ -20,6 +20,18 @@
             }
           },
           {
+            "id": "418c762d490b84cb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "3_homework.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "836547798358ffed",
             "type": "leaf",
             "state": {
@@ -43,7 +55,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -93,8 +106,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -110,7 +122,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +139,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +162,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_11 Floating-Point Code.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -171,13 +183,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "3ed9e5b4077e51b8",
   "lastOpenFiles": [
+    "3_11 Floating-Point Code.md",
+    "3_homework.md",
     "3_11 Floating-Point Code.assets/image-20240621093952917.png",
     "3_11 Floating-Point Code.assets/image-20240621093758169.png",
     "3_11 Floating-Point Code.assets/image-20240621083926082.png",
     "2_4.md",
-    "3_11 Floating-Point Code.md",
     "3_5 Arithmetic and Logical Operations.md",
     "2_3.md",
     "2_2.md",
@@ -194,7 +207,6 @@
     "3_11 Floating-Point Code.assets/image-20240616115619888.png",
     "3_11 Floating-Point Code.assets",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
-    "3_10 Combining Control and Data in Machine-Level Programs.assets/image-20240614215310752.png",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
     "3_8 Array Allocation and Access.md",
