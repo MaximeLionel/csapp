@@ -13,18 +13,6 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "418c762d490b84cb",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "3_homework.md",
                 "mode": "source",
                 "source": false
@@ -37,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "3_6 Control.md",
                 "mode": "source",
                 "source": false
               }
@@ -123,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_homework.md",
+                "file": "3_6 Control.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_homework.md",
+                "file": "3_6 Control.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_homework.md"
+                "file": "3_6 Control.md"
               }
             }
           }
@@ -184,15 +172,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "418c762d490b84cb",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
-    "3_11 Floating-Point Code.md",
+    "3_5 Arithmetic and Logical Operations.md",
     "3_homework.md",
+    "3_11 Floating-Point Code.md",
     "3_11 Floating-Point Code.assets/image-20240621093952917.png",
     "3_11 Floating-Point Code.assets/image-20240621093758169.png",
     "3_11 Floating-Point Code.assets/image-20240621083926082.png",
     "2_4.md",
-    "3_5 Arithmetic and Logical Operations.md",
     "2_3.md",
     "2_2.md",
     "2_1.md",

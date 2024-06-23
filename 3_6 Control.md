@@ -526,7 +526,7 @@ short test(short x, short y, short z) {
 # 3.6.6 Implementing Conditional Branches with Conditional Moves
 * The conventional way to implement conditional operations is through a conditional transfer of control.
 * An alternate strategy is through a **conditional transfer of data**, which is implemented by a simple **conditional move** instruction.
-![[3_6 Control.assets/image-20240515122043471.png|700]]
+![[3_6 Control.assets/image-20240515122043471.png|600]]
 * `cmovge` - Move if greater or equal (SF=OF).
 * why code based on conditional data transfers can outperform code based on conditional control transfers？
 	* Processors achieve high performance through ==pipelining==.
@@ -565,7 +565,7 @@ $T_{MP} = 40$
 B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 
 
-![[3_6 Control.assets/image-20240515125554967.png|700]]
+![[3_6 Control.assets/image-20240515125554967.png|500]]
 * Each of these instructions has two operands: a source register or memory location S, and a destination register R.
 	* The source value is read from either memory or the source register, but it is copied to the destination only if the specified condition holds.
 	* The source and destination values can be 16, 32, or 64 bits long.
@@ -596,7 +596,7 @@ B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 	}
 	```
 	* compile using conditional move:
-		![[3_6 Control.assets/image-20240515162529473.png]]
+		![[3_6 Control.assets/image-20240515162529473.png|300]]
 	* The dereferencing of `xp` by the `movq` instruction (line 2) occurs even when the test fails, causing a null pointer dereferencing error.
 
 * Using conditional moves also does not always improve code efficiency.
