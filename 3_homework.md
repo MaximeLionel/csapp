@@ -228,3 +228,14 @@ cread:
 	cmove %rdx, %rax      # If x==0, v = ve
 	ret                   # Return v
 ```
+which is:
+```c
+long cread(long *xp) {
+	v = *xp;
+	if x = 0
+	ve = 0
+	v = ve
+	return (xp ? *xp : 0);
+}
+```
+Obviously, we need to avoid the expression `*xp`.
