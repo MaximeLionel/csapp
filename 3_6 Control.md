@@ -597,7 +597,7 @@ B. $T_{OK} + T_{MP}$ = 40 + 25 = 65
 	```
 	* compile using conditional move:
 		![[3_6 Control.assets/image-20240515162529473.png|300]]
-	* The dereferencing of `xp` by the `movq` instruction (line 2) occurs even when the test fails, causing a null pointer dereferencing error.
+	* The dereferencing of `xp` by the `movq` instruction (line 2) occurs **even when the test fails**, causing a null pointer dereferencing error.
 
 * Using conditional moves also does not always improve code efficiency.
 	* if either the then-expr or the else-expr evaluation requires a significant computation, then this effort is wasted when the corresponding condition does not hold.
