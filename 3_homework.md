@@ -215,3 +215,16 @@ We showed a trial implementation using a conditional move instruction but argued
 Write a C function cread_alt that has the same behavior as cread, except that it can be compiled to use conditional data transfer. When compiled, the generated code should use a conditional move instruction rather than one of the jump instructions.
 
 **Solution**:
+If compile using a conditional move instruction, it would be like:
+```
+# long cread(long *xp)
+# Invalid implementation of function cread
+# xp in register %rdi
+
+cread:
+	movq (%rdi), %rax     # v = *xp
+	testq %rdi, %rdi      # Test x
+	movl $0, %edx         # Set ve = 0
+	cmove %rdx, %rax      # If x==0, v = ve
+	ret                   # Return v
+```
