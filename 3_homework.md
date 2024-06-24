@@ -482,6 +482,11 @@ long switch_prob(long x, long n) {
 	long result = x;
 	switch(n) {
 		/* Fill in code here */
+		case 0x3c:
+		case 0x3e:
+			result = 8*x;
+			break;
+			
 		case 
 	}
 	return result;
