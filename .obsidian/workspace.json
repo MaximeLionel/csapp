@@ -93,7 +93,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -172,6 +173,8 @@
   },
   "active": "2540482438bddfaa",
   "lastOpenFiles": [
+    "3_homework.assets/image-20240624151147104.png",
+    "3_homework.assets",
     "3_6 Control.md",
     "3_homework.md",
     "3_5 Arithmetic and Logical Operations.md",
@@ -209,7 +212,6 @@
     "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
-    "2_homework.assets/hw2_95",
-    "2_homework.assets/hw2_94"
+    "2_homework.assets/hw2_95"
   ]
 }
