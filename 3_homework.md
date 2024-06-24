@@ -462,7 +462,7 @@ We look into the assembly code:
 	4005a9: c3                      retq
 	4005aa: 48 89 f8                mov  %rdi,%rax                  # if rsi=3, rax=rdi
 	                                                                # if n - 0x3c = 3, result = x
-	4005ad: 48 c1 f8 03             sar  $0x3,%rax                  # rax=rax>>3: result = 8*x
+	4005ad: 48 c1 f8 03             sar  $0x3,%rax                  # rax=rax>>3: result = x/8
 	4005b1: c3                      retq
 	4005b2: 48 89 f8                mov  %rdi,%rax                  # if rsi=4, rax=rdi
 	                                                                # if n - 0x3c = 4, result = x
@@ -471,7 +471,7 @@ We look into the assembly code:
 	4005bc: 48 89 c7                mov  %rax,%rdi                  # rdi=rax: rdi = 15*x
 	
 	4005bf: 48 0f af ff             imul %rdi,%rdi                  # sharedcode - rdi=rdi*rdi
-	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax            # sharedcode - if rsi=1, rax=rdi+0x4b
+	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax            # sharedcode - if rsi=1, rax=rdi+0x4b                                                        # rax = rdi + 0x4b
 	                                                                # sharedcode - if n - 0x3c = 1, result = x + 0x4b
 	4005c7: c3                      retq
 ```
@@ -486,8 +486,14 @@ long switch_prob(long x, long n) {
 		case 0x3e:
 			result = 8*x;
 			break;
-			
-		case 
+		case 0x3f:
+			result = x/8;
+			break;
+		case 0x40:
+			result = 15*x*15*x + 0x4b;
+			break;
+		case 0x3d:
+			result = 
 	}
 	return result;
 }
