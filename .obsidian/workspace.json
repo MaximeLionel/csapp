@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "mode": "source",
                 "source": false
               }
@@ -111,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_5 Arithmetic and Logical Operations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "3_5 Arithmetic and Logical Operations.md"
               }
             }
           }
@@ -174,6 +174,7 @@
   },
   "active": "836547798358ffed",
   "lastOpenFiles": [
+    "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_homework.md",
     "3_11 Floating-Point Code.md",
@@ -205,7 +206,6 @@
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
     "Untitled.canvas",
-    "3_6 Control.md",
     "3_7 Procedures.assets",
     "3_6 Control.assets",
     "2_homework.md",

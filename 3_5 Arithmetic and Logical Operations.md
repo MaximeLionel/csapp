@@ -102,7 +102,7 @@ Easily to find out that the missing expression is `short t = 10y+z+xy;`.
 
 # Practice Problem 3.8
 Assume the following values are stored at the indicated memory addresses and registers:
-![[image-20240318093143070.png|400]]
+![[image-20240318093143070.png|300]]
 Fill in the following table showing the effects of the following instructions, in terms of both the register or memory location that will be updated and the resulting value:
 
 | Instruction               | Destination | Value |
@@ -115,30 +115,30 @@ Fill in the following table showing the effects of the following instructions, i
 | `subq %rdx,%rax`          |             |       |
 **Solution**:
 
-| Instruction               | Destination | Value            |
-| ------------------------- | ----------- | ---------------- |
-| `addq %rcx,(%rax)`        | 0x100       | 0xFF+0x1 = 0x100 |
-| `subq %rdx,8(%rax)`       | 0x108       | 0xA8             |
-| `imulq $16,(%rax,%rdx,8)` | 0x118       | 0x110            |
-| `incq 16(%rax)`           | 0x110       | 0x14             |
-| `decq %rcx`               | `%rcx`      | 0                |
-| `subq %rdx,%rax`          | `%rax`      | 0xFD             |
+| Instruction               | Destination          | Value                |
+| ------------------------- | -------------------- | -------------------- |
+| `addq %rcx,(%rax)`        | 0x100                | 0xFF + 0x1 = 0x100   |
+| `subq %rdx,8(%rax)`       | 0x100+0x8 = 0x108    | 0xAB - 0x3 = 0xA8    |
+| `imulq $16,(%rax,%rdx,8)` | 0x100 + 0x18 = 0x118 | 0x11 \* 0x10 = 0x110 |
+| `incq 16(%rax)`           | 0x100 + 0x10 = 0x110 | 0x13++ = 0x14        |
+| `decq %rcx`               | %rcx                 | 0x0                  |
+| `subq %rdx,%rax`          | %rax                 | 0x100 - 0x3 = 0xFD   |
 
 # 3.5.3 Shift Operations
 
-![[image-20240318094704265.png|600]]
+![[image-20240318094704265.png|400]]
 * **Shift** operations - the shift amount is given first and the value to shift is given second;
 	* the shift amount can be **an immediate value or with the single-byte register `%cl`**;
 		* a 1-byte shift amount would make it possible to encode shift amounts ranging up to $2^8 − 1 = 255$;
 * On x86-64, if data values are w bits long, we set low-order m bits of register `%cl`and get $2^m=w$. The higher-order bits are ignored.
 	* Example: when register `%cl` has hexadecimal value 0xFF,
-		* `salb` would shift by 7;
-		* `salw` would shift by 15;
-		* `sall` would shift by 31;
-		* `salq` would shift by 63.
+		* `salb` would shift by 7 because byte has only 8 bits which make m = 3. We only need to get the low-order 3 bits of `%cl`.
+		* `salw` would shift by 15 - w = 16 bits, m = 4, so 0b  1111 = 15
+		* `sall` would shift by 31 - w = 32 bits, m = 5, so 0b 11111 = 31
+		* `salq` would shift by 63 - w = 64 bits, m = 6, so 0b111111 = 63
 * `sal` and `shl` have the same effect, filling from the right with zeros;
 * `sar` ($>>_A$) performs an arithmetic shift, filling with copies of the sign bit;
-* `shr` ($>>_L$)performs a logical shift, filling with zeros;
+* `shr` ($>>_L$) performs a logical shift, filling with zeros;
 
 # Practice Problem 3.9
 Suppose we want to generate assembly code for the following C function:
@@ -163,9 +163,8 @@ shift_left4_rightn:
 Fill in the missing instructions, following the annotations on the right. The right shift should be performed arithmetically.
 
 **Solution**:
-
-x <<=4: `shlq 4,%rax`
-x >>=n: `sarq %cl,%rax`
+`sal $4, %rax`
+`sar %cl, %rax`
 
 # 3.5.4 Discussion
 * C code
@@ -184,16 +183,16 @@ long arith(long x, long y, long z)
 	; long arith(long x, long y, long z)
 	; x in %rdi, y in %rsi, z in %rdx
 arith:
-	xorq %rsi, %rdi       ; t1 = x ^ y
-	leaq (%rdx,%rdx,2),%rax ; 3*z
-	salq $4, %rax         ; t2 = 16 * (3*z) = 48*z
-	andl $252645135, %edi ; t3 = t1 & 0x0F0F0F0F
-	subq %rdi, %rax       ; Return t2 - t3
+	xorq %rsi, %rdi       ;  rdi=rdi^rsi: t1 = x ^ y
+	leaq (%rdx,%rdx,2),%rax ; rdx+2*rdx = 3*rdx: 3*z
+	salq $4, %rax         ; rax=rax<<4: t2 = 16 * (3*z) = 48*z
+	andl $252645135, %edi ; edi=edi&0x0F0F0F0F: t3 = t1 & 0x0F0F0F0F
+	subq %rdi, %rax       ; rax=rax-rdi: Return t4 = t2 - t3
 	ret
 ```
 * Arguments x, y, and z are initially stored in registers `%rdi, %rsi, and %rdx`, respectively. The assembly-code instructions correspond closely with the lines of C source code. 
 * `xorq %rsi, %rdi` computes the value of `x^y`. 
-* `leaq (%rdx,%rdx,2),%rax` and `salq $4, %rax` compute the expression z*48 by a combination of `leaq` and `shift` instructions. 
+* `leaq (%rdx,%rdx,2),%rax` and `salq $4, %rax` compute the expression z\*48 by a combination of `leaq` and `shift` instructions. 
 * `andl $252645135, %edi` computes the and of t1 and 0x0F0F0F0F. 
 * `subq %rdi, %rax` the destination of the subtraction is register `%rax`, this will be the value returned by the function.
 
@@ -224,22 +223,27 @@ arith3:
 Based on this assembly code, fill in the missing portions of the C code.
 
 **Solution**:
-Firstly, we look into the assembly code:
-```z80
-	short arith3(short x, short y, short z)
-	x in %rdi, y in %rsi, z in %rdx
+```
+	# short arith3(short x, short y, short z)
+	# x in %rdi, y in %rsi, z in %rdx
 arith3:
-	orq %rsi, %rdx    ; rdx = y | z 
-	sarq $9, %rdx     ; rdx = rdx >> 9
-	notq %rdx         ; rdx = ~rdx
-	movq %rdx, %rax   ; rax = rdx
-	subq %rsi, %rax   ; rax = rax - y
+	orq %rsi, %rdx    # rdx=rdx|rsi: rdx = z|y
+	sarq $9, %rdx     # rdx=rdx>>9: rdx = (z|y) >> 9
+	notq %rdx         # rdx=~rdx: rdx = ~((z|y) >> 9)
+	movq %rdx, %rax   # rax=rdx: rax = ~((z|y) >> 9)
+	subq %rsi, %rax   # rax=rax-rsi: rax = ~((z|y) >> 9) - y
 	ret
 ```
-* `rdx = y | z`: p1 = y | z
-* `rdx = rdx >> 9`: p2 = p1 >> 9
-* `rdx = ~rdx`: p3 = ~p2
-* `rax = rax - y`: p4 = p3 - y
+```C
+short arith3(short x, short y, short z)
+{
+	short p1 = y | z;
+	short p2 = p1 >> 9;
+	short p3 = ~p2;
+	short p4 = p3 - y;
+	return p4;
+}
+```
 
 # Practice Problem 3.11
 It is common to find assembly-code lines of the form
