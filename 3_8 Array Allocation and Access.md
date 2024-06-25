@@ -311,7 +311,7 @@ In summary, `-Og` is tailored for development and debugging, ensuring the code
 		* The initial value for `Bptr` is the address of the first element of column k of B, given by the C expression `&B[0][k]`. 
 		* The value for Bend is the index of what would be the `(n + 1)st` element in column j of B, given by the C expression `&B[N][k]`.
 * Optimized C code:
-	![[image-20240602211651509.png|600]]
+	![[image-20240602211651509.png|400]]
 
 # Practice Problem 3.39
 Use Equation 3.1 to explain how the computations of the initial values for `Aptr`, `Bptr`, and `Bend` in the C code of Figure 3.37(b) (lines 3–5) correctly describe their computations in the assembly code generated for `fix_prod_ele` (lines 3–5).
