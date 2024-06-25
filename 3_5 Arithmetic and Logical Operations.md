@@ -257,12 +257,9 @@ in code that was generated from C where no exclusive-or operations were present.
 A. it clears `%rcx`;
 B. `movq $0, %rcx`
 C. 
-`48 31 c9                xor    rcx,rcx` - need 3 bytes
-`48 c7 c1 00 00 00 00    mov    rcx,0x0` - need 7 bytes
-`31 c9                   xor    ecx,ecx` - need 2 bytes
-* updates the lower 4 bytes will cause the high-order bytes to be set to zero.
-`b9 00 00 00 00          mov    ecx,0x0` - need 5 bytes
-* updates the lower 4 bytes will cause the high-order bytes to be set to zero.
+`48 31 c9                xorq    %rcx,%rcx` - need 3 bytes
+`48 c7 c1 00 00 00 00    movq    $0, %rcx` - need 7 bytes
+`31 c9                   xorl    %ecx,%ecx` - need 2 bytes
 
 
 # 3.5.5 Special Arithmetic Operations

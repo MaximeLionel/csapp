@@ -213,3 +213,288 @@ long cread(long *xp) {
 We showed a trial implementation using a conditional move instruction but argued that it was not valid, since it could attempt to read from a null address.
 
 Write a C function cread_alt that has the same behavior as cread, except that it can be compiled to use conditional data transfer. When compiled, the generated code should use a conditional move instruction rather than one of the jump instructions.
+
+**Solution**:
+If compile using a conditional move instruction, it would be like:
+```
+# long cread(long *xp)
+# Invalid implementation of function cread
+# xp in register %rdi
+
+cread:
+	movq (%rdi), %rax     # v = *xp
+	testq %rdi, %rdi      # Test x
+	movl $0, %edx         # Set ve = 0
+	cmove %rdx, %rax      # If x==0, v = ve
+	ret                   # Return v
+```
+which is:
+```c
+long cread(long *xp) {
+	v = *xp;
+	if x = 0
+	ve = 0
+	v = ve
+	return v;
+}
+```
+Obviously, we need to avoid the expression `*xp`.
+
+If we change the source code to be:
+```c
+long cread(long *xp) {
+	return (!xp ? 0 : *xp);
+}
+```
+Then the pseudo-code would be:
+```c
+long cread(long *xp) {
+	v = 0;
+	if !xp = 0
+	v = (*xp)
+	return v;
+}
+```
+So the assembly code would be:
+```
+cread:
+	movq     $0, %rax          # v = 0
+	testq    %rdi, %rdi        # Test x
+	cmovne   (%rdi), %rax      # If x==0, v = ve
+	ret                        # Return v
+```
+
+
+# 3.62 **
+The code that follows shows an example of branching on an enumerated type value in a switch statement. Recall that enumerated types in C are simply a way to introduce a set of names having associated integer values. By default, the values assigned to the names count from zero upward. In our code, the actions associated with the different case labels have been omitted.
+```c
+/* Enumerated type creates set of constants numbered 0 and upward */
+typedef enum {MODE_A, MODE_B, MODE_C, MODE_D, MODE_E} mode_t;
+
+long switch3(long *p1, long *p2, mode_t action)
+{
+	long result = 0;
+	switch(action) {
+		case MODE_A:
+		case MODE_B:
+		case MODE_C:
+		case MODE_D:
+		case MODE_E:
+		default:
+	}
+	return result;
+}
+```
+The part of the generated assembly code implementing the different actions is shown below. The annotations indicate the argument locations, the register values, and the case labels for the different jump destinations.
+```
+# p1 in %rdi, p2 in %rsi, action in %edx
+
+.L8:             # MODE_E
+	movl $27, %eax
+	ret
+
+.L3:             # MODE_A
+	movq (%rsi), %rax
+	movq (%rdi), %rdx
+	movq %rdx, (%rsi)
+	ret
+
+.L5:             # MODE_B
+	movq (%rdi), %rax
+	addq (%rsi), %rax
+	movq %rax, (%rdi)
+	ret
+
+.L6:             # MODE_C
+	movq $59, (%rdi)
+	movq (%rsi), %rax
+	ret
+
+.L7:             # MODE_D
+	movq (%rsi), %rax
+	movq %rax, (%rdi)
+	movl $27, %eax
+	ret
+
+.L9:             # default
+	movl $12, %eax
+	ret
+```
+
+Fill in the missing parts of the C code. It contained one case that fell through to another—try to reconstruct this.
+
+**Solution**:
+```
+# p1 in %rdi, p2 in %rsi, action in %edx
+
+.L8:             # MODE_E
+	movl $27, %eax           # eax = 27
+	ret
+
+.L3:             # MODE_A
+	movq (%rsi), %rax        # rax = M(rsi): rax = *(p2)
+	movq (%rdi), %rdx        # rdx = M(rdi): rdx = *(p1)
+	movq %rdx, (%rsi)        # M(rsi) = rdx: *(p2) = rdx = *(p1)
+	ret
+
+.L5:             # MODE_B
+	movq (%rdi), %rax        # rax = M(rdi): rax = *(p1)
+	addq (%rsi), %rax        # rax = rax + M(rsi): rax = *(p2) + *(p1)
+	movq %rax, (%rdi)        # M(rdi) = rax: *p1 = rax = *(p2) + *(p1)
+	ret
+
+.L6:             # MODE_C
+	movq $59, (%rdi)         # M(rdi) = 59: (*p1) = 59
+	movq (%rsi), %rax        # rax = M(rsi): rax = *p2
+	ret
+
+.L7:             # MODE_D
+	movq (%rsi), %rax        # rax = M(rsi): rax = *p2
+	movq %rax, (%rdi)        # M(rdi) = rax: (*p1) = rax = (*p2)
+	movl $27, %eax           # eax = 27
+	ret
+
+.L9:             # default
+	movl $12, %eax           # eax = 12
+	ret
+```
+So we can get the C code below:
+```c
+/* Enumerated type creates set of constants numbered 0 and upward */
+typedef enum {MODE_A, MODE_B, MODE_C, MODE_D, MODE_E} mode_t;
+
+long switch3(long *p1, long *p2, mode_t action)
+{
+	long result = 0;
+	switch(action) {
+		case MODE_A:
+			result = *p2;
+			*(p2) = *(p1);
+			break;
+		
+		case MODE_B:
+			result = *(p2) + *(p1);
+			*p1 = result;
+			break;
+			
+		case MODE_C:
+			(*p1) = 59;
+			result = *p2;
+			break;
+			
+		case MODE_D:
+			(*p1) = (*p2);
+			result = 27;
+			break;
+			
+		case MODE_E:
+			result = 27;
+			break;
+			
+		default:
+			result = 12;
+	}
+	return result;
+}
+```
+
+# 3.63 **
+This problem will give you a chance to reverse engineer a switch statement from disassembled machine code. In the following procedure, the body of the switch statement has been omitted:
+```c
+long switch_prob(long x, long n) {
+	long result = x;
+	switch(n) {
+		/* Fill in code here */
+	}
+	return result;
+}
+```
+Figure below shows the disassembled machine code for the procedure:
+```
+# long switch_prob(long x, long n)
+# x in %rdi, n in %rsi
+
+0000000000400590 <switch_prob>:
+	400590: 48 83 ee 3c             sub  $0x3c,%rsi
+	400594: 48 83 fe 05             cmp  $0x5,%rsi
+	400598: 77 29                   ja   4005c3 <switch_prob+0x33>
+	40059a: ff 24 f5 f8 06 40 00    jmpq *0x4006f8(,%rsi,8)
+	4005a1: 48 8d 04 fd 00 00 00    lea  0x0(,%rdi,8),%rax
+	4005a8: 00
+	4005a9: c3                      retq
+	4005aa: 48 89 f8                mov  %rdi,%rax
+	4005ad: 48 c1 f8 03             sar  $0x3,%rax
+	4005b1: c3                      retq
+	4005b2: 48 89 f8                mov  %rdi,%rax
+	4005b5: 48 c1 e0 04             shl  $0x4,%rax
+	4005b9: 48 29 f8                sub  %rdi,%rax
+	4005bc: 48 89 c7                mov  %rax,%rdi
+	4005bf: 48 0f af ff             imul %rdi,%rdi
+	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax
+	4005c7: c3                      retq
+```
+
+The jump table resides in a different area of memory. We can see from the indirect jump on line 5 that the jump table begins at address 0x4006f8. Using the gdb debugger, we can examine the six 8-byte words of memory comprising the jump table with the command x/6gx 0x4006f8. Gdb prints the following:
+```shell
+(gdb) x/6gx 0x4006f8
+
+0x4006f8: 0x00000000004005a1 0x00000000004005c3
+0x400708: 0x00000000004005a1 0x00000000004005aa
+0x400718: 0x00000000004005b2 0x00000000004005bf
+```
+
+Fill in the body of the switch statement with C code that will have the same behavior as the machine code.
+
+**Solution**:
+We look into the assembly code:
+```
+# long switch_prob(long x, long n)
+# x in %rdi, n in %rsi
+
+0000000000400590 <switch_prob>:
+	400590: 48 83 ee 3c             sub  $0x3c,%rsi                 # rsi=rsi-0x3c: n = n - 0x3c
+	400594: 48 83 fe 05             cmp  $0x5,%rsi                  # cmp 5 and rsi: cmp 5 and n-0x3c
+	400598: 77 29                   ja   4005c3 <switch_prob+0x33>  # if n-0x3c > 5, goto 4005c3
+	40059a: ff 24 f5 f8 06 40 00    jmpq *0x4006f8(,%rsi,8)         # goto *(0x4006f8+8*rsi)
+	4005a1: 48 8d 04 fd 00 00 00    lea  0x0(,%rdi,8),%rax          # if rsi=0 or 2, rax=8*rdi: 
+	                                                                # if n - 0x3c = 0, result = 8*x
+	4005a8: 00
+	4005a9: c3                      retq
+	4005aa: 48 89 f8                mov  %rdi,%rax                  # if rsi=3, rax=rdi
+	                                                                # if n - 0x3c = 3, result = x
+	4005ad: 48 c1 f8 03             sar  $0x3,%rax                  # rax=rax>>3: result = x/8
+	4005b1: c3                      retq
+	4005b2: 48 89 f8                mov  %rdi,%rax                  # if rsi=4, rax=rdi
+	                                                                # if n - 0x3c = 4, result = x
+	4005b5: 48 c1 e0 04             shl  $0x4,%rax                  # rax=rax<<4: result = x*16
+	4005b9: 48 29 f8                sub  %rdi,%rax                  # rax=rax-rdi: result = 15*x
+	4005bc: 48 89 c7                mov  %rax,%rdi                  # rdi=rax: rdi = 15*x
+	
+	4005bf: 48 0f af ff             imul %rdi,%rdi                  # sharedcode - rdi=rdi*rdi
+	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax            # sharedcode - if rsi=1, rax=rdi+0x4b                                                        # rax = rdi + 0x4b
+	                                                                # sharedcode - if n - 0x3c = 1, result = x + 0x4b
+	4005c7: c3                      retq
+```
+
+Then construct the C code:
+```c
+long switch_prob(long x, long n) {
+	long result = x;
+	switch(n) {
+		/* Fill in code here */
+		case 0x3c:
+		case 0x3e:
+			result = 8*x;
+			break;
+		case 0x3f:
+			result = x/8;
+			break;
+		case 0x40:
+			result = 15*x*15*x + 0x4b;
+			break;
+		case 0x3d:
+			result = 
+	}
+	return result;
+}
+```

@@ -32,6 +32,18 @@
             }
           },
           {
+            "id": "349325d4a70108af",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "9aaf650e113735a1",
             "type": "leaf",
             "state": {
@@ -44,7 +56,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -111,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +163,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -172,10 +184,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "349325d4a70108af",
   "lastOpenFiles": [
-    "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
+    "conflict-files-obsidian-git.md",
+    "3_homework.assets/image-20240624151147104.png",
+    "3_homework.assets",
+    "3_6 Control.md",
     "3_homework.md",
     "3_11 Floating-Point Code.md",
     "3_11 Floating-Point Code.assets/image-20240621093952917.png",
@@ -194,14 +209,12 @@
     "3_11 Floating-Point Code.assets/image-20240618093310969.png",
     "3_11 Floating-Point Code.assets/image-20240618093046427.png",
     "3_11 Floating-Point Code.assets/image-20240616135320260.png",
-    "3_11 Floating-Point Code.assets/image-20240616115619888.png",
     "3_11 Floating-Point Code.assets",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
     "3_8 Array Allocation and Access.md",
     "3_9 Heterogeneous Data Structures.assets",
-    "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.assets",
     "3_2 Program Encodings.md",
     "3_7 Procedures.md",
@@ -211,7 +224,6 @@
     "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
-    "2_homework.assets/hw2_95",
-    "2_homework.assets/hw2_94"
+    "2_homework.assets/hw2_95"
   ]
 }
