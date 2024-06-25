@@ -482,18 +482,18 @@ long switch_prob(long x, long n) {
 	long result = x;
 	switch(n) {
 		/* Fill in code here */
-		case 0x3c:
-		case 0x3e:
+		case 0x3c:        // rsi = 0
+		case 0x3e:        // rsi = 2
 			result = 8*x;
 			break;
-		case 0x3f:
+		case 0x3f:        // rsi = 3
 			result = x/8;
 			break;
-		case 0x40:
+		case 0x40:        // rsi = 4
 			result = 15*x*15*x + 0x4b;
 			break;
-		case 0x3d:
-			result = 
+		case 0x3d:        // rsi = 1
+			result = x + 0x4b;
 	}
 	return result;
 }
