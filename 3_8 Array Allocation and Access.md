@@ -116,7 +116,7 @@ row3_t A[5];
 	* The total array size is then $4 \times 5 \times 3 = 60$ bytes.
 * Array A can also be viewed as a two-dimensional array with 5 rows and 3 columns, referenced as `A[0][0]` through `A[4][2]`.
 	* The array elements are ordered in memory in row-major order, meaning all elements of row 0, which can be written `A[0]`, followed by all elements of row 1 (`A[1]`), and so on.
-		![[image-20240601100306237.png|200]]
+		![[image-20240601100306237.png|150]]
 	* This ordering is a consequence of our nested declaration. Viewing A as an array of 5 elements, each of which is an array of three int’s, we first have `A[0]`, followed by `A[1]`, and so on.
 * Suppose $x_A$, i, and j are in registers `%rdi`, `%rsi`, and `%rdx`:
 	```

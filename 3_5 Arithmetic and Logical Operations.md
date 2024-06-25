@@ -102,7 +102,7 @@ Easily to find out that the missing expression is `short t = 10y+z+xy;`.
 
 # Practice Problem 3.8
 Assume the following values are stored at the indicated memory addresses and registers:
-![[image-20240318093143070.png|400]]
+![[image-20240318093143070.png|300]]
 Fill in the following table showing the effects of the following instructions, in terms of both the register or memory location that will be updated and the resulting value:
 
 | Instruction               | Destination | Value |

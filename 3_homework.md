@@ -600,6 +600,22 @@ B. Which register holds a pointer to array element A\[j\]\[i\]?
 
 C. What is the value of M?
 
+**Solution**:
+Look into the assembly code:
+```
+# void transpose(long A[M][M])
+# rdi - A
+.L6:
+	movq (%rdx), %rcx     # rcx=M(rdx): 
+	movq (%rax), %rsi     # rsi=M(rax)
+	movq %rsi, (%rdx)     # M(rdx)=rsi
+	movq %rcx, (%rax)     # M(rax)=rcx
+	addq $8, %rdx         # rdx=rdx+8
+	addq $120, %rax       # rax=rax+120
+	cmpq %rdi, %rax
+	jne .L6
+```
+
 
 
 
