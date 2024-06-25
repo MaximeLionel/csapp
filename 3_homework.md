@@ -534,5 +534,41 @@ B. Use your reverse engineering skills to determine the values of R, S, and T ba
 
 **Solution**:
 A.
-What is euqation 3.1? $\&D[i][j] = x_D + L(C \times i + j)$
-This is for 2 dimensions' array. 
+What is euqation 3.1?
+T  D\[R\]\[C\];
+$\&D[i][j] = x_D + L(C \times i + j)$
+This is for 2 dimensions' array. When doing on 3 dimensions' array, it's like:
+T  A\[R\]\[S\]\[T\];
+$\&A[i][j][k] = x_A + L(S*T*i + T*j + k)$;
+
+B.
+```
+# long store_ele(long i, long j, long k, long *dest)
+# i in %rdi, j in %rsi, k in %rdx, dest in %rcx
+
+store_ele:
+	leaq (%rsi,%rsi,2), %rax   # rax=3*rsi:  rax = 3j
+	leaq (%rsi,%rax,4), %rax   # rax=rsi+4*rax: rax = j + 12j = 13j
+	movq %rdi, %rsi            # rsi=rdi: rsi = i
+	salq $6, %rsi              # rsi=rsi<<6: rsi = 64i
+	addq %rsi, %rdi            # rdi=rdi+rsi: rdi = i + 64i = 65i
+	addq %rax, %rdi            # rdi=rdi+rax: rdi = 65i + 13j
+	addq %rdi, %rdx            # rdx=rdx+rdi: rdx = k + 65i + 13j
+	movq A(,%rdx,8), %rax      # rax=A+8*rdx: rax = A + 8(k + 65i + 13j)
+	movq %rax, (%rcx)          # M(rcx)=rax: *dest = A + 8(k + 65i + 13j)
+	movl $3640, %eax           # eax=3640
+	ret
+```
+Thus, we get `*dest = A + 8(k + 65i + 13j)`
+
+
+
+
+
+
+
+
+
+
+
+
