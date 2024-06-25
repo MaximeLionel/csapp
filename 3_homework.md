@@ -531,3 +531,8 @@ store_ele:
 A. Extend Equation 3.1 from two dimensions to three to provide a formula for the location of array element `A[i][j][k]`.
 
 B. Use your reverse engineering skills to determine the values of R, S, and T based on the assembly code.
+
+**Solution**:
+A.
+What is euqation 3.1? $\&D[i][j] = x_D + L(C \times i + j)$
+This is for 2 dimensions' array. 
