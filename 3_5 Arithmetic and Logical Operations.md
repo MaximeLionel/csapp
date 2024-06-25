@@ -263,17 +263,19 @@ C.
 
 
 # 3.5.5 Special Arithmetic Operations
-![[image-20240318165147066.png|600]]
+![[image-20240318165147066.png|500]]
 ## imulq / mulq operations
 * Multiplying two 64-bit signed or unsigned integers can yield a product that requires 128 bits to represent.
 * Intel refers to a 16-byte quantity as an **oct** word.
 * The pair of registers `%rdx` and `%rax` are viewed as forming a single 128-bit oct word.
 * 2 forms of `imulq`:
 	1. “twooperand” multiply instruction (`imulq`) - generating a 64-bit product from two 64-bit operands. It implements the operations $*^u_{64}$ and $*^t_{64}$;
-	2. “one-operand” multiply instructions - compute the full 128-bit product of two 64-bit values:
+		* Syntax: `imulq S1, S2` - S1 * S2
+		* The product is then stored in registers `%rdx` (high-order 64 bits) and `%rax` (low-order 64 bits).
+	1. “one-operand” multiply instructions - compute the full 128-bit product of two 64-bit values:
 		* `mulq`   - for unsigned
 		* `imulq` - for signed
-		* One argument must be in register `%rax`, and the other is given as the instruction source operand.
+		* One argument must be in register `%rax` by default, and the other is given as the instruction source operand.
 		* The product is then stored in registers `%rdx` (high-order 64 bits) and `%rax` (low-order 64 bits).
 
 * C code demonstrates the generation of a 128-bit product of two unsigned 64-bit numbers x and y:
@@ -292,59 +294,18 @@ C.
 	```
 		![[image-20240319125729269.png]]
 	* We get the full asm code:
-	```
-		.file	"P226.c"
-	.text
-	.globl	store_uprod
-	.type	store_uprod, @function
-	store_uprod:
-		.LFB0:
-			.cfi_startproc
-			endbr64
-			movq	%rsi, %rax
-			mulq	%rdx
-			movq	%rax, (%rdi)
-			movq	%rdx, 8(%rdi)
-			ret
-			.cfi_endproc
-		.LFE0:
-			.size	store_uprod, .-store_uprod
-			.ident	"GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
-			.section	.note.GNU-stack,"",@progbits
-			.section	.note.gnu.property,"a"
-			.align 8
-			.long	1f - 0f
-			.long	4f - 1f
-			.long	5
-		0:
-			.string	"GNU"
-		1:
-			.align 8
-			.long	0xc0000002
-			.long	3f - 2f
-		2:
-			.long	0x3
-		3:
-			.align 8
-		4:
-	```
-	* Then we get the core code:
-	```
-	; void store_uprod(uint128_t *dest, uint64_t x, uint64_t y)
-	; dest in %rdi, x in %rsi, y in %rdx
-	store_uprod:
-		endbr64
-		movq	%rsi, %rax
-		mulq	%rdx
-		movq	%rax, (%rdi)
-		movq	%rdx, 8(%rdi)
-		ret
-	```
-	* We analyze the asm code:
-		* `movq	%rsi, %rax`: %rax = x
-		* `mulq	%rdx`: x\*y
-		* `movq	%rax, (%rdi)`: \*dest = low64bits of x\*y - low-order 8 bytes
-		* `movq	%rdx, 8(%rdi)`: \*(dest+8) = high64bits of x\*y - high-order 8 bytes
+```
+# void store_uprod(uint128_t *dest, uint64_t x, uint64_t y)
+# dest - rdi
+# x - rsi
+# y - rdx
+store_uprod:
+        movq    %rsi, %rax     # rax=rsi: rax = x
+        mulq    %rdx           # rdx:rax=rdx*rax: rdx:rax = x * y
+        movq    %rax, (%rdi)   # M(rdi)=rax: *dest = low64bits(x*y)
+        movq    %rdx, 8(%rdi). # M(rdi+8)=rdx: *(dest+8) = high64bits(x*y)
+        ret
+```
 
 ## idivq / divq operations
 * idivq:
@@ -375,21 +336,14 @@ void remdiv(long x, long y, long *qp, long *rp) {
 ```
 ; void remdiv(long x, long y, long *qp, long *rp)
 ; x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
-	endbr64
-	movq	%rdi, %rax
-	movq	%rdx, %r8
-	cqto
-	idivq	%rsi
-	movq	%rax, (%r8)
-	movq	%rdx, (%rcx)
+	movq	%rdi, %rax    # rax=rdi: rax = x
+	movq	%rdx, %r8     # r8=rdx: r8 = qp
+	cqto                  # rax->rdx:rax: x->rdx:x
+	idivq	%rsi          # (rdx:rax)/rsi: (rdx:x)/y
+	movq	%rax, (%r8)   # M(r8)=rax:  *qp = quotient
+	movq	%rdx, (%rcx)  # M(rcx)=rdx: *rp = remainder
 	ret
 ```
-* `movq	%rdi, %rax`: `%rax` = x
-* `movq	%rdx, %r8`: `%r8` = qp
-* `cqto`: copy the sign bit from `%rax` to all of `%rdx`.
-* `idivq	%rsi`: x/y
-* `movq	%rax, (%r8)`: \*qp = x/y
-* `movq	%rdx, (%rcx)`: \*rp = x%y
 
 # Practice Problem 3.12
 Consider the following function for computing the quotient and remainder of two unsigned 64-bit numbers:
@@ -405,20 +359,21 @@ void uremdiv(unsigned long x, unsigned long y, unsigned long *qp, unsigned long 
 Modify the assembly code shown for signed division to implement this function.
 
 **Solution**:
-Firstly, we get the asm code for current C code:
-```z80
-; void remdiv(long x, long y, long *qp, long *rp)
+* To transit from idivq to divq, we need:
+	* When extend %rax from 64bits to 128bis, we do zero-extending for divq.
+	* change the dividing instruction from `idivq` to `divq`.
+
+```
+; void uremdiv(unsigned long x, unsigned long y, unsigned long *qp, unsigned long *rp)
 ; x in %rdi, y in %rsi, qp in %rdx, rp in %rcx
-	endbr64
-	movq	%rdi, %rax
-	movq	%rdx, %r8
-	cqto                  ; replace by `movq $0,%rdx` or `movl $0,%edx`
-	idivq	%rsi          ; replace by `divq %rsi`
-	movq	%rax, (%r8)
-	movq	%rdx, (%rcx)
+	movq	%rdi, %rax    # rax=rdi: rax = x
+	movq	%rdx, %r8     # r8=rdx: r8 = qp
+	xorq    %rdx, %rdx    # %rdx=0: clear upper 64 bits of dividend
+	divq	%rsi          # (rdx:rax)/rsi: (rdx:x)/y
+	movq	%rax, (%r8)   # M(r8)=rax:  *qp = quotient
+	movq	%rdx, (%rcx)  # M(rcx)=rdx: *rp = remainder
 	ret
 ```
-
 
 
 

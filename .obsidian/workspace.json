@@ -25,19 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_5 Arithmetic and Logical Operations.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "349325d4a70108af",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_6 Control.md",
                 "mode": "source",
                 "source": false
               }
@@ -56,7 +44,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -123,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_6 Control.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "conflict-files-obsidian-git.md",
+                "file": "3_6 Control.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "conflict-files-obsidian-git.md"
+                "file": "3_6 Control.md"
               }
             }
           }
@@ -184,7 +172,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "349325d4a70108af",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
     "3_5 Arithmetic and Logical Operations.md",
     "conflict-files-obsidian-git.md",
