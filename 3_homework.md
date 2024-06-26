@@ -606,16 +606,67 @@ Look into the assembly code:
 # void transpose(long A[M][M])
 # rdi - A
 .L6:
-	movq (%rdx), %rcx     # rcx=M(rdx): 
-	movq (%rax), %rsi     # rsi=M(rax)
-	movq %rsi, (%rdx)     # M(rdx)=rsi
-	movq %rcx, (%rax)     # M(rax)=rcx
-	addq $8, %rdx         # rdx=rdx+8
-	addq $120, %rax       # rax=rax+120
+	movq (%rdx), %rcx     # rcx=M(rdx): rcx = A[i][j]
+	movq (%rax), %rsi     # rsi=M(rax): rsi = A[j][i]
+	movq %rsi, (%rdx)     # M(rdx)=rsi:  
+	movq %rcx, (%rax)     # M(rax)=rcx:
+	addq $8, %rdx         # rdx=rdx+8: (&A[i][j])++
+	addq $120, %rax       # rax=rax+120: &A[j][i] = &A[j][i] + j
 	cmpq %rdi, %rax
 	jne .L6
 ```
 
+A.
+rdx
+
+B.
+rax
+
+C.
+15
+
+# 3.66 *
+Consider the following source code, where NR and NC are macro expressions declared with #define that compute the dimensions of array A in terms of parameter n. This code computes the sum of the elements of column j of the array.
+```c
+long sum_col(long n, long A[NR(n)][NC(n)], long j) {
+	long i;
+	long result = 0;
+	for (i = 0; i < NR(n); i++)
+		result += A[i][j];
+	return result;
+}
+```
+
+In compiling this program, gcc generates the following assembly code:
+```
+# long sum_col(long n, long A[NR(n)][NC(n)], long j)
+# n in %rdi, A in %rsi, j in %rdx
+
+sum_col:
+	leaq   1(,%rdi,4), %r8
+	leaq   (%rdi,%rdi,2), %rax
+	movq   %rax, %rdi
+	testq  %rax, %rax
+	jle    .L4
+	salq   $3, %r8
+	leaq   (%rsi,%rdx,8), %rcx
+	movl   $0, %eax
+	movl   $0, %edx
+
+.L3:
+	addq   (%rcx), %rax
+	addq   $1, %rdx
+	addq   %r8, %rcx
+	cmpq   %rdi, %rdx
+	jne    .L3
+	rep; ret
+
+.L4:
+	movl   $0, %eax
+	ret
+```
+
+**Solution**:
 
 
 

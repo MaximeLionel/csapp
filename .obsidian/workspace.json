@@ -43,8 +43,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -94,7 +93,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -110,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_8 Array Allocation and Access.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -171,10 +171,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "2540482438bddfaa",
   "lastOpenFiles": [
-    "3_homework.md",
     "3_8 Array Allocation and Access.md",
+    "3_homework.md",
     "3_6 Control.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_4 Accessing Information.md",
