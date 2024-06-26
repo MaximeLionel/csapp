@@ -667,10 +667,39 @@ sum_col:
 ```
 
 **Solution**:
+Look into the assembly code:
+```
+# long sum_col(long n, long A[NR(n)][NC(n)], long j)
+# n in %rdi, A in %rsi, j in %rdx
 
+sum_col:
+	leaq   1(,%rdi,4), %r8       # r8=4*rdi+1: r8 = 4n + 1
+	leaq   (%rdi,%rdi,2), %rax   # rax=3*rdi: rax = 3n
+	movq   %rax, %rdi            # rdi=rax: rdi = 3n
+	testq  %rax, %rax
+	jle    .L4                   # if 3n <= 0, goto .L4
+	salq   $3, %r8               # r8=r8<<3: r8 = 8*r8 = 8*(4n+1)
+	leaq   (%rsi,%rdx,8), %rcx   # rcx=rsi+8*rdx: rcx = A + 8j
+	movl   $0, %eax              # eax = 0
+	movl   $0, %edx              # edx = 0
 
+.L3:
+	addq   (%rcx), %rax          # rax+=M(rcx): rax = rax + *(A+8j)
+	addq   $1, %rdx              # rdx+=1: i++
+	addq   %r8, %rcx             # rcx+=r8: rcx = rcx + 8*(4n+1)
+	cmpq   %rdi, %rdx
+	jne    .L3                   # if rdx!=rdi, goto .L3
+	rep; ret
 
+.L4:
+	movl   $0, %eax
+	ret
+```
 
+Thus we get that: in loop, rcx is A\[i\]\[j\]
+
+From `addq   %r8, %rcx # rcx+=r8: rcx = rcx + 8*(4n+1)`, we get that NC(n) = 4n + 1
+From `cmpq   %rdi, %rdx`, we get that NR(n) = 3n
 
 
 
