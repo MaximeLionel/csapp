@@ -795,7 +795,9 @@ A.
 | %rsp+8   | movq %rsi, 8(%rsp)                         | y               | sizeof(long) |
 | %rsp     | movq %rdi, (%rsp)                          | x               | sizeof(long) |
 B.
-%rsp + 64 according to `leaq 64(%rsp), %rdi`.
+`%rsp + 64` according to `leaq 64(%rsp), %rdi`.
+
+C.
 
 
 
