@@ -798,6 +798,9 @@ B.
 `%rsp + 64` according to `leaq 64(%rsp), %rdi`.
 
 C.
+`%rsp + offset`
+
+D.
 
 
 
