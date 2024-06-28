@@ -18,12 +18,21 @@
 * all of the instructions listed below cause the condition codes to be set while altering registers at the same time:
 	* xor - cf = 0, of = 0
 	* For the shift operations, cf = the last bit shifted out, of = 0.
+<<<<<<< HEAD
 		![[3_6 Control.assets/image-20240510155445965.png|400]]
 * 2 instruction classes (having 8-, 16-, 32-, and 64-bit forms) that set condition codes without altering any other registers:
 	* `cmp` instructions set the condition codes according to the differences of their two operands:
 		* behave in the same way as the `sub` instructions, except that they set the condition codes without updating their destinations.
 	* `test` instructions behave in the same manner as the `and` instructions, except that they set the condition codes without altering their destinations.
 	![[3_6 Control.assets/image-20240510160218283.png|400]]
+=======
+	![[3_6 Control.assets/image-20240510155445965.png|400]]
+* 2 instruction classes (having 8-, 16-, 32-, and 64-bit forms) that set condition codes without altering any other registers:
+	* `cmp` instructions set the condition codes according to the differences of their two operands:
+		* behave in the same way as the sub instructions, except that they set the condition codes without updating their destinations.
+	* `test` instructions behave in the same manner as the and instructions, except that they set the condition codes without altering their destinations.
+	![[3_6 Control.assets/image-20240510160218283.png|300]]
+>>>>>>> origin/main
 
 
 # 3.6.2 Accessing the Condition Codes

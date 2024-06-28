@@ -116,7 +116,7 @@ row3_t A[5];
 	* The total array size is then $4 \times 5 \times 3 = 60$ bytes.
 * Array A can also be viewed as a two-dimensional array with 5 rows and 3 columns, referenced as `A[0][0]` through `A[4][2]`.
 	* The array elements are ordered in memory in row-major order, meaning all elements of row 0, which can be written `A[0]`, followed by all elements of row 1 (`A[1]`), and so on.
-		![[image-20240601100306237.png|200]]
+		![[image-20240601100306237.png|150]]
 	* This ordering is a consequence of our nested declaration. Viewing A as an array of 5 elements, each of which is an array of three int’s, we first have `A[0]`, followed by `A[1]`, and so on.
 * Suppose $x_A$, i, and j are in registers `%rdi`, `%rsi`, and `%rdx`:
 	```
@@ -311,7 +311,7 @@ In summary, `-Og` is tailored for development and debugging, ensuring the code
 		* The initial value for `Bptr` is the address of the first element of column k of B, given by the C expression `&B[0][k]`. 
 		* The value for Bend is the index of what would be the `(n + 1)st` element in column j of B, given by the C expression `&B[N][k]`.
 * Optimized C code:
-	![[image-20240602211651509.png|600]]
+	![[image-20240602211651509.png|400]]
 
 # Practice Problem 3.39
 Use Equation 3.1 to explain how the computations of the initial values for `Aptr`, `Bptr`, and `Bend` in the C code of Figure 3.37(b) (lines 3–5) correctly describe their computations in the assembly code generated for `fix_prod_ele` (lines 3–5).

@@ -482,19 +482,306 @@ long switch_prob(long x, long n) {
 	long result = x;
 	switch(n) {
 		/* Fill in code here */
-		case 0x3c:
-		case 0x3e:
+		case 0x3c:        // rsi = 0
+		case 0x3e:        // rsi = 2
 			result = 8*x;
 			break;
-		case 0x3f:
+		case 0x3f:        // rsi = 3
 			result = x/8;
 			break;
-		case 0x40:
+		case 0x40:        // rsi = 4
 			result = 15*x*15*x + 0x4b;
 			break;
-		case 0x3d:
-			result = 
+		default:        // rsi = 1
+			result = x + 0x4b;
 	}
 	return result;
 }
 ```
+
+# 3.64 ***
+Consider the following source code, where R, S, and T are constants declared with #define:
+```c
+long A[R][S][T];
+
+long store_ele(long i, long j, long k, long *dest)
+{
+	*dest = A[i][j][k];
+	return sizeof(A);
+}
+```
+In compiling this program, gcc generates the following assembly code:
+```
+# long store_ele(long i, long j, long k, long *dest)
+# i in %rdi, j in %rsi, k in %rdx, dest in %rcx
+
+store_ele:
+	leaq (%rsi,%rsi,2), %rax
+	leaq (%rsi,%rax,4), %rax
+	movq %rdi, %rsi
+	salq $6, %rsi
+	addq %rsi, %rdi
+	addq %rax, %rdi
+	addq %rdi, %rdx
+	movq A(,%rdx,8), %rax
+	movq %rax, (%rcx)
+	movl $3640, %eax
+	ret
+```
+A. Extend Equation 3.1 from two dimensions to three to provide a formula for the location of array element `A[i][j][k]`.
+
+B. Use your reverse engineering skills to determine the values of R, S, and T based on the assembly code.
+
+**Solution**:
+A.
+What is euqation 3.1?
+T  D\[R\]\[C\];
+$\&D[i][j] = x_D + L(C \times i + j)$
+This is for 2 dimensions' array. When doing on 3 dimensions' array, it's like:
+T  A\[R\]\[S\]\[T\];
+$\&A[i][j][k] = x_A + L(S*T*i + T*j + k)$;
+
+B.
+```
+# long store_ele(long i, long j, long k, long *dest)
+# i in %rdi, j in %rsi, k in %rdx, dest in %rcx
+
+store_ele:
+	leaq (%rsi,%rsi,2), %rax   # rax=3*rsi:  rax = 3j
+	leaq (%rsi,%rax,4), %rax   # rax=rsi+4*rax: rax = j + 12j = 13j
+	movq %rdi, %rsi            # rsi=rdi: rsi = i
+	salq $6, %rsi              # rsi=rsi<<6: rsi = 64i
+	addq %rsi, %rdi            # rdi=rdi+rsi: rdi = i + 64i = 65i
+	addq %rax, %rdi            # rdi=rdi+rax: rdi = 65i + 13j
+	addq %rdi, %rdx            # rdx=rdx+rdi: rdx = k + 65i + 13j
+	movq A(,%rdx,8), %rax      # rax=A+8*rdx: rax = A + 8(k + 65i + 13j)
+	movq %rax, (%rcx)          # M(rcx)=rax: *dest = A + 8(k + 65i + 13j)
+	movl $3640, %eax           # eax=3640
+	ret
+```
+Thus, we get `*dest = A + 8(k + 65i + 13j)`
+From all the information, we get:
+$R*S*T*8=3640$
+$S*T=65$
+$T=13$
+$S=5$
+$R=7$
+
+# 3.65 *
+The following code transposes the elements of an M × M array, where M is a constant defined by #define:
+```c
+void transpose(long A[M][M]) {
+	long i, j;
+	for (i = 0; i < M; i++)
+		for (j = 0; j < i; j++) {
+			long t = A[i][j];
+			A[i][j] = A[j][i];
+			A[j][i] = t;
+		}
+}
+```
+When compiled with optimization level -O1, gcc generates the following code for the inner loop of the function:
+```
+.L6:
+	movq (%rdx), %rcx
+	movq (%rax), %rsi
+	movq %rsi, (%rdx)
+	movq %rcx, (%rax)
+	addq $8, %rdx
+	addq $120, %rax
+	cmpq %rdi, %rax
+	jne .L6
+```
+We can see that gcc has converted the array indexing to pointer code.
+
+A. Which register holds a pointer to array element A\[i\]\[j\]?
+
+B. Which register holds a pointer to array element A\[j\]\[i\]?
+
+C. What is the value of M?
+
+**Solution**:
+Look into the assembly code:
+```
+# void transpose(long A[M][M])
+# rdi - A
+.L6:
+	movq (%rdx), %rcx     # rcx=M(rdx): rcx = A[i][j]
+	movq (%rax), %rsi     # rsi=M(rax): rsi = A[j][i]
+	movq %rsi, (%rdx)     # M(rdx)=rsi:  
+	movq %rcx, (%rax)     # M(rax)=rcx:
+	addq $8, %rdx         # rdx=rdx+8: (&A[i][j])++
+	addq $120, %rax       # rax=rax+120: &A[j][i] = &A[j][i] + j
+	cmpq %rdi, %rax
+	jne .L6
+```
+
+A.
+rdx
+
+B.
+rax
+
+C.
+15
+
+# 3.66 *
+Consider the following source code, where NR and NC are macro expressions declared with #define that compute the dimensions of array A in terms of parameter n. This code computes the sum of the elements of column j of the array.
+```c
+long sum_col(long n, long A[NR(n)][NC(n)], long j) {
+	long i;
+	long result = 0;
+	for (i = 0; i < NR(n); i++)
+		result += A[i][j];
+	return result;
+}
+```
+
+In compiling this program, gcc generates the following assembly code:
+```
+# long sum_col(long n, long A[NR(n)][NC(n)], long j)
+# n in %rdi, A in %rsi, j in %rdx
+
+sum_col:
+	leaq   1(,%rdi,4), %r8
+	leaq   (%rdi,%rdi,2), %rax
+	movq   %rax, %rdi
+	testq  %rax, %rax
+	jle    .L4
+	salq   $3, %r8
+	leaq   (%rsi,%rdx,8), %rcx
+	movl   $0, %eax
+	movl   $0, %edx
+
+.L3:
+	addq   (%rcx), %rax
+	addq   $1, %rdx
+	addq   %r8, %rcx
+	cmpq   %rdi, %rdx
+	jne    .L3
+	rep; ret
+
+.L4:
+	movl   $0, %eax
+	ret
+```
+
+Use your reverse engineering skills to determine the definitions of NR and NC.
+
+**Solution**:
+Look into the assembly code:
+```
+# long sum_col(long n, long A[NR(n)][NC(n)], long j)
+# n in %rdi, A in %rsi, j in %rdx
+
+sum_col:
+	leaq   1(,%rdi,4), %r8       # r8=4*rdi+1: r8 = 4n + 1
+	leaq   (%rdi,%rdi,2), %rax   # rax=3*rdi: rax = 3n
+	movq   %rax, %rdi            # rdi=rax: rdi = 3n
+	testq  %rax, %rax
+	jle    .L4                   # if 3n <= 0, goto .L4
+	salq   $3, %r8               # r8=r8<<3: r8 = 8*r8 = 8*(4n+1)
+	leaq   (%rsi,%rdx,8), %rcx   # rcx=rsi+8*rdx: rcx = A + 8j
+	movl   $0, %eax              # eax = 0
+	movl   $0, %edx              # edx = 0
+
+.L3:
+	addq   (%rcx), %rax          # rax+=M(rcx): rax = rax + *(A+8j)
+	addq   $1, %rdx              # rdx+=1: i++
+	addq   %r8, %rcx             # rcx+=r8: rcx = rcx + 8*(4n+1)
+	cmpq   %rdi, %rdx
+	jne    .L3                   # if rdx!=rdi, goto .L3
+	rep; ret
+
+.L4:
+	movl   $0, %eax
+	ret
+```
+
+Thus we get that: in loop, rcx is A\[i\]\[j\]
+
+From `addq   %r8, %rcx # rcx+=r8: rcx = rcx + 8*(4n+1)`, we get that NC(n) = 4n + 1
+From `cmpq   %rdi, %rdx`, we get that NR(n) = 3n
+
+# 3.67 **
+For this exercise, we will examine the code generated by gcc for functions that have structures as arguments and return values, and from this see how these language features are typically implemented.
+
+The following C code has a function process having structures as argument and return values, and a function eval that calls process:
+```c
+typedef struct {
+	long a[2];
+	long *p;
+} strA;
+
+typedef struct {
+	long u[2];
+	long q;
+} strB;
+
+strB process(strA s) {
+	strB r;
+	r.u[0] = s.a[1];
+	r.u[1] = s.a[0];
+	r.q = *s.p;
+	return r;
+}
+
+long eval(long x, long y, long z) {
+	strA s;
+	s.a[0] = x;
+	s.a[1] = y;
+	s.p = &z;
+	strB r = process(s);
+	return r.u[0] + r.u[1] + r.q;
+}
+```
+
+Gcc generates the following code for these two functions:
+```
+# strB process(strA s)
+
+process:
+	movq %rdi, %rax
+	movq 24(%rsp), %rdx
+	movq (%rdx), %rdx
+	movq 16(%rsp), %rcx
+	movq %rcx, (%rdi)
+	movq 8(%rsp), %rcx
+	movq %rcx, 8(%rdi)
+	movq %rdx, 16(%rdi)
+	ret
+
+# long eval(long x, long y, long z)
+# x in %rdi, y in %rsi, z in %rdx
+
+eval:
+	subq $104, %rsp
+	movq %rdx, 24(%rsp)
+	leaq 24(%rsp), %rax
+	movq %rdi, (%rsp)
+	movq %rsi, 8(%rsp)
+	movq %rax, 16(%rsp)
+	leaq 64(%rsp), %rdi
+	call process
+	movq 72(%rsp), %rax
+	addq 64(%rsp), %rax
+	addq 80(%rsp), %rax
+	addq $104, %rsp
+	ret
+```
+
+A. We can see on line 18 of function eval that it allocates 104 bytes on the stack. Diagram the stack frame for eval, showing the values that it stores on the stack prior to calling process.
+
+B. What value does eval pass in its call to process?
+
+C. How does the code for process access the elements of structure argument s?
+
+D. How does the code for process set the fields of result structure r?
+
+E. Complete your diagram of the stack frame for eval, showing how eval accesses the elements of structure r following the return from process.
+
+F. What general principles can you discern about how structure values are passed as function arguments and how they are returned as function results?
+
+
+
+
