@@ -20,6 +20,16 @@
             }
           },
           {
+            "id": "cc68e4757519779f",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.6.5"
+              }
+            }
+          },
+          {
             "id": "836547798358ffed",
             "type": "leaf",
             "state": {
@@ -43,7 +53,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -171,7 +182,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "cc68e4757519779f",
   "lastOpenFiles": [
     "3_8 Array Allocation and Access.md",
     "3_homework.md",
