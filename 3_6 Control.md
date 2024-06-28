@@ -43,6 +43,18 @@
 	3. conditionally transfer data
 * The `set` instructions. Each instruction sets a single byte to 0 or 1 based on some combination of the condition codes.
 	![[3_6 Control.assets/image-20240510161458720.png]]
+* Example `setg`:
+	* If we want ~(SF^OF)&~ZF == 1, then ~ZF == 1 and ~(SF^OF) == 1
+	* for ~ZF == 1, easy to understand, if `greater than`, the result cannot be zero.
+	* for ~(SF^OF) == 1, then SF^OF == 0, which means SF and OF must be same value (both 1 or both 0).
+		* if sf == of == 0, of == 0 means no signed overflow, and sf == 0, means that the result is greater than 0. Easy to get 'greater than'.
+		* if sf == of == 1, of == 1 means signed overflow, and sf == 1, means that the result is negative. Suppose the original operation is a - b, we get that a > 0, b < 0. It is also `greater than`.
+* Example `setl`:
+	* suppose the original operation is `cmpq b, a`, which change the condition codes according to `a - b`.
+	* for `setl D`, if we want to set D to 1, which means a < b.
+	* If SF\^OF == 1, then sf == 1, of == 0 or sf == 0, of == 1
+		* if sf == 1, of == 0, means a - b < 0 and no signed overflow, we can get a < b easily.
+		* if sf == 0, of == 1, means a - b > 0 and signed overflow, we can get that a < 0 and b > 0, same as a < b
 * Example:
 	* code
 	```z80
