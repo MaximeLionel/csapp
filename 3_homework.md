@@ -782,6 +782,26 @@ E. Complete your diagram of the stack frame for eval, showing how eval accesses 
 
 F. What general principles can you discern about how structure values are passed as function arguments and how they are returned as function results?
 
+**Solution**:
+
+A.
+
+| Address  | Relating Instruction                       | value           | size         |
+| -------- | ------------------------------------------ | --------------- | ------------ |
+| %rsp+104 |                                            |                 |              |
+| ...      |                                            |                 |              |
+| %rsp+24  | movq %rdx, 24(%rsp)                        | z               | sizeof(long) |
+| %rsp+16  | leaq 24(%rsp), %rax<br>movq %rax, 16(%rsp) | %rsp+24<br>/ &z | 64 bits      |
+| %rsp+8   | movq %rsi, 8(%rsp)                         | y               | sizeof(long) |
+| %rsp     | movq %rdi, (%rsp)                          | x               | sizeof(long) |
+B.
+`%rsp + 64` according to `leaq 64(%rsp), %rdi`.
+
+C.
+`%rsp + offset`
+
+D.
+
 
 
 
