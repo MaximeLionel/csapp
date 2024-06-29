@@ -936,8 +936,52 @@ typedef struct {
 	long u;
 } str2;
 ```
-* For `q->t` equals `*(q+8)`, 
-* A = (32 - 8 - 4)/2 = 10
+* For `q->t` equals `*(q+8)`, we get that 4 < B <= 8.
+* For `q->u` equals `*(q+32)`, we get that 24 < B + 4 + 2*\A <=32, thus `20 < B + 2*A <=28`.
+```c
+typedef struct {
+	int x[A][B]; /* Unknown constants A and B */
+	long y;
+} str1;
+```
+* For `p->y` equals `*(p+184)`, we get that 176 < 4\*A\*B <=184, thus 44 < A\*B <= 46.
+* According to the information above, we get that: `A=9, B=5`
+
+# 3.69 ◆◆◆
+
+You are charged with maintaining a large C program, and you come across the
+following code:
+```c
+typedef struct {
+	int first;
+	a_struct a[CNT];
+	int last;
+} b_struct;
+
+void test(long i, b_struct *bp)
+{
+	int n = bp->first + bp->last;
+	a_struct *ap = &bp->a[i];
+	ap->x[ap->idx] = n;
+}
+```
+The declarations of the compile-time constant CNT and the structure a_struct are in a file for which you do not have the necessary access privilege. Fortunately, you have a copy of the .o version of code, which you are able to disassemble with the objdump program, yielding the following disassembly:
+```
+0000000000000000 <test>: 
+	0: 8b 8e 20 01 00 00     mov 0x120(%rsi), %ecx 
+	6: 03 0e                 add (%rsi), %ecx 
+	8: 48 8d 04 bf           lea (%rdi, %rdi, 4), %rax 
+	c: 48 8d 04 c6           lea (%rsi, %rax, 8), %rax 
+	10: 48 8b 50 08          mov 0x8(%rax), %rdx 
+	14: 48 63 c9             movslq %ecx, %rcx 
+	17: 48 89 4c d0 10       mov %rcx, 0x10(%rax, %rdx, 8) 
+	1c: c3 retq
+```
+Using your reverse engineering skills, deduce the following:
+
+A. The value of CNT.
+
+B. A complete declaration of structure a_struct. Assume that the only fields in this structure are idx and x, and that both of these contain signed values.
 
 
 
