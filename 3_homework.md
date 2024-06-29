@@ -902,7 +902,26 @@ setVal:
 ```
 What are the values of A and B? (The solution is unique.)
 
+**Solution**:
+Look into the assembly code first:
+```
+# void setVal(str1 *p, str2 *q)
+# p in %rdi, q in %rsi
 
+setVal:
+	movslq   8(%rsi), %rax    # rax=M(rsi+8): rax = *(q+8)
+	addq     32(%rsi), %rax   # rax=rax+M(rsi+32): rax = rax + *(q+32)
+	movq     %rax, 184(%rdi)  # M(rdi+184)=rax: *(p+184) = rax
+	ret
+```
+Compare with the C code:
+```c
+void setVal(str1 *p, str2 *q) {
+	long v1 = q->t;
+	long v2 = q->u;
+	p->y = v1+v2;
+}
+```
 
 
 
