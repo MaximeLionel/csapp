@@ -917,12 +917,27 @@ setVal:
 Compare with the C code:
 ```c
 void setVal(str1 *p, str2 *q) {
-	long v1 = q->t;
+	long v1 = q->t;   
 	long v2 = q->u;
 	p->y = v1+v2;
 }
 ```
-
+Easy to find that:
+* `q->t` equals `*(q+8)`
+* `q->u` equals `*(q+32)`
+* `p->y` equals `*(p+184)`
+But we need to consider alignment, which means it's not so exactly.
+For str2 struct:
+```c
+typedef struct {
+	char array[B];
+	int t;
+	short s[A];
+	long u;
+} str2;
+```
+* For `q->t` equals `*(q+8)`, 
+* A = (32 - 8 - 4)/2 = 10
 
 
 
