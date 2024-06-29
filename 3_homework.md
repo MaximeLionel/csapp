@@ -807,7 +807,7 @@ When run into process function, the stack is like:
 | -------- | ------------------------------------------ | --------------- | ------------ |
 | %rsp+112 |                                            |                 |              |
 | ...      |                                            |                 |              |
-| %rsp+64  |                                            |                 |              |
+| %rsp+72  |                                            |                 |              |
 | ...      |                                            |                 |              |
 | %rsp+32  | movq %rdx, 24(%rsp)                        | z               | sizeof(long) |
 | %rsp+24  | leaq 24(%rsp), %rax<br>movq %rax, 16(%rsp) | %rsp+32<br>/ &z | 64 bits      |
@@ -829,29 +829,88 @@ Look into the process assembly language:
 # strB process(strA s)
 # the eval pass s=rsp+64 as parameter
 process:
-	movq %rdi, %rax        # rax=rdi: rax = s
+	movq %rdi, %rax        # rax=rdi: rax = rsp+72
 	movq 24(%rsp), %rdx    # rdx=M(rsp+24): rdx = &z
 	movq (%rdx), %rdx      # rdx=M(rdx): rdx = z
 	movq 16(%rsp), %rcx    # rcx=M(rsp+16): rcx = y
-	movq %rcx, (%rdi)      # M(rdi)=rcx: r.u[0] = y
+	movq %rcx, (%rdi)      # M(rdi)=rcx: M(rsp+72) = r.u[0] = y
 	movq 8(%rsp), %rcx     # rcx=M(rsp+8): rcx = x
-	movq %rcx, 8(%rdi)     # M(rdi+8)=rcx: r.u[1] = x
-	movq %rdx, 16(%rdi)    # M(rdi+16)=rdx: r.q = z
+	movq %rcx, 8(%rdi)     # M(rdi+8)=rcx: M(rsp+80) = r.u[1] = x
+	movq %rdx, 16(%rdi)    # M(rdi+16)=rdx: M(rsp+88) = r.q = z
 	ret
 ```
-* We find that `r` actually use the same address as the parameter `s`.
+* We find that:
+	* even though in C code: `strB r = process(s)`, it's calling process by passing `strA s` as a parameter.
+	* gcc actually use rsp+64 as the address of `r`.
 
 E.
 After return from function process, the return address is popped from stack then the stack will shrink by 8 bytes: `rsp = rsp + 8`. So we get the stack below:
 
-| Address  | Relating Instruction | value    | size         |
-| -------- | -------------------- | -------- | ------------ |
-| %rsp+104 |                      |          |              |
-| ...      |                      |          |              |
-| %rsp+24  | movq %rdx, 16(%rsp)  | z        | sizeof(long) |
-| %rsp+16  | movq %rdx, 16(%rdi)  | z/r.q    | sizeof(long) |
-| %rsp+8   | movq %rcx, 8(%rdi)   | x/r.u[1] | sizeof(long) |
-| %rsp     | movq %rcx, (%rdi)    | y/r.u[0] | sizeof(long) |
+| Address  | value           | size         |
+| -------- | --------------- | ------------ |
+| %rsp+104 |                 |              |
+| ...      |                 |              |
+| %rsp+80  | z / r.q         | sizeof(long) |
+| %rsp+72  | x / r.u[1]      | sizeof(long) |
+| %rsp+64  | y / r.u[0]      | sizeof(long) |
+| ...      |                 |              |
+| %rsp+24  | z               | sizeof(long) |
+| %rsp+16  | %rsp+32<br>/ &z | 64 bits      |
+| %rsp+8   | y               | sizeof(long) |
+| %rsp+0   | x               | sizeof(long) |
+Then look into the assembly code below:
+```
+	movq 72(%rsp), %rax    # rax = M(rsp+72) = x
+	addq 64(%rsp), %rax    # rax += M(rsp+64) = y: rax = x + y
+	addq 80(%rsp), %rax    # rax += M(rsp+80) = z: rax = x + y + z
+```
+
+F.
+caller find space and pass space address to callee, callee store data on this space area and return this address.
+
+# 3.68 ***
+In the following code, A and B are constants defined with #define:
+```c
+typedef struct {
+	int x[A][B]; /* Unknown constants A and B */
+	long y;
+} str1;
+
+typedef struct {
+	char array[B];
+	int t;
+	short s[A];
+	long u;
+} str2;
+
+void setVal(str1 *p, str2 *q) {
+	long v1 = q->t;
+	long v2 = q->u;
+	p->y = v1+v2;
+}
+```
+Gcc generates the following code for setVal:
+```
+# void setVal(str1 *p, str2 *q)
+# p in %rdi, q in %rsi
+
+setVal:
+	movslq 8(%rsi), %rax
+	addq 32(%rsi), %rax
+	movq %rax, 184(%rdi)
+	ret
+```
+What are the values of A and B? (The solution is unique.)
+
+
+
+
+
+
+
+
+
+
 
 
 
