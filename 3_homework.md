@@ -786,14 +786,14 @@ F. What general principles can you discern about how structure values are passed
 
 A.
 
-| Address  | Relating Instruction                       | value           | size         |
-| -------- | ------------------------------------------ | --------------- | ------------ |
-| %rsp+104 |                                            |                 |              |
-| ...      |                                            |                 |              |
-| %rsp+24  | movq %rdx, 24(%rsp)                        | z               | sizeof(long) |
-| %rsp+16  | leaq 24(%rsp), %rax<br>movq %rax, 16(%rsp) | %rsp+24<br>/ &z | 64 bits      |
-| %rsp+8   | movq %rsi, 8(%rsp)                         | y               | sizeof(long) |
-| %rsp     | movq %rdi, (%rsp)                          | x               | sizeof(long) |
+| Address  | Relating Instruction                       | value                 | size         |
+| -------- | ------------------------------------------ | --------------------- | ------------ |
+| %rsp+104 |                                            |                       |              |
+| ...      |                                            |                       |              |
+| %rsp+24  | movq %rdx, 24(%rsp)                        | z                     | sizeof(long) |
+| %rsp+16  | leaq 24(%rsp), %rax<br>movq %rax, 16(%rsp) | %rsp+24<br>/ &z / s.p | 64 bits      |
+| %rsp+8   | movq %rsi, 8(%rsp)                         | y/s.a[1]              | sizeof(long) |
+| %rsp     | movq %rdi, (%rsp)                          | x/s.a[0]              | sizeof(long) |
 B.
 `%rsp + 64` according to `leaq 64(%rsp), %rdi`.
 
@@ -801,6 +801,57 @@ C.
 `%rsp + offset`
 
 D.
+When run into process function, the stack is like:
+
+| Address  | Relating Instruction                       | value           | size         |
+| -------- | ------------------------------------------ | --------------- | ------------ |
+| %rsp+112 |                                            |                 |              |
+| ...      |                                            |                 |              |
+| %rsp+64  |                                            |                 |              |
+| ...      |                                            |                 |              |
+| %rsp+32  | movq %rdx, 24(%rsp)                        | z               | sizeof(long) |
+| %rsp+24  | leaq 24(%rsp), %rax<br>movq %rax, 16(%rsp) | %rsp+32<br>/ &z | 64 bits      |
+| %rsp+16  | movq %rsi, 8(%rsp)                         | y               | sizeof(long) |
+| %rsp+8   | movq %rdi, (%rsp)                          | x               | sizeof(long) |
+| %rsp     | call process                               | return address  | 64 bits      |
+Copy the process C code here:
+```c
+strB process(strA s) {
+	strB r;
+	r.u[0] = s.a[1];
+	r.u[1] = s.a[0];
+	r.q = *s.p;
+	return r;
+}
+```
+Look into the process assembly language:
+```
+# strB process(strA s)
+# the eval pass s=rsp+64 as parameter
+process:
+	movq %rdi, %rax        # rax=rdi: rax = s
+	movq 24(%rsp), %rdx    # rdx=M(rsp+24): rdx = &z
+	movq (%rdx), %rdx      # rdx=M(rdx): rdx = z
+	movq 16(%rsp), %rcx    # rcx=M(rsp+16): rcx = y
+	movq %rcx, (%rdi)      # M(rdi)=rcx: r.u[0] = y
+	movq 8(%rsp), %rcx     # rcx=M(rsp+8): rcx = x
+	movq %rcx, 8(%rdi)     # M(rdi+8)=rcx: r.u[1] = x
+	movq %rdx, 16(%rdi)    # M(rdi+16)=rdx: r.q = z
+	ret
+```
+* We find that `r` actually use the same address as the parameter `s`.
+
+E.
+After return from function process, the return address is popped from stack then the stack will shrink by 8 bytes: `rsp = rsp + 8`. So we get the stack below:
+
+| Address  | Relating Instruction | value    | size         |
+| -------- | -------------------- | -------- | ------------ |
+| %rsp+104 |                      |          |              |
+| ...      |                      |          |              |
+| %rsp+24  | movq %rdx, 16(%rsp)  | z        | sizeof(long) |
+| %rsp+16  | movq %rdx, 16(%rdi)  | z/r.q    | sizeof(long) |
+| %rsp+8   | movq %rcx, 8(%rdi)   | x/r.u[1] | sizeof(long) |
+| %rsp     | movq %rcx, (%rdi)    | y/r.u[0] | sizeof(long) |
 
 
 
