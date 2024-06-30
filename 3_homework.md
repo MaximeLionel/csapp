@@ -1022,7 +1022,7 @@ After reversing the assembly code and compare to the original C code, we get the
 * Then let's analyze this one: `mov %rcx, 0x10(%rax, %rdx, 8)   # M(rax+8*rdx+0x10)=rcx` step by step.
 	* `rax+0x8` is `bp+8`, which is `&bp->a[i]`
 	* `rax+0x8+0x8` is `&bp->a[i] + 0x8`, which is `&bp->a[i].x`
-	* `rax+8*rdx+0x10` is `&bp->a[i].x + 8*rdx`
+	* `rax+8*rdx+0x10` is `&bp->a[i].x + 8*rdx`, which is `&ap->x + 8*rdx`, then `&ap->x[ap->idx]`
 
 
 
