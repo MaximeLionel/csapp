@@ -68,17 +68,18 @@
 	```
 	* The comparison order of the `cmpq` instruction. Although the arguments are listed in the order %rsi (b), then %rdi (a), the comparison is really between a and b.
 	* `movzbl` instruction clears not just the high-order 3 bytes of `%eax`, but the upper 4 bytes of the entire register, %rax, as well.
-	* Condition 1 (signed a - b):
+		* even though `l` of `movzbl` means 4 bytes (32bits), it actually equal to `movzbq` in reality, which means clear high 7 bytes of `%rax` register.
+	* Condition 1 (signed a - b) - `setl`:
 		* `sete` or `setz`: set when a == b
-		* `setl`: set when a < b if sf^of
+		* `setl`: set when a < b if `sf^of`
 			* case1 (sf == 1, of == 0): $a-^t_wb<0$ 
 			* case2 (sf == 0, of == 1): $a-^t_wb>0$ means a<0, b>0, negative overflow
 		* `setge`: set when a >= b if ~(sf^of)
 			* case1 (sf == 0, of == 0): $a-^t_wb>0$ 
-			* case2 (sf == 1, of == 1): $a-^t_wb<0$ means a>0, b<0, positve overflow
-		* `sete`: set when a == b if ~zf
-	* Condition 2 (unsigned a - b):
-		* `seta`: set when a > b if ~cf & ~zf
+			* case2 (sf == 1, of == 1): $a-^t_wb<0$ means a>0, b<0, positive overflow
+		* `sete`: set when a == b if zf
+	* Condition 2 (unsigned a - b) - replace `setl` with `setb`:
+		* `seta`: set when a > b if `~cf & ~zf`
 			* `~zf` is to exclude a special case: when a == b, cf = o and zf = 1
 		* `setb`: set when a < b if cf
 		* `sete` or `setz`: set when a == b
