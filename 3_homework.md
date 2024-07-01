@@ -1023,6 +1023,15 @@ After reversing the assembly code and compare to the original C code, we get the
 	* `rax+0x8` is `bp+8`, which is `&bp->a[i]`
 	* `rax+0x8+0x8` is `&bp->a[i] + 0x8`, which is `&bp->a[i].x`. `idx` is 8 bytes.
 	* `rax+8*rdx+0x10` is `&bp->a[i].x + 8*rdx`, which is `&ap->x + 8*rdx`, then `&ap->x[ap->idx]`. 
+Now we know that: 1. the size of a_struct is 40 bytes, 2. the 1st element of a_struct is 8 bytes (`idx`), 3. the size of a in a_struct is 8 bytes.
+We easily get the a_struct below:
+```c
+typedef struct 
+{ 
+	long idx; 
+	long x[4]; 
+} a_struct;
+```
 
 
 
