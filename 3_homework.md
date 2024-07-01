@@ -1033,6 +1033,112 @@ typedef struct
 } a_struct;
 ```
 
+# 3.70 ◆◆◆
+Consider the following union declaration:
+```c
+union ele {
+	struct {
+		long *p;
+		long y;
+	} e1;
+
+	struct {
+		long x;
+		union ele *next;
+	} e2;
+};
+```
+This declaration illustrates that structures can be embedded within unions.
+
+The following function (with some expressions omitted) operates on a linked list having these unions as list elements:
+```c
+void proc (union ele *up) {
+	up-> ______ = *( ______ ) - ______ ;
+}
+```
+
+A. What are the offsets (in bytes) of the following fields:
+```
+e1.p          ______
+e1.y          ______
+e2.x          ______
+e2.next       ______
+```
+
+B. How many total bytes does the structure require?
+
+C. The compiler generates the following assembly code for proc:
+```
+# void proc (union ele *up)
+# up in %rdi
+
+proc:
+	movq 8(%rdi), %rax
+	movq (%rax), %rdx
+	movq (%rdx), %rdx
+	subq 8(%rax), %rdx
+	movq %rdx, (%rdi)
+	ret
+```
+
+On the basis of this information, fill in the missing expressions in the code for proc. Hint: Some union references can have ambiguous interpretations. These ambiguities get resolved as you see where the references lead. There is only one answer that does not perform any casting and does not violate any type constraints.
+
+**Solution**:
+A. 
+We analyze the offsets first:
+```c
+union ele {
+	struct {
+		long *p;     // offset - 0
+		long y;      // offset - 8
+	} e1;
+
+	struct {
+		long x;            // offset - 0
+		union ele *next;   // offset - 8
+	} e2;
+};
+```
+
+| Element | Offset |
+| ------- | ------ |
+| e1.p    | 0      |
+| e1.y    | 8      |
+| e2.x    | 0      |
+| e2.next | 8      |
+B.
+16 bytes
+
+C.
+Look into the assembly code first:
+```
+# void proc (union ele *up)
+# up in %rdi
+
+proc:
+	movq 8(%rdi), %rax     # rax=M(rdi+8): rax = *(up + 8) - up->y or up->next
+	movq (%rax), %rdx      # rdx=M(rax): rdx = *(up->next) = up->next->p
+	movq (%rdx), %rdx      # rdx=M(rdx): rdx = *(up->next->p)
+	subq 8(%rax), %rdx     # rdx=rdx-M(rax+8): rdx = *(up->next->p) - (up->next->y)
+	movq %rdx, (%rdi)      # M(rdi)=rdx: up->x = *(up->next->p) - (up->next->y)
+	ret
+```
+Then fill in the code below:
+```c
+void proc (union ele *up) {
+	up->e2.x = *(up->e2.next->e1.p) - up->e2.next->e1.y;
+}
+```
+
+# 3.71 ◆
+Write a function good_echo that reads a line from standard input and writes it to standard output. Your implementation should work for an input line of arbitrary length. You may use the library function fgets, but you must make sure your function works correctly even when the input line requires more space than you have allocated for your buffer. Your code should also check for error conditions and return when one is encountered. Refer to the definitions of the standard I/O functions for documentation [45, 61].
+
+
+
+
+
+
+
 
 
 
