@@ -282,12 +282,19 @@ D. In the code that follows, the jump target is encoded in PC-relative form as a
 ```
 
 **Solution**:
-A. `4003fc + 2 = 4003fe`
-B. `400431 - c = 400425`
-C. `2ndXXXXXX + 2 = 400547` -> `2ndXXXXXX = 400545`
-	`1stXXXXXX = 400545 - 2 = 400543`
-D. We extract the number: 0xffffff73 = -0x8d
-	Then, 0x4005ed - 0x8d = 0x400560
+A. 0x4003fc + 0x2 = 0x4003fe
+B. 0x400431 + 0xf4 = 0x =0x400425
+C. 
+0x400547 - 0x02 = 0x400545
+0x400545 - 2 = 0x400543
+So we get:
+```
+	400543: 77 02   ja 400547
+	400545: 5d      pop %rbp
+```
+D.
+the encoding of `73 ff ff ff` should be 0xffffff73, which is `-0x8d`.
+So XXXXXXX = 0x4005ed + (-0x8d) = 0x400560
 
 # 3.6.5 Implementing Conditional Branches with Conditional Control
 * The most general way to translate conditional expressions and statements from C into machine code is to use combinations of conditional and unconditional jumps.
