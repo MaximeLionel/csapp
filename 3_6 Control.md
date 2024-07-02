@@ -432,15 +432,16 @@ long absdiff_se(long x, long y)
 ```
 long absdiff_se(long x, long y)
 {
-	long result;
-	if (x < y)
+	t = (x < y)
+	if (t)
 		goto true;
 	ge_cnt++;
 	result = x - y;
-	return result;
+	goto done;
 true:
 	lt_cnt++;
 	result = y - x;
+done:
 	return result;
 }
 ```
@@ -532,74 +533,59 @@ test:
 
 .globl  test
 test:
-        leal    (%rdx,%rsi), %eax  # eax = rdx(z) + rsi(y) = z + y
-        subl    %edi, %eax         # eax = z + y - x
-        cmpw    $5, %dx            # compare 5 and dx(z)
-        jle     .L2                # if(signed) dx(z) <= 5, go to .L2
-		
-		                           # if(signed) dx(z) > 5,
-        cmpw    $2, %si            # compare 2 and si(y)
-        jle     .L3                # if(signed) si(y) <= 2, go to .L3
-
-		                           # if(signed) si(y) > 2
-        movswl  %di, %eax          # eax = di(x)
-        movswl  %dx, %ecx          # ecx = dx(z)
-        cltd                       # Sign-extend EAX(x) into EDX:EAX
-        idivl   %ecx               # EDX:EAX / ecx: x/z
-		                           # eax - quotient
+        leal    (%rdx,%rsi), %eax   # eax=rdx+rsi: eax = z + y
+        subl    %edi, %eax          # eax=eax-edi: eax = z + y - x
+        cmpw    $5, %dx             # cmp dx,5: cmp z - 5
+        jle     .L2                 # if(z-5)<=0, goto .L2
+        cmpw    $2, %si             # cmp si,2: cmp y - 2
+        jle     .L3                 # if(y-2)<=0, goto .L3
+        movswl  %di, %eax           # eax=di: eax = x
+        movswl  %dx, %ecx           # ecx=dx: ecx = z
+        cltd                        # sign-extend eax into edx:eax: x
+        idivl   %ecx                # edx:eax/ecx: x/z - eax=quotient
         ret
-.L3:
-        movswl  %di, %eax          # eax = di(x)
-        movswl  %si, %esi          # esi = si(y)
-        cltd                       # Sign-extend EAX(x) into EDX:EAX
-        idivl   %esi               # EDX:EAX / esi: x/y
-		                           # eax - quotient
+.L3:                                # if(z>5 && y<=2)
+        movswl  %di, %eax           # eax=di: eax = x
+        movswl  %si, %esi           # esi=si: esi = y
+        cltd                        # sign-extend eax into edx:eax: x
+        idivl   %esi                # edx:eax/esi: x/y - eax=quotient
         ret
-.L2:
-        cmpw    $2, %dx            # compare dx(z) and 2
-        jg      .L1                # if(signed) dx(z) > 2, go to .L1
-		                           # return rax(z+y-x)
-
-								   # if(signed) dx(z) <= 2
-        movswl  %dx, %eax          # eax = dx(z)
-        movswl  %si, %esi          # esi = si(y)
-        cltd                       # Sign-extend EAX(z) into EDX:EAX
-        idivl   %esi               # EDX:EAX / esi: z/y
-		                           # eax - quotient
+.L2:                                # if(z<=5)
+        cmpw    $2, %dx             # cmp dx,2: cmp z-2
+        jg      .L1                 # if(z-2 > 0) return z + y - x
+                                    # if(z-2 <= 0)
+        movswl  %dx, %eax           # eax=dx: eax = z
+        movswl  %si, %esi           # y
+        cltd                        # sign-extend eax into edx:eax: z
+        idivl   %esi                # edx:eax/esi: z/y - eax=quotient
 .L1:
         ret
 ```
-* `movsw` - Move Signed Word to Long. Move and sign-extend a 16-bit word to a 32-bit long value.
-* `cltd` - Convert Long to Double. Sign-extend the value from the `EAX` register (32-bit) into the `EDX:EAX` register pair.
 
-
-* draft:
-```c
-short test(short x, short y, short z)
-{
-	short rax = y + z - x;
-	if(z>2 && z<=5) return rax;
-	if(z>5 && y<=2) return x/y;
-	if(z>5 && y>2) return x/z;
-	if(z<=2) return z/y;
-}
-
-```
-* final:
 ```c
 short test(short x, short y, short z) {
-	short val = y + z - x ;
+	if(z>5 && y>2) return x/z;
+	if(z>5 && y<=2) return x/y;
+	if(z<=5 && z>2) return z + y - x;
+	if(z<=2) return z/y
+	return val;
+}
+```
+
+
+```c
+short test(short x, short y, short z) {
+	short val = z + y - x ;
 	if (z > 5) {
-		if (y <= 2)
-			val = x/y ;
-		else
+		if (y > 2)
 			val = x/z ;
+		else
+			val = x/y ;
 	} else if ( z <= 2 )
 		val = z/y ;
 	return val;
 }
 ```
-
 # 3.6.6 Implementing Conditional Branches with Conditional Moves
 * The conventional way to implement conditional operations is through a conditional transfer of control.
 * An alternate strategy is through a **conditional transfer of data**, which is implemented by a simple **conditional move** instruction.
