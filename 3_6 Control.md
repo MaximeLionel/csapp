@@ -352,7 +352,17 @@ void cond(short a, short *p)
 }
 ```
 gcc generates the following assembly code:
-![[3_6 Control.assets/image-20240513130005518.png|250]]
+```
+# void cond(short a, short *p)
+# a in %di, p in %rsi
+    testw   %di, %di
+    je      .L1
+    cmpw    %di, (%rsi)
+    jge     .L1
+    movw    %di, (%rsi)
+.L1
+	ret
+```
 A. Write a goto version in C that performs the same computation and mimics the control flow of the assembly code, in the style shown in Figure 3.16(b). You might find it helpful to first annotate the assembly code as we have done in our examples.
 
 B. Explain why the assembly code contains two conditional branches, even though the C code has only one if statement.
@@ -369,7 +379,6 @@ void cond(short a, short *p)
 
 ```
 void cond(short a, short *p){
-	t = test-expr;
 	if (!a)
 		goto done;
 	if (*p >= a)
