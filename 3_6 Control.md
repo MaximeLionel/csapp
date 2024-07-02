@@ -222,7 +222,7 @@ jmp .L1.         # Goto .L1
 # 3.6.4 Jump Instruction Encodings
 * In assembly code, jump targets are written using symbolic labels.
 	* The assembler, and later the linker, generate the proper encodings of the jump targets.
-* different encodings for jump:
+* different encodings for jump targets:
 	* PC relative - encode the difference between the address of the target instruction and the address of the instruction immediately following the jump.
 	* absolute address - using 4 bytes to directly specify the target.
 	* The assembler and linker select the appropriate encodings of the jump destinations.
@@ -242,12 +242,12 @@ jg .L3
 rep; ret
 recommend using the combination of rep followed by ret to avoid making the ret instruction the destination of a conditional jump instruction.
 Without the rep instruction, the jg instruction (line 7 of the assembly code) would proceed to the ret instruction when the branch is not taken. 
-According to AMD, their processors cannot properly predict the destination of a ret instruction when it is reached from a jump instruction. 
+According to AMD, their processors cannot properly predict the destination of a ret instruction when it is reached from a jump instruction. RAS (Return Address Prediction Stack) would be invalid.
 The rep instruction serves as a form of no-operation here,
 ```
 
 * Object file:
-![[3_6 Control.assets/image-20240512222356179.png|500]]
+![[3_6 Control.assets/image-20240512222356179.png|300]]
 * The target of the first jump instruction is encoded (in the second byte) as 0x03. 
 * Adding this to 0x5, the address of the following instruction, we get jump target address 0x8.
 * The target of the second jump instruction is encoded as 0xf8.
@@ -255,7 +255,7 @@ The rep instruction serves as a form of no-operation here,
 * The value of the program counter when performing PC-relative addressing is the address of **the instruction following the jump**, not that of the jump itself.
 	* the processor would update the program counter as its first step in executing an instruction.
 * the disassembled version of the program after linking:
-![[3_6 Control.assets/image-20240512222857761.png|500]]
+![[3_6 Control.assets/image-20240512222857761.png|400]]
 * The instructions have been relocated to different addresses, but the encodings of the jump targets in lines 2 and 5 remain ==unchanged==.
 # Practice Problem 3.15
 In the following excerpts from a disassembled binary, some of the information has been replaced by X’s. Answer the following questions about these instructions.
