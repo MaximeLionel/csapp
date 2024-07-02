@@ -330,7 +330,7 @@ if (test-expr)
 else
 	else-statement
 ```
-* C syntax to describe the control flow:
+* C syntax to describe the control flow using goto expression:
 ```
 	t = test-expr;
 	if (!t)
