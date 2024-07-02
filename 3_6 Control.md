@@ -92,7 +92,7 @@ int comp(data_t a, data_t b) {
 }
 ```
 shows a general comparison between arguments a and b, where data_t, the data type of the arguments, is defined (via typedef) to be one of the integer data types listed below and either signed or unsigned. The comparison COMP is defined via #define.
-![[3_6 Control.assets/image-20240510171846633.png|500]]
+![[3_6 Control.assets/image-20240510171846633.png|400]]
 
 Suppose a is in some portion of %rdi while b is in some portion of %rsi. For each of the following instruction sequences, determine which data types data_t and which comparisons COMP could cause the compiler to generate this code. (There can be multiple correct answers; you should list them all.)
 A.
@@ -112,14 +112,34 @@ cmpq %rsi, %rdi
 setne %al
 
 **Solution**:
-A. 
-int, a < b
+A.
+cmpl %esi, %edi
+setl %al
+
+data_t - int
+COMP - a < b
+
 B.
-short, a >= b
+cmpw %si, %di
+setge %al
+
+data_t - short
+COMP - a >= b
+
 C.
-unsigned char, a <= b
+cmpb %sil, %dil
+setbe %al
+
+data_t - unsigned char
+COMP - a <= b
+
 D.
-long or unsigned long, a != b
+cmpq %rsi, %rdi
+setne %al
+
+data_t - long or unsigned long
+COMP - a != b
+
 # Practice Problem 3.14
 The C code
 ```c
@@ -146,13 +166,32 @@ setle %al
 
 **Solution**:
 A.
-long, a >= 0
+testq %rdi, %rdi
+setge %al
+
+data_t - long
+TEST - a >= 0
+
 B.
-short or unsigned short, a == 0
+testw %di, %di
+sete %al
+
+data_t - short or unsigned short
+TEST - a == 0
+
 C.
-unsigned char, a > 0
+testb %dil, %dil
+seta %al
+
+data_t  - unsigned char
+TEST - a > 0
+
 D.
-int, a <= 0
+testl %edi, %edi
+setle %al
+
+data_t - int
+TEST - a <= 0
 
 # 3.6.3 Jump Instructions
 * A `jump` instruction can cause the execution to switch to a completely new position in the program.
