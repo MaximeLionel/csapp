@@ -1162,7 +1162,7 @@ int main()
 }
 ```
 # 3.72 ◆◆
-Figure 3.54(a) shows the code for a function that is similar to function vfunct (Figure 3.43(a)). We used vfunct to illustrate the use of a frame pointer in managing variable-size stack frames. The new function aframe allocates space for local array p by calling library function alloca. This function is similar to the more commonly used function malloc, except that it allocates space on the run-time stack. The space is automatically deallocated when the executing procedure returns. Figure 3.54(b) shows the part of the assembly code that sets up the frame pointer and allocates space for local variables i and p. It is very similar to the corresponding code for vframe. Let us use the same notation as in Problem 3.49: The stack pointer is set to values s1 at line 4 and s2 at line 7. The start address of array p is set to value p at line 9. Extra space e2 may arise between s2 and p, and extra space e1 may arise between the end of array p and s1.
+The C code below shows the code for a function that is similar to function vfunct. We used vfunct to illustrate the use of a frame pointer in managing variable-size stack frames. The new function aframe allocates space for local array p by calling library function `alloca`. This function is similar to the more commonly used function `malloc`, except that it allocates space on the run-time stack. The space is automatically deallocated when the executing procedure returns. The assembly code below shows the part of the assembly code that sets up the frame pointer and allocates space for local variables i and p. It is very similar to the corresponding code for vframe. Let us use the same notation as in Problem 3.49: The stack pointer is set to values $s_1$ at line 7 and $s_2$ at line 10. The start address of array p is set to value p at line 12. Extra space $e_2$ may arise between $s_2$ and p, and extra space $e_1$ may arise between the end of array p and $s_1$.
 ```c
 #include <alloca.h>
 
@@ -1176,7 +1176,29 @@ long aframe(long n, long idx, long *q) {
 }
 ```
 
+```z80
+# long aframe(long n, long idx, long *q)
+# n in %rdi, idx in %rsi, q in %rdx
 
+aframe:
+	pushq %rbp
+	movq %rsp, %rbp
+	subq $16, %rsp              # Allocate space for i (%rsp = s1)
+	leaq 30(,%rdi,8), %rax
+	andq $-16, %rax
+	subq %rax, %rsp             # Allocate space for array p (%rsp = s2)
+	leaq 15(%rsp), %r8
+	andq $-16, %r8              # Set %r8 to &p[0]
+	...
+```
+
+A. Explain, in mathematical terms, the logic in the computation of $s_2$.
+
+B. Explain, in mathematical terms, the logic in the computation of p.
+
+C. Find values of n and $s_1$ that lead to minimum and maximum values of $e_1$.
+
+D. What alignment properties does this code guarantee for the values of $s_2$ and p?
 
 
 
