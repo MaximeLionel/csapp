@@ -43,8 +43,7 @@
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -172,8 +171,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "9aaf650e113735a1",
+  "active": "2540482438bddfaa",
   "lastOpenFiles": [
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "2_4.md",
     "3_homework.md",
     "3_6 Control.md",
@@ -198,7 +198,6 @@
     "3_11 Floating-Point Code.assets/image-20240618093046427.png",
     "3_11 Floating-Point Code.assets/image-20240616135320260.png",
     "3_11 Floating-Point Code.assets",
-    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
     "3_8 Array Allocation and Access.md",

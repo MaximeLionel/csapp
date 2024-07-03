@@ -1134,7 +1134,47 @@ void proc (union ele *up) {
 Write a function good_echo that reads a line from standard input and writes it to standard output. Your implementation should work for an input line of arbitrary length. You may use the library function fgets, but you must make sure your function works correctly even when the input line requires more space than you have allocated for your buffer. Your code should also check for error conditions and return when one is encountered. Refer to the definitions of the standard I/O functions for documentation [45, 61].
 
 **Solutino**:
+Get the syntax of `fgets` function:
+```c
+char* fgets(char *_str_, int _n_, FILE *_stream_);
+```
+* The `fgets()` reads a line from the specified stream and stores it into the string pointed to by str. 
+* It stops when either (n-1) characters are read, the newline character is read, or the end-of-file is reached, whichever comes first.
+* The `fgets()` function returns a pointer to the string where the input is stored.
 
+```c
+#include <stdio.h>
+#define BUFSIZE 5
+
+void good_echo(void)  
+{  
+	char buf[BUFSIZE];
+	while (!feof(stdin)) {  
+		if (fgets(buf, BUFSIZE, stdin) == NULL)  return;  
+		fputs(buf, stdout);  
+	}  
+}
+
+int main()
+{
+	good_echo();
+	return 0;
+}
+```
+# 3.72 ◆◆
+Figure 3.54(a) shows the code for a function that is similar to function vfunct (Figure 3.43(a)). We used vfunct to illustrate the use of a frame pointer in managing variable-size stack frames. The new function aframe allocates space for local array p by calling library function alloca. This function is similar to the more commonly used function malloc, except that it allocates space on the run-time stack. The space is automatically deallocated when the executing procedure returns. Figure 3.54(b) shows the part of the assembly code that sets up the frame pointer and allocates space for local variables i and p. It is very similar to the corresponding code for vframe. Let us use the same notation as in Problem 3.49: The stack pointer is set to values s1 at line 4 and s2 at line 7. The start address of array p is set to value p at line 9. Extra space e2 may arise between s2 and p, and extra space e1 may arise between the end of array p and s1.
+```c
+#include <alloca.h>
+
+long aframe(long n, long idx, long *q) {
+	long i;
+	long **p = alloca(n * sizeof(long *));
+	p[0] = &i;
+	for (i = 1; i < n; i++)
+		p[i] = q;
+	return *p[idx];
+}
+```
 
 
 
