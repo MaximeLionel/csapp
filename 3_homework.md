@@ -1218,7 +1218,7 @@ aframe:
 ```
 
 A.
-$s_2 = (8 \times n + 30) \& 0xFFFFFFF0$
+$s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$
 This is to:
 * meet 16 bytes' alignment;
 * allocate proper stack space for use;
@@ -1237,7 +1237,8 @@ We buld the stack frame first.
 
 p = (rsp+15) & 0x FFFF FFF0
 
-$e_1$ = p - $s_1$ = (rsp+15) & 0x FFFF FFF0 - (rsp + (8\*n+30)&0xfffffff0)
+$e_1$ = $s_1$ - end of array p
+We know that $s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$, to make $e_1$ minimum, we need to maximize $s_2$. n must be an even number
 
 D.
 
