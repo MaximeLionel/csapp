@@ -1212,16 +1212,31 @@ aframe:
 	leaq 30(,%rdi,8), %rax      # rax=8*rdi+30: rax = 8*n + 0x 1E
 	andq $-16, %rax             # rax = rax & 0x FFFF FFF0
 	subq %rax, %rsp             # rsp=rsp-rax: Allocate space for array p (%rsp = s2)
-	leaq 15(%rsp), %r8
+	leaq 15(%rsp), %r8          # r8=rsp+15
 	andq $-16, %r8              # Set %r8 to &p[0]
 	...
 ```
 
 A.
 $s_2 = (8 \times n + 30) \& 0xFFFFFFF0$
+This is to:
+* meet 16 bytes' alignment;
+* allocate proper stack space for use;
+
+B.
+p = ($s_2$+15) & 0x FFFF FFF0, which is the closest multiples of 16 which is greater than $s_2$.
+
+C.
+We buld the stack frame first.
+
+| Stack | Comment |
+| ----- | ------- |
+|       |         |
 
 
+$e_1$ = p - $s_1$
 
+D.
 
 
 
