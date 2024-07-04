@@ -1200,6 +1200,7 @@ C. Find values of n and $s_1$ that lead to minimum and maximum values of $e_1$.
 
 D. What alignment properties does this code guarantee for the values of $s_2$ and p?
 
+**Solution**:
 
 
 
