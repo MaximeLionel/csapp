@@ -1216,6 +1216,15 @@ aframe:
 	andq $-16, %r8              # Set %r8 to &p[0]
 	...
 ```
+Go through all instructions with changing in stack frame step by step:
+1. Enter function.
+	![[image-20240704170455325.png|250]]
+2. After executing `pushq %rbp` 
+	![[image-20240704170809783.png|250]]
+
+
+
+
 
 A.
 $s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$
