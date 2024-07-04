@@ -1221,6 +1221,22 @@ Go through all instructions with changing in stack frame step by step:
 	![[image-20240704170455325.png|250]]
 2. After executing `pushq %rbp` 
 	![[image-20240704170809783.png|250]]
+3. After executing `movq %rsp, %rbp`
+	![[image-20240704170945156.png|250]]
+4. After executing `subq $16, %rsp`
+	![[image-20240704171555542.png|250]]
+5. After executing `leaq 30(,%rdi,8), %rax`, no change for stack frame.
+	We get: `rax = 8*n + 0x 1E`
+6. After executing `andq $-16, %rax`, no change for stack frame.
+	We get: `rax = (8*n + 0x 1E) & 0xfffffff0`
+7. After executing `subq %rax, %rsp`
+	![[image-20240704172634501.png|300]]
+8. Add $s_1$, $s_2$ labels
+
+	
+
+
+
 
 
 
