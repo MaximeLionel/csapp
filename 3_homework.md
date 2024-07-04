@@ -1201,7 +1201,21 @@ C. Find values of n and $s_1$ that lead to minimum and maximum values of $e_1$.
 D. What alignment properties does this code guarantee for the values of $s_2$ and p?
 
 **Solution**:
+```z80
+# long aframe(long n, long idx, long *q)
+# n in %rdi, idx in %rsi, q in %rdx
 
+aframe:
+	pushq %rbp
+	movq %rsp, %rbp
+	subq $16, %rsp              # rsp=rsp-16: Allocate space for i (%rsp = s1)
+	leaq 30(,%rdi,8), %rax      # rax=8*rdi+30: rax = 8*n + 0x 1E
+	andq $-16, %rax             # rax = rax & 0x FFFF FFF0
+	subq %rax, %rsp             # rsp=rsp-rax: Allocate space for array p (%rsp = s2)
+	leaq 15(%rsp), %r8
+	andq $-16, %r8              # Set %r8 to &p[0]
+	...
+```
 
 
 
