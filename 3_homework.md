@@ -1229,12 +1229,15 @@ p = ($s_2$+15) & 0x FFFF FFF0, which is the closest multiples of 16 which is gre
 C.
 We buld the stack frame first.
 
-| Stack | Comment |
-| ----- | ------- |
-|       |         |
+| Stack                | size                       | comment                                                                    |
+| -------------------- | -------------------------- | -------------------------------------------------------------------------- |
+| ...<br>$s_1$         | 16 bytes                   | `subq $16, %rsp`<br>$s_1$ -> bottom                                        |
+| ...<br><br><br>$s_2$ | (8\*n+30)&0xfffffff0 bytes | <br>`leaq 30(,%rdi,8), %rax`<br>`andq $-16, %rax`<br>`subq %rax, %rsp`<br> |
+| rsp                  |                            | $s_2$ -> here                                                              |
 
+p = (rsp+15) & 0x FFFF FFF0
 
-$e_1$ = p - $s_1$
+$e_1$ = p - $s_1$ = (rsp+15) & 0x FFFF FFF0 - (rsp + (8\*n+30)&0xfffffff0)
 
 D.
 
