@@ -1217,6 +1217,9 @@ aframe:
 	...
 ```
 
+A.
+$s_2 = (8 \times n + 30) \& 0xFFFFFFF0$
+
 
 
 
