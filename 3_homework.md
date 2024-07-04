@@ -1232,6 +1232,14 @@ Go through all instructions with changing in stack frame step by step:
 7. After executing `subq %rax, %rsp`
 	![[image-20240704172634501.png|300]]
 8. Add $s_1$, $s_2$ labels
+	![[image-20240704174031105.png|300]]
+9. After executing `leaq 15(%rsp), %r8`, no change for stack frame.
+	We get: `r8=rsp+15`
+10. After executing `andq $-16, %r8`
+	We get: `r8=(rsp+15)&0xfffffff0` for 16 bytes alignment
+	![[image-20240704174623686.png|300]]
+
+
 
 	
 
