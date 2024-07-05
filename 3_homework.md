@@ -1238,6 +1238,9 @@ Go through all instructions with changing in stack frame step by step:
 10. After executing `andq $-16, %r8`
 	We get: `r8=(rsp+15)&0xfffffff0` for 16 bytes alignment
 	![[image-20240704174623686.png|300]]
+11. Add $e_1$, $e_2$ labels
+	![[image-20240705101754367.png|300]]
+
 
 
 
