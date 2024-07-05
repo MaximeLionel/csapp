@@ -2,5 +2,6 @@
   "accentColor": "",
   "theme": "moonstone",
   "baseFontSize": 12,
-  "textFontFamily": "Consolas"
+  "textFontFamily": "Consolas",
+  "cssTheme": "Prism"
 }
