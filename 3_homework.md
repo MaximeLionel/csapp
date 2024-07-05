@@ -1244,42 +1244,21 @@ Go through all instructions with changing in stack frame step by step:
 
 
 
-Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
-* If n = 9, s1 - s2 = 0x60 = 96 bytes, while p array takes 8\*9 = 72 bytes
-	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
-	* p_array_end = ($\&p[0]$ + 8\*(n+1) + 8) & (-16) = ($\&p[0]$ + 88) & (-16) = $\&p[0]$ + 80
-	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
-	* $e_1$ = $s_1$ - p_array_end = (96 + $s_2$) - ($\&p[0]$ + 80) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
-* If n = 8, s1 - s2 = 0x50 = 80 bytes, while p array takes 8\*8 = 64 bytes
-	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
-	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 72) & (-16) = $\&p[0]$ + 64 for 16 bytes alignment
-	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
-	* $e_1$ = $s_1$ - p_array_end = (80 + $s_2$) - ($\&p[0]$ + 64) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
 
 
 Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
 * If n = 2m + 1 (odd number):
-	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes.
+	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = (16m+38)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes.
 	* $\&p[0]$ =(s2+15)&(-16) = (s2+15) - (s2+15)%16 for 16 bytes alignment.
-	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 16m + 16) & (-16) = $\&p[0]$ + 16m + 16.
-	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - (s2+15)%16.
-	* $e_1$ = $s_1$ - p_array_end = s2 + 16m + 32 - ($\&p[0]$ + 16m + 16) = s2 - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + (s2+15)%16
-* If n = 8, s1 - s2 = 0x50 = 80 bytes, while p array takes 8\*8 = 64 bytes
+	* p_array_end = $\&p[0]$ + 8\*n = $\&p[0]$ + 8\*(2m+1) + 8 = $\&p[0]$ + 16m + 8.
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - (s2+15)%16 = 15 - (s1 - 16m - 32 + 15)%16 = 15 - (s1 - 16m - 17)%16
+	* $e_1$ = $s_1$ - p_array_end = s2 + 16m + 32 - ($\&p[0]$ + 16m + 8) = s2 - $\&p[0]$ + 24 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 24 = 9 + (s2+15)%16
+* If n = 2m (even number):
+	* s1 - s2 = (8\*2m+30)&0xfffffff0 = 16m + 16, while p array takes 16m + 16 bytes
 	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
-	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 72) & (-16) = $\&p[0]$ + 64 for 16 bytes alignment
-	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
-	* $e_1$ = $s_1$ - p_array_end = (80 + $s_2$) - ($\&p[0]$ + 64) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
-
-
-
-	
-
-
-
-
-
-
-
+	* p_array_end = ($\&p[0]$ + 8\*n) & (-16) = $\&p[0]$ + 16m for 16 bytes alignment
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16 
+	* $e_1$ = $s_1$ - p_array_end = (16m + 16 + $s_2$) - ($\&p[0]$ + 16m) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16 
 
 A.
 $s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$
@@ -1291,22 +1270,16 @@ B.
 p = ($s_2$+15) & 0x FFFF FFF0, which is the closest multiples of 16 which is greater than $s_2$.
 
 C.
-We buld the stack frame first.
-
-| Stack                | size                       | comment                                                                    |
-| -------------------- | -------------------------- | -------------------------------------------------------------------------- |
-| ...<br>$s_1$         | 16 bytes                   | `subq $16, %rsp`<br>$s_1$ -> bottom                                        |
-| ...<br><br><br>$s_2$ | (8\*n+30)&0xfffffff0 bytes | <br>`leaq 30(,%rdi,8), %rax`<br>`andq $-16, %rax`<br>`subq %rax, %rsp`<br> |
-| rsp                  |                            | $s_2$ -> here                                                              |
-
-p = (rsp+15) & 0x FFFF FFF0
-
-$e_1$ = $s_1$ - end of array p
-We know that $s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$, to make $e_1$ minimum, we need to maximize $s_2$. n must be an even number
+The minimum e1: when n is an even number, $e1_{min}$ = 1
+The maximum e1: when n is an odd number, $e2_{max}=24$
 
 D.
+16 bytes.
 
+# 3.73 ◆
+Write a function in assembly code that matches the behavior of the function find_range in Figure 3.51. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all 232 possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
 
+**Solution**:
 
 
 
