@@ -1259,11 +1259,11 @@ Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
 
 Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
 * If n = 2m + 1 (odd number):
-	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes
-	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
-	* p_array_end = ($\&p[0]$ + 8\*(n+1) + 8) & (-16) = ($\&p[0]$ + 88) & (-16) = $\&p[0]$ + 80
-	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
-	* $e_1$ = $s_1$ - p_array_end = (96 + $s_2$) - ($\&p[0]$ + 80) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
+	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes.
+	* $\&p[0]$ =(s2+15)&(-16) = (s2+15) - (s2+15)%16 for 16 bytes alignment.
+	* p_array_end = ($\&p[0]$ + 8\*(n+1) + 8) & (-16) = ($\&p[0]$ + 16m + 24) & (-16) = $\&p[0]$ + 16m + 16.
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - (s2+15)%16.
+	* $e_1$ = $s_1$ - p_array_end = s1 - ($\&p[0]$ + 80) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
 * If n = 8, s1 - s2 = 0x50 = 80 bytes, while p array takes 8\*8 = 64 bytes
 	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
 	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 72) & (-16) = $\&p[0]$ + 64 for 16 bytes alignment
