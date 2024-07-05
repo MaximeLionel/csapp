@@ -1201,6 +1201,7 @@ C. Find values of n and $s_1$ that lead to minimum and maximum values of $e_1$.
 D. What alignment properties does this code guarantee for the values of $s_2$ and p?
 
 **Solution**:
+Reverse the assembly code:
 ```z80
 # long aframe(long n, long idx, long *q)
 # n in %rdi, idx in %rsi, q in %rdx
@@ -1235,12 +1236,39 @@ Go through all instructions with changing in stack frame step by step:
 	![[image-20240704174031105.png|300]]
 9. After executing `leaq 15(%rsp), %r8`, no change for stack frame.
 	We get: `r8=rsp+15`
-10. After executing `andq $-16, %r8`
-	We get: `r8=(rsp+15)&0xfffffff0` for 16 bytes alignment
+10. After executing `andq $-16, %r8`, while `-16 = 0x ffff ffff ffff fff0`
+	We get: `r8=(rsp+15)&(-16)` for 16 bytes alignment
 	![[image-20240704174623686.png|300]]
 11. Add $e_1$, $e_2$ labels
-	![[image-20240705101754367.png|300]]
+	![[image-20240705104621981.png|300]]
 
+
+
+Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
+* If n = 9, s1 - s2 = 0x60 = 96 bytes, while p array takes 8\*9 = 72 bytes
+	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
+	* p_array_end = ($\&p[0]$ + 8\*(n+1) + 8) & (-16) = ($\&p[0]$ + 88) & (-16) = $\&p[0]$ + 80
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
+	* $e_1$ = $s_1$ - p_array_end = (96 + $s_2$) - ($\&p[0]$ + 80) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
+* If n = 8, s1 - s2 = 0x50 = 80 bytes, while p array takes 8\*8 = 64 bytes
+	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
+	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 72) & (-16) = $\&p[0]$ + 64 for 16 bytes alignment
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
+	* $e_1$ = $s_1$ - p_array_end = (80 + $s_2$) - ($\&p[0]$ + 64) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
+
+
+Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
+* If n = 2m + 1 (odd number):
+	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes
+	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
+	* p_array_end = ($\&p[0]$ + 8\*(n+1) + 8) & (-16) = ($\&p[0]$ + 88) & (-16) = $\&p[0]$ + 80
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
+	* $e_1$ = $s_1$ - p_array_end = (96 + $s_2$) - ($\&p[0]$ + 80) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
+* If n = 8, s1 - s2 = 0x50 = 80 bytes, while p array takes 8\*8 = 64 bytes
+	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
+	* p_array_end = ($\&p[0]$ + 8\*n + 8) & (-16) = ($\&p[0]$ + 72) & (-16) = $\&p[0]$ + 64 for 16 bytes alignment
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16
+	* $e_1$ = $s_1$ - p_array_end = (80 + $s_2$) - ($\&p[0]$ + 64) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16
 
 
 
