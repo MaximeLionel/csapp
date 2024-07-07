@@ -1,6 +1,7 @@
 {
   "accentColor": "",
-  "theme": "obsidian",
+  "theme": "system",
   "baseFontSize": 12,
-  "textFontFamily": "Consolas"
+  "textFontFamily": "Consolas",
+  "cssTheme": "Prism"
 }
