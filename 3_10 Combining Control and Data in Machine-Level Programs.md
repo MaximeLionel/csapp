@@ -61,7 +61,7 @@
 	{
 		int c;
 		char *dest = s;
-		while ((c = getchar()) != ’\n’ && c != EOF)
+		while ((c = getchar()) != '\n' && c != EOF)
 			*dest++ = c;
 			
 		if (c == EOF && dest == s) /* No characters read */

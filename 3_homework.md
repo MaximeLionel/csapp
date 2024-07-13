@@ -1133,14 +1133,153 @@ void proc (union ele *up) {
 # 3.71 ◆
 Write a function good_echo that reads a line from standard input and writes it to standard output. Your implementation should work for an input line of arbitrary length. You may use the library function fgets, but you must make sure your function works correctly even when the input line requires more space than you have allocated for your buffer. Your code should also check for error conditions and return when one is encountered. Refer to the definitions of the standard I/O functions for documentation [45, 61].
 
+**Solutino**:
+Get the syntax of `fgets` function:
+```c
+char* fgets(char *_str_, int _n_, FILE *_stream_);
+```
+* The `fgets()` reads a line from the specified stream and stores it into the string pointed to by str. 
+* It stops when either (n-1) characters are read, the newline character is read, or the end-of-file is reached, whichever comes first.
+* The `fgets()` function returns a pointer to the string where the input is stored.
+
+```c
+#include <stdio.h>
+#define BUFSIZE 5
+
+void good_echo(void)  
+{  
+	char buf[BUFSIZE];
+	while (!feof(stdin)) {  
+		if (fgets(buf, BUFSIZE, stdin) == NULL)  return;  
+		fputs(buf, stdout);  
+	}  
+}
+
+int main()
+{
+	good_echo();
+	return 0;
+}
+```
+# 3.72 ◆◆
+The C code below shows the code for a function that is similar to function vfunct. We used vfunct to illustrate the use of a frame pointer in managing variable-size stack frames. The new function aframe allocates space for local array p by calling library function `alloca`. This function is similar to the more commonly used function `malloc`, except that it allocates space on the run-time stack. The space is automatically deallocated when the executing procedure returns. The assembly code below shows the part of the assembly code that sets up the frame pointer and allocates space for local variables i and p. It is very similar to the corresponding code for vframe. Let us use the same notation as in Problem 3.49: The stack pointer is set to values $s_1$ at line 7 and $s_2$ at line 10. The start address of array p is set to value p at line 12. Extra space $e_2$ may arise between $s_2$ and p, and extra space $e_1$ may arise between the end of array p and $s_1$.
+```c
+#include <alloca.h>
+
+long aframe(long n, long idx, long *q) {
+	long i;
+	long **p = alloca(n * sizeof(long *));
+	p[0] = &i;
+	for (i = 1; i < n; i++)
+		p[i] = q;
+	return *p[idx];
+}
+```
+
+```z80
+# long aframe(long n, long idx, long *q)
+# n in %rdi, idx in %rsi, q in %rdx
+
+aframe:
+	pushq %rbp
+	movq %rsp, %rbp
+	subq $16, %rsp              # Allocate space for i (%rsp = s1)
+	leaq 30(,%rdi,8), %rax
+	andq $-16, %rax
+	subq %rax, %rsp             # Allocate space for array p (%rsp = s2)
+	leaq 15(%rsp), %r8
+	andq $-16, %r8              # Set %r8 to &p[0]
+	...
+```
+
+A. Explain, in mathematical terms, the logic in the computation of $s_2$.
+
+B. Explain, in mathematical terms, the logic in the computation of p.
+
+C. Find values of n and $s_1$ that lead to minimum and maximum values of $e_1$.
+
+D. What alignment properties does this code guarantee for the values of $s_2$ and p?
+
+**Solution**:
+Reverse the assembly code:
+```z80
+# long aframe(long n, long idx, long *q)
+# n in %rdi, idx in %rsi, q in %rdx
+
+aframe:
+	pushq %rbp
+	movq %rsp, %rbp
+	subq $16, %rsp              # rsp=rsp-16: Allocate space for i (%rsp = s1)
+	leaq 30(,%rdi,8), %rax      # rax=8*rdi+30: rax = 8*n + 0x 1E
+	andq $-16, %rax             # rax = rax & 0x FFFF FFF0
+	subq %rax, %rsp             # rsp=rsp-rax: Allocate space for array p (%rsp = s2)
+	leaq 15(%rsp), %r8          # r8=rsp+15
+	andq $-16, %r8              # Set %r8 to &p[0]
+	...
+```
+Go through all instructions with changing in stack frame step by step:
+1. Enter function.
+	![[image-20240704170455325.png|250]]
+2. After executing `pushq %rbp` 
+	![[image-20240704170809783.png|250]]
+3. After executing `movq %rsp, %rbp`
+	![[image-20240704170945156.png|250]]
+4. After executing `subq $16, %rsp`
+	![[image-20240704171555542.png|250]]
+5. After executing `leaq 30(,%rdi,8), %rax`, no change for stack frame.
+	We get: `rax = 8*n + 0x 1E`
+6. After executing `andq $-16, %rax`, no change for stack frame.
+	We get: `rax = (8*n + 0x 1E) & 0xfffffff0`
+7. After executing `subq %rax, %rsp`
+	![[image-20240704172634501.png|300]]
+8. Add $s_1$, $s_2$ labels
+	![[image-20240704174031105.png|300]]
+9. After executing `leaq 15(%rsp), %r8`, no change for stack frame.
+	We get: `r8=rsp+15`
+10. After executing `andq $-16, %r8`, while `-16 = 0x ffff ffff ffff fff0`
+	We get: `r8=(rsp+15)&(-16)` for 16 bytes alignment
+	![[image-20240704174623686.png|300]]
+11. Add $e_1$, $e_2$ labels
+	![[image-20240705104621981.png|300]]
 
 
 
 
 
+Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
+* If n = 2m + 1 (odd number):
+	* s1 - s2 = (8*(2m+1)+30)&0xfffffff0 = (16m+38)&0xfffffff0 = 16m + 32 bytes, while p array roughly takes 16m + 32 bytes.
+	* $\&p[0]$ =(s2+15)&(-16) = (s2+15) - (s2+15)%16 for 16 bytes alignment.
+	* p_array_end = $\&p[0]$ + 8\*n = $\&p[0]$ + 8\*(2m+1) + 8 = $\&p[0]$ + 16m + 8.
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - (s2+15)%16 = 15 - (s1 - 16m - 32 + 15)%16 = 15 - (s1 - 16m - 17)%16
+	* $e_1$ = $s_1$ - p_array_end = s2 + 16m + 32 - ($\&p[0]$ + 16m + 8) = s2 - $\&p[0]$ + 24 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 24 = 9 + (s2+15)%16
+* If n = 2m (even number):
+	* s1 - s2 = (8\*2m+30)&0xfffffff0 = 16m + 16, while p array takes 16m + 16 bytes
+	* $\&p[0]$ =`(s2+15)&0xfffffff0` = `(s2+15) - (s2+15)%16` for 16 bytes alignment
+	* p_array_end = ($\&p[0]$ + 8\*n) & (-16) = $\&p[0]$ + 16m for 16 bytes alignment
+	* $e_2$ = $\&p[0]$ - $s_2$ = 15 - ($s_2$+15)%16 
+	* $e_1$ = $s_1$ - p_array_end = (16m + 16 + $s_2$) - ($\&p[0]$ + 16m) = $s_2$ - $\&p[0]$ + 16 = $s_2$ - (`(s2+15) - (s2+15)%16`) + 16 = 1 + ($s_2$+15)%16 
 
+A.
+$s_2 = s_1 - (8 \times n + 30) \& 0xFFFFFFF0$
+This is to:
+* meet 16 bytes' alignment;
+* allocate proper stack space for use;
 
+B.
+p = ($s_2$+15) & 0x FFFF FFF0, which is the closest multiples of 16 which is greater than $s_2$.
 
+C.
+The minimum e1: when n is an even number, $e1_{min}$ = 1
+The maximum e1: when n is an odd number, $e2_{max}=24$
+
+D.
+16 bytes.
+
+# 3.73 ◆
+Write a function in assembly code that matches the behavior of the function find_range in Figure 3.51. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all $2^{32}$ possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
+
+**Solution**:
 
 
 

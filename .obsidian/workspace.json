@@ -32,6 +32,18 @@
             }
           },
           {
+            "id": "e0414601a67c67cb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "9aaf650e113735a1",
             "type": "leaf",
             "state": {
@@ -44,7 +56,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -111,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +163,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -172,18 +184,24 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "e0414601a67c67cb",
   "lastOpenFiles": [
-    "3_homework.md",
     "3_6 Control.md",
     "conflict-files-obsidian-git.md",
+    "3_homework.assets/image-20240705104621981.png",
+    "3_homework.assets/image-20240705101754367.png",
+    "3_homework.assets/image-20240704174623686.png",
+    "3_homework.assets/image-20240704174031105.png",
+    "3_homework.assets/image-20240704172634501.png",
+    "3_homework.assets/image-20240704171555542.png",
+    "3_homework.assets/image-20240704171549728.png",
+    "3_homework.assets/image-20240704171535890.png",
+    "3_homework.assets/image-20240704170945156.png",
+    "3_homework.assets/image-20240704170809783.png",
+    "3_homework.md",
     "3_5 Arithmetic and Logical Operations.md",
-    "3_homework.assets/image-20240624151147104.png",
     "3_homework.assets",
     "3_11 Floating-Point Code.md",
-    "3_11 Floating-Point Code.assets/image-20240621093952917.png",
-    "3_11 Floating-Point Code.assets/image-20240621093758169.png",
-    "3_11 Floating-Point Code.assets/image-20240621083926082.png",
     "2_4.md",
     "2_3.md",
     "2_2.md",
@@ -191,12 +209,6 @@
     "2_0.md",
     "1_9.md",
     "3_4 Accessing Information.md",
-    "3_11 Floating-Point Code.assets/image-20240619155051303.png",
-    "3_11 Floating-Point Code.assets/image-20240619155030256.png",
-    "3_11 Floating-Point Code.assets/image-20240619154607449.png",
-    "3_11 Floating-Point Code.assets/image-20240618093310969.png",
-    "3_11 Floating-Point Code.assets/image-20240618093046427.png",
-    "3_11 Floating-Point Code.assets/image-20240616135320260.png",
     "3_11 Floating-Point Code.assets",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
