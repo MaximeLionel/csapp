@@ -43,7 +43,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -110,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_homework.md",
+                "file": "3_6 Control.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_homework.md",
+                "file": "3_6 Control.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_homework.md"
+                "file": "3_6 Control.md"
               }
             }
           }
@@ -171,10 +172,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
-    "3_6 Control.md",
     "3_homework.md",
+    "3_6 Control.md",
     "conflict-files-obsidian-git.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_homework.assets/image-20240624151147104.png",
