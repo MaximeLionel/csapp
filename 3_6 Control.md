@@ -696,26 +696,16 @@ B. Annotate the code to explain how it works.
 # x in %rdi
 
 arith:
-	leaq    15(%rdi), %rbx  # rbx = 15 + rdi(x)
-	testq   %rdi, %rdi      # test rdi & rdi
-	cmovns  %rdi, %rbx      # if rdi(x) >= 0, rbx = rdi(x)
-	sarq    $4, %rbx        # rbx >> 4
+	leaq    15(%rdi), %rbx  # rbx=rdi+15: rbx = x + 15
+	testq   %rdi, %rdi      # test x
+	cmovns  %rdi, %rbx      # if x >= 0, rbx=rdi: rbx = x
+	sarq    $4, %rbx        # rbx=rbx>>4
 	ret
 ```
-So we get:
-```c
-short arith(short x)
-{
-	int rbx = 15 + x;
-	if(x >= 0) rbx = x;
-	rbx = rbx / 16;
-	return rbx;
-}
-```
-$x/2^4=(x<0? x+(1<<4)-1 : x)>>4$
-
-We easily find it's a Two’s-complement division by a power of 2.
-So we get the operation is `/`.
+A.
+$x/2^4$ = (x < 0? x+(1<<4)-1:x)>>4
+B.
+Two's compliment division operation.
 
 # Practice Problem 3.21
 Starting with C code of the form
