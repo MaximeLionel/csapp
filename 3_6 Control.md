@@ -758,57 +758,57 @@ Fill in the missing expressions in the C code.
 # x in %rdi, y in %rsi
 .globl  test
 test:
-        leal    12(%rsi), %eax   # eax = 12 + rsi(y)
+        leal    12(%rsi), %eax    # eax=rsi+12: eax = y + 12
         testw   %di, %di
-        js      .L5              # if di(x) < 0, go to .L5
-		                         # if di(x) >= 0
-        cmpw    $10, %si         # compare si(x) and 10
-        jle     .L1              # if x <= 10, go to .L1(return)
-		                         # if x > 10
-        movswl  %di, %eax        # eax = x
-        movswl  %si, %esi        # y = y 
-        cltd
-        idivl   %esi             # x / y
-		                         # eax = quotient
+        js      .L5               # if x < 0, jump to .L5
+							      # if x >=0 
+        cmpw    $10, %si          # cmp 10,y: compare y,10
+        jle     .L1               # if y-10<=0, jump to .L1
+                                  # if y-10>0
+        movswl  %di, %eax         # eax=di: eax = x
+        movswl  %si, %esi         # esi=si: esi = y
+        cltd                      # edx:eax=eax: edx:eax = x
+        idivl   %esi              # edx:eax / esi: x/y
+                                  # eax = quotient
 .L1:
         ret
 .L5:
-        cmpw    %di, %si         # compare si(y) and di(x)
-        jle     .L3              # if y<=x, go to .L3
-		                         # if y>x
-        movl    %edi, %eax       # eax = x
-        imull   %esi, %eax       # eax = x * y
+        cmpw    %di, %si          # cmp x,y: compare y,x
+        jle     .L3               # if y <= x, jump to .L3
+                                  # if y > x
+        movl    %edi, %eax        # eax=edi: eax = x
+        imull   %esi, %eax        # eax=eax*esi: eax = x*y
         ret
 .L3:
-        movl    %esi, %eax       # eax = y
-        orl     %edi, %eax       # eax = x | y
+        movl    %esi, %eax        # eax=esi: eax = y
+        orl     %edi, %eax        # eax=eax|edi: eax = y | x
         ret
 ```
-* `cltd` - Convert Long to Double. Sign-extend the value from the `EAX` register (32-bit) into the `EDX:EAX` register pair.
 
 ```c
 short test(short x, short y)
 {
-	if(x>=0 && x<=10) return 12+y;
-	if(x<0 && y<=x) return x | y;
+	if(x<0 && y<=x) return x|y;
+	if(x>=0 && y<=10) return y+12;
+	if(x>=0 && y>10) return x/y;
 	if(x<0 && y>x) return x*y;
-    if(x>10) return x/y;
 }
 ```
 
 ```c
 short test(short x, short y) {
-	short val = 12 + y ;
+	short val = y + 12 ;
 	if ( x < 0 ) {
 		if ( y <= x )
-			val = x|y ;
+			val = x | y ;
 		else
 			val = x*y ;
-	} else if ( x > 10 )
+	} else if ( y > 10 )
 		val = x/y ;
 	return val;
 }
 ```
+
 
 
 # 3.6.7 Loops
@@ -877,10 +877,10 @@ loop:
 		goto loop;
 done:
 ```
-![[3_6 Control.assets/image-20240519091323183.png|600]]
+![[3_6 Control.assets/image-20240519091323183.png|500]]
 
 ## For Loops
-* general form of a for loop：
+* General form of a for loop：
 ```c
 for (init-expr; test-expr; update-expr)
 	body-statement
@@ -1001,7 +1001,7 @@ done:
 		        movq    %rdx, %rax
 		        ret
 		```
-		* we easily find that gcc actually use jump-to-middle strategy with Og option.
+		* we easily find that gcc actually use jump-to-middle strategy with `-Og` option.
 
 
 # Practice Problem 3.22

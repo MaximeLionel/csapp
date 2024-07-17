@@ -1277,11 +1277,132 @@ D.
 16 bytes.
 
 # 3.73 ◆
-Write a function in assembly code that matches the behavior of the function find_range in Figure 3.51. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all $2^{32}$ possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
+Write a function in assembly code that matches the behavior of the function find_range in code below. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all $2^{32}$ possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
+* C code:
+```c
+typedef enum {NEG, ZERO, POS, OTHER} range_t; // 0 (NEG), 1 (ZERO), 2 (POS), and 3 (OTHER)
+
+range_t find_range(float x)
+{
+	int result;
+	if (x < 0)
+		result = NEG;
+	else if (x == 0)
+		result = ZERO;
+	else if (x > 0)
+		result = POS;
+	else
+		result = OTHER;
+	return result;
+}
+```
+* Assembly code:
+```
+# range_t find_range(float x)
+# x in %xmm0
+
+find_range:
+	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
+	vucomiss %xmm0, %xmm1               # Compare 0:x
+	ja .L5                              # If >, goto neg
+	vucomiss %xmm1, %xmm0               # Compare x:0
+	jp .L8                              # If NaN, goto posornan
+	movl $1, %eax                       # result = ZERO
+	je .L3                              # If =, goto done
+
+.L8:                                    # posornan:
+	vucomiss .LC0(%rip), %xmm0          # Compare x:0
+	setbe %al                           # Set result = NaN?1:0
+	movzbl %al, %eax                    # Zero-extend
+	addl $2, %eax                       # result += 2 (POS for > 0, OTHER for NaN)
+	ret                                 # Return
+
+.L5:                                    # neg:
+	movl $0, %eax                       # result = NEG
+
+.L3:                                    # done:
+	rep; ret                            # Return
+```
+
 
 **Solution**:
+First, let's go through the compare instruction `vucomiss` from intel manual:
+* UCOMISS — Unordered Compare Scalar Single Precision Floating-Point Values and Set EFLAGS.
+	```
+	RESULT := UnorderedCompare(DEST[31:0] <> SRC[31:0]) {
+		(* Set EFLAGS *) CASE (RESULT) OF
+		UNORDERED: ZF,PF,CF := 111;
+		GREATER_THAN: ZF,PF,CF := 000;
+		LESS_THAN: ZF,PF,CF := 001;
+		EQUAL: ZF,PF,CF := 100;
+		ESAC;
+		OF, AF, SF := 0; }
+	```
+	* We get that by using `UCOMISS` instructions, only when `PF == 1` means it's unordered.
 
+Secondly, let's go through the conditional jump instruction `jp` from intel manual:
+	`JP - Jump near if parity (PF=1)`
 
+Thirdly, let's write the assembly code below:
+```
+# range_t find_range(float x)
+# x in %xmm0
+# typedef enum {NEG, ZERO, POS, OTHER}
 
+find_range:
+	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
+	vucomiss %xmm1, %xmm0               # Compare x:0
+	jp .other                           # if unordered
+	ja .pos                             # if x > 0
+	je .zero                            # if x == 0
+	jb .neg                             # if x < 0
+	
+.other:
+	movl $3, %eax                       # eax = OTHER
+	jmp .done
+.pos:
+	movl $2, %eax                       # eax = POS
+	jmp .done
+.zero:
+	movl $1, %eax                       # eax = ZERO
+	jmp .done
+.neg
+	xorl %eax, %eax                     # eax = NEG
+.done:                                  # done:
+	rep; ret                            # Return
+```
+
+Fourthly, let's do inline assembly code in C code:
+How to do inline assembly code - please refer to my videos about assembly languages.
+```C
+#include <stdio.h>
+typedef enum {NEG, ZERO, POS, OTHER}
+
+range_t find_range(float x)
+{
+	__asm__(
+	"vxorps %xmm1, %xmm1, %xmm1\n\t"
+	"vucomiss %xmm1, %xmm0\n\t"               
+	"jp .other\n\t"                           
+	"ja .pos\n\t"                             
+	"je .zero\n\t"                            
+	"jb .neg\n\t"                             
+	".other:\n\t"
+	"movl $3, %eax\n\t"                       
+	"jmp .done\n\t"
+	".pos:\n\t"
+	"movl $2, %eax\n\t"                      
+	"jmp .done\n\t"
+	".zero:\n\t"
+	"movl $1, %eax\n\t"                      
+	"jmp .done\n\t"
+	".neg\n\t"
+	"xorl %eax, %eax\n\t"                  
+	".done:\n\t"                                 
+	"rep; ret\n\t" 
+	)
+}
+
+```
 
 
