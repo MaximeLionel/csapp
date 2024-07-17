@@ -1,12 +1,4 @@
 [
-  "obsidian-custom-attachment-location",
-  "mousewheel-image-zoom",
-  "cm-editor-syntax-highlight-obsidian",
-  "obsidian-git",
-<<<<<<< HEAD
-  "codeblock-customizer",
-=======
-  "code-styler",
->>>>>>> origin/main
-  "obsidian-style-settings"
+  "obsidian-style-settings",
+  "obsidian-git"
 ]
