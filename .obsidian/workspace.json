@@ -37,14 +37,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "2_homework.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_6 Control.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -172,8 +171,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "836547798358ffed",
+  "active": "2540482438bddfaa",
   "lastOpenFiles": [
+    "2_homework.md",
     "3_homework.md",
     "3_11 Floating-Point Code.md",
     "3_6 Control.md",
@@ -209,7 +209,6 @@
     "Untitled.canvas",
     "3_7 Procedures.assets",
     "3_6 Control.assets",
-    "2_homework.md",
     "2_homework.assets/hw2_97",
     "2_homework.assets/hw2_96",
     "2_homework.assets/hw2_95"

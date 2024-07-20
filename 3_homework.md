@@ -1376,7 +1376,7 @@ Fourthly, let's do inline assembly code in C code:
 How to do inline assembly code - please refer to my videos about assembly languages.
 ```C
 #include <stdio.h>
-typedef enum {NEG, ZERO, POS, OTHER}
+typedef enum {NEG, ZERO, POS, OTHER} range_t;
 
 range_t find_range(float x)
 {
@@ -1401,6 +1401,63 @@ range_t find_range(float x)
 	".done:\n\t"                                 
 	"rep; ret\n\t" 
 	)
+}
+
+```
+
+Finally, let's the testing code, including testing all $2^{32}$ numbers.
+```C
+#include <stdio.h>
+typedef enum {NEG, ZERO, POS, OTHER}
+
+/* Access bit-level representation floating-point number */
+typedef unsigned float_bits;
+
+range_t find_range(float x)
+{
+	__asm__(
+	"vxorps %xmm1, %xmm1, %xmm1\n\t"
+	"vucomiss %xmm1, %xmm0\n\t"               
+	"jp .other\n\t"                           
+	"ja .pos\n\t"                             
+	"je .zero\n\t"                            
+	"jb .neg\n\t"                             
+	".other:\n\t"
+	"movl $3, %eax\n\t"                       
+	"jmp .done\n\t"
+	".pos:\n\t"
+	"movl $2, %eax\n\t"                      
+	"jmp .done\n\t"
+	".zero:\n\t"
+	"movl $1, %eax\n\t"                      
+	"jmp .done\n\t"
+	".neg\n\t"
+	"xorl %eax, %eax\n\t"                  
+	".done:\n\t"                                 
+	"rep; ret\n\t" 
+	)
+}
+
+float u2f(unsigned x)
+{
+    unsigned* p_x = &x;
+    return *(float*)p_x;
+}
+
+int main()
+{
+    unsigned u = 0;
+    while (u <= UINT_MAX)
+    {
+	    float f = u2f(x);
+		if(f < 0) assert(NEG == find_range(f));
+        else if(f == 0) assert(ZERO == find_range(f));
+        else if(f > 0)  assert(POS == find_range(f));
+        else assert(OTHER == find_range(f));
+        u++;
+        printf("Test passed on 0x%08f \n", f);
+    }
+    return 0;
 }
 
 ```
