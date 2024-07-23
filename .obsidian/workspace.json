@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_homework.md",
                 "mode": "source",
                 "source": false
               }
@@ -77,12 +77,12 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_homework.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -161,12 +161,12 @@
   },
   "active": "836547798358ffed",
   "lastOpenFiles": [
+    "2_homework.md",
     "3_6 Control.md",
     "2_1.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_11 Floating-Point Code.md",
     "3_homework.md",
-    "2_homework.md",
     "conflict-files-obsidian-git.md",
     "3_homework.assets/image-20240705104621981.png",
     "3_homework.assets/image-20240705101754367.png",
