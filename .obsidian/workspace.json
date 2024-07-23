@@ -8,24 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2540482438bddfaa",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "3_homework.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "836547798358ffed",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "2_homework.md",
                 "mode": "source",
                 "source": false
               }
@@ -72,7 +60,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "float_bits",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -89,12 +77,12 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -110,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_homework.md",
+                "file": "2_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_homework.md",
+                "file": "2_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_homework.md"
+                "file": "2_homework.md"
               }
             }
           }
@@ -171,12 +159,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2540482438bddfaa",
+  "active": "836547798358ffed",
   "lastOpenFiles": [
-    "2_homework.md",
-    "3_homework.md",
-    "3_11 Floating-Point Code.md",
     "3_6 Control.md",
+    "2_1.md",
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
+    "3_11 Floating-Point Code.md",
+    "3_homework.md",
+    "2_homework.md",
     "conflict-files-obsidian-git.md",
     "3_homework.assets/image-20240705104621981.png",
     "3_homework.assets/image-20240705101754367.png",
@@ -193,12 +183,10 @@
     "2_4.md",
     "2_3.md",
     "2_2.md",
-    "2_1.md",
     "2_0.md",
     "1_9.md",
     "3_4 Accessing Information.md",
     "3_11 Floating-Point Code.assets",
-    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "3_9 Heterogeneous Data Structures.md",
     "3_8 Array Allocation and Access.md",
