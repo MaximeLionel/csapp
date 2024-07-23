@@ -1492,7 +1492,7 @@ Firstly, let's modify the asm code for homework 3.37
 ```
 # range_t find_range(float x)
 # x in %xmm0
-# typedef enum {NEG, ZERO, POS, OTHER}
+# typedef enum {NEG, ZERO, POS, OTHER} range_t
 
 find_range:
 	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
