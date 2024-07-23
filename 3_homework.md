@@ -1497,22 +1497,30 @@ Firstly, let's modify the asm code for homework 3.37
 find_range:
 	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
 	vucomiss %xmm1, %xmm0               # Compare x:0
-	jp .other                           # if unordered
-	ja .pos                             # if x > 0
-	je .zero                            # if x == 0
-	jb .neg                             # if x < 0
-	
-.other:
-	movl $3, %eax                       # eax = OTHER
-	jmp .done
-.pos:
-	movl $2, %eax                       # eax = POS
-	jmp .done
-.zero:
-	movl $1, %eax                       # eax = ZERO
-	jmp .done
-.neg
-	xorl %eax, %eax                     # eax = NEG
-.done:                                  # done:
+	cmovpq   other, %eax                # if unordered and neg is local variable
+	cmovaq   pos, %eax                  # if x > 0
+	cmoveq   zero, %eax                 # if x == 0
+	cmovbq   neg, %eax                  # if x < 0
 	rep; ret                            # Return
+```
+
+```c
+/* memtest_x64.c - An example of using memory locations as values */
+
+#include <stdio.h>
+
+int main()
+{
+	long dividend = 20;
+	long divisor = 5;
+	long result;
+
+	asm("divb %2\n\t"
+		"movq %%rax, %0"
+		: "=m"(result)       // m - local variable result
+		: "a"(dividend), "m"(divisor));  // a - eax, m - local variable divisor
+
+	printf("The result is %ld\n", result);
+	return 0;
+}
 ```
