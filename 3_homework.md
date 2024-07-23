@@ -1489,3 +1489,30 @@ Write a function in assembly code that matches the behavior of the function find
 
 **Solution**:
 Firstly, let's modify the asm code for homework 3.37
+```
+# range_t find_range(float x)
+# x in %xmm0
+# typedef enum {NEG, ZERO, POS, OTHER}
+
+find_range:
+	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
+	vucomiss %xmm1, %xmm0               # Compare x:0
+	jp .other                           # if unordered
+	ja .pos                             # if x > 0
+	je .zero                            # if x == 0
+	jb .neg                             # if x < 0
+	
+.other:
+	movl $3, %eax                       # eax = OTHER
+	jmp .done
+.pos:
+	movl $2, %eax                       # eax = POS
+	jmp .done
+.zero:
+	movl $1, %eax                       # eax = ZERO
+	jmp .done
+.neg
+	xorl %eax, %eax                     # eax = NEG
+.done:                                  # done:
+	rep; ret                            # Return
+```
