@@ -1413,8 +1413,6 @@ Finally, let's the testing code, including testing all $2^{32}$ numbers.
 
 typedef enum {NEG, ZERO, POS, OTHER} range_t;
 
-  
-
 /* Access bit-level representation floating-point number */
 typedef unsigned float_bits;
 
@@ -1504,6 +1502,34 @@ find_range:
 	rep; ret                            # Return
 ```
 
+Secondly, we make it into C code as inline asm:
+```C
+#include <stdio.h>
+typedef enum {NEG, ZERO, POS, OTHER} range_t;
+
+range_t find_range(float x)
+{
+	int result;
+	int other = OTHER;
+	int pos   = POS;
+	int zero  = ZERO;
+	int neg   = NEG;
+	asm(
+	"vxorps   %%xmm1, %%xmm1, %%xmm1\n\t"
+	"vucomiss %%xmm1, %%xmm0\n\t"               
+	"cmovpq   %1, %%eax\n\t"                           
+	"cmovaq   %2, %%eax\n\t"                             
+	"cmoveq   %3, %%eax\n\t"                            
+	"cmovbq   %4, %%eax\n\t" 
+	"movl     %%eax, %0\n\t"                                                       
+	: "=a"(result)
+	: "m"(other), "m"(pos), "m"(zero), "m"(neg)
+	);
+	return result;
+}
+
+```
+
 ```c
 /* memtest_x64.c - An example of using memory locations as values */
 
@@ -1521,6 +1547,76 @@ int main()
 		: "a"(dividend), "m"(divisor));  // a - eax, m - local variable divisor
 
 	printf("The result is %ld\n", result);
+	return 0;
+}
+```
+
+Thirdly, let's construct the full code:
+```C
+#include <stdio.h>
+#include <limits.h>
+#include <assert.h>
+
+typedef enum {NEG, ZERO, POS, OTHER} range_t;
+
+/* Access bit-level representation floating-point number */
+typedef unsigned float_bits;
+
+range_t find_range(float x)
+{
+	int result;
+	int other = OTHER;
+	int pos   = POS;
+	int zero  = ZERO;
+	int neg   = NEG;
+	asm(
+	"vxorps   %%xmm1, %%xmm1, %%xmm1\n\t"
+	"vucomiss %%xmm1, %%xmm0\n\t"               
+	"cmovpq   %1, %%eax\n\t"                           
+	"cmovaq   %2, %%eax\n\t"                             
+	"cmoveq   %3, %%eax\n\t"                            
+	"cmovbq   %4, %%eax\n\t" 
+	"movl     %%eax, %0\n\t"                                                       
+	: "=a"(result)
+	: "m"(other), "m"(pos), "m"(zero), "m"(neg)
+	);
+	return result;
+}
+
+
+float u2f(unsigned x)
+{
+	unsigned* p_x = &x;
+	return *(float*)p_x;
+}
+
+int main()
+{
+	unsigned u = 0;
+	while (u <= UINT_MAX)
+	{
+		float f = u2f(u);
+		unsigned range;
+		
+		if(f < 0) {
+			range = find_range(f);
+			assert(NEG == range);
+		}
+		else if(f == 0) {
+			range = find_range(f);
+			assert(ZERO == range);
+		}
+		else if(f > 0){
+			range = find_range(f);
+			assert(POS == range);
+		}
+		else {
+			range = find_range(f);
+			assert(OTHER == range);
+		}
+		u = u + 0x1000;   // to cut down testing cost
+		printf("Test passed on 0x%g \n", f);
+	}
 	return 0;
 }
 ```
