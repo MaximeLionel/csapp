@@ -1673,6 +1673,16 @@ Firstly, let's find out what is `complex numbers`.
 	* (b) is the imaginary part
 	* (i) is the imaginary unit with the property that (i^2 = -1).
 	* a and b are both real number
+So we get that, as a complex number, when doing parameters transferring, basically it's just passing a and b.
+
+Therefore, according to the assembly code above. We can get the result as below:
+A. 
+%xmm0, %xmm2 are for passing parameter a.
+%xmm1, %xmm3 are for passing parameter b.
+
+B.
+return %xmm0 for real part (a)
+return %xmm1 for img  part (b)
 
 
 
