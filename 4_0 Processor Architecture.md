@@ -1,0 +1,2 @@
+* instruction set architecture (ISA) - The instructions supported by a particular processor and their byte-level encodings are known as its instruction set architecture (ISA).
+* ISA provides a conceptual layer of abstraction between compiler writers, who need only know what instructions are permitted and how they are encoded, and processor designers, who must build machines that execute those instructions.
