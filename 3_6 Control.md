@@ -1207,6 +1207,19 @@ root@ml:~/csapp/chap3/prac3_22/b# ./b
 The result is 0x 000000144c3b2800
 ```
 
+# Side - explain on assembling and linking command
+`ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 a.o test_a.o -o a -lc`
+* ld - GNU linker
+* -m elf_i386 - force the liner to produce elf_i386 format (x86)
+* -dynamic-linker /lib/ld-linux.so.2 - tells the linker to use dynamic linker and also the path to the specific dynamic linker.
+* a.o test_a.o -o a - use a.o and test_a.o to produce the executable file a.
+* -lc - tells the linker to link the standard C library.
+
+`as --32 -gstabs a.s -o a.o`
+* as - GNU assembler
+* --32 - force the assembler to produce a 32bit object file.
+* -gstabs - include the debugging information in produced object file.
+* a.s -o a.o - use a.s to produce the object file a.o
 # Practice Problem 3.23
 For the C code
 ```c
