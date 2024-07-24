@@ -1620,3 +1620,6 @@ int main()
 	return 0;
 }
 ```
+
+* Compile and run: `gcc -Og 3_74.c -o 3_74`
+
