@@ -1047,7 +1047,7 @@ _start:
         movl    result, %eax
         cdq     # signed expand eax to edx:eax
         movl    value, %edi
-        idivl   %edi
+        idivl   %edi       # edx:eax / edi
         movl    %eax, ofvalue1  # save quotient on stack
 
         # compute 13!
