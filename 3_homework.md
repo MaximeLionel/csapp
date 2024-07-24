@@ -1665,6 +1665,15 @@ Based on these examples, determine the following:
 A. How are complex arguments passed to a function?
 B. How are complex values returned from a function?
 
+**Solution**:
+Firstly, let's find out what is `complex numbers`.
+* "complex numbers" refers to numbers that have both a real part and an imaginary part. 
+* A complex number is typically written in the form (a + bi)
+	* (a) is the real part
+	* (b) is the imaginary part
+	* (i) is the imaginary unit with the property that (i^2 = -1).
+	* a and b are both real number
+
 
 
 
