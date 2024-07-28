@@ -1467,7 +1467,7 @@ long loop_while2(long a, long b)
 A function test_one has the following overall structure:
 ```c
 short test_one(unsigned short x) {
-	short val = 1;
+	short val = 0;
 	while ( ... ) {
 		.
 		.
@@ -1523,54 +1523,47 @@ C. Describe in English what this function computes.
 # x in %rdi
 
 test_one:
-        movl    $0, %eax    # eax = 0
-        jmp     .L2         # go to .L2
+        movl    $0, %eax       # eax=0
+        jmp     .L2            # jump to middle
 .L3:
-        movl    %edi, %edx  # edx = edi(x) = x
-        andl    $1, %edx    # edx = x&1
-        xorl    %edx, %eax  # eax = edx^eax
-        shrw    %di         # x = x >>1
+        movl    %edi, %edx     # edx=edi: edx = x
+        andl    $1, %edx       # edx=edx&1: edx = x & 1
+        xorl    %edx, %eax     # eax=eax^edx: eax = eax ^ (x&1)
+        shrw    %di            # di=di>>1: x = x >> 1
 .L2:
-        testw   %di, %di    
-        jne     .L3         # if di(x)!=0, go to .L3
+        testw   %di, %di       # test di: test x,x
+        jne     .L3            # if(x != 0) jump to .L3
         ret
 ```
-* Draft code:
+* Create the draft code:
 ```c
-# short test_one(unsigned short x)
-# x in %rdi
-
 short test_one(unsigned short x)
 {
-	eax = 0;
-	while(x!=0)
+	int eax = 0;
+	while(x != 0)
 	{
-		eax = eax^(x&1);
-		x = x>>1;
+		eax = eax ^ (x&1);
+		x >> 1;
 	}
 	return eax;
 }
 ```
-* Final code:
+* Finalize the C code:
 ```c
-# short test_one(unsigned short x)
-# x in %rdi
-
-short test_one(unsigned short x)
-{
+short test_one(unsigned short x) {
 	short val = 0;
-	while(x!=0)          
-	{
-		val=val^(x&1);     
-		x = x>>1;      
+	while (x != 0) {
+		val = val^(x&1);
+		x = x >> 1;
 	}
 	return val;
-}
 ```
 
-A. Obviously, jump-to-middle.
+A. Jump to middle.
 B. Done.
-C. Check the parity of argument x, which means return 1 if there's an odd number of 1s in x, or return 0 if there's an even number of 1s in x.
+C. Find out the parity of x. 
+If there's an odd number of 1s, the function return 0.
+If there's an even number of 1s, the function return 1.
 
 # Practice Problem 3.27
 Write goto code for a function called fibonacci to print fibonacci numbers using a while loop. Apply the guarded-do transformation.
