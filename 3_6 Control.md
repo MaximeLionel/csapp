@@ -1263,50 +1263,48 @@ dw_loop:
 ```
 
 A. Which registers are used to hold program values x, y, and n?
-B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (*p)+=5?
+B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (\*p)+=5?
 C. Add annotations to the assembly code describing the operation of the program, similar to those shown in Figure 3.19(c).
 
 **Solution**:
-* Add annotations:
 ```z80
 # short dw_loop(short x)
 # x initially in %rdi
 .globl  dw_loop
 .type   dw_loop, @function
 dw_loop:
-	    movl    %edi, %edx  # edx = edi(x) = x
-        movswl  %di, %ecx   # ecx = di(x)
-        imull   $7282, %ecx, %ecx  # ecx = ecx x 7282 = 7282*x
-        shrl    $16, %ecx   # ecx = 1/9 * x = y
-        movl    %edi, %eax  # eax = edi(x)
-        sarw    $15, %ax    # ax = 0 or -1: get the sign bit
-        subl    %eax, %ecx  # adjust the deviation by sign extention and arithmetic shifts, now ecx = y
-        sall    $2, %edi    # edi = 4*edi = 4*x = n
+        movl    %edi, %edx          # edx=edi: edx = x
+        movswl  %di, %ecx           # ecx=(dw)di: ecx = x
+        imull   $7282, %ecx, %ecx   # ecx=ecx*7282: ecx = x * 7282
+        shrl    $16, %ecx           # ecx=ecx>>16: ecx = (x * 7282)>>16 = x / 9 = y
+        movl    %edi, %eax          # eax=edi: eax = x
+        sarw    $15, %ax            # ax=ax>>15: ax = 0 or -1 to indicate sign bit of x
+        subl    %eax, %ecx          # ecx=ecx-eax: deviation adjustment
+        sall    $2, %edi            # edi=edi*4: edi = x*4 = n
 .L2:
-        leal    5(%rcx,%rdx), %edx  # edx = 5 + rcx + rdx = 5+y+x
-        leal    -2(%rdi), %eax      # eax = n - 2
-        movl    %eax, %edi          # edi = eax = n - 2
-        testw   %ax, %ax
-        jg      .L2                 # if eax(n-2) > 0, go to .L2
-        movl    %edx, %eax
+        leal    5(%rcx,%rdx), %edx  # edx=5+rcx+rdx: edx = 5 + y + x
+        leal    -2(%rdi), %eax      # eax=rdi-2: eax = n - 2
+        movl    %eax, %edi          # edi=eax: edi = n - 2
+        testw   %ax, %ax            # test n-2
+        jg      .L2                 # if n - 2 > 0, go to .L2
+        movl    %edx, %eax          # eax=edx: eax = 5 + y + x
         ret
 ```
-* Why 7282？
-	* If we want to realize x/9, it's impossible to find the exact number with only shift operations.
-	* Thus we need to find the closest number using shift operations.
-	* To simplify, we need to find a constant number to make c/2^n $\approx$ 1/9. 
-	* Let's find a proper number n = 16, so c = 1/9 $\times$ 65536 = 7281.78 $\approx$ 7282.
-	* therefore, we get that 1/9 is 65536 logically shift right by 16 bits.
+* Why 7282?
+	* We get from next instruction: ecx = (x * 7282)>>16
+	* To focus on (x * 7282)>>16 = (x * 7282) / $2^{16}$ = x * (7282/$2^{16}$) = x / 9
 
-A. Which registers are used to hold program values x, y, and n?
-edx - x
-ecx - y
-edi - n
-B. How has the compiler eliminated the need for pointer variable p and the pointer dereferencing implied by the expression (*p)+=5?
-It just simply assumes that p always points to x
-C. Add annotations to the assembly code describing the operation of the program, similar to those shown in Figure 3.19(c).
+A. 
+x - edx
+y - ecx
+n - edi
 
+B. 
+Because the code does not use pointer p alone, but always \*p directly, the compiler directly use x to replace \*p for convenience. 
+For example, to realize `(*p) += 5`, the compiler simply add 5 to x directly by `leal    5(%rcx,%rdx), %edx`.
 
+C.
+Done.
 
 # Practice Problem 3.24
 For C code having the general form
