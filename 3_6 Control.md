@@ -1344,38 +1344,38 @@ We can see that the compiler used a jump-to-middle translation, using the jmp in
 # a in %rdi, b in %rsi
 
 loop_while:
-	movl $0, %eax     # eax = 0
+	movl $0, %eax      # eax=0
 	jmp .L2
 .L3:
-	leaq (,%rsi,%rdi), %rdx # rdx = rdi(a) * rsi(b)
-	addq %rdx, %rax         # rax = rax + rdx = rax + a * b
-	subq $1, %rdi           # rdi = rdi - 1 = a - 1
+	leaq (,%rsi,%rdi), %rdx    # rdx=rsi*rdi: rdx = b * a
+	addq %rdx, %rax    # rax=rax+rdx: rax = rax + a*b
+	subq $1, %rdi      # rdi=rdi-1: a--
 .L2:
-	cmpq %rsi, %rdi   # compare rdi(a) and rsi(b)
-	jg .L3            # if rdi(a) > rsi(b), go to .L3
+	cmpq %rsi, %rdi    # compare rdi and rsi - cmp a,b
+	jg .L3             # if a > b, jump to .L3
 	rep; ret
 ```
-* then we get below:
+
 ```
 short loop_while(short a, short b)
 {
-	int eax = 0;
+	int result = 0;   // result - eax
 	while(a > b)
 	{
-		rax += (a*b);
+		result += a*b;
 		a--;
 	}
-	return eax;
+	return result;
 }
 ```
-* fill in the code below:
+
 ```c
 short loop_while(short a, short b)
 {
 	short result = 0;
 	while ( a > b ) {
-		result = result + a * b;
-		a = a - 1;
+		result = result + a*b ;
+		a = a - 1 ;
 	}
 	return result;
 }
@@ -1421,49 +1421,42 @@ We can see that the compiler used a guarded-do translation, using the `jle` inst
 # a in %rdi, b in %rsi
 
 loop_while2:
-	testq %rsi, %rsi
-	jle .L8            # if b <=0, go to .L8
-					   # if b>0
-	movq %rsi, %rax    # rax = rsi(b)
+	testq %rsi, %rsi   # test b,b
+	jle .L8            # if(b<=0), go to .L8
+	                   # if(b > 0)
+	movq %rsi, %rax    # rax=rsi: rax = b
 .L7:
-	imulq %rdi, %rax   # rax = rax*rdi = b*a
-	subq %rdi, %rsi    # rsi = rsi-rdi: b=b-a
-	testq %rsi, %rsi   
-	jg .L7             # if b>0, go to .L7
-	rep; ret           # if b<=0, return
-.L8:                   
-	movq %rsi, %rax    # rax = rsi(b)
+	imulq %rdi, %rax   # rax=rax*rdi: rax = b*a
+	subq %rdi, %rsi    # rsi=rsi-rdi: rsi = b - a
+	testq %rsi, %rsi   # test rsi,rsi
+	jg .L7             # if(rsi>0), go to .L7
+	                   # if(rsi<=0)
+	rep; ret
+.L8:
+	movq %rsi, %rax    # rax=rsi: rax = b
 	ret
 ```
-* we get the draft code logically:
-```c
-# long loop_while2(long a, long b)
-# a in %rdi, b in %rsi
-
+* Create a draft code:
+```
 long loop_while2(long a, long b)
 {
-	if(b<=0) return b;
-	if(b>0)
+	if(b <= 0) return b;
+	long result = b;
 	{
-		rax = b;
-		do{
-			rax = rax*a;
-			b = b-a;
-		}while(b>0)
-		return rax;
-	}
+		result = result * a;
+		b = b - a;
+	}while(b > 0);
+	return result;
 }
 ```
-* Finalise the final code:
+* Finalize the final code:
 ```c
-# long loop_while2(long a, long b)
-# a in %rdi, b in %rsi
 long loop_while2(long a, long b)
 {
 	long result = b;
-	while (b > 0) {
-		result = result*a;
-		b = b-a;
+	while ( b > 0 ) {
+		result = result * a;
+		b = b - a ;
 	}
 	return result;
 }
