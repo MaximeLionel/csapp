@@ -51,6 +51,17 @@
 ## `CMOV` - conditional move instructions
 * 6 conditional move instructions: `cmovle`, `cmovl`, `cmove`, `cmovne`, `cmovge`, and `cmovg`.
 
+## `CALL` and `RET`
+* The `call` instruction pushes the return address on the stack and jumps to the destination address. 
+* The `ret` instruction returns from such a call.
+
+## `pushq` and `popq` instructions
+* The `pushq` and `popq` instructions implement `push` and `pop`.
+
+## `halt`
+* The `halt` instruction stops instruction execution.
+* Y86-64 executes the `halt` instruction causes the processor to stop, with the status code set to `HLT`.
+
 
 
 
