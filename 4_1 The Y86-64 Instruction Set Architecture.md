@@ -63,15 +63,18 @@
 * Y86-64 executes the `halt` instruction causes the processor to stop, with the status code set to `HLT`.
 
 # 4.1.3 Instruction Encoding
-## byte-level encoding of the instructions
+## Byte-level encoding of the instructions
 ![[Pasted image 20240801141959.png|400]]
 * Each instruction requires between 1 and 10 bytes, depending on which fields are required.
 * Every instruction has an initial byte identifying the instruction type. This byte is split into two 4-bit parts: 
 	* the high-order, or code, part.
-		* range from 0 to 0xB.
+		* **The code values** range from 0 to 0xB.
 	* the low-order, or function, part.
+		* **The function values** are significant only for the cases where a group of related instructions share a common code.
 
-
+## Function values for Y86-64 instruction set.
+![[Pasted image 20240801143245.png|500]]
+* Observe that `rrmovq` has the same instruction `code value` as the conditional moves.
 
 
 
