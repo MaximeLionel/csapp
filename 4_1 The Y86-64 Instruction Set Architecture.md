@@ -118,7 +118,9 @@ Let us generate the byte encoding of the instruction `rmmovq %rsp,0x123456789abc
 
 # Summary of Y86-64 Instructions
 ![[Pasted image 20240801215256.png|550]]
+![[Y86-64.htm]]
 
+![[Pasted image 20240801221104.png|300]]
 # Practice Problem 4.1
 Determine the byte encoding of the Y86-64 instruction sequence that follows. The line `.pos 0x100` indicates that the starting address of the object code should be 0x100.
 ```
@@ -186,4 +188,66 @@ Overall, we get the full byte encodings below:
 116  60 31	                        addq %rbx,%rcx
 118  70 0C 01 00 00 00 00 00 00	    jmp loop
 ```
+
+# Practice Problem 4.2
+For each byte sequence listed, determine the Y86-64 instruction sequence it encodes. If there is some invalid byte in the sequence, show the instruction sequence up to that point and indicate where the invalid value occurs. For each sequence, we show the starting address, then a colon, and then the byte sequence.
+
+A. 0x100: 30f3fcffffffffffffff40630008000000000000
+
+B. 0x200: a06f800c020000000000000030f30a00000000000000
+
+C. 0x300: 5054070000000000000010f0b01f
+
+D. 0x400: 611373000400000000000000
+
+E. 0x500: 6362a0f0
+
+**Solution**:
+A. 0x100: 30f3fcffffffffffffff40630008000000000000
+`30f3fcffffffffffffff`:
+* 30:
+	![[Pasted image 20240801222447.png|500]]
+* rB = 3: %rbx
+* V = 0x ff ff ff ff ff ff ff fc (reversed) = -4
+* Code: `irmovq $-4, %rbx`
+`40630008000000000000`:
+* 40: ![[Pasted image 20240801223005.png|500]]
+* rA = 6: %rsi
+* rB = 3: %rbx
+* D = 0x 00 00 00 00 00 00 08 00 (reversed) = 0x800
+* Code: `rmmovq %rsi, 0x800(%rbx)`
+
+Full code:
+```
+0x100 30 f3 fc ff ff ff ff ff ff ff    irmovq $-4, %rbx
+0x10A 40 63 00 08 00 00 00 00 00 00    rmmovq %rsi, 0x800(%rbx)
+```
+
+B. 0x200: a06f800c020000000000000030f30a00000000000000
+`a06f`:
+* a0: ![[Pasted image 20240801223854.png|150]]
+* rA = 6: %rsi
+* Code: `pushq %rsi`
+`800c02000000000000`:
+* 80: ![[Pasted image 20240801224120.png|400]]
+* D = 0x 00 00 00 00 00 00 02 0c (reversed) = 0x20c
+* Code: `call 0x20c` - what is 0x20c? we will see next.
+`00`: 
+* Code: `halt` 
+`30f30a00000000000000`:
+* 30: ![[Pasted image 20240801224717.png|450]]
+* rB = 3: %rbx
+* V = 0x 00 00 00 00 00 00 00 0a = 10
+* Code: `irmovq $10, %rbx`
+
+Full code:
+```
+0x200 a0 6f                         pushq %rsi
+0x202 80 0c 02 00 00 00 00 00 00    call func:
+0x20b 00                            halt
+0x20c func:
+0x20c 30 f3 0a 00 00 00 00 00 00 00 irmovq $10, %rbx
+```
+
+
 
