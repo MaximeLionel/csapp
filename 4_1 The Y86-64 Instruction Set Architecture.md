@@ -28,7 +28,7 @@
 * All numeric values are shown in hexadecimal.
 
 
-## `movq` - data transfer instruction
+## `MOVQ` - data transfer instruction
 ![[Pasted image 20240730223317.png|500]]
 * The Y86-64 `movq` instruction is split into four different instructions: `irmovq`, `rrmovq`, `mrmovq`, and `rmmovq`, explicitly indicating the form of the source and destination.
 * The source is either immediate (i), register (r), or memory (m). It is designated by the first character in the instruction name.
@@ -47,6 +47,18 @@
 ## `JXX` - jump instructions
 * 7 jump instructions: `jmp`, `jle`, `jl`, `je`, `jne`, `jge`, and `jg`.
 * Branches are taken according to the type of branch and the settings of the condition codes.
+
+## `CMOV` - conditional move instructions
+* 6 conditional move instructions: `cmovle`, `cmovl`, `cmove`, `cmovne`, `cmovge`, and `cmovg`.
+
+
+
+
+
+
+
+
+
 
 
 
