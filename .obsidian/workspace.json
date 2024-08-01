@@ -169,11 +169,13 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
   "active": "fae7601defcadbaa",
   "lastOpenFiles": [
+    "3_6 Control.assets/Book1.htm",
     "3_6 Control.assets/Pasted image 20240801162429.png",
     "3_6 Control.assets/Pasted image 20240801162302.png",
     "3_6 Control.assets/Pasted image 20240801161921.png",
@@ -184,7 +186,6 @@
     "3_6 Control.assets/Pasted image 20240801153216.png",
     "3_6 Control.assets/Pasted image 20240801145505.png",
     "3_6 Control.assets/Pasted image 20240801144810.png",
-    "3_6 Control.assets/Pasted image 20240801143245.png",
     "3_6 Control.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_0 Processor Architecture.md",
