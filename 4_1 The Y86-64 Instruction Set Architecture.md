@@ -237,7 +237,7 @@ B. 0x200: a06f800c020000000000000030f30a00000000000000
 `30f30a00000000000000`:
 * 30: ![[Pasted image 20240801224717.png|450]]
 * rB = 3: %rbx
-* V = 0x 00 00 00 00 00 00 00 0a = 10
+* V = 0x 00 00 00 00 00 00 00 0a (reversed) = 10
 * Code: `irmovq $10, %rbx`
 
 Full code:
@@ -248,6 +248,86 @@ Full code:
 0x20c func:
 0x20c 30 f3 0a 00 00 00 00 00 00 00 irmovq $10, %rbx
 ```
+
+C. 0x300: 5054070000000000000010f0b01f
+`50540700000000000000`:
+* 50: ![[Pasted image 20240801225608.png|500]]
+* rA = 5: %rbp
+* rB = 4: %rsp
+* D = 0x 00 00 00 00 00 00 00 07 = 7
+* Code: `mrmovq 7(%rsp), %rbp`
+`10`:
+* Code: `nop`
+`f0`: invalid code
+`b01f`:
+* b0: ![[Pasted image 20240801230200.png|150]]
+* rA = 1: %rcx
+* Code: `popq %rcx`
+
+Full code:
+```
+0x300 50 54 07 00 00 00 00 00 00 00    mrmovq 7(%rsp), %rbp
+0x30a 10                               nop
+0x30b f0
+0x30c b0 1f                            popq %rcx
+```
+
+D. 0x400: 611373000400000000000000
+`6113`:
+* 61: ![[Pasted image 20240801230923.png|200]]
+* rA = 1: %rcx
+* rB = 3: %rbx
+* Code: `subq %rcx, %rbx`
+`730004000000000000`:
+* 73: ![[Pasted image 20240801231139.png|500]]
+* Dest = 0x 00 00 00 00 00 00 04 00 = 0x400
+* Code: `je 0x400`
+`00`: 
+* Code: `halt`
+
+Full code:
+```
+0x400 loop:
+0x400 61 13                      subq %rcx, %rbx
+0x402 73 00 04 00 00 00 00 00 00 je loop
+0x40c 00                         halt
+```
+
+
+E. 0x500: 6362a0f0
+`6362`:
+* 63: ![[Pasted image 20240801231704.png|180]]
+* rA = 6: %rsi
+* rB = 2: %rdx
+* Code: `xorq %rsi, %rdx`
+
+* a0: ![[Pasted image 20240801231916.png|150]]
+* f0: invalid instruction
+
+Full code:
+```
+0x500 63 62 xorq %rsi, %rdx
+0x502 a0    pushq???
+0x503 f0    invalid instruction
+```
+
+
+# 4.1.4 Y86-64 Exceptions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
