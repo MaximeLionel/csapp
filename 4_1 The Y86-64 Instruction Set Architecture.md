@@ -117,7 +117,7 @@ Let us generate the byte encoding of the instruction `rmmovq %rsp,0x123456789abc
 
 
 # Summary of Y86-64 Instructions
-
+![[Pasted image 20240801215256.png|550]]
 
 # Practice Problem 4.1
 Determine the byte encoding of the Y86-64 instruction sequence that follows. The line `.pos 0x100` indicates that the starting address of the object code should be 0x100.
