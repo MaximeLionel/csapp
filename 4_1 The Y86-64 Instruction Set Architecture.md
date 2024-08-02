@@ -315,6 +315,85 @@ Full code:
 # 4.1.4 Y86-64 Exceptions
 * Y86-64 status codes：
 	![[Pasted image 20240802162013.png|300]]
+	* `AOK` - the program is executing normally.
+	* `HLT` - the processor has executed a ==halt== instruction.
+	* `ADR` - the processor attempted to read from or write to an ==invalid== memory address, either while fetching an instruction or while reading or writing data.
+	* `INS` - an invalid instruction code has been encountered.
+* For Y86-64, we will simply have the processor stop executing instructions when it encounters any of the exceptions listed.
+* In a more complete design, the processor would typically invoke an exception handler, a procedure designated to handle the specific type of exception encountered.
+
+# 4.1.5 Y86-64 Programs
+* C code:
+	```c
+	long sum(long *start, long count)
+	{
+		long sum = 0;
+		while (count) {
+			sum += *start;
+			start++;
+			count--;
+		}
+		return sum;
+	}
+	```
+* x86-64 assembly code:
+	```
+	# long sum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		movl $0, %eax       # sum = 0
+		jmp .L2             # Goto test
+	.L3:                    # loop:
+		addq (%rdi), %rax   # Add *start to sum
+		addq $8, %rdi       # start++
+		subq $1, %rsi       # count--
+	.L2:                    # test:
+		testq %rsi, %rsi    # Test sum
+		jne .L3             # If !=0, goto loop
+		rep; ret            # Return
+	```
+* y86-64 assembly code:
+	```
+	# long sum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+		addq %r8,%rdi           # start++
+		subq %r9,%rsi           # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+	```
+	* The Y86-64 code loads constants into registers, since it cannot use immediate data in arithmetic instructions.
+	```
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+	```
+	* The Y86-64 code requires two instructions to read a value from memory and add it to a register, whereas the x86-64 code can do this with a single addq instruction.
+	```y86-64
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+	```
+
+	```x86-64
+		addq (%rdi), %rax       # Add *start to sum
+	```
+	* Our hand-coded Y86-64 implementation takes advantage of the property that the `subq` instruction also sets the condition codes, and so the `testq` instruction of the gcc-generated code is not required. For this to work, though, the Y86-64 code must set the condition codes prior to entering the loop with an `andq` instruction.
+
+
+
+
+
+
 
 
 
