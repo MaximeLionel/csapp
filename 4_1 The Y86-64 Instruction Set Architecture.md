@@ -394,7 +394,7 @@ Full code:
 
 
 ## Sample program written in Y86-64 assembly code
-```Y86-64
+```y86-64
 # Execution begins at address 0
 	.pos 0
 	irmovq stack, %rsp    # Set up stack pointer
@@ -415,88 +415,27 @@ main:
 	call sum              # sum(array, 4)
 	ret
 
-20
-
-21
-
 # long sum(long *start, long count)
-
-22
-
 # start in %rdi, count in %rsi
-
-23
-
 sum:
-
-24
-
-irmovq $8,%r8 # Constant 8
-
-25
-
-irmovq $1,%r9 # Constant 1
-
-26
-
-xorq %rax,%rax # sum = 0
-
-27
-
-andq %rsi,%rsi # Set CC
-
-28
-
-jmp test # Goto test
-
-29
+	irmovq $8,%r8    # Constant 8
+	irmovq $1,%r9    # Constant 1
+	xorq %rax,%rax   # sum = 0
+    andq %rsi,%rsi   # Set CC
+    jmp test         # Goto test
 
 loop:
-
-30
-
-mrmovq (%rdi),%r10 # Get *start
-
-31
-
-addq %r10,%rax # Add to sum
-
-32
-
-addq %r8,%rdi # start++
-
-33
-
-subq %r9,%rsi # count--. Set CC
-
-34
+    mrmovq (%rdi),%r10  # Get *start
+    addq %r10,%rax      # Add to sum
+    addq %r8,%rdi       # start++
+    subq %r9,%rsi       # count--. Set CC
 
 test:
-
-35
-
-jne loop
-
-# Stop when 0
-
-36
-
-ret
-
-# Return
-
-37
-
-38
+    jne loop            # Stop when 0
+    ret                 # Return
 
 # Stack starts here and grows to lower addresses
-
-39
-
-.pos 0x200
-
-40
-
+	.pos 0x200
 stack:
 ```
 
