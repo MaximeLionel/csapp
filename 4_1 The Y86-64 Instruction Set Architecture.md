@@ -378,7 +378,7 @@ Full code:
 		irmovq $8,%r8           # Constant 8
 		irmovq $1,%r9           # Constant 1
 	```
-	* The Y86-64 code requires two instructions to read a value from memory and add it to a register, whereas the x86-64 code can do this with a single addq instruction.
+	* The Y86-64 code requires two instructions to read a value from memory and add it to a register, whereas the x86-64 code can do this with a single `addq` instruction.
 	```y86-64
 		mrmovq (%rdi),%r10      # Get *start
 		addq %r10,%rax          # Add to sum
