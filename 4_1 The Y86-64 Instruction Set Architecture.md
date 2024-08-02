@@ -313,7 +313,8 @@ Full code:
 
 
 # 4.1.4 Y86-64 Exceptions
-
+* Y86-64 status codes：
+	![[Pasted image 20240802162013.png|300]]
 
 
 
