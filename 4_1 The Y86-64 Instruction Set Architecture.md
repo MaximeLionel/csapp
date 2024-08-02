@@ -393,7 +393,112 @@ Full code:
 		`subq %r9,%rsi           # count--. Set CC`
 
 
+## Sample program written in Y86-64 assembly code
+```Y86-64
+# Execution begins at address 0
+	.pos 0
+	irmovq stack, %rsp    # Set up stack pointer
+	call main             # Execute main program
+	halt                  # Terminate program
 
+# Array of 4 elements
+	.align 8
+array:
+	.quad 0x000d000d000d
+	.quad 0x00c000c000c0
+	.quad 0x0b000b000b00
+	.quad 0xa000a000a000
+
+main:
+	irmovq array,%rdi
+	irmovq $4,%rsi
+	call sum              # sum(array, 4)
+	ret
+
+20
+
+21
+
+# long sum(long *start, long count)
+
+22
+
+# start in %rdi, count in %rsi
+
+23
+
+sum:
+
+24
+
+irmovq $8,%r8 # Constant 8
+
+25
+
+irmovq $1,%r9 # Constant 1
+
+26
+
+xorq %rax,%rax # sum = 0
+
+27
+
+andq %rsi,%rsi # Set CC
+
+28
+
+jmp test # Goto test
+
+29
+
+loop:
+
+30
+
+mrmovq (%rdi),%r10 # Get *start
+
+31
+
+addq %r10,%rax # Add to sum
+
+32
+
+addq %r8,%rdi # start++
+
+33
+
+subq %r9,%rsi # count--. Set CC
+
+34
+
+test:
+
+35
+
+jne loop
+
+# Stop when 0
+
+36
+
+ret
+
+# Return
+
+37
+
+38
+
+# Stack starts here and grows to lower addresses
+
+39
+
+.pos 0x200
+
+40
+
+stack:
+```
 
 
 
