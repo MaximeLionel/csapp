@@ -323,6 +323,7 @@ Full code:
 * In a more complete design, the processor would typically invoke an exception handler, a procedure designated to handle the specific type of exception encountered.
 
 # 4.1.5 Y86-64 Programs
+## Comparison of Y86-64 and x86-64 assembly programs
 * C code:
 	```c
 	long sum(long *start, long count)
@@ -362,7 +363,7 @@ Full code:
 		irmovq $8,%r8           # Constant 8
 		irmovq $1,%r9           # Constant 1
 		xorq %rax,%rax          # sum = 0
-		andq %rsi,%rsi          # Set CC
+		andq %rsi,%rsi          # Set CC - condition codes
 		jmp test                # Goto test
 	loop:
 		mrmovq (%rdi),%r10      # Get *start
@@ -388,6 +389,8 @@ Full code:
 		addq (%rdi), %rax       # Add *start to sum
 	```
 	* Our hand-coded Y86-64 implementation takes advantage of the property that the `subq` instruction also sets the condition codes, and so the `testq` instruction of the gcc-generated code is not required. For this to work, though, the Y86-64 code must set the condition codes prior to entering the loop with an `andq` instruction.
+		`andq %rsi,%rsi          # Set CC - condition codes`
+		`subq %r9,%rsi           # count--. Set CC`
 
 
 
