@@ -466,15 +466,97 @@ stack:
 			ret
 		```
 
+## Output of yas assembler
+```
+                            | # Execution begins at address 0
+0x000:                      | .pos 0
+0x000: 30f40002000000000000 | irmovq stack, %rsp # Set up stack pointer
+0x00a: 803800000000000000   | call main # Execute main program
+0x013: 00                   | halt # Terminate program
+                            |
+                            | # Array of 4 elements
+0x018:                      | .align 8
+0x018:                      | array:
+0x018: 0d000d000d000000     | .quad 0x000d000d000d
+0x020: c000c000c0000000     | .quad 0x00c000c000c0
+0x028: 000b000b000b0000     | .quad 0x0b000b000b00
+0x030: 00a000a000a00000     | .quad 0xa000a000a000
+                            |
+0x038:                      | main:
+0x038: 30f71800000000000000 | irmovq array,%rdi
+0x042: 30f60400000000000000 | irmovq $4,%rsi
+0x04c: 805600000000000000   | call sum # sum(array, 4)
+0x055: 90                   | ret
+                            |
+                            | # long sum(long *start, long count)
+                            | # start in %rdi, count in %rsi
+0x056:                      | sum:
+0x056: 30f80800000000000000 | irmovq $8,%r8 # Constant 8
+0x060: 30f90100000000000000 | irmovq $1,%r9 # Constant 1
+0x06a: 6300                 | xorq %rax,%rax # sum = 0
+0x06c: 6266                 | andq %rsi,%rsi # Set CC
+0x06e: 708700000000000000   | jmp test # Goto test
+0x077:                      | loop:
+0x077: 50a70000000000000000 | mrmovq (%rdi),%r10 # Get *start
+0x081: 60a0                 | addq %r10,%rax # Add to sum
+0x083: 6087                 | addq %r8,%rdi # start++
+0x085: 6196                 | subq %r9,%rsi # count--. Set CC
+0x087:                      | test:
+0x087: 747700000000000000   | jne loop # Stop when 0
+0x090: 90                   | ret # Return
+                            |
+                            | # Stack starts here and grows to lower addresses
+0x200:                      | .pos 0x200
+0x200:                      | stack:
+```
+* The result of assembling the code shown above by an assembler we call `yas`.
+* Each line includes a hexadecimal address and between 1 and 10 bytes of object code.
+* We have implemented an instruction set simulator we call `yis`, the purpose of which is to model the execution of a Y86-64 machine-code program without attempting to model the behavior of any specific processor implementation.
 
+## Output of yis simulator
+```
+Stopped in 34 steps at PC = 0x13. Status ’HLT’, CC Z=1 S=0 O=0
+Changes to registers:
+%rax: 0x0000000000000000 0x0000abcdabcdabcd
+%rsp: 0x0000000000000000 0x0000000000000200
+%rdi: 0x0000000000000000 0x0000000000000038
+%r8: 0x0000000000000000 0x0000000000000008
+%r9: 0x0000000000000000 0x0000000000000001
+%r10: 0x0000000000000000 0x0000a000a000a000
+Changes to memory:
+0x01f0: 0x0000000000000000 0x0000000000000055
+0x01f8: 0x0000000000000000 0x0000000000000013
+```
+* The first line of the simulation output summarizes the execution and the resulting values of the PC and program status.
+* In printing register and memory values, it only prints out words that change during simulation, either in registers or in memory. The original values (here they are all zero) are shown on the left, and the final values are shown on the right.
 
+# Practice Problem 4.3
+One common pattern in machine-level programs is to add a constant value to a
+register. With the Y86-64 instructions presented thus far, this requires first using an `irmovq` instruction to set a register to the constant, and then an `addq` instruction to add this value to the destination register. Suppose we want to add a new instruction `iaddq` with the following format:
+![[Pasted image 20240803235003.png|400]]
+This instruction adds the constant value `V` to register `rB`.
+Rewrite the Y86-64 sum function to make use of the `iaddq` instruction. In the original version, we dedicated registers `%r8` and `%r9` to hold constant values. Now, we can avoid using those registers altogether.
 
-
-
-
-
-
-
+**Solution**:
+```
+	# long sum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		# irmovq $8,%r8           # Constant 8
+		# irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC - condition codes
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+		iaddq $8,%rdi           # start++
+		iaddq $-1,%rsi          # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+```
 
 
 
