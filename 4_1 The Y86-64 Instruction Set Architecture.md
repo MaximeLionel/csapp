@@ -442,11 +442,11 @@ stack:
 	* The program contains both data and instructions. 
 	* Directives indicate where to place code or data and how to align it.
 	* The program specifies issues such as stack placement, data initialization, program initialization, and program termination.
-* words beginning with ‘.’ are assembler directives telling the
-
-assembler to adjust the address at which it is generating code or to insert some
-
-words of data.
+* Detailed explanation of the program:
+	* Words beginning with ‘.’ are assembler directives telling the assembler to adjust the address at which it is generating code or to insert some words of data.
+	* The directive `.pos 0` (line 2) indicates that the assembler should begin generating code starting at address 0.
+	* This is the starting address for all Y86-64 programs.
+* The next instruction (line 3) initializes the stack pointer. We can see that the label stack is declared at the end of the program (line 40), to indicate address 0x200 using a .pos directive (line 39).
 
 
 
