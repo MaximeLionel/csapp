@@ -438,7 +438,15 @@ test:
 	.pos 0x200
 stack:
 ```
+* An example of a complete program file written in Y86-64 assembly code.
+	* The program contains both data and instructions. 
+	* Directives indicate where to place code or data and how to align it.
+	* The program specifies issues such as stack placement, data initialization, program initialization, and program termination.
+* words beginning with ‘.’ are assembler directives telling the
 
+assembler to adjust the address at which it is generating code or to insert some
+
+words of data.
 
 
 
