@@ -444,9 +444,27 @@ stack:
 	* The program specifies issues such as stack placement, data initialization, program initialization, and program termination.
 * Detailed explanation of the program:
 	* Words beginning with ‘.’ are assembler directives telling the assembler to adjust the address at which it is generating code or to insert some words of data.
-	* The directive `.pos 0` (line 2) indicates that the assembler should begin generating code starting at address 0.
-	* This is the starting address for all Y86-64 programs.
-* The next instruction (line 3) initializes the stack pointer. We can see that the label stack is declared at the end of the program (line 40), to indicate address 0x200 using a .pos directive (line 39).
+	* The directive `.pos 0` (line 2) indicates that the assembler should begin generating code starting at address 0. This is the starting address for all Y86-64 programs.
+	* The next instruction (line 3: `irmovq stack, %rsp    # Set up stack pointer`) initializes the stack pointer. We can see that the label stack is declared at the end of the program (line 42: `stack:`), to indicate address 0x200 using a .pos directive (line 41: `.pos 0x200`).
+		* Our stack will therefore start at this address and grow toward lower addresses.
+	* Lines 8 to 13 of the program declare an array of four words, having the values.
+		```Y86-64
+			.align 8
+		array:
+			.quad 0x000d000d000d
+			.quad 0x00c000c000c0
+			.quad 0x0b000b000b00
+			.quad 0xa000a000a000
+		```
+		* The label `array` denotes the start of this array, and is aligned on an 8-byte boundary.
+	* Lines 16 to 19 show a “main” procedure that calls the function sum on the four-word array and then halts.
+		```
+		main:
+			irmovq array,%rdi
+			irmovq $4,%rsi
+			call sum              # sum(array, 4)
+			ret
+		```
 
 
 
