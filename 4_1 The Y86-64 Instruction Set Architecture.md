@@ -744,6 +744,9 @@ In our experiments, we find that function `pushtest` always returns 0. What
 does this imply about the behavior of the instruction pushq `%rsp` under x86-64?
 
 **Solution**:
+let's think over it logically:
+* from rax = 4, we get that rdx = rax
+* so in `pushq %rsp`, it actually save the rsp to the stack first, then decrease the rsp secondly.
 
 
 # Practice Problem 4.8
@@ -763,4 +766,5 @@ poptest:
 We find this function always returns 0xabcd. What does this imply about the
 behavior of `popq %rsp`? What other Y86-64 instruction would have the exact same behavior?
 
+**Solution**:
 
