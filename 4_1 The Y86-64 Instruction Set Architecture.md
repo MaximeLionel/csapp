@@ -720,8 +720,14 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 
 # 4.1.6 Some Y86-64 Instruction Details
 * 2 unusual instruction combinations require special attention.
+
+
 ## pushq %rsp
 * The `pushq` instruction both decrements the stack pointer by 8 and writes a register value to memory.
+## popq %rsp
+
+
+# Practice Problem 4.7
 
 
 
