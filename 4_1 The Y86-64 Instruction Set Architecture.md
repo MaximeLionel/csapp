@@ -558,8 +558,86 @@ Rewrite the Y86-64 sum function to make use of the `iaddq` instruction. In the o
 		ret                     # Return
 ```
 
+# Practice Problem 4.4
+Write Y86-64 code to implement a recursive product function `rproduct`, based
+on the following C code:
+```C
+long rproduct(long *start, long count)
+{
+	if (count <= 1)
+		return 1;
+	return *start * rproduct(start+1, count-1);
+}
+```
+
+Use the same argument passing and register saving conventions as x86-64 code
+does. You might find it helpful to compile the C code on an x86-64 machine and then translate the instructions to Y86-64.
+
+**Solution**:
+* Compile the C code first:`gcc -Og -S -fno-stack-protector rproduct.c`
+* x86-64 assembly code (`rproduct.s`) and add annotations:
+	```x86-64
+	# long rproduct(long *start, long count)
+	# %rdi - start, %rsi - count
+	rproduct:
+		cmpq	$1, %rsi      # compare rsi,1: compare count and 1
+		jle	.L3               # if count <= 1, goto .L3
+		                      # if count > 1
+		pushq	%rbx          # save %rbx
+		movq	(%rdi), %rbx  # rbx=M(rdi): rbx = *start
+		subq	$1, %rsi      # rsi=rsi-1: count--
+		addq	$8, %rdi      # rdi=rdi+8: start++
+		call	rproduct      # rproduct(start+1, count-1)
+		imulq	%rbx, %rax    # rax=rax*rbx: rax = *start * rproduct(start+1, count-1)
+		popq	%rbx          # load %rbx
+		ret
+	.L3:
+		movl	$1, %eax      # eax = 1
+		ret
+	```
+* Translate to y86-64 code:
+	```y86-64
+	# long rproduct(long *start, long count)
+	# %rdi - start, %rsi - count
+	rproduct:
+		irmovq  $1, %r8
+		irmovq  $8, %r9
+		subq	%r8, %rsi     # compare rsi,1: compare count and 1
+		jle	.L3               # if count <= 1, goto .L3
+		                      # if count > 1
+		pushq	%rbx          # save %rbx
+		mvmovq	(%rdi), %rbx  # rbx=M(rdi): rbx = *start
+		subq	$r8, %rsi     # rsi=rsi-1: count--
+		addq	%r9, %rdi     # rdi=rdi+8: start++
+		call	rproduct      # rproduct(start+1, count-1)
+		imulq	%rbx, %rax    # rax=rax*rbx: rax = *start * rproduct(start+1, count-1)
+		popq	%rbx          # load %rbx
+		ret
+	.L3:
+		irmovq	$1, %rax      # rax = 1
+		ret
+	```
 
 
+
+
+
+
+
+```
+# long rproduct(long *start, long count)
+# start in %rdi, count in %rsi
+	
+	irmovq  $1,%r8           # Constant 1
+	subq    %r8, %rsi
+	jle     done
+	addq    %r8, %rdi
+	call    rproduct
+done:
+	irmovq  $1, %rax
+	ret
+		
+```
 
 
 
