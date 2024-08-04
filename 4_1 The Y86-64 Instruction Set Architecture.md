@@ -725,10 +725,20 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 ## pushq %rsp
 * The `pushq` instruction both decrements the stack pointer by 8 and writes a register value to memory.
 ## popq %rsp
-
+* `popq %rsp` could either set `%rsp` to the value read from memory or to the incremented stack pointer.
 
 # Practice Problem 4.7
-
+Let us determine the behavior of the instruction pushq `%rsp` for an x86-64 processor. We could try reading the Intel documentation on this instruction, but a simpler approach is to conduct an experiment on an actual machine. The C compiler would not normally generate this instruction, so we must use hand-generated assembly code for this task. Here is a test function we have written:
+```
+.text
+.globl pushtest
+pushtest:
+	movq %rsp, %rax   # Copy stack pointer
+	pushq %rsp        # Push stack pointer
+	popq %rdx         # Pop it back
+	subq %rdx, %rax   # Return 0 or 4
+	ret
+```
 
 
 
