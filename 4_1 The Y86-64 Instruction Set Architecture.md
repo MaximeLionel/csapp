@@ -751,6 +751,7 @@ let's think over it logically:
 
 # Practice Problem 4.8
 The following assembly-code function lets us determine the behavior of the instruction `popq %rsp` for x86-64:
+
 ```
 .text
 .globl poptest
@@ -767,4 +768,5 @@ We find this function always returns 0xabcd. What does this imply about the
 behavior of `popq %rsp`? What other Y86-64 instruction would have the exact same behavior?
 
 **Solution**:
+
 
