@@ -647,7 +647,7 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 	# long absSum(long *start, long count)
 	# start in %rdi, count in %rsi
 	
-	sum:
+	absSum:
 		irmovq $8,%r8           # Constant 8
 		irmovq $1,%r9           # Constant 1
 		xorq %rax,%rax          # sum = 0
@@ -655,6 +655,11 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 		jmp test                # Goto test
 	loop:
 		mrmovq (%rdi),%r10      # Get *start
+		xorq %r11, %r11         # r11 = 0
+		subq %r10, %r11         # r11=r11-r10: r11 = -(*start)
+		jle  pos                # if(r10 >= 0), goto pos
+		rrmovq %r11, %r10       # r10 = r11
+	pos:
 		addq %r10,%rax          # Add to sum
 		addq %r8,%rdi           # start++
 		subq %r9,%rsi           # count--. Set CC
@@ -662,8 +667,6 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 		jne loop                # Stop when 0
 		ret                     # Return
 	```
-
-
 
 # Practice Problem 4.6
 Modify the Y86-64 code for the `sum` function to implement a function `absSum` that computes the sum of absolute values of an array. Use a conditional move instruction within your inner loop.
@@ -694,7 +697,7 @@ Modify the Y86-64 code for the `sum` function to implement a function `absSum` t
 	# long absSum(long *start, long count)
 	# start in %rdi, count in %rsi
 	
-	sum:
+	absSum:
 		irmovq $8,%r8           # Constant 8
 		irmovq $1,%r9           # Constant 1
 		xorq %rax,%rax          # sum = 0
