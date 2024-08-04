@@ -619,25 +619,12 @@ does. You might find it helpful to compile the C code on an x86-64 machine and t
 	```
 
 
+# Practice Problem 4.6
+Modify the Y86-64 code for the `sum` function to implement a function `absSum` that computes the sum of absolute values of an array. Use a conditional move instruction within your inner loop.
 
 
 
 
-
-```
-# long rproduct(long *start, long count)
-# start in %rdi, count in %rsi
-	
-	irmovq  $1,%r8           # Constant 1
-	subq    %r8, %rsi
-	jle     done
-	addq    %r8, %rdi
-	call    rproduct
-done:
-	irmovq  $1, %rax
-	ret
-		
-```
 
 
 
