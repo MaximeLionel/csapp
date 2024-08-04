@@ -618,12 +618,101 @@ does. You might find it helpful to compile the C code on an x86-64 machine and t
 		ret
 	```
 
+# Practice Problem 4.5
+Modify the Y86-64 code for the `sum` function to implement a function `absSum` that computes the sum of absolute values of an array. Use a conditional jump instruction within your inner loop.
+
+**Solution**:
+* Original `sum` function:
+	```
+	# long sum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC - condition codes
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+		addq %r8,%rdi           # start++
+		subq %r9,%rsi           # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+	```
+* To write `absSum` function, we need to reverse the sign bit when the number is negative.
+	```
+	# long absSum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC - condition codes
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+		addq %r8,%rdi           # start++
+		subq %r9,%rsi           # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+	```
+
+
 
 # Practice Problem 4.6
 Modify the Y86-64 code for the `sum` function to implement a function `absSum` that computes the sum of absolute values of an array. Use a conditional move instruction within your inner loop.
 
-
-
+**Solution**:
+* Original `sum` function:
+	```
+	# long sum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC - condition codes
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		addq %r10,%rax          # Add to sum
+		addq %r8,%rdi           # start++
+		subq %r9,%rsi           # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+	```
+* To write `absSum` function, we need to reverse the sign bit when the number is negative.
+	```
+	# long absSum(long *start, long count)
+	# start in %rdi, count in %rsi
+	
+	sum:
+		irmovq $8,%r8           # Constant 8
+		irmovq $1,%r9           # Constant 1
+		xorq %rax,%rax          # sum = 0
+		andq %rsi,%rsi          # Set CC - condition codes
+		jmp test                # Goto test
+	loop:
+		mrmovq (%rdi),%r10      # Get *start
+		xorq %r11, %r11         # r11 = 0
+		subq %r10, %r11         # r11=r11-r10: r11 = -(*start)
+		cmovg %r11, %r10        # if r11 > 0, r10 = r11
+		                        # if r10 <=0, r10 = r10
+		addq %r10,%rax          # Add to sum
+		addq %r8,%rdi           # start++
+		subq %r9,%rsi           # count--. Set CC
+	test:
+		jne loop                # Stop when 0
+		ret                     # Return
+	```
 
 
 
