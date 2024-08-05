@@ -1599,9 +1599,9 @@ done:
 # Practice Problem 3.28
 A function test_two has the following overall structure:
 ```c
-short test_two(unsigned short x) {
-	short val = 0;
-	short i;
+unsigned long test_two(unsigned long x) {
+	unsigned long val = 0;
+	long i;
 	for ( ... ; ... ; ... ) {
 		.
 		.
@@ -1612,21 +1612,20 @@ short test_two(unsigned short x) {
 ```
 The gcc C compiler generates the following assembly code:
 ```z80
-# test fun_b(unsigned test x)
-# x in %rdi
-
-test_two:
-	movl $64, %edx     # mistake on book, should be `64` instead of `1`
-	movl $0, %eax      # mistake on book, should be `0` instead of `65`
-.L10:
-	movq %rdi, %rcx
-	andl $1, %ecx
-	addq %rax, %rax
-	orq %rcx, %rax
-	shrq %rdi           # Shift right by 1
-	subq $1, %rdx       # mistake on book, should be `subq` instead of `addq`
-	jne .L10
-	rep; ret
+	movl	$64, %edx
+	movl	$0, %eax
+	jmp	.L2
+.L3:
+	addq	%rax, %rax
+	movq	%rdi, %rcx
+	andl	$1, %ecx
+	orq	%rcx, %rax
+	shrq	%rdi
+	subq	$1, %rdx
+.L2:
+	testq	%rdx, %rdx
+	jne	.L3
+	ret
 ```
 Reverse engineer the operation of this code and then do the following:
 
@@ -1638,40 +1637,38 @@ C. Describe in English what this function computes.
 
 **Solution**:
 ```z80
-# test fun_b(unsigned test x)
+# test fun_b(unsigned x)
 # x in %rdi
 
 test_two:
-	movl $64, %edx       # edx = 64
-	movl $0, %eax        # eax = 0
+	movl $64, %edx     # edx=64
+	movl $0, %eax      # eax=0
 .L10:
-	movq %rdi, %rcx      # rcx = rdi(x) = x
-	andl $1, %ecx        # ecx = ecx&1 = x&1
-	addq %rax, %rax      # rax = rax+rax = rax<<1
-	orq %rcx, %rax       # rax = rcx|rax = (x&1)|rax
-	shrq %rdi            # rdi = rdi>>1(logical)
-	subq $1, %rdx        # rdx--
-	jne .L10             # if rdx!=0, go to .L10
+	movq %rdi, %rcx    # rcx=rdi: rcx = x
+	andl $1, %ecx      # ecx=ecx&1: ecx = x & 1
+	addq %rax, %rax    # rax=rax+rax: rax += rax - rax = rax << 1
+	orq %rcx, %rax     # rax=rax|rcx: rax = rax | (x & 1)
+	shrq %rdi          # rdi=rdi>>1: rdi = x>>1 (logical shift)
+	subq $1, %rdx      # rdx=rdx-1: rdx--
+	jne .L10           # if rdx!=0, goto .L10
 	rep; ret
 ```
 A.
 ```c
-short test_two(unsigned short x) {
-	short val = 0;
+unsigned test_two(unsigned x) {
+	unsigned val = 0;
 	short i;
 	for ( i = 64 ; i != 0 ; i-- ) {
-		val = (x&1) | (val<<1);
-		x = x>>1; // because x is unsigned, right shift is logically by default
+		val = (val<<1)|(x&1)
+		x = x >> 1;
 	}
 	return val;
 }
 ```
-
 B.
-Compiler find it no need. i(edx) is initialized to 64 which is obviously != 0.
-
-C. 
-Reverse the bits of x and return.
+Because `i` is initialized to constant `64`, compiler made a decision that is no need to make the test or jump operation again, which is `i != 0`.
+C.
+Reverse the bits of val and return.
 
 # Practice Problem 3.29
 Executing a continue statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a for loop into a while loop needs some refinement when dealing with continue statements. For example, consider the following code:
