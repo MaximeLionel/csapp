@@ -55,7 +55,8 @@
 * In a combinational circuit, the outputs continually respond to changes in the inputs, while a C expression is only evaluated when it is encountered during the execution of a program.
 * In a combinational circuit, the logic gates only operate over the bit values 0 and 1, while logical expressions in C allow arguments to be arbitrary integers, interpreting 0 as false and anything else as true. 
 * In a combinational circuit, it does not have any partial evaluation rules. The gates simply respond to changing inputs. However, logical expressions in C have the property that they might only be partially evaluated.
-	* Example
+	* Example: `(a && !a) && func(b,c)`
+	* the function func will not be called, because the expression `(a && !a)` evaluates to 0.
 
 
 # Practice Problem 4.9
