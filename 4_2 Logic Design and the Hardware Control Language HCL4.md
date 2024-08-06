@@ -15,3 +15,10 @@
 	* Example: 3 input (a,b and c) and gate: a&&b&&c.
 
 # 4.2.2 Combinational Circuits and HCL Boolean Expressions
+* combinational circuits (组合电路) - by assembling a number of logic gates into a network, we can construct computational blocks known as combinational circuits.
+* Some restrictions:
+	* Every logic gate input must be connected to exactly one of the following:
+		* one of the system inputs (known as a **primary input**). 
+		* OR the output connection of some memory element. 
+		* OR the output of some logic gate.
+	* The outputs of 2 or more logic gates cannot be connected together.
