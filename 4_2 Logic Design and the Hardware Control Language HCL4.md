@@ -26,9 +26,44 @@
 
 ## Example - a simple combinational circuit
 ![[Pasted image 20240806111841.png|280]]
-* Combinational circuit to test for bit equality
+* Combinational circuit to test for bit equality.
+*  It has two inputs, a and b. It generates a single output eq, such that the output will equal 1 if either a and b are both 1.
+* Write in HCL:
+	```c
+	bool eq = (a && b) || (!a && !b);
+	```
+* HCL uses C-style syntax, with ‘=’ associating a signal name with an expression.
 
+# Practice Problem 4.9
+Write an HCL expression for a signal `xor`, equal to the exclusive-or of inputs `a` and `b`. What is the relation between the signals `xor` and `eq` defined above?
 
+**Solution**:
 ```c
-bool eq = (a && b) || (!a && !b);
+bool eq = (a && !b) || (!a && b)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
