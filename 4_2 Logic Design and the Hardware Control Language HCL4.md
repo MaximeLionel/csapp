@@ -15,7 +15,9 @@
 	* Example: 3 input (a,b and c) and gate: a&&b&&c.
 
 # 4.2.2 Combinational Circuits and HCL Boolean Expressions
-* combinational circuits (组合电路) - by assembling a number of logic gates into a network, we can construct computational blocks known as combinational circuits.
+
+## Combinational Circuits
+* combinational circuits (组合电路) - by assembling a number of logic gates into a network, we can construct computational blocks known as combinational circuits.
 * Some restrictions:
 	* Every logic gate input must be connected to exactly one of the following:
 		* one of the system inputs (known as a **primary input**). 
@@ -24,7 +26,7 @@
 	* The outputs of 2 or more logic gates cannot be connected together.
 	* The network must be ==acyclic== (非循环的).
 
-## Example - a simple combinational circuit
+### Example - a simple combinational circuit
 ![[Pasted image 20240806111841.png|280]]
 * Combinational circuit to test for bit equality.
 *  It has two inputs, a and b. It generates a single output eq, such that the output will equal 1 if either a and b are both 1.
@@ -33,6 +35,18 @@
 	bool eq = (a && b) || (!a && !b);
 	```
 * HCL uses C-style syntax, with ‘=’ associating a signal name with an expression.
+
+## Multiplexor
+* A multiplexor (MUX) **selects a value** from among **a set of different data signals**, depending on the value of **a control input signal**.
+### Single-bit multiplexor
+* Example of single-bit multiplexor circuit:
+	![[Pasted image 20240806222140.png|300]]
+	* The two data signals are the input bits a and b
+	* The control signal is the input bit s. 
+	* The output will equal a when s is 1, and it will equal b when s is 0.
+		* The upper `AND` gate passes signal b when s is 0.
+		* The lower `AND` gate passes signal a when s is 1.
+
 
 # Practice Problem 4.9
 Write an HCL expression for a signal `xor`, equal to the exclusive-or of inputs `a` and `b`. What is the relation between the signals `xor` and `eq` defined above?
