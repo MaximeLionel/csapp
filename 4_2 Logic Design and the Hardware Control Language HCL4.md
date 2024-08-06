@@ -46,6 +46,13 @@
 	* The output will equal a when s is 1, and it will equal b when s is 0.
 		* The upper `AND` gate passes signal b when s is 0.
 		* The lower `AND` gate passes signal a when s is 1.
+* HCL expression：
+	```c
+	bool out = (s && a) || (!s && b);
+	```
+
+## Differences between combinational logic circuits and logical expressions in C
+* A combinational circuit has the property that the outputs continually respond to changes in the inputs, while a C expression is only evaluated when it is encountered during the execution of a program.
 
 
 # Practice Problem 4.9
