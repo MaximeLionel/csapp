@@ -68,7 +68,7 @@ bool eq = (a && !b) || (!a && b)
 ```
 
 
-
+# 4.2.3 Word-Level Combinational Circuits and HCL Integer Expressions
 
 
 
