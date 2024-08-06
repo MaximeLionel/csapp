@@ -22,3 +22,13 @@
 		* OR the output connection of some memory element. 
 		* OR the output of some logic gate.
 	* The outputs of 2 or more logic gates cannot be connected together.
+	* The network must be ==acyclic== (非循环的).
+
+## Example - a simple combinational circuit
+![[Pasted image 20240806111841.png|280]]
+* Combinational circuit to test for bit equality
+
+
+```c
+bool eq = (a && b) || (!a && !b);
+```
