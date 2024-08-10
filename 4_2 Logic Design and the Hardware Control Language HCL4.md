@@ -69,8 +69,10 @@ bool eq = (a && !b) || (!a && b)
 
 
 # 4.2.3 Word-Level Combinational Circuits and HCL Integer Expressions
-
-
+* We design circuits that operate on **data words**, which are groups of bit-level signals that represent an integer or some control pattern.
+* Combinational circuits that perform **word-level** computations are constructed using **logic gates** to compute the individual bits of the output word, based on the individual bits of the input words.
+* Example:
+	![[Pasted image 20240810151327.png|400]]
 
 
 
