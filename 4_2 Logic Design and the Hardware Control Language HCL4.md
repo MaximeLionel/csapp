@@ -95,6 +95,7 @@ Suppose you want to implement a word-level equality circuit using the exclusive-
 * Single-bit `xor` circuit:
 	![[Pasted image 20240811212742.png|250]]
 * Word-level `xor` circuit:
+	![[Pasted image 20240811214515.png|400]]
 
 
 
