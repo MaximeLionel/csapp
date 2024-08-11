@@ -71,9 +71,18 @@ bool eq = (a && !b) || (!a && b)
 # 4.2.3 Word-Level Combinational Circuits and HCL Integer Expressions
 * We design circuits that operate on **data words**, which are groups of bit-level signals that represent an integer or some control pattern.
 * Combinational circuits that perform **word-level** computations are constructed using **logic gates** to compute the individual bits of the output word, based on the individual bits of the input words.
-* Example:
+* Example - Word-level equality test circuit：
 	![[Pasted image 20240810151327.png|400]]
-
+	* The output will equal 1 when each bit from word A equals its counterpart from word B.
+	* This circuit is implemented using 64 of the single-bit equality circuits shown below. 
+		![[Pasted image 20240811095506.png|200]]
+	* The outputs of these single-bit circuits are combined with an `AND` gate to form the circuit output.
+	* The functionality of the circuit2 can be expressed at the word level as:
+		`bool Eq = (A == B);`
+		* Arguments A and B are of type int.
+	* As is shown on the right side, we will draw word-level circuits using medium-thickness lines to represent the set of wires carrying the individual bits of the word, and we will show a single-bit signal as a dashed line.
+* For simplicity, in HCL, we will declare any word-level signal as an `int`, without specifying the word size.
+* In a **full-featured hardware description language**, every word can be declared to have a specific number of bits.
 
 
 
