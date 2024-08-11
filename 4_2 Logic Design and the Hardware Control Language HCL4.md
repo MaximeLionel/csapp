@@ -88,11 +88,13 @@ bool eq = (a && !b) || (!a && b)
 Suppose you want to implement a word-level equality circuit using the exclusive-or circuits from Problem 4.9 rather than from bit-level equality circuits. Design such a circuit for a 64-bit word consisting of 64 bit-level exclusive-or circuits and two additional logic gates.
 
 **Solution**:
-The exclusive-or in C as below:
-```c
-bool eq = (a && !b) || (!a && b)
-```
-
+* The exclusive-or in C as below:
+	```c
+	bool eq = (a && !b) || (!a && b)
+	```
+* Single-bit `xor` circuit:
+	![[Pasted image 20240811212742.png|250]]
+* Word-level `xor` circuit:
 
 
 
