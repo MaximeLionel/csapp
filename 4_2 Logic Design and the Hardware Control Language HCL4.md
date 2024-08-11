@@ -84,6 +84,25 @@ bool eq = (a && !b) || (!a && b)
 * For simplicity, in HCL, we will declare any word-level signal as an `int`, without specifying the word size.
 * In a **full-featured hardware description language**, every word can be declared to have a specific number of bits.
 
+* Example - Word-level multiplexor circuit:
+	![[Pasted image 20240811215715.png|400]]
+	* This circuit generates a 64-bit word `Out` equal to one of the two input words, `A` or `B`, depending on the control input bit `s`.
+	* The circuit consists of 64 identical sub-circuits, each having a structure similar to the bit-level multiplexor.
+	* The output will equal input word A when the control signal s is 1, and it will equal B otherwise.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Practice Problem 4.10
 Suppose you want to implement a word-level equality circuit using the exclusive-or circuits from Problem 4.9 rather than from bit-level equality circuits. Design such a circuit for a 64-bit word consisting of 64 bit-level exclusive-or circuits and two additional logic gates.
 
@@ -99,7 +118,7 @@ Suppose you want to implement a word-level equality circuit using the exclusive-
 
 
 
-
+	
 
 
 
