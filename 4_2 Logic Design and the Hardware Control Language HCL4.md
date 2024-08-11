@@ -84,6 +84,15 @@ bool eq = (a && !b) || (!a && b)
 * For simplicity, in HCL, we will declare any word-level signal as an `int`, without specifying the word size.
 * In a **full-featured hardware description language**, every word can be declared to have a specific number of bits.
 
+# Practice Problem 4.10
+Suppose you want to implement a word-level equality circuit using the exclusive-or circuits from Problem 4.9 rather than from bit-level equality circuits. Design such a circuit for a 64-bit word consisting of 64 bit-level exclusive-or circuits and two additional logic gates.
+
+**Solution**:
+The exclusive-or in C as below:
+```c
+bool eq = (a && !b) || (!a && b)
+```
+
 
 
 
