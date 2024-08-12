@@ -113,7 +113,7 @@ bool eq = (a && !b) || (!a && b)
 	* The second selection expression is simply 1, indicating that this case should be selected if no prior one has been. This is the way to specify a default case in HCL.
 * Allowing ==nonexclusive== selection expressions makes the HCL code more readable.
 * To translate an HCL case expression into hardware, a logic synthesis program would need to analyze the set of selection expressions and resolve any possible conflicts by **making sure that only the first matching case would be selected**.
-
+s
 
 
 
