@@ -89,6 +89,30 @@ bool eq = (a && !b) || (!a && b)
 	* This circuit generates a 64-bit word `Out` equal to one of the two input words, `A` or `B`, depending on the control input bit `s`.
 	* The circuit consists of 64 identical sub-circuits, each having a structure similar to the bit-level multiplexor.
 	* The output will equal input word A when the control signal s is 1, and it will equal B otherwise.
+* We will use many forms of multiplexors in our processor designs. They allow us to **select a word from a number of sources** depending on some control condition.
+* Multiplexing functions are described in HCL using ==case expressions==. A case expression has the following general form:
+	```
+	[
+		select1 : expr1;
+		select2 : expr2;
+		.
+		.
+		.
+		selectk : exprk;
+	]
+	```
+	* The expression contains a series of cases, where each case i consists of a Boolean expression $select_i$, indicating when this case should be selected, and an integer expression $expr_i$, indicating the resulting value.
+	* Logically, the selection expressions are evaluated in sequence, and the case for the first one yielding 1 is selected.
+* Example:
+	```
+		word Out = [
+			s: A;
+			1: B;
+		];
+	```
+	* The second selection expression is simply 1, indicating that this case should be selected if no prior one has been. This is the way to specify a default case in HCL.
+* Allowing ==nonexclusive== selection expressions makes the HCL code more readable.
+* To translate an HCL case expression into hardware, a logic synthesis program would need to analyze the set of selection expressions and resolve any possible conflicts by **making sure that only the first matching case would be selected**.
 
 
 
