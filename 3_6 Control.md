@@ -1614,7 +1614,7 @@ The gcc C compiler generates the following assembly code:
 ```z80
 	movl	$64, %edx
 	movl	$0, %eax
-	jmp	.L2
+	jmp	.L2            # could be deleted
 .L3:
 	addq	%rax, %rax
 	movq	%rdi, %rcx
@@ -1637,38 +1637,42 @@ C. Describe in English what this function computes.
 
 **Solution**:
 ```z80
-# test fun_b(unsigned x)
-# x in %rdi
-
-test_two:
-	movl $64, %edx     # edx=64
-	movl $0, %eax      # eax=0
-.L10:
-	movq %rdi, %rcx    # rcx=rdi: rcx = x
-	andl $1, %ecx      # ecx=ecx&1: ecx = x & 1
-	addq %rax, %rax    # rax=rax+rax: rax += rax - rax = rax << 1
-	orq %rcx, %rax     # rax=rax|rcx: rax = rax | (x & 1)
-	shrq %rdi          # rdi=rdi>>1: rdi = x>>1 (logical shift)
-	subq $1, %rdx      # rdx=rdx-1: rdx--
-	jne .L10           # if rdx!=0, goto .L10
-	rep; ret
+# unsigned long test_two(unsigned long x)
+# x - %rdi
+	movl	$64, %edx     # edx=64
+	movl	$0, %eax      # eax=0
+	jmp	.L2
+.L3:
+	addq	%rax, %rax    # rax=rax+rax: rax *= 2
+	movq	%rdi, %rcx    # rcx=rdi: rcx = x
+	andl	$1, %ecx      # ecx=ecx&1: get the LSB of ecx
+	orq	%rcx, %rax        # rax=rax|rcx: rax = rax | ecx&1
+	shrq	%rdi          # rdi=rdi>>1: rdi = rdi/2
+	subq	$1, %rdx      # rdx--
+.L2:
+	testq	%rdx, %rdx   # test rdx
+	jne	.L3              # if rdx!=0, goto .L3
+	ret
 ```
+
 A.
 ```c
-unsigned test_two(unsigned x) {
-	unsigned val = 0;
-	short i;
+unsigned long test_two(unsigned long x) {
+	unsigned long val = 0;
+	long i;
 	for ( i = 64 ; i != 0 ; i-- ) {
-		val = (val<<1)|(x&1)
+		val = (val<<1) | (x&1);
 		x = x >> 1;
 	}
 	return val;
 }
 ```
+
 B.
-Because `i` is initialized to constant `64`, compiler made a decision that is no need to make the test or jump operation again, which is `i != 0`.
+Because the rdx has just been assign an immediate number 64, it's obviously unequal to 0. Therefore, this step is skipped to improve efficiency.
+
 C.
-Reverse the bits of val and return.
+Reverse the bits of x and return.
 
 # Practice Problem 3.29
 Executing a continue statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a for loop into a while loop needs some refinement when dealing with continue statements. For example, consider the following code:

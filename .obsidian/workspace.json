@@ -44,7 +44,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -111,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_2 Logic Design and the Hardware Control Language HCL4.md",
+                "file": "3_6 Control.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_2 Logic Design and the Hardware Control Language HCL4.md",
+                "file": "3_6 Control.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_2 Logic Design and the Hardware Control Language HCL4.md"
+                "file": "3_6 Control.md"
               }
             }
           }
@@ -173,8 +173,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "fae7601defcadbaa",
+  "active": "e12c23177d9b1910",
   "lastOpenFiles": [
+    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Pasted image 20240811215715.png",
     "3_6 Control.assets/Pasted image 20240811214515.png",
     "3_6 Control.assets/Pasted image 20240811212742.png",
@@ -183,12 +184,10 @@
     "3_6 Control.assets/Pasted image 20240806222140.png",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_6 Control.md",
-    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Pasted image 20240806111841.png",
     "3_6 Control.assets/Pasted image 20240806090557.png",
     "3_6 Control.assets/Pasted image 20240803235003.png",
     "3_6 Control.assets/Pasted image 20240802162013.png",
-    "3_6 Control.assets/Pasted image 20240801231916.png",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "4_0 Processor Architecture.md",
