@@ -258,6 +258,9 @@ word Min3 = [
 	* In our implementation, data can be read from the register file as if it were a block of combinational logic having addresses as inputs and the data as outputs.
 	* When either srcA or srcB is set to some register ID, then, after some delay, the value stored in the corresponding program register will appear on either valA or valB. 
 		* For example, setting `srcA` to 3 will cause the value of program register `%rbx` to be read, and this value will appear on output `valA`.
+* The writing of words to the register file is controlled by the clock signal in a manner similar to the loading of values into a clocked register. 
+	* Every time the clock rises, the value on input valW is written to the program register indicated by the register ID on input `dstW`.
+	* When `dstW` is set to the special ID value 0xF, no program register is written.
 
 
 
