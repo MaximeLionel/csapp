@@ -84,7 +84,7 @@ bool eq = (a && !b) || (!a && b)
 * For simplicity, in HCL, we will declare any word-level signal as an `int`, without specifying the word size.
 * In a **full-featured hardware description language**, every word can be declared to have a specific number of bits.
 
-* Example - Word-level multiplexor circuit:
+## Example - Word-level multiplexor circuit:
 	![[Pasted image 20240811215715.png|400]]
 	* This circuit generates a 64-bit word `Out` equal to one of the two input words, `A` or `B`, depending on the control input bit `s`.
 	* The circuit consists of 64 identical sub-circuits, each having a structure similar to the bit-level multiplexor.
@@ -113,20 +113,42 @@ bool eq = (a && !b) || (!a && b)
 	* The second selection expression is simply 1, indicating that this case should be selected if no prior one has been. This is the way to specify a default case in HCL.
 * Allowing ==nonexclusive== selection expressions makes the HCL code more readable.
 * To translate an HCL case expression into hardware, a logic synthesis program would need to analyze the set of selection expressions and resolve any possible conflicts by **making sure that only the first matching case would be selected**.
-s
+## Example - Four-way multiplexor
+![[Pasted image 20240814083746.png|200]]
+* The selection expressions can be arbitrary Boolean expressions, and there can be an **arbitrary number of cases**. This allows case expressions to describe blocks where there are many choices of input signals with complex selection criteria.
+* The circuit above selects from among the four input words A, B, C, and D based on the control signals `s1` and `s0`, treating the controls as a 2-bit binary number.
+* Express the circuit in HCL using Boolean expressions:
+	```C
+	word Out4 = [
+		!s1 && !s0 : A; # 00
+		!s1 : B;        # 01
+		!s0 : C;        # 10
+		1 : D;          # 11
+	];
+	```
+	* The comments on the right (any text starting with # and running for the rest of the line is a comment) show which combination of `s1` and `s0` will cause the case to be selected.
+	* The second expression can be written `!s1`, rather than the more complete `!s1&&s0`.
+	* The third expression can be written as `!s0`, rather than the more complete `s1&&!s0`.
+	* The fourth expression can be written as `1`, rather than the more complete `s1&&s0`.
+
+## Example - find the minimum value
+![[Pasted image 20240814085626.png|200]]
+* Expression in HCL:
+	```c
+	word Min3 = [
+		A <= B && A <= C : A;
+		B <= A && B <= C : B;
+		1 : C;
+	];
+	```
 
 
-
-
-
-
-
-
-
-
-
-
-
+## Arithmetic/logic unit (ALU)
+![[Pasted image 20240814093605.png|500]]
+* The circuit has three inputs: 2 data inputs labeled A and B and 1 control input. 
+* Depending on the setting of the control input, the circuit will perform different arithmetic or logical operations on the data inputs.
+* Observe that the four operations diagrammed for this ALU correspond to the four different integer operations supported by the Y86-64 instruction set, and the control values match the function codes for these instructions.
+	![[Pasted image 20240814093823.png|90]]
 # Practice Problem 4.10
 Suppose you want to implement a word-level equality circuit using the exclusive-or circuits from Problem 4.9 rather than from bit-level equality circuits. Design such a circuit for a 64-bit word consisting of 64 bit-level exclusive-or circuits and two additional logic gates.
 
@@ -140,10 +162,67 @@ Suppose you want to implement a word-level equality circuit using the exclusive-
 * Word-level `xor` circuit:
 	![[Pasted image 20240811214515.png|400]]
 
+# Practice Problem 4.11
+The HCL code given for computing the minimum of 3 words contains 4 comparison expressions of the form X <= Y . Rewrite the code to compute the
+same result, but using only three comparisons.
+
+**Solution**:
+The original code:
+```c
+	word Min3 = [
+		A <= B && A <= C : A; # 1st expression
+		B <= A && B <= C : B; # 2nd expression
+		1 : C;                # 3rd expression
+	];
+```
+
+The logic is like this:
+Suppose we implement the 1st expression and it fails, it means that A is not the minimum of the 3 words. Logically, the minimum number is among B and C. Then we go to the 2nd expression, to decide the minimum is B or C, we only need to compare B and C.
+
+Therefore, the rewrited code:
+```C
+word Min3 = [
+	A <= B && A <= C : A; # 1st expression
+	B <= C : B;           # 2nd expression - only need to compare B and C
+	1 : C;                # 3rd expression
+];
+```
+
+# Practice Problem 4.12
+Write HCL code describing a circuit that for word inputs A, B, and C selects the median of the three values. That is, the output equals the word lying between the minimum and maximum of the three inputs.
+
+**Solution**:
+```C
+word Min3 = [
+	A <= B && B <= C : B; 
+	C <= B && B <= A : B; 
+	B <= C && C <= A : C; 
+	A <= C && C <= B : C;
+	1 : A;                
+];
+```
 
 
-	
+# 4.2.4 Set Membership (集合关系)
+![[Pasted image 20240814100533.png|400]]
+* In this circuit, the 2-bit signal code would then control the selection among the 4 data words A, B, C, and D. 
+* We can express the generation of signals `s1` and `s0` using equality tests based on the possible values of code:
+	```c
+	bool s1 = code == 2 || code == 3;
+	bool s0 = code == 1 || code == 3;
+	```
+* A more concise expression can be written that expresses the property that `s1` is 1 when code is in the set {2, 3}, and `s0` is 1 when code is in the set {1, 3}:
+	```c
+	bool s1 = code in { 2, 3 };
+	bool s0 = code in { 1, 3 };
+	```
+* The general form of a set membership test is 
+	```c
+	iexpr in {iexpr1, iexpr2, ... , iexprk}
+	```
+	* The tested (`iexpr`) and the candidate matches ($iexpr_1$ through $iexpr_k$) are all integer expressions.
 
+# 4.2.5 Memory and Clocking(时钟控制)
 
 
 
