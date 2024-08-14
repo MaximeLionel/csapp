@@ -1675,7 +1675,7 @@ C.
 Reverse the bits of x and return.
 
 # Practice Problem 3.29
-Executing a continue statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a for loop into a while loop needs some refinement when dealing with continue statements. For example, consider the following code:
+Executing a `continue` statement in C causes the program to jump to the end of the current loop iteration. The stated rule for translating a `for` loop into a `while` loop needs some refinement when dealing with `continue` statements. For example, consider the following code:
 ```c
 /* Example of for loop containing a continue statement */
 /* Sum even numbers between 0 and 9 */
@@ -1689,37 +1689,54 @@ for (i = 0; i < 10; i++) {
 	sum += i;
 }
 ```
-A. What would we get if we naively applied our rule for translating the for loop into a while loop? What would be wrong with this code?
+A. What would we get if we naively applied our rule for translating the `for` loop into a `while` loop? What would be wrong with this code?
 
-B. How could you replace the continue statement with a goto statement to ensure that the while loop correctly duplicates the behavior of the for loop?
+B. How could you replace the `continue` statement with a `goto` statement to ensure that the `while` loop correctly duplicates the behavior of the `for` loop?
 
 **Solution**:
 A.
-If translate to `while` loop directly, we get below:
 ```c
+/* Example of for loop containing a continue statement */
+/* Sum even numbers between 0 and 9 */
+
 long sum = 0;
 long i = 0;
 
-while(i < 10){
+while(i < 10)
+{
 	if (i & 1)
 		continue;
-	sum += i;
-	i++;
+	sum += i;    // if execute 'continue', this line will be skipped.
+	i++;         // if execute 'continue', this line will be skipped.
+	             // Thus, causes infinite loop because `i++` will not be executed.
 }
+
+/*
+for (i = 0; i < 10; i++) {
+	if (i & 1)
+		continue;
+	sum += i;     # if execute 'continue', this line will be skipped.
+	              # but i++ will be executed as usual.
+}*/
 ```
-There's an obviously error that, if i&1 return 1, i++ will not be executed thus lead an infinite loop.
+
 
 B.
 ```c
+/* Example of for loop containing a continue statement */
+/* Sum even numbers between 0 and 9 */
+
 long sum = 0;
 long i = 0;
 
-while(i < 10){
+while(i < 10)
+{
 	if (i & 1)
-		goto loop;
-	sum += i;
-loop:
-	i++;
+		goto i_label;
+	sum += i;    // if execute 'continue', this line will be skipped.
+	
+i_label:
+	i++;         // cannot skipped         
 }
 ```
 
