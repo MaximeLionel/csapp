@@ -262,6 +262,22 @@ word Min3 = [
 	* Every time the clock rises, the value on input valW is written to the program register indicated by the register ID on input `dstW`.
 	* When `dstW` is set to the special ID value 0xF, no program register is written.
 
+## RAM in Processor
+![[Pasted image 20240814144235.png|250]]
+* The memory has a single **address input**, a **data input** for writing, and a **data output** for reading.
+* Reading from our memory operates: 
+	* If we provide an address on the **address input** and set the **write control signal** to 0, then after some delay, the value stored at that address will appear on **data out**. 
+	* The **error** signal will be set to 1 if the address is out of range, and to 0 otherwise.
+* Writing to the memory is controlled by the clock: 
+	* We set **address** to the desired address, **data in** to the desired value, and **write** to 1. 
+	* When we then operate the clock, the specified location in the memory will be updated, as long as the address is valid. 
+	* As with the read operation, the error signal will be set to 1 if the address is invalid.
+
+
+
+
+
+
 
 
 
