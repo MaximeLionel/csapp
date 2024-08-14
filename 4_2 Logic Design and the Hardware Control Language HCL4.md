@@ -223,6 +223,41 @@ word Min3 = [
 	* The tested (`iexpr`) and the candidate matches ($iexpr_1$ through $iexpr_k$) are all integer expressions.
 
 # 4.2.5 Memory and Clocking(时钟控制)
+* Combinational circuits **do not store any information**. Instead, they simply react to the signals at their inputs, generating outputs equal to some function of the inputs.
+* To create **sequential circuits**—that is, systems that have state and perform computations on that state—we must introduce devices that store information represented as bits. 
+* Our storage devices are all controlled by a **single clock**, a periodic signal that determines when new values are to be loaded into the devices. We consider two classes of memory devices:
+	* ==Clocked registers== (or simply registers, or hardware registers) - store individual bits or words. The clock signal controls the loading of the register with the value at its input.
+	* ==Random access memories== (or simply memories) - store multiple words, using an address to select which word should be read or written.
+		* Examples: (1) the virtual memory system; (2) the register file (or Program Registers), where register identifiers serve as the addresses. 
+		* In a Y86-64 processor, the register file holds the 15 program registers (%rax through %r14).
+
+## Hardware Register
+![[Pasted image 20240814104017.png|500]]
+* In hardware, a register is directly connected to the rest of the circuit by its input and output wires.
+* How it operates:
+	* For most of the time, the register remains in a fixed state (State = x), generating an output equal to its current state. 
+	* Signals propagate through the combinational logic preceding the register, creating a new value for the register input (Input = y), but the register output remains fixed as long as the clock is low.
+	* As the clock rises, the input signals are loaded into the register as its next state (State = y), and this becomes the new register output until the next rising clock edge. 
+* A key point is that the registers serve as barriers between the combinational logic in different parts of the circuit. 
+* Values only propagate from a register input to its output once every clock cycle at the rising clock edge. 
+* Our Y86-64 processors will use clocked registers to hold **the program counter (PC), the condition codes (CC), and the program status (Stat)**.
+
+## Program Register
+![[Pasted image 20240814105039.png|400]]
+* In machine-level programming, the registers represent a small collection of addressable words in the CPU, where the addresses consist of **register IDs**.
+* In the register file diagrammed, the circuit can read the values of two program registers and update the state of a third. 
+	* Each port has an **address input**, indicating which program register should be selected.
+	* Each port has a **data output or input** giving a value for that program register. 
+	* The addresses are register identifiers, using the encoding shown below:
+		![[Pasted image 20240814110104.png|300]]
+* This register file has two read ports, named A and B, and one write port, named W. 
+	* The 2 read ports have address inputs srcA and srcB (short for “source A” and “source B”) and data outputs valA and valB (short for “value A” and “value B”). 
+	* The write port has address input dstW (short for “destination W”) and data input valW (short for “value W”).
+* Such a multi-ported random access memory allows multiple read and write operations to take place simultaneously. 
+* The register file is not a combinational circuit, since it has **internal storage**. 
+	* In our implementation, data can be read from the register file as if it were a block of combinational logic having addresses as inputs and the data as outputs.
+	* When either srcA or srcB is set to some register ID, then, after some delay, the value stored in the corresponding program register will appear on either valA or valB. 
+		* For example, setting `srcA` to 3 will cause the value of program register `%rbx` to be read, and this value will appear on output `valA`.
 
 
 
