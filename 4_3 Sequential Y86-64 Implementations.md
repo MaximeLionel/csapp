@@ -94,8 +94,6 @@ OPq rA, rB
 	```
 		PC <- valP
 	```
-
-
 #### Details of processing rrmovq
 ```
 rrmovq rA, rB
@@ -116,4 +114,18 @@ The encoding of `rrmovq`: ![[Pasted image 20240815150537.png|150]]
 	valA ← R[rA]
 	```
 * Execute
-	* 
+	* `arithmetic/logic unit (ALU)` performs the operation specified by the instruction.
+	```
+	valE ← 0 + valA
+	```
+* Memory - Nothing happens in the memory stage for these instructions.
+* Write back - `valE` is written to register `rB` in the write-back stage.
+	```
+	R[rB] <- valE
+	```
+* PC update - the PC is set to `valP` to complete the instruction execution.
+	```
+	PC <- valP
+	```
+
+#### Details of processing irmovq
