@@ -58,16 +58,36 @@
 ![[Pasted image 20240815103811.png|500]]
 * Encodings of Y86-64 instructions:
 	![[Pasted image 20240728220633.png|500]]
-
-
-
-
-
-
-
-Let us first consider the integer operations. Examining Figure 4.2,
-we can see that we have carefully chosen an encoding of instructions so that the
-four integer operations (addq, subq, andq, and xorq) all have the same value of
-icode. We can handle them all by an identical sequence of steps, except that the
-ALU computation must be set according to the particular instruction operation,
-encoded in ifun.
+* 4 integer operations (`addq`, `subq`, `andq`, and `xorq`) all have the same value of `icode`. We can handle them all by an identical sequence of steps, except that the **ALU** computation must be set according to the particular instruction operation, encoded in `ifun`.
+#### Details of processing OPq
+* Fetch - In the **fetch** stage, we do not require a constant word, and so `valP` is computed as PC + 2. 
+	* The encoding of `OPq`: ![[Pasted image 20240815110341.png|150]]
+	* The operations of `OPq` on Fetch stage:
+	```
+		icode:ifun <- M1[PC]    
+		rA:rB <- M1[PC+1]       // read register IDs
+		valP <- PC+2
+	```
+* Decode - During the **decode** stage, we read both operands. 
+	* The operations of `OPq` on Decode stage:
+	```
+		valA <- rA  // read register rA and give value to valA
+		valB <- rB  // read register rB and give value to valB
+	```
+* Execute - Both operands are supplied to the ALU in the **execute** stage, along with the function specifier `ifun`, so that `valE` becomes the instruction result. 
+	* This computation is shown as the expression `valB OP valA`, where `OP` indicates the operation specified by `ifun`. 
+	* Note the ordering of the two arguments—this order is consistent with the conventions of Y86-64 (and x86-64). 
+		* For example, the instruction `subq %rax,%rdx` is supposed to compute the value `R[%rdx] − R[%rax]`. 
+	```
+		valE <- valB OP valA    // ALU performs computations and 
+		Set CC
+	```
+* Memory - Nothing happens in the memory stage for these instructions.
+* Write back - `valE` is written to register `rB` in the write-back stage.
+	```
+		R[rB] <- valE
+	```
+* PC update - the PC is set to `valP` to complete the instruction execution.
+	```
+		PC <- valP
+	```
