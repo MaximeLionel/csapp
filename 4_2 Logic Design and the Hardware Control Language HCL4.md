@@ -228,7 +228,7 @@ word Min3 = [
 * Our storage devices are all controlled by a **single clock**, a periodic signal that determines when new values are to be loaded into the devices. We consider two classes of memory devices:
 	* ==Clocked registers== (or simply registers, or hardware registers) - store individual bits or words. The clock signal controls the loading of the register with the value at its input.
 	* ==Random access memories== (or simply memories) - store multiple words, using an address to select which word should be read or written.
-		* Examples: (1) the virtual memory system; (2) the register file (or Program Registers), where register identifiers serve as the addresses. 
+		* Examples: (1) the **virtual memory** system; (2) the **register file** (or Program Registers), where register identifiers serve as the addresses. 
 		* In a Y86-64 processor, the register file holds the 15 program registers (%rax through %r14).
 
 ## Hardware Register
@@ -264,6 +264,7 @@ word Min3 = [
 
 ## RAM in Processor
 ![[Pasted image 20240814144235.png|250]]
+* Our processor has a random access memory for **storing program data**.
 * The memory has a single **address input**, a **data input** for writing, and a **data output** for reading.
 * Reading from our memory operates: 
 	* If we provide an address on the **address input** and set the **write control signal** to 0, then after some delay, the value stored at that address will appear on **data out**. 
