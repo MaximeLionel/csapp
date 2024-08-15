@@ -54,7 +54,10 @@
 0x041:                         | proc:
 0x041: 90                      |   ret # Return
 ```
-* The processing required for instruction types `OPq` (integer and logical operations), `rrmovq` (register-register move), and `irmovq` (immediate-register move). 
+### OPq, rrmovq and irmovq instructions
+![[Pasted image 20240815103811.png|500]]
+* Encodings of Y86-64 instructions:
+	![[Pasted image 20240728220633.png|500]]
 
 
 
