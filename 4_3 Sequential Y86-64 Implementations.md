@@ -161,11 +161,18 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ## rmmovq and mrmovq - memory write and read instructions
 ![[Pasted image 20240815161351.png|400]]
-*  the same basic flow as before, but using the
-ALU to add valC to valB, giving the effective address (the sum of the displacement
-and the base register value) for the memory operation. In the memory stage, we
-either write the register value valA to memory or read valM from memory.
+* Some notices: 
+	* On execute stage, use **ALU** to add `valC` to `valB`, giving the effective address (the sum of the displacement and the base register value) for the memory operation. 
+	* On the memory stage, either write the register value `valA` to memory or read `valM` from memory.
 
+## pushq and popq instructions
+![[Pasted image 20240815165649.png|400]]
+* Some notices on `pushq rA`:
+	* On **decode** stage, use `%rsp` as the identifier for the second register operand, giving the stack pointer as value `valB`. 
+	* On **execute** stage, use the `ALU` to decrement the stack pointer by 8. 
+	* On **write-back** stage, the decremented value is used for the memory write address and is also stored back to `%rsp`.
+	* By using `valE` as the address for the write operation, we adhere to the Y86-64 (and x86-64) convention that `pushq` should decrement the stack pointer before writing, even though the actual updating of the stack pointer does not occur until after the memory operation has completed.
+* Some notices on `popq rA`:
 
 
 
