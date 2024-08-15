@@ -161,7 +161,10 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ## rmmovq and mrmovq - memory write and read instructions
 ![[Pasted image 20240815161351.png|400]]
-
+*  the same basic flow as before, but using the
+ALU to add valC to valB, giving the effective address (the sum of the displacement
+and the base register value) for the memory operation. In the memory stage, we
+either write the register value valA to memory or read valM from memory.
 
 
 
