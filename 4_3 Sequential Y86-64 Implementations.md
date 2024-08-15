@@ -129,3 +129,74 @@ The encoding of `rrmovq`: ![[Pasted image 20240815150537.png|150]]
 	```
 
 #### Details of processing irmovq
+```
+irmovq V, rB
+```
+The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
+* Fetch
+	* extracts the two 4-bit portions of the instruction specifier byte: `icode` and `ifun`.
+	* fetches a register specifier byte: `rA` and `rB`.
+	* fetches an 8-byte constant word `valC`.
+	* computes `valP`.
+	```
+	icode :ifun ← M1[PC]
+	rA :rB ← M1[PC + 1]
+	valC ← M8[PC + 2]
+	valP ← PC + 10
+	```
+* Decode - Nothing happens in the memory stage for these instructions.
+* Execute - `arithmetic/logic unit (ALU)` performs the operation specified by the instruction.
+	```
+	valE ← 0 + valC
+	```
+* Memory - Nothing happens in the memory stage for these instructions.
+* Write back - `valE` is written to register `rB` in the write-back stage.
+	```
+	R[rB] ← valE
+	```
+* PC update - the PC is set to `valP` to complete the instruction execution.
+	```
+	PC <- valP
+	```
+
+## rmmovq and mrmovq - memory write and read instructions
+![[Pasted image 20240815161351.png|400]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
