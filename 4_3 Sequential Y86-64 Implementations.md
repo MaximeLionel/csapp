@@ -60,6 +60,9 @@
 	![[Pasted image 20240728220633.png|500]]
 * 4 integer operations (`addq`, `subq`, `andq`, and `xorq`) all have the same value of `icode`. We can handle them all by an identical sequence of steps, except that the **ALU** computation must be set according to the particular instruction operation, encoded in `ifun`.
 #### Details of processing OPq
+```
+OPq rA, rB
+```
 * Fetch - In the **fetch** stage, we do not require a constant word, and so `valP` is computed as PC + 2. 
 	* The encoding of `OPq`: ![[Pasted image 20240815110341.png|150]]
 	* The operations of `OPq` on Fetch stage:
@@ -91,3 +94,26 @@
 	```
 		PC <- valP
 	```
+
+
+#### Details of processing rrmovq
+```
+rrmovq rA, rB
+```
+The encoding of `rrmovq`: ![[Pasted image 20240815150537.png|150]]
+* Fetch
+	* extracts the two 4-bit portions of the instruction specifier byte: `icode` and `ifun`.
+	* fetches a register specifier byte: `rA` and `rB`.
+	* computes `valP`.
+	```
+	icode :ifun ← M1[PC]
+	rA :rB ← M1[PC + 1]
+	valP ← PC + 2
+	```
+* Decode
+	* reads up to 1 operand from the register file, giving value `valA`.
+	```
+	valA ← R[rA]
+	```
+* Execute
+	* 
