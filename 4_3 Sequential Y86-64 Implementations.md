@@ -206,6 +206,8 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 	* With instruction `ret`, we assign `valM`, the value popped from the stack, to the PC in the **PC update** stage.
 
 ## Tracing Y86-64 instructions
+### Tracing the execution of a subq instruction
+
 
 
 
