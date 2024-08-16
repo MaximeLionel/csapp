@@ -173,8 +173,28 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 	* On **write-back** stage, the decremented value is used for the memory write address and is also stored back to `%rsp`.
 	* By using `valE` as the address for the write operation, we adhere to the Y86-64 (and x86-64) convention that `pushq` should decrement the stack pointer before writing, even though the actual updating of the stack pointer does not occur until after the memory operation has completed.
 * Some notices on `popq rA`:
+	* On **decode** stage, read 2 copies of the stack pointer to enhance the overall uniformity of the design. 
+		```
+		valA ← R[%rsp]
+		valB ← R[%rsp]
+		```
+	* On **execute** stage, use the ALU to increment the stack pointer by 8 in the execute stage.
+		```
+		valE ← valB + 8
+		```
+	* On **memory** stage, use the un-incremented value as the address for the memory operation.
+		```
+		valM ← M8[valA]
+		```
+	* On **write-back** stage, update both the stack pointer register with the incremented stack pointer and register `rA` with the value read from memory. 
+		```
+		 R[%rsp] ← valE
+		 R[rA] ← valM
+		```
+	* Using the un-incremented stack pointer as the memory read address preserves the Y86-64 (and x86-64) convention that **`popq` should first read memory and then increment the stack pointer**.
 
-
+## jXX, call, and ret instructions
+![[Pasted image 20240816090343.png|500]]
 
 
 
