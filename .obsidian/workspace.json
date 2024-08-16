@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_homework.md",
                 "mode": "source",
                 "source": false
               }
@@ -175,25 +175,24 @@
   },
   "active": "336240595a418a64",
   "lastOpenFiles": [
+    "3_homework.md",
+    "3_6 Control.md",
+    "4_3 Sequential Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240816090343.png",
     "3_6 Control.assets/Pasted image 20240815165649.png",
     "3_6 Control.assets/Pasted image 20240815161351.png",
     "3_6 Control.assets/Pasted image 20240815155517.png",
     "4_1 The Y86-64 Instruction Set Architecture.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240815150537.png",
     "3_6 Control.assets/Pasted image 20240815110341.png",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Pasted image 20240815103811.png",
-    "3_6 Control.md",
     "3_6 Control.assets/Pasted image 20240814144235.png",
     "3_6 Control.assets/Pasted image 20240814110104.png",
     "3_6 Control.assets/Pasted image 20240814105039.png",
-    "3_6 Control.assets/Pasted image 20240814104017.png",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "4_0 Processor Architecture.md",
-    "3_homework.md",
     "2_homework.md",
     "2_1.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",

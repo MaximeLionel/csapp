@@ -195,9 +195,41 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ## jXX, call, and ret instructions
 ![[Pasted image 20240816090343.png|500]]
+* Some notices on `jXX Dest`:
+	* Process all of the jumps in a uniform manner, since they differ only when determining whether or not to take the branch. 
+	* On **fetch** and **decode** stage, a jump instruction proceeds through fetch and decode much like the previous instructions, except that it does not require a register specifier byte.
+	* On the **execute** stage, check the condition codes and the jump condition to determine whether or not to take the branch, yielding a 1-bit signal `Cnd`. 
+	* On the **PC update** stage, test this `Cnd`flag and set the `PC` to `valC` (the jump target) if the flag is 1 and to `valP` (the address of the following instruction) if the flag is 0.
+* Some notices on `call` and `ret`:
+	* With instruction `call`, we `push valP`, the address of the instruction that follows the call instruction. 
+		* On the **PC update** stage, we set the PC to `valC`, the call destination. 
+	* With instruction `ret`, we assign `valM`, the value popped from the stack, to the PC in the **PC update** stage.
 
+# Practice Problem 4.13
+Fill in the right-hand column of the following table to describe the processing of the `irmovq` instruction below:
+```
+0x016: 30f48000000000000000    |   irmovq $128,%rsp # Problem 4.13
+```
 
+| Stage      | Generic<br>irmovq V, rB                                                           | Specific<br>irmovq $128, %rsp |
+| ---------- | --------------------------------------------------------------------------------- | ----------------------------- |
+| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 10 |                               |
+| Decode     | -                                                                                 |                               |
+| Execute    | valE ← 0 + valC                                                                   |                               |
+| Memory     | -                                                                                 |                               |
+| Write-back | R[rB] ← valE                                                                      |                               |
+| PC-update  | PC ← valP                                                                         |                               |
+**Solution**:
+PC = 0x016
 
+| Stage      | Generic<br>irmovq V, rB                                                           | Specific<br>irmovq $128, %rsp                                                                                                                                                   |
+| ---------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 10 | M1[0x016] = 0x30<br>icode:ifun ← 3:0<br><br>M1[0x017] = 0xf4<br>rA :rB ← f:4<br><br>M8[0x018] = 0x 0000000000000080<br>(little-endian)<br>valC ← 0x80 = 128<br><br>valP ← 0x020 |
+| Decode     | -                                                                                 |                                                                                                                                                                                 |
+| Execute    | valE ← 0 + valC                                                                   | valE ← 0 + 0x80 = 128                                                                                                                                                           |
+| Memory     | -                                                                                 |                                                                                                                                                                                 |
+| Write-back | R[rB] ← valE                                                                      | %rsp ← 128                                                                                                                                                                      |
+| PC-update  | PC ← valP                                                                         | PC ← 0x020                                                                                                                                                                      |
 
 
 
