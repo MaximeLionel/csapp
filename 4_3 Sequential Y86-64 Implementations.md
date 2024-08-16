@@ -38,7 +38,7 @@
 		* The cost of duplicating blocks of logic in hardware is much higher than the cost of having multiple copies of code in software. 
 		* It is also more difficult to deal with many special cases and idiosyncrasies in a hardware system than with software.
 
-## Example - processing Y86-64 instructions
+## Processing Y86-64 instructions
 ```
 0x000: 30f20900000000000000    |   irmovq $9, %rdx
 0x00a: 30f31500000000000000    |   irmovq $21, %rbx
@@ -159,13 +159,13 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 	PC <- valP
 	```
 
-## rmmovq and mrmovq - memory write and read instructions
+### rmmovq and mrmovq - memory write and read instructions
 ![[Pasted image 20240815161351.png|400]]
 * Some notices: 
 	* On execute stage, use **ALU** to add `valC` to `valB`, giving the effective address (the sum of the displacement and the base register value) for the memory operation. 
 	* On the memory stage, either write the register value `valA` to memory or read `valM` from memory.
 
-## pushq and popq instructions
+### pushq and popq instructions
 ![[Pasted image 20240815165649.png|400]]
 * Some notices on `pushq rA`:
 	* On **decode** stage, use `%rsp` as the identifier for the second register operand, giving the stack pointer as value `valB`. 
@@ -193,7 +193,7 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 		```
 	* Using the un-incremented stack pointer as the memory read address preserves the Y86-64 (and x86-64) convention that **`popq` should first read memory and then increment the stack pointer**.
 
-## jXX, call, and ret instructions
+### jXX, call, and ret instructions
 ![[Pasted image 20240816090343.png|500]]
 * Some notices on `jXX Dest`:
 	* Process all of the jumps in a uniform manner, since they differ only when determining whether or not to take the branch. 
@@ -204,6 +204,10 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 	* With instruction `call`, we `push valP`, the address of the instruction that follows the call instruction. 
 		* On the **PC update** stage, we set the PC to `valC`, the call destination. 
 	* With instruction `ret`, we assign `valM`, the value popped from the stack, to the PC in the **PC update** stage.
+
+## Tracing Y86-64 instructions
+
+
 
 # Practice Problem 4.13
 Fill in the right-hand column of the following table to describe the processing of the `irmovq` instruction below:
