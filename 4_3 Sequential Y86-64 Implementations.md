@@ -207,7 +207,25 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ## Tracing Y86-64 instructions
 ### Tracing the execution of a subq instruction
+```
+0x000: 30f20900000000000000    |   irmovq $9, %rdx
+0x00a: 30f31500000000000000    |   irmovq $21, %rbx
+0x014: 6123                    |   subq %rdx, %rbx # subtract
+```
 
+![[Pasted image 20240801144810.png|250]]
+![[Pasted image 20240728220428.png|70]]
+
+| Stage      | OPq rA, rB                                                  | subq %rdx, %rbx                                                       |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valP ← PC + 2 | icode:ifun ← 6:1<br>rA:rB ← 2:3 = %rdx:%rbx<br>valP ← 0x14 + 2 = 0x16 |
+| Decode     | valA ← R[rA]<br>valB ← R[rB]                                | valA ← R[rA] = 9<br>valB ← R[rB] = 21                                 |
+| Execute    | valE ← valB OP valA<br>Set CC                               | valE ← 21-9 = 12<br>OF ← 0, ZF ← 0, SF ← 0                            |
+| Memory     |                                                             |                                                                       |
+| Write-back | R[rB] ← valE                                                | R(%rbx) ← 12                                                          |
+| PC update  | PC ← valP                                                   | PC ← 0x16                                                             |
+
+![[Pasted image 20240816111320.png|400]]
 
 
 
