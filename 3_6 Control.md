@@ -1741,7 +1741,7 @@ i_label:
 ```
 
 # 3.6.8 Switch Statement
-* A jump table is an array where entry i is the address of a code segment implementing the action the program should take when the switch index equals i.
+* A ==jump table== is an array where entry i is the address of a code segment implementing the action the program should take when the switch index equals i.
 	* The advantage of using a jump table over a long sequence of if-else statements is that the time taken to perform the switch is independent of the number of switch cases.
 	* Jump tables are used when there are a number of cases and they span a small range of values.
 ## Example:
@@ -1807,15 +1807,15 @@ void switch_eg_impl(long x, long n, long *dest)
 }
 ```
 * This code makes use of **support provided by gcc for jump tables**, as an extension to the C language.
-* The array `jt` contains seven entries, each of which is the address of a block of code.
+* The array `jt` contains 7 entries, each of which is the address of a block of code.
 * These locations are defined by labels in the code and indicated in the entries in `jt` by code pointers, consisting of the labels prefixed by `&&`.
 	* `&&` - in GCC, `&&label` is a way to get the address of a label.
 * The compiler first shifts the range to between 0 and 6 by subtracting 100 from n, creating a new program variable that we call `index` in our C version.
 	* treating `index` as an unsigned value.
 * It can therefore test whether index is outside of the range 0–6 by testing whether it is greater than 6.
-* There are five distinct locations to jump to, based on the value of index.
-* The key step in executing a switch statement is to access a code location through the jump table. This occurs in line 16 in the C code, with a goto statement that references the jump table `jt`.
-* Our C code declares the jump table as an array of seven elements, each of which is a pointer to a code location. These elements span values 0–6 of index, corresponding to values 100–106 of n. Observe that the jump table handles duplicate cases by simply having the same code label (loc_D) for entries 4 and 6, and it handles missing cases by using the label for the default case (loc_def) as entries 1 and 5.
+* There are 5 distinct locations to jump to, based on the value of index.
+* The key step in executing a switch statement is to access a code location through the jump table. This occurs in line 16 in the C code, with a `goto` statement that references the jump table `jt`.
+* Our C code declares the jump table as an array of 7 elements, each of which is a pointer to a code location. These elements span values 0–6 of index, corresponding to values 100–106 of n. Observe that the jump table handles duplicated cases by simply having the same code label (loc_D) for entries 4 and 6, and it handles missing cases by using the label for the default case (loc_def) as entries 1 and 5.
 
 ### Assembly Code
 ```z80
