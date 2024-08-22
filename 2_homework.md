@@ -244,6 +244,8 @@ int main()
     printf("0x80000000 right shift arithmetically for 3 bits is: 0x %X\n", sra(test1, 3));
     printf("0x80000000 right shift arithmetically for 8 bits is: 0x %X\n", sra(test1, 8));
     printf("0x80000000 right shift arithmetically for 16 bits is: 0x %X\n", sra(test1, 16));
+    printf("\n");
+    printf("0x70000000 right shift arithmetically for 3 bits is: 0x %X\n", sra(test1, 3));
     return 0;
 }
 
