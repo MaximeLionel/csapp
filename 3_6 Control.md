@@ -1879,7 +1879,7 @@ switch_eg:
         ja      .L8
         leaq    .L4(%rip), %rcx         # rcx = .L4 + rip = .L4 absolute address
         movslq  (%rcx,%rsi,4), %rax     # rax = *(4*rsi + rcx) = *(4*n + .L4 absolute address) = some entry value of jump table
-        addq    %rcx, %rax              # rax = rcx + rax = absolute address of some entry label
+        addq    %rcx, %rax              # rax = rcx + rax = switch case absolute address
         notrack                         # pseudo-instruction, just ignore
 		jmp     *%rax                   # jump to the address contained in rax  
 .section        .rodata
@@ -1928,7 +1928,7 @@ void switch2(short x, short *dest) {
 	*dest = val;
 }
 ```
-In compiling the function, gcc generates the assembly code that follows for the initial part of the procedure, with variable x in %rdi:
+In compiling the function, gcc generates the assembly code that follows for the initial part of the procedure, with variable `x` in `%rdi`:
 ```z80
 # void switch2(short x, short *dest)
 # x in %rdi
@@ -1964,31 +1964,33 @@ B. What cases had multiple labels in the C code?
 # x in %rdi
 
 switch2:
-	addq $2, %rdi        # rdi = rdi + 2 = x + 2
-	cmpq $8, %rdi        # compare rdi and 8
-	ja .L2               # if rdi > 8, jump to .L2
-	                     # if rdi <= 8
-	jmp *.L4(,%rdi,8)    # jump to *(.L4 + 8*rdi)
+	addq $2, %rdi      # rdi=rdi+2: x+=2
+	cmpq $8, %rdi      # compare x,8
+	ja .L2             # if x > 8, jump to .L2
+	jmp *.L4(,%rdi,8)  # jump to *(.L4 + 8*rdi)
 ```
-* Easy to guess `.L2` is `.done` label.
-* Let's look into the jump table:
+We can get the following tips from the reverse-engineering work above:
+* .L2 must be the label of default case.
+* We need to look into the jump table based on the expression `jmp *.L4(,%rdi,8)`.
+	* for sure, x has been already added by 2. So we need to get the original x value by subtracting by 2.
 ```z80
 .L4:
-	.quad .L9 # rdi = 0: x = -2
-	.quad .L5 # rdi = 1: x = -1
-	.quad .L6 # x = 0
-	.quad .L7 # x = 1
-	.quad .L2 # x = 2  # .done label and ignore
-	.quad .L7 # x = 3
-	.quad .L8 # x = 4
-	.quad .L2 # x = 5  # .done label and ignore
-	.quad .L5 # x = 6
+	.quad .L9    # rdi=0: x = -2
+	.quad .L5    # rdi=1: x = -1
+	.quad .L6    # rdi=2: x = 0
+	.quad .L7    # rdi=3: x = 1
+	.quad .L2    # rdi=4: x = 2 - default case
+	.quad .L7    # rdi=5: x = 3
+	.quad .L8    # rdi=6: x = 4
+	.quad .L2    # rdi=7: x = 5 - default case
+	.quad .L5    # rdi=8: x = 6
 ```
-A. 
--2,-1,0,1,3,4,6
+
+A.
+-2, -1, 0, 1, 3, 4, 6
 
 B.
-.L5, .L7, .L2 (.done label)
+.L2, .L5, .L7
 
 # Practice Problem 3.31
 For a C function switcher with the general structure
