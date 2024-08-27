@@ -8,7 +8,7 @@
 
 # 3.7.1 The Run-Time Stack
 * A key feature of the procedure-calling mechanism of C, and of most other languages, is that it can make use of the **last-in, first-out** memory management discipline provided by a **stack** data structure.
-* Suppose procedure P calling Q:
+* Suppose procedure P is calling Q:
 	* while Q is executing, P is temporarily suspended.
 	* While Q is running, only it will need the ability to **allocate new storage** for its local variables or to set up a call to another procedure.
 	* When Q returns, any local storage it has allocated can be freed.
