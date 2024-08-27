@@ -2022,7 +2022,7 @@ gcc generates the assembly code and jump table shown in figure below.
 Fill in the missing parts of the C code. Except for the ordering of case labels C and D, there is only one way to fit the different cases into the template.
 ```z80
 # void switcher(long a, long b, long c, long *dest) 
-# a in %rsi, b in %rdi, c in %rdx, d in %rcx 
+# a in %rdi, b in %rsi, c in %rdx, d in %rcx 
 
 switcher: 
 	cmpq $7, %rdi 
@@ -2051,76 +2051,87 @@ switcher:
 	ret
 ```
 
+```
+.L4:
+	.quad .L3
+	.quad .L2
+	.quad .L5
+	.quad .L2
+	.quad .L6
+	.quad .L7
+	.quad .L2
+	.quad .L5
+```
+
 **Solution**:
 ```z80
 # void switcher(long a, long b, long c, long *dest) 
 # a in %rdi, b in %rsi, c in %rdx, d in %rcx 
 
 switcher: 
-	cmpq $7, %rdi            # compare rdi(a) and 7
-	ja .L2                   # if a > 7, jump to .L2(.done)
-	jmp *.L4(,%rdi,8)        # jump to (.L4+8*rdi) = (.L4+8*a)
+	cmpq $7, %rdi        # compare a,7
+	ja .L2               # if a>7, jump to .L2
+	jmp *.L4(,%rdi,8)    # jump to *(.L4+8*rdi): *(.L4 + 8a)
 	.section .rodata 
 	
 .L7: 
-	xorq $15, %rsi           # rsi = rsi xor 0x1111 = b^0x1111
-	movq %rsi, %rdx          # rdx = rsi = b^0x1111
-	                         # fall through
+	xorq $15, %rsi       # rsi=rsi^15: rsi = b^15
+	movq %rsi, %rdx      # rdx=rsi: rdx = b^15
+	
 .L3: 
-	leaq 112(%rdx), %rdi     # rdi = rdx + 112
+	leaq 112(%rdx), %rdi  # rdi = rdx+112
 	jmp .L6 
 	
 .L5: 
-	leaq (%rdx,%rsi), %rdi   # rdi = rdx+rsi = c + b
-	salq $2, %rdi            # rdi >>= 2
+	leaq (%rdx,%rsi), %rdi # rdi=rdx+rsi: c + b
+	salq $2, %rdi          # rdi=rdi<<2: 
 	jmp .L6 
 	
 .L2: 
-	movq %rsi, %rdi          # rdi = rsi
+	movq %rsi, %rdi        # rdi=rsi: b
 	
 .L6: 
-	movq %rdi, (%rcx) 
+	movq %rdi, (%rcx)      # *(rcx) = rdi: *dest = a
 	ret
 ```
 
 ```
 .L4:
-	.quad .L3    # rdi = 0: a = 0
-	.quad .L2    # a = 1 - .done
-	.quad .L5    # a = 2 
-	.quad .L2    # a = 3 - .done
-	.quad .L6    # a = 4
-	.quad .L7    # a = 5
-	.quad .L2    # a = 6 - .done
-	.quad .L5    # a = 7
+	.quad .L3 - a = 0
+	.quad .L2 - a = 1 - default
+	.quad .L5 - a = 2
+	.quad .L2 - a = 3 - default
+	.quad .L6 - a = 4
+	.quad .L7 - a = 5
+	.quad .L2 - a = 6 - default
+	.quad .L5 - a = 7
 ```
-* Now let's try to fill in:
+
+Fill in the C code:
 ```c
 void switcher(long a, long b, long c, long *dest)
 {
 	long val;
 	switch(a) {
 		case 5 : /* Case A */
-			c = b^0x1111;
+			c = b^15 ;
 			/* Fall through */
-		case 0: /* Case B */
-			val = c + 112;
+		case 0 : /* Case B */
+			val = c + 112 ;
 			break;
-		case 2: /* Case C */
-		case 7: /* Case D */
-			val = (b+c)>>2;
+		case 2 : /* Case C */
+		case 7 : /* Case D */
+			val = (c + b)<<2 ;
 			break;
-		case 4: /* Case E */
-			val = a;
+		case 4 : /* Case E */
+			val = a ;
 			break;
 		default:
-			val = b;
+			val = b ;
 	}
-	*dest = val;  // (rcx) = val
+	*dest = val;
 }
 ```
-
-
 
 
 
