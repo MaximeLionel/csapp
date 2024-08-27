@@ -20,7 +20,7 @@
 	* Data can be stored on and retrieved from the stack using the `pushq` and `popq` instructions.
 	* Space for data with no specified initial value can be allocated on the stack by simply decrementing the stack pointer by an appropriate amount. 
 	* Space can be deallocated by incrementing the stack pointer.
-## Stack Frame
+## Stack Frame (栈帧)
 ![[3_7 Procedures.assets/image-20240522094322604.png|500]]
 * When an x86-64 procedure requires storage beyond what it can hold in registers, it allocates space on the stack, which is the procedure's **stack frame**.
 * The frame for the currently executing procedure is always at the top of the stack.
