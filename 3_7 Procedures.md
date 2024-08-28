@@ -27,9 +27,68 @@
 * When procedure P calls procedure Q, it will push the **return address** onto the stack, indicating where within P the program should resume execution once Q returns.
 	* The return address is part of P’s stack frame, since it holds state relevant to P.
 * Q allocates the space required for its stack frame by extending the current stack boundary.
-	* With the stack fram, Q cAan save the values of registers, allocate space for local variables, and set up arguments for the procedures it calls.
+	* With the stack frame, Q can save the values of registers (such as push rbp...), allocate space for local variables (subq $40, %rsp), and set up arguments for the procedures it calls.
 * The stack frames for most procedures are of fixed size, allocated at the beginning of the procedure.
-* Procedure P can pass up to six integral values on the stack, but if Q requires more arguments, these can be stored by P within its stack frame prior to the call.
+* Procedure P can pass up to six integral values by 6 registers (%rdi, %rsi, %rdx, %rcx, %r8, %r9 in System V AMD64 ABI), but if Q requires more arguments, these can be stored by P within its **stack frame** prior to the call.
+```
+常见的x64调用约定：
+1. Windows x64 Calling Convention (Microsoft x64 Calling Convention)
+
+这是在Windows操作系统上使用的默认调用约定。
+
+参数传递：
+
+前四个整数或指针类型的参数：通过寄存器传递，依次使用以下寄存器：
+第1个参数：RCX
+第2个参数：RDX
+第3个参数：R8
+第4个参数：R9
+浮点型参数：使用XMM寄存器传递，前四个浮点参数依次使用XMM0到XMM3。
+超过四个参数：从第五个参数开始，通过栈传递，栈上的参数按照右到左的顺序进行传递。
+返回值：
+
+返回值通常通过RAX寄存器返回。
+如果返回值是一个浮点数，则使用XMM0寄存器。
+栈帧：
+
+调用方（Caller）负责栈平衡（Caller cleans the stack），即调用方在函数调用后负责清理栈上的参数。
+8字节对齐是必须的。
+寄存器保存：
+
+调用者保存（Caller-saved）寄存器：RAX, RCX, RDX, R8, R9, R10, R11, XMM0-XMM5。调用方在调用函数前应保存这些寄存器，如果希望在函数返回后继续使用这些寄存器的值。
+被调用者保存（Callee-saved）寄存器：RBX, RBP, RDI, RSI, R12, R13, R14, R15。被调用的函数必须在使用这些寄存器前保存它们，并在返回前恢复它们。
+
+2. System V AMD64 ABI Calling Convention
+
+这是 Linux、macOS 和其他 UNIX 风格操作系统上使用的默认 x64 调用约定。
+
+参数传递:
+
+整数或指针类型的参数（前六个参数）通过以下寄存器传递：
+
+第1个参数：RDI
+第2个参数：RSI
+第3个参数：RDX
+第4个参数：RCX
+第5个参数：R8
+第6个参数：R9
+浮点类型的参数（如 float 或 double）使用 XMM0 到 XMM7 寄存器传递。
+
+超过寄存器数量的参数将被压入栈（stack）中。栈上传递的参数从右到左顺序压栈。
+
+返回值:
+
+整数或指针类型返回值：通过 RAX 寄存器返回。
+浮点类型返回值：通过 XMM0 寄存器返回。
+栈帧：
+
+栈帧需要是 16 字节对齐的。函数调用可能会在栈上分配空间，尤其是在传递超过六个参数时。
+寄存器保存：
+
+调用者保存（Caller-saved）寄存器: RAX, RCX, RDX, RSI, RDI, R8, R9, R10, R11, XMM0 - XMM15。调用方需要在函数调用前保存这些寄存器的值，如果它们在调用函数之后仍然需要使用这些寄存器的值的话。
+
+被调用者保存（Callee-saved）寄存器: RBX, RBP, R12, R13, R14, R15。被调用函数负责在使用这些寄存器时保存它们，并在返回前恢复它们。
+```
 * In the interest of space and time efficiency, x86-64 procedures allocate only the portions of stack frames they require.
 * Some functions do not even require a stack frame. This occurs when all of the local variables can be held in registers and the function does not call any other functions.
 
