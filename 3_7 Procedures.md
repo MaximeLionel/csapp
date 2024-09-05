@@ -102,7 +102,7 @@
 * `ret`:
 	* Pops an address A off the stack;
 	* Sets the PC to A.
-![[3_7 Procedures.assets/image-20240522101614495.png|300]]
+![[3_7 Procedures.assets/image-20240522101614495.png|200]]
 * A call can be either direct or indirect:
 	* Direct call - the target of a direct call is given as a label;
 	* Indirect call - the target of an indirect call is given by `*` followed by an operand specifier.
