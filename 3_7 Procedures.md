@@ -127,7 +127,7 @@ int main()
 ```
 * compile: `gcc -Og -g main.c -o main`
 * set breakpoint: `break *main` then run `run`
-* Firstly, we check and select the stack frame, also list the frame info and stack 64bits' information:
+* check and select the stack frame, also list the frame info and stack 64bits' information:
 ```shell
 (gdb) backtrace
 #0  main () at main.c:9
@@ -153,7 +153,19 @@ No arguments.
 (gdb) 
 ```
 
-* Secondly, step into the add function and check the same information again:
+* step into the add function:
+```shell
+(gdb) break add
+Breakpoint 2 at 0x555555555149: file main.c, line 4.
+(gdb) continue
+Continuing.
+
+Breakpoint 2, add (a=a@entry=6, b=b@entry=9) at main.c:4
+4       {
+(gdb) stepi
+5               return a+b;
+```
+* check the same information again:
 ```shell
 (gdb) backtrace
 #0  add (a=a@entry=6, b=b@entry=9) at main.c:5
@@ -170,14 +182,13 @@ No locals.
 a = 6
 b = 9
 ```
-
+* check current stack
 ```shell
 (gdb) x/10dx $rsp
 0x7fffffffe388: 0x55555168      0x00005555      0x00000000    0x00000000
 0x7fffffffe398: 0xf7da9d90      0x00007fff      0x00000000    0x00000000
 0x7fffffffe3a8: 0x55555151      0x00005555
 ```
-
 * What we find is that on top of the stack, there's one 64bits number: `0x55555168      0x00005555`. Let's find out what it is. We disassemble the main function.
 ```shell
 (gdb) disassemble main
@@ -213,7 +224,7 @@ End of assembler dump.
 
 ## Example 1 on book
 ![[3_7 Procedures.assets/image-20240522130848202.png|600]]
-![[3_7 Procedures.assets/image-20240522130957356.png|600]]
+![[3_7 Procedures.assets/image-20240522130957356.png|500]]
 
 * Executing call - the call instruction with address 0x400563 in main calls function `multstore`.
 * After call - push the return address 0x400568 onto the stack and to jump to the first instruction in function `multstore`, at address 0x0400540.
@@ -222,7 +233,7 @@ End of assembler dump.
 		
 ## Example 2 on book
 ![[3_7 Procedures.assets/image-20240522131654513.png|600]]
-![[3_7 Procedures.assets/image-20240522131746300.png|600]]
+![[3_7 Procedures.assets/image-20240522131746300.png|550]]
 * Each instruction is identified by labels L1–L2 (in leaf), T1–T4 (in top), and M1–M2 in main.
 * main calls top(100), causing top to call leaf(95). Function leaf returns 97 to top, then returns 194 to main.
 * Details:
