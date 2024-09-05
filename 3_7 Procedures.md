@@ -223,8 +223,8 @@ End of assembler dump.
 * We find the `return address` has been popped already.
 
 ## Example 1 on book
-![[3_7 Procedures.assets/image-20240522130848202.png|600]]
-![[3_7 Procedures.assets/image-20240522130957356.png|500]]
+![[3_7 Procedures.assets/image-20240522130848202.png|550]]
+![[3_7 Procedures.assets/image-20240522130957356.png|450]]
 
 * Executing call - the call instruction with address 0x400563 in main calls function `multstore`.
 * After call - push the return address 0x400568 onto the stack and to jump to the first instruction in function `multstore`, at address 0x0400540.
