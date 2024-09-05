@@ -243,7 +243,7 @@ End of assembler dump.
 	* L1 - after executing the operation above.
 	* L2 - return to top. The return address (0x40054E) will be popped to `rip`, thus the `rsp` will be increased by 8.
 	* T3 - after executing the operation above.
-	* T4 - return to top. The return address (0x400560) will be popped to `rip`, thus the `rsp` will be increased by 8.
+	* T4 - return to main. The return address (0x400560) will be popped to `rip`, thus the `rsp` will be increased by 8.
 	* M2 - after executing the operation above.
 
 
