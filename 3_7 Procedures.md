@@ -125,6 +125,8 @@ int main()
         return 0;
 }
 ```
+* compile: `gcc -Og -g main.c -o main`
+* set breakpoint: `break *main` then run `run`
 * Firstly, we check and select the stack frame, also list the frame info and stack 64bits' information:
 ```shell
 (gdb) backtrace
