@@ -248,7 +248,7 @@ End of assembler dump.
 
 
 # Practice Problem 3.32
-The disassembled code for two functions first and last is shown below, along with the code for a call of first by function main:
+The disassembled code for two functions `first` and `last` is shown below, along with the code for a call of `first` by function `main`:
 ![[3_7 Procedures.assets/image-20240522160933277.png|600]]
 Each of these instructions is given a label. Starting with the calling of first(10) by main, fill in the following table to trace instruction execution through to the point where the program returns back to main.
 
@@ -267,17 +267,18 @@ Each of these instructions is given a label. Starting with the calling of first(
 **Solution**:
 ![[3_7 Procedures.assets/image-20240522160933277.png|600]]
 
-| Label |    PC    | Instruction | %rdi | %rsi | %rax |      %rsp      |  *%rsp   |       Description       |
-| :---: | :------: | :---------: | :--: | :--: | :--: | :------------: | :------: | :---------------------: |
-|  M1   | 0x400560 |    callq    |  10  |  -   |  -   | 0x7fffffffe820 |    -     |   Will call first(10)   |
-|  F1   | 0x400548 |     lea     |  10  |  -   |  -   | 0x7fffffffe818 | 0x400565 |  Will do: rsi=rdi+1=10  |
-|  F2   | 0x40054c |     sub     |  10  |  11  |  -   | 0x7fffffffe818 | 0x400565 |      Will do:rdi--      |
-|  F3   | 0x400550 |    callq    |  9   |  11  |  -   | 0x7fffffffe818 | 0x400565 |     Will call last      |
-|  L1   | 0x400540 |     mov     |  9   |  11  |  -   | 0x7fffffffe810 | 0x400555 |    Will do:rax=rdi=9    |
-|  L2   | 0x400543 |    imul     |  9   |  11  |  9   | 0x7fffffffe810 | 0x400555 | Will do: rax=rsi*rax=99 |
-|  L3   | 0x400547 |    retq     |  9   |  11  |  99  | 0x7fffffffe810 | 0x400555 |  Will return to first   |
-|  F4   | 0x400555 |  repz retq  |  9   |  11  |  99  | 0x7fffffffe818 | 0x400565 |   Will return to main   |
-|  M2   | 0x400565 |     mov     |  9   |  11  |  99  | 0x7fffffffe820 |    -     |         in main         |
+| Label |    PC    | Instruction | %rdi | %rsi | %rax |      %rsp      |  *%rsp   |        Description         |
+| :---: | :------: | :---------: | :--: | :--: | :--: | :------------: | :------: | :------------------------: |
+|  M1   | 0x400560 |    callq    |  10  |  -   |  -   | 0x7fffffffe820 |    -     |       Call first(10)       |
+|  F1   | 0x400548 |     lea     |  10  |  -   |  -   | 0x7fffffffe818 | 0x400565 | will do:<br>rsi = rdi + 1  |
+|  F2   | 0x40043c |     sub     |  10  |  11  |  -   | 0x7fffffffe818 | 0x400565 | will do:<br>rdi = rdi - 1  |
+|  F3   | 0x400550 |    callq    |  9   |  11  |  -   | 0x7fffffffe818 | 0x400565 |      call last(9,11)       |
+|  L1   | 0x400540 |     mov     |  9   |  11  |  -   | 0x7fffffffe810 | 0x400555 |   will do:<br>rax = rdi    |
+|  L2   | 0x400543 |    imul     |  9   |  11  |  9   | 0x7fffffffe810 | 0x400555 | will do:<br>rax = rax\*rsi |
+|  L3   | 0x400547 |    retq     |  9   |  11  |  99  | 0x7fffffffe810 | 0x400555 |            retq            |
+|  F4   | 0x400555 |    retq     |  9   |  11  |  99  | 0x7fffffffe818 | 0x400565 |            retq            |
+|  M2   | 0x400565 |     mov     |  9   |  11  |  99  | 0x7fffffffe820 |    -     |   will do:<br>rdx = rax    |
+
 
 
 # 3.7.3 Data Transfer
