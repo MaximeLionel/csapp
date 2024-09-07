@@ -286,7 +286,7 @@ Each of these instructions is given a label. Starting with the calling of first(
 ![[3_7 Procedures.assets/image-20240523090718505.png|400]]
 * With x86-64, up to six integral arguments can be passed via registers.
 * Arguments smaller than 64 bits can be accessed using the appropriate subsection of the 64-bit register.
-* When a function has more than six integral arguments:
+* When a function has more than 6 integral arguments:
 	* Suppose P calls Q with n integral arguments (n > 6):
 	* The code for P must allocate a stack frame with enough storage for arguments 7 through n.
 	* The code for P copies arguments 1–6 into the appropriate registers, and it puts arguments 7 through n onto the stack, with argument 7 at the top of the stack.
