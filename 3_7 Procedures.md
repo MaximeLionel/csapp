@@ -289,7 +289,7 @@ Each of these instructions is given a label. Starting with the calling of first(
 * When a function has more than 6 integral arguments:
 	* Suppose P calls Q with n integral arguments (n > 6):
 	* The code for P must allocate a stack frame with enough storage for arguments 7 through n.
-	* The code for P copies arguments 1–6 into the appropriate registers, and it puts arguments 7 through n onto the stack, with argument 7 at the top of the stack.
+	* The code for P copies arguments 1–6 into the appropriate registers, and it puts arguments 7 through n onto the **stack**, with argument 7 at the top of the stack.
 		* When passing parameters on the stack, all data sizes are rounded up to be multiples of eight.
 	* Procedure Q can access its arguments via registers and possibly from the stack.
 
@@ -329,7 +329,7 @@ proc:
         addq    %rdi, (%rsi)      # *rsi += rdi: *a1p += a1
         addl    %edx, (%rcx)      # *rcx += edx: *a2p += a2
         addw    %r8w, (%r9)       # *r9  += r8w: *a3p += a3
-        movl    8(%rsp), %edx     # edx = *(rsp+8) = a4
+        movl    8(%rsp), %edx     # edx = *(rsp+8) = a4 because we already pushed a return address on stack, which makes rsp=rsp-8. So we need to add the 8 back.
         addb    %dl, (%rax)       # *rax += dl: *a4p += a4
         ret
 
@@ -340,19 +340,19 @@ main:
         movq    %fs:40, %rax            
         movq    %rax, 24(%rsp)    
         xorl    %eax, %eax        # clear eax
-        movq    $1, 16(%rsp)      # *(16+rsp) = 1
-        movl    $2, 12(%rsp)      # *(12+rsp) = 2
-        movw    $3, 10(%rsp)      # *(10+rsp) = 3
-        movb    $4, 9(%rsp)       # *(9 +rsp) = 4
-        leaq    12(%rsp), %rcx    # 4th arg: rcx = rsp + 12
-        leaq    16(%rsp), %rsi    # 2nd arg: rsi = rsp + 16
-        leaq    9(%rsp), %rax     # rax = rsp + 9
+        movq    $1, 16(%rsp)      # *(16+rsp) = 1 - long a1 = 1;
+        movl    $2, 12(%rsp)      # *(12+rsp) = 2 - int a2 = 2;
+        movw    $3, 10(%rsp)      # *(10+rsp) = 3 - short a3 = 3;
+        movb    $4, 9(%rsp)       # *(9 +rsp) = 4 - char a4 = 4;
+        leaq    12(%rsp), %rcx    # 4th arg: rcx = rsp + 12 - a2p
+        leaq    16(%rsp), %rsi    # 2nd arg: rsi = rsp + 16 - a1p
+        leaq    9(%rsp), %rax     # rax = rsp + 9 - a4p
         pushq   %rax              # 8th arg: rsp=rsp-8, *rsp = rax
         pushq   $4                # 7th arg: rsp=rsp-8, *rsp = 4
-        leaq    26(%rsp), %r9     # 6th arg: r9 = 26 + rsp
-        movl    $3, %r8d          # 5th arg: r8d = 3
-        movl    $2, %edx          # 3rd arg: edx = 2
-        movl    $1, %edi          # 1st arg: edi = 1
+        leaq    26(%rsp), %r9     # 6th arg: r9 = (rsp+10)+8+8 - a3p
+        movl    $3, %r8d          # 5th arg: r8d = 3 - a3
+        movl    $2, %edx          # 3rd arg: edx = 2 - a2
+        movl    $1, %edi          # 1st arg: edi = 1 - a1
         call    proc              # push return address (rsp=rsp-8,*rsp=return address)
         addq    $16, %rsp
         movq    24(%rsp), %rax
