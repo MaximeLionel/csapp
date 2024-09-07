@@ -316,7 +316,7 @@ int main()
 	char a4 = 4;
 	char* a4p = &a4;
 	proc(long a1, long *a1p, int a2, int *a2p, short a3, short *a3p, char a4, char *a4p);
-
+	
 	return 0;
 }
 ```
@@ -364,7 +364,7 @@ main:
 ```
 
 # Practice Problem 3.33
-A C function procprob has four arguments u, a, v, and b. Each is either a signed number or a pointer to a signed number, where the numbers have different sizes. The function has the following body:
+A C function `procprob` has four arguments u, a, v, and b. Each is either a signed number or a pointer to a signed number, where the numbers have different sizes. The function has the following body:
 ```c
 	*u += a;
 	*v += b;
