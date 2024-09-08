@@ -495,10 +495,10 @@ Disassembly of section .text:
 
 # long swap_add(long *xp, long *yp)
 0000000000001169 <swap_add>:
-    116d:       48 8b 07                mov    (%rdi),%rax          # rax = *(rdi) - *xp
-    1170:       48 8b 16                mov    (%rsi),%rdx          # rdx = *(rsi) - *yp
-    1173:       48 89 17                mov    %rdx,(%rdi)          # *(rdi) = rdx - y
-    1176:       48 89 06                mov    %rax,(%rsi)          # *(rsi) = rax - x
+    116d:       48 8b 07                mov    (%rdi),%rax          # rax = *(rdi) - *xp - arg1
+    1170:       48 8b 16                mov    (%rsi),%rdx          # rdx = *(rsi) - *yp - arg2
+    1173:       48 89 17                mov    %rdx,(%rdi)          # *(rdi) = rdx - y - arg2
+    1176:       48 89 06                mov    %rax,(%rsi)          # *(rsi) = rax - x - arg1
     1179:       48 01 d0                add    %rdx,%rax            # rax = x + y
     117c:       c3                      ret    
 
@@ -509,15 +509,15 @@ Disassembly of section .text:
     118c:       00 00 
     118e:       48 89 44 24 18          mov    %rax,0x18(%rsp)      # save the special value to rsp+0x18
     1193:       31 c0                   xor    %eax,%eax            # clear eax
-    1195:       48 c7 44 24 08 16 02    movq   $0x216,0x8(%rsp)     # *(rsp+0x8)=0x216  - arg1
+    1195:       48 c7 44 24 08 16 02    movq   $0x216,0x8(%rsp)     # *(rsp+0x8)=0x216  - local variable: arg1
     119c:       00 00 
-    119e:       48 c7 44 24 10 21 04    movq   $0x421,0x10(%rsp)    # *(rsp+0x10)=0x421 - arg2
+    119e:       48 c7 44 24 10 21 04    movq   $0x421,0x10(%rsp)    # *(rsp+0x10)=0x421 - local variable: arg2
     11a5:       00 00 
     11a7:       48 8d 74 24 10          lea    0x10(%rsp),%rsi      # rsi=rsp+0x10 - &arg2
     11ac:       48 8d 7c 24 08          lea    0x8(%rsp),%rdi       # rdi=rsp+0x8  - &arg1
     11b1:       e8 b3 ff ff ff          call   1169 <swap_add>      # call swap_add
     11b6:       48 8b 54 24 08          mov    0x8(%rsp),%rdx       # rdx = *(rsp+0x8) - arg1
-    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx      # rdx = rdx-*(rsp+0x10) - arg1-arg2
+    11bb:       48 2b 54 24 10          sub    0x10(%rsp),%rdx      # rdx = rdx-*(rsp+0x10) = arg1-arg2
     11c0:       48 0f af c2             imul   %rdx,%rax            # rax = rax*rdx - sum*(arg1-arg2)
     11c4:       48 8b 54 24 18          mov    0x18(%rsp),%rdx      # stack protection - get the special value to rdx
     11c9:       64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx        # compare the special value, if changed, means the stack has been broken.
