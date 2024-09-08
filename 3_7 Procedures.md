@@ -384,22 +384,25 @@ Determine a valid ordering and types of the four parameters. There are two corre
 **Solution**:
 ```z80
 procprob:
-	movslq %edi, %rdi      # rdi = edi
-	addq %rdi, (%rdx)      # *rdx += rdi
-	addb %sil, (%rcx)      # *rcx +=%sil
-	movl $6, %eax          # eax = 6
+	movslq %edi, %rdi    # rdi = edi
+	addq %rdi, (%rdx)    # *rdx += rdi
+	addb %sil, (%rcx)    # *rcx += sil
+	movl $6, %eax        # eax = 6
 	ret
 ```
-Answer1 - suppose `addq %rdi, (%rdx)` is `*u += a`, then:
-* u is rdx, which is a 64bit address.
-* a is edi, which is a 32bit signed integer.
-* v is rcx, which is a 64bit address.
-* b is sil, because eax = 6 and a is 4-bytes, b is a 16-bit signed integer.
-Answer2 - suppose `addq %rdi, (%rdx)` is `*v += b`, then:
-* v is rdx, which is a 64bit address.
-* b is edi, which is a 32bit signed integer.
-* u is rcx, which is a 64bit address.
-* a is sil, because eax = 6 and b is 4bytes, a is a 16bit signed integer.
+Answer 1 - suppose `*u += a` is equal to `addq %rdi, (%rdx)`:
+rdx - u: pointer
+edi - a: 32bit signed integer
+rcx - v: pointer
+sil - b: 16bit signed integer
+so that `sizeof(a) + sizeof(b)` = 6.
+
+Answer 2 - suppose `*u += a` is equal to `addb %sil, (%rcx)`:
+rcx - u: pointer
+sil - a: 16bit signed integer
+rdx - v: pointer
+edi - b: 32bit signed integer
+so that `sizeof(a) + sizeof(b)` = 6.
 
 # 3.7.4 Local Storage on the Stack
 * Local data must be stored in memory.
@@ -433,7 +436,7 @@ int main()
 	return 0;
 }
 ```
-* Then we do `gcc -Og caller.c -o prog` and 'objdump -d prog'. 
+* Then we do `gcc -Og caller.c -o prog` and `objdump -d prog`. 
 ```z80
 prog:     file format elf64-x86-64
 
