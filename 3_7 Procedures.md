@@ -530,7 +530,7 @@ Disassembly of section .text:
     11e2:       48 83 ec 08             sub    $0x8,%rsp
     11e6:       b8 00 00 00 00          mov    $0x0,%eax
     11eb:       e8 8d ff ff ff          call   117d <caller>
-    11f0:       48 89 c2                mov    %rax,%rdx
+    11f0:       48 89 c2                mov    %rax,%rdx           # rdx = rax: rdx = sum*diff
     11f3:       48 8d 35 0a 0e 00 00    lea    0xe0a(%rip),%rsi        # 2004 <_IO_stdin_used+0x4>
     11fa:       bf 01 00 00 00          mov    $0x1,%edi
     11ff:       b8 00 00 00 00          mov    $0x0,%eax
@@ -540,7 +540,7 @@ Disassembly of section .text:
     1212:       c3                      ret    
 ```
 * Ok, now let's detect how the program deal with the local variables:
-	* for swap_add function, the program store the local varibles into registers:
+	* for swap_add function, the program store the local variables into registers, instead of allocating new stack frame for local variables:
 	```
 	116d:       48 8b 07                mov    (%rdi),%rax          # rax = *(rdi) - *xp
 	1170:       48 8b 16                mov    (%rsi),%rdx          # rdx = *(rsi) - *yp
