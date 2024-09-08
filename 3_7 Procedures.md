@@ -394,7 +394,7 @@ Answer1 - suppose `addq %rdi, (%rdx)` is `*u += a`, then:
 * u is rdx, which is a 64bit address.
 * a is edi, which is a 32bit signed integer.
 * v is rcx, which is a 64bit address.
-* b is sil, because eax = 6 and a is 4bytes, b is a 16bit signed integer.
+* b is sil, because eax = 6 and a is 4-bytes, b is a 16-bit signed integer.
 Answer2 - suppose `addq %rdi, (%rdx)` is `*v += b`, then:
 * v is rdx, which is a 64bit address.
 * b is edi, which is a 32bit signed integer.
