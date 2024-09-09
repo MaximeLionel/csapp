@@ -417,7 +417,15 @@ What effect would this instruction execution have on the registers, the PC, and 
 
 **Solution**:
 
-
+| Stage      | Generic<br>call Dest                                              | Specific<br>call 0x041                                                                  |
+| ---------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_8$[PC + 1]<br>valP ← PC + 9 | icode:ifun ← $M_1$[PC] = 0x80<br>rA :rB ← $M_8$[PC + 1] = 0x41<br>valP ← PC + 9 = 0x040 |
+| Decode     | valB ← R[%rsp]                                                    | valB ← R[%rsp] = 128                                                                    |
+| Execute    | valE ← valB + (−8)                                                | valE ← valB + (−8) = 120                                                                |
+| Memory     | $M_8$[valE] ← valP                                                | $M_8$[valE] ← valP = 0x040                                                              |
+| Write-back | R[%rsp] ← valE                                                    | R[%rsp] ← valE = 120                                                                    |
+| PC-update  | PC ← valC                                                         | 0x41                                                                                    |
+set `%rsp` to 120, to store 0x040 (the return address) at this memory address, and to set the PC to 0x041 (the call target).
 
 
 
