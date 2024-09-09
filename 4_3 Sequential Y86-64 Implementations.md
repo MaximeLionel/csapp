@@ -255,8 +255,22 @@ PC = 0x016
 | Write-back | R[rB] ← valE                                                                      | %rsp ← 128                                                                                                                                                                      |
 | PC-update  | PC ← valP                                                                         | PC ← 0x020                                                                                                                                                                      |
 
+# Practice Problem 4.14
+Fill in the right-hand column of the following table to describe the processing of
+the `popq` instruction below:
+```
+0x02c: b00f | popq %rax
+```
 
-
+| Stage      | Generic<br>popq rA                                                               | Specific<br>popq %rax |
+| ---------- | -------------------------------------------------------------------------------- | --------------------- |
+| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 2 |                       |
+| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                                 |                       |
+| Execute    | valE ← valB + 8                                                                  |                       |
+| Memory     | valM ← $M_8[valA]$                                                               |                       |
+| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                                   |                       |
+| PC-update  | PC ← valP                                                                        |                       |
+What effect does this instruction execution have on the registers and the PC?
 
 
 
