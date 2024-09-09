@@ -246,33 +246,56 @@ Fill in the right-hand column of the following table to describe the processing 
 **Solution**:
 PC = 0x016
 
-| Stage      | Generic<br>irmovq V, rB                                                           | Specific<br>irmovq $128, %rsp                                                                                                                                                   |
-| ---------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 10 | M1[0x016] = 0x30<br>icode:ifun ← 3:0<br><br>M1[0x017] = 0xf4<br>rA :rB ← f:4<br><br>M8[0x018] = 0x 0000000000000080<br>(little-endian)<br>valC ← 0x80 = 128<br><br>valP ← 0x020 |
-| Decode     | -                                                                                 |                                                                                                                                                                                 |
-| Execute    | valE ← 0 + valC                                                                   | valE ← 0 + 0x80 = 128                                                                                                                                                           |
-| Memory     | -                                                                                 |                                                                                                                                                                                 |
-| Write-back | R[rB] ← valE                                                                      | %rsp ← 128                                                                                                                                                                      |
-| PC-update  | PC ← valP                                                                         | PC ← 0x020                                                                                                                                                                      |
+| Stage      | Generic<br>irmovq V, rB                                                           | Specific<br>irmovq $128, %rsp                                                                                                                                                            |
+| ---------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 10 | $M_1$[0x016] = 0x30<br>icode:ifun ← 3:0<br><br>$M_1$[0x017] = 0xf4<br>rA :rB ← f:4<br><br>$M_8$[0x018] = 0x 0000000000000080<br>(little-endian)<br>valC ← 0x80 = 128<br><br>valP ← 0x020 |
+| Decode     | -                                                                                 |                                                                                                                                                                                          |
+| Execute    | valE ← 0 + valC                                                                   | valE ← 0 + 0x80 = 128                                                                                                                                                                    |
+| Memory     | -                                                                                 |                                                                                                                                                                                          |
+| Write-back | R[rB] ← valE                                                                      | %rsp ← 128                                                                                                                                                                               |
+| PC-update  | PC ← valP                                                                         | PC ← 0x020                                                                                                                                                                               |
 
 # Practice Problem 4.14
 Fill in the right-hand column of the following table to describe the processing of
-the `popq` instruction below:
+the `popq` instruction on line 7 of the code below:
+
 ```
-0x02c: b00f | popq %rax
+0x000: 30f20900000000000000    |   irmovq $9, %rdx
+0x00a: 30f31500000000000000    |   irmovq $21, %rbx
+0x014: 6123                    |   subq %rdx, %rbx            # subtract
+0x016: 30f48000000000000000    |   irmovq $128,%rsp           # Problem 4.13
+0x020: 40436400000000000000    |   rmmovq %rsp, 100(%rbx)     # store
+0x02a: a02f                    |   pushq %rdx                 # push
+0x02c: b00f                    |   popq %rax                  # Problem 4.14
+0x02e: 734000000000000000      |   je done                    # Not taken
+0x037: 804100000000000000      |   call proc                  # Problem 4.18
+0x040:                         | done:
+0x040: 00                      |   halt
+0x041:                         | proc:
+0x041: 90                      |   ret                        # Return
 ```
 
-| Stage      | Generic<br>popq rA                                                               | Specific<br>popq %rax |
-| ---------- | -------------------------------------------------------------------------------- | --------------------- |
-| Fetch      | icode:ifun ← M1[PC]<br>rA :rB ← M1[PC + 1]<br>valC ← M8[PC + 2]<br>valP ← PC + 2 |                       |
-| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                                 |                       |
-| Execute    | valE ← valB + 8                                                                  |                       |
-| Memory     | valM ← $M_8[valA]$                                                               |                       |
-| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                                   |                       |
-| PC-update  | PC ← valP                                                                        |                       |
+| Stage      | Generic<br>popq rA                                                | Specific<br>popq %rax |
+| ---------- | ----------------------------------------------------------------- | --------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 |                       |
+| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                  |                       |
+| Execute    | valE ← valB + 8                                                   |                       |
+| Memory     | valM ← $M_8$[valA]                                                |                       |
+| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    |                       |
+| PC-update  | PC ← valP                                                         |                       |
 What effect does this instruction execution have on the registers and the PC?
 
+**Solution**:
+`0x02c: b00f | popq %rax`
 
+| Stage      | Generic<br>popq rA                                                | Specific<br>popq %rax                                                             |
+| ---------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 |
+| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                  | valA ← R[%rsp] = <br>valB ← R[%rsp]                                               |
+| Execute    | valE ← valB + 8                                                   |                                                                                   |
+| Memory     | valM ← $M_8$[valA]                                                |                                                                                   |
+| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    |                                                                                   |
+| PC-update  | PC ← valP                                                         |                                                                                   |
 
 
 

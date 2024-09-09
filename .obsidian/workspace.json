@@ -162,9 +162,11 @@
   },
   "active": "336240595a418a64",
   "lastOpenFiles": [
+    "Untitled.canvas",
+    "README.pdf",
+    "4_3 Sequential Y86-64 Implementations.md",
     "3_7 Procedures.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "2_1.md",
     "2_2.md",
     "2_3.md",
@@ -201,9 +203,7 @@
     "3_8 Array Allocation and Access.md",
     "3_9 Heterogeneous Data Structures.assets",
     "3_8 Array Allocation and Access.assets",
-    "Untitled.canvas",
     "3_7 Procedures.assets",
-    "3_6 Control.assets",
-    "2_homework.assets/hw2_97"
+    "3_6 Control.assets"
   ]
 }
