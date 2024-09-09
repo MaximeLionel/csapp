@@ -286,16 +286,31 @@ the `popq` instruction on line 7 of the code below:
 What effect does this instruction execution have on the registers and the PC?
 
 **Solution**:
-`0x02c: b00f | popq %rax`
+Firstly, let's reverse the asm code to get the `rsp` related value.
+```
+0x000: 30f20900000000000000    |   irmovq $9, %rdx          # rdx = 9
+0x00a: 30f31500000000000000    |   irmovq $21, %rbx         # rbx = 21
+0x014: 6123                    |   subq %rdx, %rbx          # rbx=rbx-rdx: rbx = 12
+0x016: 30f48000000000000000    |   irmovq $128,%rsp         # rsp = 128
+0x020: 40436400000000000000    |   rmmovq %rsp, 100(%rbx)   # M(rbx+100)=rsp: *(112) = 128
+0x02a: a02f                    |   pushq %rdx               # rsp-=8, *rsp=9: rsp=120, *(120)=9
+0x02c: b00f                    |   popq %rax                # rax=*rsp, rsp+=8
+0x02e: 734000000000000000      |   je done                    
+0x037: 804100000000000000      |   call proc                  # Problem 4.18
+0x040:                         | done:
+0x040: 00                      |   halt
+0x041:                         | proc:
+0x041: 90                      |   ret                        # Return
+```
 
-| Stage      | Generic<br>popq rA                                                | Specific<br>popq %rax                                                             |
-| ---------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 |
-| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                  | valA ← R[%rsp] = <br>valB ← R[%rsp]                                               |
-| Execute    | valE ← valB + 8                                                   |                                                                                   |
-| Memory     | valM ← $M_8$[valA]                                                |                                                                                   |
-| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    |                                                                                   |
-| PC-update  | PC ← valP                                                         |                                                                                   |
+| Stage      | Generic<br>popq rA                                                | Specific<br>popq %rax                                                                                 |
+| ---------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 = 0x02c + 2 = 0x02e |
+| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                  | valA ← R[%rsp] = 120<br>valB ← R[%rsp] = 120                                                          |
+| Execute    | valE ← valB + 8                                                   | valE ← valB + 8 = 128                                                                                 |
+| Memory     | valM ← $M_8$[valA]                                                | valM ← $M_8$[valA] = \*(120) = 9                                                                      |
+| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    | R[%rsp] ← valE = 128<br>R[rA] ← valM = 9                                                              |
+| PC-update  | PC ← valP                                                         | PC ← valP = 0x02e                                                                                     |
 
 
 
