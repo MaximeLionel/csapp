@@ -20,18 +20,6 @@
             }
           },
           {
-            "id": "fae7601defcadbaa",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "336240595a418a64",
             "type": "leaf",
             "state": {
@@ -43,7 +31,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -110,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_7 Procedures.md",
+                "file": "4_3 Sequential Y86-64 Implementations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_7 Procedures.md",
+                "file": "4_3 Sequential Y86-64 Implementations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_7 Procedures.md"
+                "file": "4_3 Sequential Y86-64 Implementations.md"
               }
             }
           }
@@ -172,8 +161,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "336240595a418a64",
   "lastOpenFiles": [
+    "3_7 Procedures.md",
+    "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "2_1.md",
     "2_2.md",
@@ -184,9 +175,7 @@
     "3_4 Accessing Information.md",
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.md",
-    "3_7 Procedures.md",
     "3_homework.md",
-    "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_6 Control.assets/Pasted image 20240816111320.png",
     "3_6 Control.assets/Pasted image 20240816090343.png",
     "3_6 Control.assets/Pasted image 20240815165649.png",
