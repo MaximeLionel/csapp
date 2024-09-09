@@ -388,8 +388,34 @@ Similarily, we can use `Cnd ← Cond(CC, ifun)`, to put it into write back stage
 | PC-update  | PC ← valP                                                         |
 
 # Practice Problem 4.18
-Fill in the right-hand column of the following table to describe the processing of the call instruction on line 9 of the object code in Figure 4.17:
+Fill in the right-hand column of the following table to describe the processing of the call instruction on line 9 of the object code in Figure below:
+```
+0x000: 30f20900000000000000    |   irmovq $9, %rdx          # rdx = 9
+0x00a: 30f31500000000000000    |   irmovq $21, %rbx         # rbx = 21
+0x014: 6123                    |   subq %rdx, %rbx          # rbx=rbx-rdx: rbx = 12
+0x016: 30f48000000000000000    |   irmovq $128,%rsp         # rsp = 128
+0x020: 40436400000000000000    |   rmmovq %rsp, 100(%rbx)   # M(rbx+100)=rsp: *(112) = 128
+0x02a: a02f                    |   pushq %rdx               # rsp-=8, *rsp=9: rsp=120, *(120)=9
+0x02c: b00f                    |   popq %rax                # rax=*rsp, rsp+=8
+0x02e: 734000000000000000      |   je done                    
+0x037: 804100000000000000      |   call proc                  # Problem 4.18
+0x040:                         | done:
+0x040: 00                      |   halt
+0x041:                         | proc:
+0x041: 90                      |   ret                        # Return
+```
 
+| Stage      | Generic<br>call Dest                                              | Specific<br>call 0x041 |
+| ---------- | ----------------------------------------------------------------- | ---------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_8$[PC + 1]<br>valP ← PC + 9 |                        |
+| Decode     | valB ← R[%rsp]                                                    |                        |
+| Execute    | valE ← valB + (−8)                                                |                        |
+| Memory     | $M_8$[valE] ← valP                                                |                        |
+| Write-back | R[%rsp] ← valE                                                    |                        |
+| PC-update  | PC ← valC                                                         |                        |
+What effect would this instruction execution have on the registers, the PC, and the memory?
+
+**Solution**:
 
 
 
