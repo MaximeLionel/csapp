@@ -334,14 +334,61 @@ We find that it save rsp to valA, then store valA into stack in memory stage, at
 determined in Problem 4.7.
 
 # Practice Problem 4.16
-Assume the two register writes in the write-back stage for `popq` occur in the order listed in Figure 4.20. What would be the effect of executing popq %rsp? Does this conform to the desired behavior for Y86-64, as determined in Problem 4.8?
+Assume the two register writes in the write-back stage for `popq` occur in the order listed in Figure 4.20. What would be the effect of executing `popq %rsp`? Does this conform to the desired behavior for Y86-64, as determined in Problem 4.8?
 
+**Solution**:
+In Problem 4.8, we get that:
+`popq %rsp` is equal to `mrmovq (%rsp),%rsp`.
 
+Then let's analyze `popq %rsp` for Y86-64:
 
+| Stage      | Generic<br>popq rA                                                |
+| ---------- | ----------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 |
+| Decode     | valA ← R[%rsp]<br>valB ← R[%rsp]                                  |
+| Execute    | valE ← valB + 8                                                   |
+| Memory     | valM ← $M_8$[valA]                                                |
+| Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    |
+| PC-update  | PC ← valP                                                         |
+We find that it save rsp to valA and valB, then update valE to valB+8 in execute stage and store valA into stack in memory stage, at last it store valE into rsp but finally it update valM to rsp again sequencely. Logically, it conforms to the desired behavior for Y86-64, as
+determined in Problem 4.8.
 
+# Practice Problem 4.17
+We can see by the instruction encodings (Figures 4.2 and 4.3) that the `rrmovq` instruction is the unconditional version of a more general class of instructions that include the conditional moves. Show how you would modify the steps for the `rrmovq` instruction below to also handle the six conditional move instructions. You may find it useful to see how the implementation of the `jXX` instructions (Figure 4.21) handles conditional behavior.
 
+| Stage      | cmovXX rA, rB                                                     |
+| ---------- | ----------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 |
+| Decode     | valA ← R[rA]                                                      |
+| Execute    | valE ← valA + 0                                                   |
+| Memory     | -                                                                 |
+| Write-back | R[rB] ← valE                                                      |
+| PC-update  | PC ← valP                                                         |
+**Solution**:
+Firstly, let's review the implementation of the `jXX` instructions:
 
+| Stage      | jXX Dest                                                          |
+| ---------- | ----------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_8$[PC + 1]<br>valP ← PC + 9 |
+| Decode     | -                                                                 |
+| Execute    | Cnd ← Cond(CC, ifun)                                              |
+| Memory     | -                                                                 |
+| Write-back | -                                                                 |
+| PC-update  | PC ← Cnd ? valC : valP                                            |
 
+Similarily, we can use `Cnd ← Cond(CC, ifun)`, to put it into write back stage like below.
+
+| Stage      | cmovXX rA, rB                                                     |
+| ---------- | ----------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 |
+| Decode     | valA ← R[rA]                                                      |
+| Execute    | valE ← valA + 0<br>Cnd ← Cond(CC, ifun)                           |
+| Memory     | -                                                                 |
+| Write-back | if(Cnd) R[rB] ← valE                                              |
+| PC-update  | PC ← valP                                                         |
+
+# Practice Problem 4.18
+Fill in the right-hand column of the following table to describe the processing of the call instruction on line 9 of the object code in Figure 4.17:
 
 
 
