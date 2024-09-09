@@ -303,6 +303,8 @@ Firstly, let's reverse the asm code to get the `rsp` related value.
 0x041: 90                      |   ret                        # Return
 ```
 
+Secondly, fill in the table below:
+
 | Stage      | Generic<br>popq rA                                                | Specific<br>popq %rax                                                                                 |
 | ---------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 = 0x02c + 2 = 0x02e |
@@ -312,9 +314,22 @@ Firstly, let's reverse the asm code to get the `rsp` related value.
 | Write-back | R[%rsp] ← valE<br>R[rA] ← valM                                    | R[%rsp] ← valE = 128<br>R[rA] ← valM = 9                                                              |
 | PC-update  | PC ← valP                                                         | PC ← valP = 0x02e                                                                                     |
 
+# Practice Problem 4.15
+What would be the effect of the instruction `pushq %rsp` according to the steps
+listed in Figure 4.20? Does this conform to the desired behavior for Y86-64, as
+determined in Problem 4.7?
 
+**Solution**:
+Firstly, let's analyze `pushq %rsp`:
 
-
+| Stage      | Generic<br>pushq rA                                               | Specific<br>pushq %rsp                                                                                |
+| ---------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 = 0x02c + 2 = 0x02e |
+| Decode     | valA ← R[rA]<br>valB ← R[%rsp]                                    | valA ← R[%rsp] = 120<br>valB ← R[%rsp] = 120                                                          |
+| Execute    | valE ← valB + (-8)                                                | valE ← valB + 8 = 128                                                                                 |
+| Memory     | $M_8$[valE] ← valA                                                | valM ← $M_8$[valA] = \*(120) = 9                                                                      |
+| Write-back | R[%rsp] ← valE                                                    | R[%rsp] ← valE = 128<br>R[rA] ← valM = 9                                                              |
+| PC-update  | PC ← valP                                                         | PC ← valP = 0x02e                                                                                     |
 
 
 
