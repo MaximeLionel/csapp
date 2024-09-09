@@ -315,22 +315,26 @@ Secondly, fill in the table below:
 | PC-update  | PC ← valP                                                         | PC ← valP = 0x02e                                                                                     |
 
 # Practice Problem 4.15
-What would be the effect of the instruction `pushq %rsp` according to the steps
-listed in Figure 4.20? Does this conform to the desired behavior for Y86-64, as
-determined in Problem 4.7?
+What would be the effect of the instruction `pushq %rsp` according to the steps listed below? Does this conform to the desired behavior for Y86-64, as determined in Problem 4.7?
 
 **Solution**:
-Firstly, let's analyze `pushq %rsp`:
+In problem 4.7, we summarized that `pushq %rsp`actually, firstly save the rsp to the stack, secondly decrease the rsp.
 
-| Stage      | Generic<br>pushq rA                                               | Specific<br>pushq %rsp                                                                                |
-| ---------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 | icode:ifun ← $M_1$[0x02c] = 0xb0<br>rA :rB ← $M_1$[0x02d] = 0x0f<br>valP ← PC + 2 = 0x02c + 2 = 0x02e |
-| Decode     | valA ← R[rA]<br>valB ← R[%rsp]                                    | valA ← R[%rsp] = 120<br>valB ← R[%rsp] = 120                                                          |
-| Execute    | valE ← valB + (-8)                                                | valE ← valB + 8 = 128                                                                                 |
-| Memory     | $M_8$[valE] ← valA                                                | valM ← $M_8$[valA] = \*(120) = 9                                                                      |
-| Write-back | R[%rsp] ← valE                                                    | R[%rsp] ← valE = 128<br>R[rA] ← valM = 9                                                              |
-| PC-update  | PC ← valP                                                         | PC ← valP = 0x02e                                                                                     |
+Then, let's analyze `pushq %rsp`:
 
+| Stage      | Generic<br>pushq rA                                               |
+| ---------- | ----------------------------------------------------------------- |
+| Fetch      | icode:ifun ← $M_1$[PC]<br>rA :rB ← $M_1$[PC + 1]<br>valP ← PC + 2 |
+| Decode     | valA ← R[rA]<br>valB ← R[%rsp]                                    |
+| Execute    | valE ← valB + (-8)                                                |
+| Memory     | $M_8$[valE] ← valA                                                |
+| Write-back | R[%rsp] ← valE                                                    |
+| PC-update  | PC ← valP                                                         |
+We find that it save rsp to valA, then store valA into stack in memory stage, at last it store valE into rsp again. Logically, it conforms to the desired behavior for Y86-64, as
+determined in Problem 4.7.
+
+# Practice Problem 4.16
+Assume the two register writes in the write-back stage for `popq` occur in the order listed in Figure 4.20. What would be the effect of executing popq %rsp? Does this conform to the desired behavior for Y86-64, as determined in Problem 4.8?
 
 
 
