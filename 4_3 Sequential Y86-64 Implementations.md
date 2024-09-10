@@ -475,7 +475,7 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 * Processing is performed by **hardware units** associated with the different stages.
 * In SEQ, all of the processing by the hardware units occurs within **a single clock cycle**.
 
-## Hardware units associated with the different processing stages
+### Hardware units associated with the different processing stages
 * Fetch
 	* Using the **program counter register** as an address, the **instruction memory** reads the bytes of an instruction. 
 	* The **PC incrementer** computes `valP`, the incremented program counter.
@@ -489,8 +489,17 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 		* When executing a conditional move instruction, the decision as to whether or not to update the destination register is computed based on the condition codes and move condition. 
 		* When executing a jump instruction,the branch signal Cnd is computed based on the condition codes and the jump type.
 * Memory
-	* The data memory reads or writes a word of memory when executing a memory instruction.
+	* The **data memory** reads or writes a word of memory when executing a memory instruction.
 	* The instruction and data memories access the same memory locations, but for different purposes.
+* Write back
+	* The **register file** has two write ports: 
+		* **Port E** is used to write values computed by the **ALU**.
+		* **Port M** is used to write values read from the **data memory**.
+* PC update. 
+	* The new value of the **program counter** is selected to be either `valP`, the address of the next instruction, `valC`, the destination address specified by a call or jump instruction, or `valM`, the return address read from memory.
+
+## Hardware structure of SEQ, a sequential implementation
+![[Pasted image 20240910165411.png|500]]
 
 
 
