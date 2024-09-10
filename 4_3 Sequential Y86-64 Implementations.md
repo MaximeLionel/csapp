@@ -242,6 +242,12 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ![[Pasted image 20240816111320.png|400]]
 
+### Tracing the execution of an `rmmovq` instruction
+```
+0x020: 40436400000000000000    |   rmmovq %rsp, 100(%rbx)   # M(rbx+100)=rsp: *(112) = 128
+```
+![[Pasted image 20240910160409.png|400]]
+
 ### Tracing the execution of a `pushq` instruction
 ```
 0x02a: a02f                    |   pushq %rdx               # rsp-=8, *rsp=9: rsp=120, *(120)=9
@@ -457,6 +463,35 @@ What effect would this instruction execution have on the registers, the PC, and 
 | Write-back | R[%rsp] ← valE                                                    | R[%rsp] ← valE = 120                                                                    |
 | PC-update  | PC ← valC                                                         | 0x41                                                                                    |
 Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, and to set the PC to 0x041 (the call target).
+
+
+# 4.3.2 SEQ Hardware Structure
+* The computations required to implement all of the Y86-64 instructions can be organized as a series of six basic stages: fetch, decode, execute, memory, write back, and PC update.
+
+## Abstract view of SEQ, a sequential implementation.
+![[Pasted image 20240910161320.png|400]]
+*  The program counter is stored in a register, shown in the lower left-hand corner (labeled “PC”).
+* Information then flows along wires (shown grouped together as a heavy gray line), first upward and then around to the right.
+* Processing is performed by **hardware units** associated with the different stages.
+* In SEQ, all of the processing by the hardware units occurs within **a single clock cycle**.
+
+## Hardware units associated with the different processing stages
+* Fetch
+	* Using the **program counter register** as an address, the **instruction memory** reads the bytes of an instruction. 
+	* The **PC incrementer** computes `valP`, the incremented program counter.
+* Decode
+	* The **register file** has two read ports, A and B, via which register values `valA` and `valB` are read simultaneously.
+* Execute
+	* The execute stage uses the **arithmetic/logic (ALU) unit** for different purposes according to the instruction type.
+		* For integer operations, it performs the specified operation. 
+		* For other instructions, it serves as an adder to compute an incremented or decremented stack pointer, to compute an effective address, or simply to pass one of its inputs to its outputs by adding zero.
+	* The **condition code register (CC)** holds the 3 condition code bits. New values for the condition codes are computed by the **ALU**.
+		* When executing a conditional move instruction, the decision as to whether or not to update the destination register is computed based on the condition codes and move condition. 
+		* When executing a jump instruction,the branch signal Cnd is computed based on the condition codes and the jump type.
+* Memory
+	* The data memory reads or writes a word of memory when executing a memory instruction.
+	* The instruction and data memories access the same memory locations, but for different purposes.
+
 
 
 
