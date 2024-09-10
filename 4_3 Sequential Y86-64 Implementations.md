@@ -206,7 +206,22 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 	* With instruction `ret`, we assign `valM`, the value popped from the stack, to the PC in the **PC update** stage.
 
 ## Tracing Y86-64 instructions
-### Tracing the execution of a subq instruction
+```
+0x000: 30f20900000000000000    |   irmovq $9, %rdx          # rdx = 9
+0x00a: 30f31500000000000000    |   irmovq $21, %rbx         # rbx = 21
+0x014: 6123                    |   subq %rdx, %rbx          # rbx=rbx-rdx: rbx = 12
+0x016: 30f48000000000000000    |   irmovq $128,%rsp         # rsp = 128
+0x020: 40436400000000000000    |   rmmovq %rsp, 100(%rbx)   # M(rbx+100)=rsp: *(112) = 128
+0x02a: a02f                    |   pushq %rdx               # rsp-=8, *rsp=9: rsp=120, *(120)=9
+0x02c: b00f                    |   popq %rax                # rax=*rsp, rsp+=8
+0x02e: 734000000000000000      |   je done                    
+0x037: 804100000000000000      |   call proc                  # Problem 4.18
+0x040:                         | done:
+0x040: 00                      |   halt
+0x041:                         | proc:
+0x041: 90                      |   ret                        # Return
+```
+### Tracing the execution of a `subq` instruction
 ```
 0x000: 30f20900000000000000    |   irmovq $9, %rdx
 0x00a: 30f31500000000000000    |   irmovq $21, %rbx
@@ -227,8 +242,24 @@ The encoding of `irmovq`: ![[Pasted image 20240815155517.png|400]]
 
 ![[Pasted image 20240816111320.png|400]]
 
+### Tracing the execution of a `pushq` instruction
+```
+0x02a: a02f                    |   pushq %rdx               # rsp-=8, *rsp=9: rsp=120, *(120)=9
+```
 
+![[Pasted image 20240910143850.png|400]]
+### Tracing the execution of a `je` instruction
+```
+0x02e: 734000000000000000      |   je done
+```
 
+![[Pasted image 20240910143640.png|400]]
+### Tracing the execution of a `ret` instruction
+```
+0x041: 90                      |   ret                        # Return
+```
+
+![[Pasted image 20240910143208.png|400]]
 # Practice Problem 4.13
 Fill in the right-hand column of the following table to describe the processing of the `irmovq` instruction below:
 ```
@@ -425,7 +456,7 @@ What effect would this instruction execution have on the registers, the PC, and 
 | Memory     | $M_8$[valE] ← valP                                                | $M_8$[valE] ← valP = 0x040                                                              |
 | Write-back | R[%rsp] ← valE                                                    | R[%rsp] ← valE = 120                                                                    |
 | PC-update  | PC ← valC                                                         | 0x41                                                                                    |
-set `%rsp` to 120, to store 0x040 (the return address) at this memory address, and to set the PC to 0x041 (the call target).
+Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, and to set the PC to 0x041 (the call target).
 
 
 
