@@ -628,6 +628,7 @@ P:
 	call Q
 	...
 ```
+
 A. Identify which local values get stored in callee-saved registers.
 
 B. Identify which local values get stored on the stack.
@@ -639,36 +640,35 @@ C. Explain why the program could not store all of the local values in calleesav
 # long P(long x)
 # x in %rdi
 P: 
-	pushq %r15          # callee-saved register
-	pushq %r14          # callee-saved register 
-	pushq %r13          # callee-saved register 
-	pushq %r12          # callee-saved register 
-	pushq %rbp          # callee-saved register 
-	pushq %rbx          # callee-saved register 
-	subq $24, %rsp 
-	movq %rdi, %rbx     # rbx = rdi: rbx=x
-	leaq 1(%rdi), %r15  # r15 = rdi+1: r15=x+1
-	leaq 2(%rdi), %r14  # r14 = rdi+2: r14=x+2
-	leaq 3(%rdi), %r13  # r13 = rdi+3: r13=x+3
-	leaq 4(%rdi), %r12  # r12 = rdi+4: r12=x+4
-	leaq 5(%rdi), %rbp  # rbp = rdi+5: rbp=x+5
-	leaq 6(%rdi), %rax  # rax = rdi+6: rax=x+6
-	movq %rax, (%rsp)   # *rsp = rax: *rsp=x+6
-	leaq 7(%rdi), %rdx  # rdx = rdi+7: rdx=x+7
-	movq %rdx, 8(%rsp)  # *(rsp+8) = rdx: *(rsp+8)=x+7
-	movl $0, %eax 
+	pushq %r15   # callee-saved register
+	pushq %r14   # callee-saved register
+	pushq %r13   # callee-saved register
+	pushq %r12   # callee-saved register
+	pushq %rbp   # callee-saved register
+	pushq %rbx   # callee-saved register
+	subq $24, %rsp      # allocates storage for stack frame
+	movq %rdi, %rbx     # rbx=rdi: rbx = x
+	leaq 1(%rdi), %r15  # r15=rdi+1: r15 = x + 1
+	leaq 2(%rdi), %r14  # r14=rdi+2: r14 = x + 2
+	leaq 3(%rdi), %r13  # r13 = x + 3
+	leaq 4(%rdi), %r12  # r12 = x + 4
+	leaq 5(%rdi), %rbp  # rbp = x + 5
+	leaq 6(%rdi), %rax  # rax = x + 6
+	movq %rax, (%rsp)   # *(rsp) = rax = x + 6
+	leaq 7(%rdi), %rdx  # rdx = x + 7
+	movq %rdx, 8(%rsp)  # *(rsp+8) = x + 7
+	movl $0, %eax       # eax = 0
 	call Q
 	...
 ```
-A.
-We get in this function, the callee-saved registers are: `rbx rbp r12 r13 r14 r15`
-Thus local values are: `x, x+1, x+2, x+3, x+4, x+5`
+A. 
+x, x+1, x+2, x+3, x+4, x+5
 
 B.
-Local values stored on the stack are: `x+6, x+7`
+x+6, x+7
 
 C.
-Limited quantity of callee-saved registers.
+Totally only 6 callee-saved registers are available to use.
 
 # 3.7.6 Recursive Procedures (递归过程)
 * The conventions we have described for using the registers and the stack allow x86-64 procedures to call themselves recursively, and so the local variables of the multiple outstanding calls do not interfere with one another.
