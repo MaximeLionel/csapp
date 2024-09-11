@@ -507,8 +507,14 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 	* We will treat these units as “black boxes” and not go into their detailed designs.
 * **Control logic blocks** - gray rounded rectangles.
 	* These blocks serve to select from among a set of signal sources or to compute some Boolean function. 
-* **Wire** - white circles.
+* **Wire names** - white circles.
 	* These are simply labels on the wires, not any kind of hardware element.
+* **Word-wide data connections** - medium lines. 
+	* Each represents a bundle of 64 wires, connected in parallel, for transferring a word from one part of the hardware to another.
+* **Byte and narrower data connections** - thin lines.
+	* Each represents a bundle of 4 or 8 wires, depending on what type of values must be carried on the wires.
+* **Single-bit connections** - dotted lines.
+	* These represent control values passed between the units and blocks on the chip.
 
 
 
