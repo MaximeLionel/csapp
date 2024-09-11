@@ -538,7 +538,6 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 		* Some instructions (the integer operations) set the condition codes, and some instructions (the conditional move and jump instructions) read these condition codes, but no instruction must both set and then read the condition codes.
 
 ## Tracing two cycles of execution by SEQ
-We will trace line 3 and 4 of the code below:
 ```
 0x000: irmovq $0x100,%rbx  # %rbx <-- 0x100
 0x00a: irmovq $0x200,%rdx  # %rdx <-- 0x200
@@ -547,6 +546,9 @@ We will trace line 3 and 4 of the code below:
 0x01f: rmmovq %rbx,0(%rdx) # M[0x200] <-- 0x300
 0x029: dest: halt
 ```
+![[Pasted image 20240911142240.png|400]]
+We will trace line 3 and 4 of the code above.
+![[Pasted image 20240911142200.png|500]]
 
 
 
