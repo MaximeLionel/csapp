@@ -689,6 +689,8 @@ long rfact(long n)
 .text
 .globl  rfact
 .type   rfact, @function
+# long rfact(long n)
+#  n - %rdi
 rfact:
         cmpq    $1, %rdi
         jg      .L8              # if rdi(n)>1, jump to .L8
@@ -737,26 +739,30 @@ B. Fill in the missing expressions in the C code shown above.
 
 **Solution**:
 ```z80
+# long rfun(unsigned long x)
+# %rdi - x
 rfun: 
-	pushq %rbx         # callee-saved register
-	movq %rdi, %rbx    # rbx = rdi: rbx=x
+	pushq %rbx         # save callee-saved register
+	movq %rdi, %rbx    # rbx=rdi: rbx = x
 	movl $0, %eax      # eax = 0
 	testq %rdi, %rdi   
-	je .L2             # if rdi(x) == 0, jump to .L2
-	shrq $2, %rdi      # rdi = rdi >> 2: rdi=x>>2
+	je .L2             # if rdi==0, goto .L2
+	                   # if rdi!=0
+	shrq $2, %rdi      # rdi>>=2: rdi = x >> 2
 	call rfun          # rfun(rdi): rfun(x>>2)
-	addq %rbx, %rax    # rax = rax + rbx: rax=rfun(x>>2)+x
+	addq %rbx, %rax    # rax+=rbx: rax += x
 .L2: 
-	popq %rbx 
+	popq %rbx          # restore rbx
 	ret
 ```
-A. `x`
+
+A. x
 B.
 ```c
 long rfun(unsigned long x) {
 	if ( x == 0 ) return;
-	unsigned long nx = x >> 2 ;
+	unsigned long nx = x >> 2;
 	long rv = rfun(nx);
-	return rv + x ;
+	return x + rv ;
 }
 ```
