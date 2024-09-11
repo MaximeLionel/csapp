@@ -516,6 +516,26 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 * **Single-bit connections** - dotted lines.
 	* These represent control values passed between the units and blocks on the chip.
 
+# 4.3.3 SEQ Timing
+* Our implementation of SEQ consists of **combinational logic** and **two forms of memory devices**: clocked registers (the program counter and condition code register) and random access memories (the register file, the instruction memory, and the data memory).
+* No need any sequencing or control:
+	* Combinational logic.
+	* Reading from a random access memory operates is assumed to be similar as combinational logic, with the output word generated based on the address input.
+* Need sequencing or control:
+	* the program counter -  loaded with a new instruction address every clock cycle.
+	* the condition code register - loaded only when an integer operation instruction is executed.
+	* write to the data memory -  written only when an rmmovq, pushq, or call instruction is executed.
+	* write to the register file - The two write ports of the register file allow two program registers to be updated on every cycle.
+		* but we can use the special register ID 0xF as a port address to indicate that no write should be performed for this port.
+* Principle: No reading back - The processor never needs to read back the state updated by an instruction in order to complete the processing of this instruction
+	* Example - `pushq`:
+		* Wrong approach:  first decrementing %rsp by 8 and then using the updated value of %rsp as the address of a write operation.
+		* Reason for violating the principle: require reading the updated stack pointer from the register file in order to perform the memory operation.
+		* Correct approach: generates the decremented value of the stack pointer as the signal `valE` and then uses this signal both as the data for the register write and the address for the memory write.
+			* It can perform the register and memory writes simultaneously as the clock rises to begin the next clock cycle.
+	* Example - `cc`:
+		* Some instructions (the integer operations) set the condition codes, and some instructions (the conditional move and jump instructions) read these condition codes, but no instruction must both set and then read the condition codes.
+
 
 
 
