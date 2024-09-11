@@ -501,7 +501,14 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 ## Hardware structure of SEQ, a sequential implementation
 ![[Pasted image 20240910165411.png|500]]
 * **Clocked registers** - white rectangles.
-	* The program counter PC is the only clocked register in SEQ.
+	* The **program counter PC** is the only clocked register in SEQ.
+* **Hardware units** - light blue boxes. 
+	* These include the **memories**, the **ALU**, and so forth. 
+	* We will treat these units as “black boxes” and not go into their detailed designs.
+* **Control logic blocks** - gray rounded rectangles.
+	* These blocks serve to select from among a set of signal sources or to compute some Boolean function. 
+* **Wire** - white circles.
+	* These are simply labels on the wires, not any kind of hardware element.
 
 
 
