@@ -552,7 +552,7 @@ We will trace line 3 and 4 of the code above.
 * The **combinational logic** as being wrapped around the **condition code register**:
 	* Some of the combinational logic (such as the ALU) generates the input to the condition code register.
 	* Other parts (such as the branch computation and the PC selection logic) have the condition code register as input.
-* The register file and the data memory as having separate connections for reading and writing:
+* The register file and the data memory have separate connections for reading and writing:
 	* The read operations propagate through these units as if they were combinational logic.
 	* The write operations are controlled by the clock.
 
