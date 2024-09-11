@@ -500,7 +500,8 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 
 ## Hardware structure of SEQ, a sequential implementation
 ![[Pasted image 20240910165411.png|500]]
-
+* **Clocked registers** - white rectangles.
+	* The program counter PC is the only clocked register in SEQ.
 
 
 
