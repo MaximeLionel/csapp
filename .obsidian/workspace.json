@@ -176,6 +176,7 @@
   "active": "336240595a418a64",
   "lastOpenFiles": [
     "3_8 Array Allocation and Access.md",
+    "4_3 Sequential Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240911142240.png",
     "3_6 Control.assets/Pasted image 20240911142200.png",
     "3_6 Control.assets/Pasted image 20240910165411.png",
@@ -188,7 +189,6 @@
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_9 Heterogeneous Data Structures.md",
     "3_7 Procedures.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "2_1.md",
     "2_2.md",
     "2_3.md",
