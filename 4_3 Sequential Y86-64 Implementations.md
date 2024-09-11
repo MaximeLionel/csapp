@@ -527,6 +527,7 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 	* write to the data memory -  written only when an rmmovq, pushq, or call instruction is executed.
 	* write to the register file - The two write ports of the register file allow two program registers to be updated on every cycle.
 		* but we can use the special register ID 0xF as a port address to indicate that no write should be performed for this port.
+## Principle: No reading back
 * Principle: No reading back - The processor never needs to read back the state updated by an instruction in order to complete the processing of this instruction
 	* Example - `pushq`:
 		* Wrong approach:  first decrementing %rsp by 8 and then using the updated value of %rsp as the address of a write operation.
@@ -535,6 +536,17 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 			* It can perform the register and memory writes simultaneously as the clock rises to begin the next clock cycle.
 	* Example - `cc`:
 		* Some instructions (the integer operations) set the condition codes, and some instructions (the conditional move and jump instructions) read these condition codes, but no instruction must both set and then read the condition codes.
+
+## Tracing two cycles of execution by SEQ
+We will trace line 3 and 4 of the code below:
+```
+0x000: irmovq $0x100,%rbx  # %rbx <-- 0x100
+0x00a: irmovq $0x200,%rdx  # %rdx <-- 0x200
+0x014: addq %rdx,%rbx      # %rbx <-- 0x300 CC <-- 000
+0x016: je dest             # Not taken
+0x01f: rmmovq %rbx,0(%rdx) # M[0x200] <-- 0x300
+0x029: dest: halt
+```
 
 
 
