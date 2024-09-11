@@ -549,7 +549,12 @@ Set `%rsp` to 120, to store 0x040 (the return address) at this memory address, a
 ![[Pasted image 20240911142240.png|400]]
 We will trace line 3 and 4 of the code above.
 ![[Pasted image 20240911142200.png|500]]
-
+* The **combinational logic** as being wrapped around the **condition code register**:
+	* Some of the combinational logic (such as the ALU) generates the input to the condition code register.
+	* Other parts (such as the branch computation and the PC selection logic) have the condition code register as input.
+* The register file and the data memory as having separate connections for reading and writing:
+	* The read operations propagate through these units as if they were combinational logic.
+	* The write operations are controlled by the clock.
 
 
 
