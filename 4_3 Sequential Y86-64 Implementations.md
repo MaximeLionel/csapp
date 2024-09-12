@@ -629,6 +629,7 @@ We will trace line 3 and 4 of the code above.
 			1 : RNONE; # Don’t need register
 		];
 		```
+	* The register signal `srcB` indicates which register should be read to generate the signal `valB`. 
 
 * Register ID `dstE` indicates the destination register for write port E, where the computed value `valE` is stored.
 	* HCL description of dstE:
@@ -676,9 +677,7 @@ Register ID `dstM` indicates the destination register for write port M, where `v
 ```
 # WARNING: Conditional move not implemented correctly here
 word dstM = [
-	icode in { IMRMOVQ } : rA;
-	icode in { IIRMOVQ, IOPQ} : rB;
-	icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;
+	icode in { IMRMOVQ, IPOPQ } : rA;
 	1 : RNONE; # Don’t write any register
 ];
 ```
