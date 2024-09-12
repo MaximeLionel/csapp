@@ -619,6 +619,7 @@ We will trace line 3 and 4 of the code above.
 	* 2 read ports have address inputs: **srcA** and **srcB**.
 	* 2 write ports have address inputs: **dstE** and **dstM**.
 	* The special identifier 0xF (RNONE) on an address port indicates that no register should be accessed.
+* The 4 blocks at the bottom generate the 4 different register IDs for the register file, based on the instruction code **icode**, the register specifiers **rA** and **rB**, and possibly the condition **signalCnd** computed in the execute stage.
 
 
 
