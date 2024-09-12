@@ -751,4 +751,12 @@ Based on the first operand of the first step of the execute stage in Figures 4.1
 # Practice Problem 4.24
 The conditional move instructions, abbreviated `cmovXX`, have instruction code `IRRMOVQ`. As Figure 4.28 shows, we can implement these instructions by making use of the `Cnd` signal, generated in the execute stage. Modify the HCL code for `dstE` to implement these instructions.
 
-
+**Solution**:
+```
+word dstE = [
+	icode in { IRRMOVQ } && Cnd : rB;
+	icode in { IIRMOVQ, IOPQ} : rB;
+	icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;
+	1 : RNONE; # Don’t write any register
+];
+```
