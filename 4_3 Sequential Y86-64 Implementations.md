@@ -587,7 +587,7 @@ We will trace line 3 and 4 of the code above.
 ![[Pasted image 20240912094237.png|400]]
 * The fetch stage includes the **instruction memory hardware** unit:
 	* This unit reads 10 bytes from memory at a time, using the PC as the address of the first byte (byte 0). 
-	* Byte 0 is interpreted as the instruction byte and is split (by the unit labeled “Split”) into two 4-bit quantities: icode and ifun.
+* Byte 0 is interpreted as the **instruction byte** and is split (by the unit labeled “Split”) into two 4-bit quantities: **icode** and **ifun**.
 	* The control logic blocks labeled “icode” and “ifun” then compute the instruction and function codes.
 	* If the instruction address is not valid, the instruction memory unit will release an signal **imem_error**, and the values corresponding to a nop instruction.
 	* Based on the value of icode, we can compute **3 1-bit signals**:
@@ -600,7 +600,19 @@ We will trace line 3 and 4 of the code above.
 	bool need_regids =
 		icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
 	```
+* Byte 1-9: the remaining 9 bytes read from the instruction memory encode some combination of the **register specifier byte** and the **constant word**.
+	* Byte 1-9 are processed by the hardware unit labeled “Align” into the **register fields** and the **constant word**.
+	* Byte 1:
+		* If the signal **need_regids** is 1, Byte 1 is split into register specifiers rA and rB.
+			* For any instruction having only one register operand, the other field of the register specifier byte will be 0xF (RNONE).
+		* If the signal **need_regids** is 0, both register specifiers are set to 0xF (RNONE), indicating there are no registers specified by this instruction.
+		* we can assume that the signals rA and rB either encode registers we want to access or indicate that register access is not required.
+* “Align” also generates the constant word `valC`. This will either be bytes 1–8 or bytes 2–9, depending on the value of signal need_regids.
+* **PC incrementer hardware** unit generates the signal `valP`, based on the current value of the PC, and the two signals **need_regids** and **need_valC**.
+	* For PC value `p`, need_regids value `r`, and need_valC value `i`, the incrementer generates the value `p + 1 + r + 8i`.
 
+## Decode and Write-Back Stages
+![[Pasted image 20240912104757.png|300]]
 
 
 
