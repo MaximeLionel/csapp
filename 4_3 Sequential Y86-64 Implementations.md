@@ -613,7 +613,12 @@ We will trace line 3 and 4 of the code above.
 
 ## Decode and Write-Back Stages
 ![[Pasted image 20240912104757.png|300]]
-
+* Decode and write-back stages are combined because they both access the **register file**.
+* The register file has 4 ports: 2 simultaneous reads (on ports A and B) and 2 simultaneous writes (on ports E and M).
+	* Each port has both an **address connection** and a **data connection**, where the address connection is a **register ID**, and the data connection is a set of 64 wires serving as either an **output word** (for a read port) or an **input word** (for a write port) of the register file.
+	* 2 read ports have address inputs: **srcA** and **srcB**.
+	* 2 write ports have address inputs: **dstE** and **dstM**.
+	* The special identifier 0xF (RNONE) on an address port indicates that no register should be accessed.
 
 
 
