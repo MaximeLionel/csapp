@@ -621,6 +621,14 @@ We will trace line 3 and 4 of the code above.
 	* The special identifier 0xF (RNONE) on an address port indicates that no register should be accessed.
 * The 4 blocks at the bottom generate the 4 different register IDs for the register file, based on the instruction code **icode**, the register specifiers **rA** and **rB**, and possibly the condition **signalCnd** computed in the execute stage.
 	* Example - register ID `srcA` indicates which register should be read to generate `valA`.
+	* HCL description of srcA:
+		```
+		word srcA = [
+			icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;
+			icode in { IPOPQ, IRET } : RRSP;
+			1 : RNONE; # Don’t need register
+		];
+		```
 
 
 
