@@ -579,6 +579,8 @@ We will trace line 3 and 4 of the code above.
 	* The use of a clock to control the updating of the state elements, combined with the propagation of values through combinational logic, suffices to control the computations performed for each instruction in our implementation of SEQ.
 	* Every time the clock transitions from low to high, the processor begins executing a new instruction.
 
+# 4.3.4 SEQ Stage Implementations
+
 
 
 
