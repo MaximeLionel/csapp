@@ -630,7 +630,7 @@ We will trace line 3 and 4 of the code above.
 		];
 		```
 
-
+* Register ID `dstE` indicates the destination register for write port E, where the computed value `valE` is stored.
 
 
 
@@ -647,7 +647,16 @@ Write HCL code for the signal need_valC in the SEQ implementation.
 		icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL};
 ```
 
+# Practice Problem 4.20
+The register signal `srcB` indicates which register should be read to generate the signal `valB`. The desired value is shown as the second step in the decode stage. Write HCL code for `srcB`.
 
+**Solution**:
+```
+		word srcB = [
+			icode in { IRMMOVQ, IMRMOVQ, IOPQ } : rB;
+			1 : RNONE; # Don’t need register
+		];
+```
 
 
 
