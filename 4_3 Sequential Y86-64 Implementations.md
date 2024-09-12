@@ -682,8 +682,14 @@ word dstM = [
 ];
 ```
 
+# Practice Problem 4.22
+Only the `popq` instruction uses both register file write ports simultaneously. For the instruction `popq %rsp`, the same address will be used for both the E and M write ports, but with different data. To handle this conflict, we must establish a priority among the two write ports so that when both attempt to write the same register on the same cycle, only the write from the higher-priority port takes place. Which of the two ports should be given priority in order to implement the desired behavior, as determined in Practice Problem 4.8?
 
+**Solution**:
+![[Pasted image 20240815165649.png|300]]
+From practice problem 4.8, we get that: `popq %rsp` is equal to `mrmovq (%rsp),%rsp`.
 
+To realize this, we have to give valM higher priority than `valE`, to make sure `(%rsp)` can be writen to `%rsp`.
 
 
 
