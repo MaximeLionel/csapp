@@ -37,7 +37,7 @@
 * As with x86-64, we do not allow direct transfers from one memory location to another. In addition, we do not allow a transfer of immediate data to memory.
 
 ## `OPq` - integer operation instructions
-![[Pasted image 20240730225333.png|300]]
+![[Pasted image 20240730225333.png|200]]
 
 ![[Pasted image 20240730225244.png|100]]
 * 4 integer operation instructions: `addq`, `subq`, `andq`, and `xorq`.

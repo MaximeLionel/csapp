@@ -631,7 +631,17 @@ We will trace line 3 and 4 of the code above.
 		```
 
 * Register ID `dstE` indicates the destination register for write port E, where the computed value `valE` is stored.
-
+	* HCL description of dstE:
+		```
+		# WARNING: Conditional move not implemented correctly here
+		word dstE = [
+			icode in { IRRMOVQ } : rB;
+			icode in { IIRMOVQ, IOPQ} : rB;
+			icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;
+			1 : RNONE; # Don’t write any register
+		];
+		```
+* Register ID `dstM` indicates the destination register for write port M, where valM, the value read from memory, is stored.
 
 
 
@@ -654,8 +664,23 @@ The register signal `srcB` indicates which register should be read to generate t
 ```
 		word srcB = [
 			icode in { IRMMOVQ, IMRMOVQ, IOPQ } : rB;
+			icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;
 			1 : RNONE; # Don’t need register
 		];
+```
+
+# Practice Problem 4.21
+Register ID `dstM` indicates the destination register for write port M, where `valM`, the value read from memory, is stored. This is shown in Figures 4.18 to 4.21 as the second step in the write-back stage. Write HCL code for dstM.
+
+**Solution**:
+```
+# WARNING: Conditional move not implemented correctly here
+word dstM = [
+	icode in { IMRMOVQ } : rA;
+	icode in { IIRMOVQ, IOPQ} : rB;
+	icode in { IPUSHQ, IPOPQ, ICALL, IRET } : RRSP;
+	1 : RNONE; # Don’t write any register
+];
 ```
 
 
