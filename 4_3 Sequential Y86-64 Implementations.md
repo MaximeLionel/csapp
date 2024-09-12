@@ -580,9 +580,45 @@ We will trace line 3 and 4 of the code above.
 	* Every time the clock transitions from low to high, the processor begins executing a new instruction.
 
 # 4.3.4 SEQ Stage Implementations
+* Constant values used in HCL descriptions.
+	![[Pasted image 20240912093533.png|400]]
+
+## Fetch Stage
+![[Pasted image 20240912094237.png|400]]
+* The fetch stage includes the **instruction memory hardware** unit:
+	* This unit reads 10 bytes from memory at a time, using the PC as the address of the first byte (byte 0). 
+	* Byte 0 is interpreted as the instruction byte and is split (by the unit labeled “Split”) into two 4-bit quantities: icode and ifun.
+	* The control logic blocks labeled “icode” and “ifun” then compute the instruction and function codes.
+	* If the instruction address is not valid, the instruction memory unit will release an signal **imem_error**, and the values corresponding to a nop instruction.
+	* Based on the value of icode, we can compute **3 1-bit signals**:
+		* **instr_valid** - Does this byte correspond to a legal Y86-64 instruction? This signal is used to detect an illegal instruction.
+		* **need_regids** - Does this instruction include a register specifier byte?
+		* **need_valC** - Does this instruction include a constant word?
+	* The signals **instr_valid** and **imem_error** are used to generate the status code in the memory stage.
+	* Example - HCL description for need_regids:
+	```
+	bool need_regids =
+		icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
+	```
 
 
 
+
+
+
+
+
+
+
+
+# Practice Problem 4.19
+Write HCL code for the signal need_valC in the SEQ implementation.
+
+**Solution**:
+```
+	bool need_valC =
+		icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL};
+```
 
 
 
