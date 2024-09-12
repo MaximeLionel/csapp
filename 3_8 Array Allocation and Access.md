@@ -16,9 +16,9 @@
 * Consider the declaration below:
 	```c
 	char A[12];
-	char *B[8];
+	char* B[8];
 	int C[6];
-	double *D[5];
+	double* D[5];
 	```
 * The declarations will generate arrays with the following parameters:
 	![[3_8 Array Allocation and Access.assets/image-20240529152558409.png|400]]
