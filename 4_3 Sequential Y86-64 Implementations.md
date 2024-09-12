@@ -644,9 +644,38 @@ We will trace line 3 and 4 of the code above.
 		```
 * Register ID `dstM` indicates the destination register for write port M, where valM, the value read from memory, is stored.
 
+## Execute Stage
+![[Pasted image 20240912165714.png|300]]
+* The execute stage includes the **arithmetic/logic unit (ALU)**.
+	* ALU performs the operation add, subtract, and, or exclusive-or on inputs `aluA` and `aluB` based on the setting of the `alufun` signal.
+	* The ALU output becomes the signal `valE`.
+	* The operands are listed with `aluB` first, followed by `aluA` to make sure the `subq` instruction subtracts `valA` from `valB`.
+	* The value of `aluA` can be `valA`, `valC`, or either −8 or +8, depending on the instruction type.
+	* HCL description of `aluA`:
+		```
+		word aluA = [
+			icode in { IRRMOVQ, IOPQ } : valA;
+			icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ } : valC;
+			icode in { ICALL, IPUSHQ } : -8;
+			icode in { IRET, IPOPQ } : 8;
+			# Other instructions don’t need ALU
+		];
+		```
+	* HCL description for the ALU control `alufun`:
+		```
+		word alufun = [
+			icode == IOPQ : ifun;
+			1 : ALUADD;
+		];
+		```
 
-
-
+* The execute stage also includes the **condition code register**.
+	* ALU generates the three signals on which the condition codes are based — **zero, sign, and overflow** — every time it operates.
+	* We only want to set the condition codes when an `OPq` instruction is executed.
+	* We therefore generate a signal `set_cc` that controls whether or not the condition code register should be updated:
+		```
+		bool set_cc = icode in { IOPQ };
+		```
 
 
 # Practice Problem 4.19
@@ -691,6 +720,16 @@ From practice problem 4.8, we get that: `popq %rsp` is equal to `mrmovq (%rsp),%
 
 To realize this, we have to give valM higher priority than `valE`, to make sure `(%rsp)` can be writen to `%rsp`.
 
+# Practice Problem 4.23
+Based on the first operand of the first step of the execute stage in Figures 4.18 to 4.21, write an HCL description for the signal aluB in SEQ.
+
+**Solution**:
+```
+	word aluB = [
+		icode in { IOPQ, IRMMOVQ, IMRMOVQ, IPUSHQ, IPOPQ, ICALL, IRET} : valB;
+		icode in { IRRMOVQ, IIRMOVQ, } : 0;
+	];
+```
 
 
 
