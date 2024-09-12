@@ -677,6 +677,23 @@ We will trace line 3 and 4 of the code above.
 		bool set_cc = icode in { IOPQ };
 		```
 
+* The hardware unit labeled “cond” uses a combination of the **condition codes** and the **function code** to determine whether a conditional branch or data transfer should take place.
+	* It generates the `Cnd` signal used both for the setting of `dstE` with conditional moves and in the next PC logic for conditional branches.
+	* For other instructions, the `Cnd` signal may be set to either 1 or 0, depending on the instruction’s function code and the setting of the condition codes, but it will be ignored by the control logic.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Practice Problem 4.19
 Write HCL code for the signal need_valC in the SEQ implementation.
@@ -731,6 +748,7 @@ Based on the first operand of the first step of the execute stage in Figures 4.1
 	];
 ```
 
-
+# Practice Problem 4.24
+The conditional move instructions, abbreviated `cmovXX`, have instruction code `IRRMOVQ`. As Figure 4.28 shows, we can implement these instructions by making use of the `Cnd` signal, generated in the execute stage. Modify the HCL code for `dstE` to implement these instructions.
 
 
