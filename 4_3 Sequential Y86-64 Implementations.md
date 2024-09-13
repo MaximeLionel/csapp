@@ -780,3 +780,10 @@ word dstE = [
 Looking at the memory operations for the different instructions shown in Figures 4.18 to 4.21, we can see that the data for memory writes are always either `valA` or `valP`. Write HCL code for the signal `mem_data` in SEQ.
 
 **Solution**:
+In this case, `valA` can only be data, not address. So `IPOPQ` and `IRET` cannot be chosen.
+```
+	word mem_data = [
+		icode in { IRMMOVQ, IPUSHQ } : valA # in this case, valA can only be data, not address.
+		icode == ICALL  : valP
+	];
+```
