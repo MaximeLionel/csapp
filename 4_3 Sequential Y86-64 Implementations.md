@@ -681,6 +681,20 @@ We will trace line 3 and 4 of the code above.
 	* It generates the `Cnd` signal used both for the setting of `dstE` with conditional moves and in the next PC logic for conditional branches.
 	* For other instructions, the `Cnd` signal may be set to either 1 or 0, depending on the instruction’s function code and the setting of the condition codes, but it will be ignored by the control logic.
 
+## Memory Stage
+![[Pasted image 20240913100500.png|250]]
+* The memory stage has the task of either **reading or writing program data**.
+	* 2 control blocks generate the **values** for the memory address and the memory input data (for write operations).
+	* 2 other blocks generate the **control signals** indicating whether to perform a read or a write operation. 
+	* When a read operation is performed, the data memory generates the value `valM`.
+* The address for memory reads and writes (`mem_addr`) is always `valE` or `valA`. `mem_addr` in HCL:
+	```
+	word mem_addr = [
+		icode in { IRMMOVQ, IPUSHQ, ICALL, IMRMOVQ } : valE;
+		icode in { IPOPQ, IRET } : valA;
+		# Other instructions don’t need address
+	];
+	```
 
 
 
@@ -760,3 +774,8 @@ word dstE = [
 	1 : RNONE; # Don’t write any register
 ];
 ```
+
+# Practice Problem 4.25
+Looking at the memory operations for the different instructions shown in Figures 4.18 to 4.21, we can see that the data for memory writes are always either `valA` or `valP`. Write HCL code for the signal `mem_data` in SEQ.
+
+**Solution**:
