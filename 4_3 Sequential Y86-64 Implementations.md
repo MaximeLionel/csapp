@@ -695,6 +695,7 @@ We will trace line 3 and 4 of the code above.
 		# Other instructions don’t need address
 	];
 	```
+* The data for memory writes are always either `valA` or `valP`.
 
 
 
