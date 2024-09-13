@@ -64,14 +64,19 @@ Fill in the following table describing the element size, the total size, and the
 * The unary operators `&` and `*` allow the generation and dereferencing of pointers.
 * Example:
 	* For an expression Expr denoting some object, &Expr is a pointer giving the address of the object.
-	* For an expression AExpr denoting an address, *AExpr gives the value at that address.
+	* For an expression AExpr denoting an address, \*AExpr gives the value at that address.
 	* The expressions Expr and \*&Expr are therefore equivalent.
 	* The array `A[i]` is identical to the expression `*(A+i)`.
 * Suppose the starting address of integer array E and integer index i are stored in registers `%rdx` and `%rcx`:
-	![[image-20240531235948114.png|600]]
+	![[image-20240531235948114.png|500]]
+To correct:
+
+| &E[i]-E | 4*i | leaq (0, %rcx, 4), %rax |
+| ------- | --- | ----------------------- |
+
 
 # Practice Problem 3.37
-Suppose $x_P$, the address of short integer array P, and long integer index i are stored in registers %rdx and %rcx, respectively. For each of the following expressions, give its type, a formula for its value, and an assembly-code implementation. The result should be stored in register %rax if it is a pointer and register element %ax if it has data type short.
+Suppose $x_P$, the address of short integer array P, and long integer index i are stored in registers `%rdx` and `%rcx`, respectively. For each of the following expressions, give its type, a formula for its value, and an assembly-code implementation. The result should be stored in register `%rax` if it is a pointer and register element `%ax` if it has data type short.
 
 | Expression | Type | Value | Assembly Code |
 | :--------: | ---- | ----- | ------------- |
@@ -82,13 +87,13 @@ Suppose $x_P$, the address of short integer array P, and long integer index i ar
 | `&P[i+2]`  |      |       |               |
 **Solution**:
 
-| Expression | Type   | Value           | Assembly Code                  |
-| :--------: | ------ | --------------- | ------------------------------ |
-|   `P[1]`   | short  | M[$x_P$+2]      | `movw 2(%rdx), %rax`           |
-|  `P+3+i`   | short* | $x_P$+3*2+2i    | `leaq 6(%rdx,%rcx,2), %rax`    |
-| `P[i*6-5]` | short  | M[$x_P$+12i-10] | `movw -10(%rdx,%rcx,12), %rax` |
-|   `P[2]`   | short  | M[$x_P$+4]      | `movw 4(%rdx), %rax`           |
-| `&P[i+2]`  | short* | $x_P$+2*2+2i    | `leaq 4(%rdx,%rcx,2), %rax`    |
+| Expression | Type   | Value            | Assembly Code              |
+| :--------: | ------ | ---------------- | -------------------------- |
+|    P[1]    | short  | $M[x_p+2]$       | movw 2(%rdx), %ax          |
+|   P+3+i    | short* | $x_p+3*2+2*i$    | leaq 6(%rdx,%rcx,2),%rax   |
+|  P[i*6-5]  | short  | $M[x_p+12*i-10]$ | movw -10(%rdx,%rcx,12),%ax |
+|    P[2]    | short  | $M[x_p+4]$       | movw 4(%rdx), %ax          |
+|  &P[i+2]   | short* | $x_p+2*i+4$      | leaq 4(%rdx,%rcx,2),%rax   |
 
 # 3.8.3 Nested Arrays
 * A multidimensional array declared as:
