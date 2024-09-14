@@ -800,7 +800,8 @@ We want to set the control signal `mem_write` only for instructions that write d
 	bool mem_write = icode in { IRMMOVQ, IPUSHQ, ICALL };
 ```
 
-
+# Practice Problem 4.27
+Write HCL code for `Stat`, generating the four status codes `SAOK`, `SADR`, `SINS`, and `SHLT` (see Figure 4.26).
 
 
 
