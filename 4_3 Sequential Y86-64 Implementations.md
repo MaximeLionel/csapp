@@ -696,6 +696,10 @@ We will trace line 3 and 4 of the code above.
 	];
 	```
 * The data for memory writes are always either `valA` or `valP`.
+* The control signal `mem_read` only for instructions that read data from memory, as expressed by the following HCL code:
+	```
+	bool mem_read = icode in { IMRMOVQ, IPOPQ, IRET };
+	```
 
 
 
@@ -787,3 +791,37 @@ In this case, `valA` can only be data, not address. So `IPOPQ` and `IRET` cannot
 		icode == ICALL  : valP
 	];
 ```
+
+# Practice Problem 4.26
+We want to set the control signal `mem_write` only for instructions that write data to memory. Write HCL code for the signal `mem_write` in SEQ.
+
+**Solution**:
+```
+	bool mem_write = icode in { IRMMOVQ, IPUSHQ, ICALL };
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
