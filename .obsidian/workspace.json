@@ -43,7 +43,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -110,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_8 Array Allocation and Access.md"
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md"
               }
             }
           }
@@ -172,9 +173,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "fae7601defcadbaa",
   "lastOpenFiles": [
+    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "4_3 Sequential Y86-64 Implementations.md",
+    "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_8 Array Allocation and Access.md",
     "conflict-files-obsidian-git.md",
     "3_6 Control.assets/Pasted image 20240913100500.png",
@@ -201,8 +204,6 @@
     "3_5 Arithmetic and Logical Operations.md",
     "3_6 Control.md",
     "3_homework.md",
-    "4_1 The Y86-64 Instruction Set Architecture.md",
-    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "4_0 Processor Architecture.md",
