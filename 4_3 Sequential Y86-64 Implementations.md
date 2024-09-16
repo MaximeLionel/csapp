@@ -803,6 +803,17 @@ We want to set the control signal `mem_write` only for instructions that write d
 # Practice Problem 4.27
 Write HCL code for `Stat`, generating the four status codes `SAOK`, `SADR`, `SINS`, and `SHLT` (see Figure 4.26).
 
+**Solution**:
+
+```
+	word Stat = [
+		imem_error || dmem_error : SADR;
+		!instr_valid : SINS;
+		icode == IHALT : SHLT;
+		1 : SAOK;
+	];
+```
+
 
 
 
