@@ -319,16 +319,16 @@ In summary, `-Og` is tailored for development and debugging, ensuring the code
 	![[image-20240602211651509.png|400]]
 
 # Practice Problem 3.39
-Use Equation 3.1 to explain how the computations of the initial values for `Aptr`, `Bptr`, and `Bend` in the C code of Figure 3.37(b) (lines 3–5) correctly describe their computations in the assembly code generated for `fix_prod_ele` (lines 3–5).
+Use Equation $\&D[i][j] = x_D + L(C \times i + j)$ to explain how the computations of the initial values for `Aptr`, `Bptr`, and `Bend` in the C code of Figure above correctly describe their computations in the assembly code generated for `fix_prod_ele`.
 
 **Solution**:
-Equation 3.1: $\&D[i][j] = x_D + L(C \times i + j)$
-C = 16 because of `#define N 16`.
-L = 4  because of integer type.
+We know that N = 16, so C = 16
+Sizeof(int)=4, so L = 4
+Therefore, $\&D[i][j] = x_D + 4(16 \times i + j)$
 
-$Aptr = \&A[i][0] = x_A+4(16 \times i+0)=x_A+64i$
-$Bptr=\&B[0][k]=x_B+4(16 \times 0+k)=x_B+4k$
-$Bend=\&B[N][k]=x_B+4(16 \times 16 + k)=x_B+4k+1024$
+Aptr = $\&A[i][0]$ = $x_A + 4(16 \times i + 0)$ = $x_A + 64i$
+Bptr = $\&B[0][k]$ = $x_B + 4(16 \times 0 + k)$ = $x_B + 4k$
+Bend = $\&B[N][k]$ = $x_B + 4(16 \times 16 + k)$ = $x_B +4k+1024$
 
 # Practice Problem 3.40
 The following C code sets the diagonal elements of one of our fixed-size arrays to `val`:
