@@ -505,9 +505,9 @@ var_prod_ele:
         testq   %rdi, %rdi            # test n&n
         jle     .L4                   # if n<=0, jump to .L4
         imulq   %rdi, %rcx            # rcx=rcx*rdi: rcx=i*n
-        leaq    (%rsi,%rcx,4), %r10   # r10=rsi+4*rcx: r10=A+4i
+        leaq    (%rsi,%rcx,4), %r10   # r10=rsi+4*rcx: r10=A+4*i*n = &A[i][0] = Aptr
         leaq    0(,%rdi,4), %r9       # r9=4*rdi: r9=4n
-        leaq    (%rdx,%r8,4), %rcx    # rcx=rdx+4*r8: rcx=B+4k
+        leaq    (%rdx,%r8,4), %rcx    # rcx=rdx+4*r8: rcx=B+4k=&B[0][k]= Bptr
         movl    $0, %esi              # esi=0: result=0
         movl    $0, %eax              # eax=0: j=0
 .L3:
