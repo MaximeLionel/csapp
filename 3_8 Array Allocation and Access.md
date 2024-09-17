@@ -358,36 +358,53 @@ fix_set_diag:
 Create a C code program `fix_set_diag_opt` that uses optimizations similar to those in the assembly code, in the same style as the code in Optimized C Code. Use expressions involving the parameter N rather than integer constants, so that your code will work correctly if N is redefined.
 
 **Solution**:
-Firstly, we interpret the assembly code below:
 ```z80
 # void fix_set_diag(fix_matrix A, int val)
 # A in %rdi, val in %rsi
 
 fix_set_diag:
-	movl $0, %eax             # eax=0
+	movl $0, %eax           # eax = 0
 .L13:
-	movl %esi, (%rdi,%rax)    # M(rax+rdi)=esi: *(rax+A)=val
-	addq $68, %rax            # rax+=68
-	cmpq $1088, %rax          # compare rax and 1088
-	jne .L13                  # if rax <= 1088, jump to .L13
+	movl %esi, (%rdi,%rax)  # M(rdi+rax)=esi: *(A + rax) = val
+	addq $68, %rax          # rax+=68: rax = rax + 68
+	cmpq $1088, %rax        # compare rax and 1088
+	jne .L13                # if rax!=1088, jump to .L13
 	rep; ret
 ```
-Secondly, we introduce `char* Abase` and construct the C code below:
-```C
+Write the C code:
+```c
 void fix_set_diag_opt(fix_matrix A, int val)
 {
-	char* Abase = &A[0][0];
-	int i = 0;              // movl $0, %eax
+	char* Aptr = (char*)A;  // %rdi
+	int i = 0; // %rax
 	do{
-		*(Abase + i) = val;
-		i+=68;
-	}while(i<=1088)         // cmpq $1088, %rax
-	                        // jne .L13
+		*(Aptr + i) = val;
+		i += 68;
+	}while(i != 1088); // 1088/68 = 16
 }
+
 ```
-Thirdly, 
-Suppose N is `int A[N][N]`, then we get the equation below:
-	4(N+1)=68 -> N=16
+Suppose A\[N]\[N]
+if we want to go from one diagonal element to the next, the range is like:
+(N+1)\*4 = 68, so N = 16
+So Aend = A\[N+1]\[N+1] = \*(Aptr+1088)
+
+Therefore, we modified our C code:
+```c
+void fix_set_diag_opt(fix_matrix A, int val)
+{
+	int* Aptr = (int*)A;  // %rdi
+	int i = 0; // %rax
+	int iend = N*(N+1);
+	do{
+		*(Aptr + i) = val;
+		i += N + 1;
+	}while(i != iend); // 1088/68 = 16
+}
+
+```
+
+
 
 # 3.8.5 Variable-Size Arrays
 * In the C version of variable-size arrays, we can declare an array：
