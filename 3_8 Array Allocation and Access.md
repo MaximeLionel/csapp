@@ -417,7 +417,7 @@ void fix_set_diag_opt(fix_matrix A, int val)
 		return A[i][j];
 	}
 	```
-	* The parameter n must precede the parameter `A[n][n]`, so that the function can compute the array dimensions as the parameter is encountered.
+	* The parameter $n$ must precede the parameter `A[n][n]`, so that the function can compute the array dimensions as the parameter is encountered.
 	* Assembly code:
 		![[image-20240603110542601.png|400]]
 	* The code computes the address of element i, j as $x_A + 4(n \times i) + 4j = x_A + 4(n \times i + j)$.
