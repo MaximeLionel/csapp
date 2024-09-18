@@ -20,6 +20,18 @@
             }
           },
           {
+            "id": "ae09f0d785495628",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "fae7601defcadbaa",
             "type": "leaf",
             "state": {
@@ -43,7 +55,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -110,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +163,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -172,26 +185,27 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "ae09f0d785495628",
   "lastOpenFiles": [
+    "3_9 Heterogeneous Data Structures.md",
+    "conflict-files-obsidian-git.md",
+    "4_4 General Principles of Pipelining.md",
+    "3_6 Control.assets/Pasted image 20240918163705.png",
+    "3_6 Control.assets/Pasted image 20240918161817.png",
+    "3_6 Control.assets/Pasted image 20240918151225.png",
+    "3_6 Control.assets/Pasted image 20240918150721.png",
     "3_8 Array Allocation and Access.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
-    "conflict-files-obsidian-git.md",
     "3_6 Control.assets/Pasted image 20240913100500.png",
     "3_6 Control.assets/Pasted image 20240912165714.png",
     "3_6 Control.assets/Pasted image 20240912104757.png",
     "3_6 Control.assets/Pasted image 20240912094237.png",
     "3_6 Control.assets/Pasted image 20240912093533.png",
     "3_6 Control.assets/Pasted image 20240911142240.png",
-    "3_6 Control.assets/Pasted image 20240911142200.png",
-    "3_6 Control.assets/Pasted image 20240910165411.png",
-    "3_6 Control.assets/Pasted image 20240910161320.png",
-    "3_6 Control.assets/Pasted image 20240910160409.png",
     "3_11 Floating-Point Code.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
-    "3_9 Heterogeneous Data Structures.md",
     "3_7 Procedures.md",
     "2_1.md",
     "2_2.md",

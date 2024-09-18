@@ -701,6 +701,21 @@ We will trace line 3 and 4 of the code above.
 	bool mem_read = icode in { IMRMOVQ, IPOPQ, IRET };
 	```
 
+## PC Update Stage
+* The final stage in SEQ generates the new value of the **program counter**, while the new PC will be `valC`, `valM`, or `valP`, depending on the instruction type and whether or not a branch should be taken.
+* HCL description:
+	```
+	word new_pc = [
+		# Call. Use instruction constant
+		icode == ICALL : valC;
+		# Taken branch. Use instruction constant
+		icode == IJXX && Cnd : valC;
+		# Completion of RET instruction. Use value from stack
+		icode == IRET : valM;
+		# Default: Use incremented PC
+		1 : valP;
+	];
+	```
 
 
 
