@@ -33,6 +33,10 @@ hardware
 	* During the 3rd clock cycle in the pipeline diagram where `I1` is in stage C, `I2` is in stage B, and `I3` is in stage A.
 * Some computations of the performance:
 	* The computation is split into stages A, B, and C. On each 120 ps cycle, each instruction progresses through one stage.
+	* Cycle the clocks every 100 + 20 = 120 picoseconds, giving a throughput of around 8.33 GIPS ($Throughput = \frac{1~instruction} {(20+100)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 8.33~GIPS$).
+	* Since processing a single instruction requires 3 clock cycles, the latency of this pipeline is 3 × 120 = 360 ps.
+* Performance inprovements - increase the **throughput** of the system by a factor of 8.33/3.12 = 2.67 at the expense of some added hardware and a slight increase in the **latency** (360/320 = 1.12).
+	* The increased latency is due to the time overhead of the added pipeline registers.
 
 
 
