@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "3_9 Heterogeneous Data Structures.md",
                 "mode": "source",
                 "source": false
               }
@@ -110,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "3_9 Heterogeneous Data Structures.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_8 Array Allocation and Access.md",
+                "file": "3_9 Heterogeneous Data Structures.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_8 Array Allocation and Access.md"
+                "file": "3_9 Heterogeneous Data Structures.md"
               }
             }
           }
@@ -174,8 +174,8 @@
   },
   "active": "e12c23177d9b1910",
   "lastOpenFiles": [
-    "4_3 Sequential Y86-64 Implementations.md",
     "3_8 Array Allocation and Access.md",
+    "4_3 Sequential Y86-64 Implementations.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "conflict-files-obsidian-git.md",
