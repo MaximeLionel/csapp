@@ -42,7 +42,12 @@ hardware
 ## Three-stage pipeline timing
 ![[Pasted image 20240919151150.png|300]]
 * The transfer of the instructions between pipeline stages is controlled by a **clock signal**.
+* The rising edge of the clock signal controls the movement of instructions from one pipeline stage to the next.
 * Every 120 ps, this signal rises from 0 to 1, initiating the next set of pipeline stage evaluations.
+
+## One clock cycle of pipeline operation
+
+
 
 
 
