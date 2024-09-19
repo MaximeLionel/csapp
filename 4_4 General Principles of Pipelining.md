@@ -65,6 +65,17 @@ hardware
 * Point 4 (359 ps) - before time 360, the result values reach the inputs of the pipeline registers.
 * When the clock rises at time 360, each of the instructions will have progressed through one pipeline stage.
 
+* Tips:
+	* Slowing down the clock would not change the pipeline behavior.
+	* If the clock were run too fast, the values would not have time to propagate through the combinational logic.
+	* The simple mechanism of having clocked registers between blocks of combinational logic suffices to control the flow of instructions in the pipeline.
+
+# 4.4.3 Limitations of Pipelining
+
+
+
+
+
 
 
 
