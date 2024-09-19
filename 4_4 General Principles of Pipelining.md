@@ -33,7 +33,7 @@ hardware
 	* During the 3rd clock cycle in the pipeline diagram where `I1` is in stage C, `I2` is in stage B, and `I3` is in stage A.
 * Some computations of the performance:
 	* The computation is split into stages A, B, and C. On each 120 ps cycle, each instruction progresses through one stage.
-	* Cycle the clocks every 100 + 20 = 120 picoseconds, giving a throughput of around 8.33 GIPS ($Throughput = \frac{1~instruction} {(20+100)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 8.33~GIPS$).
+	* Cycle the clocks every 100 + 20 = 120 picoseconds (皮秒), giving a throughput of around 8.33 GIPS ($Throughput = \frac{1~instruction} {(20+100)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 8.33~GIPS$).
 	* Since processing a single instruction requires 3 clock cycles, the latency of this pipeline is 3 × 120 = 360 ps.
 * Performance inprovements - increase the **throughput** of the system by a factor of 8.33/3.12 = 2.67 at the expense of some added hardware and a slight increase in the **latency** (360/320 = 1.12).
 	* The increased latency is due to the time overhead of the added pipeline registers.
@@ -47,10 +47,23 @@ hardware
 
 ## One clock cycle of pipeline operation
 ![[Pasted image 20240919152328.png|400]]
-
-
-
-
+* Between times 240 and 360:
+	* The instruction `I1` propagates through stage C;
+	* The instruction `I2` propagates through stage B;
+	* The instruction `I3` propagates through stage A.
+![[Pasted image 20240919153557.png|400]]
+* Point 1 (239 ps) - just before the rising clock at time 240,
+	* The values computed in stage A for instruction `I2` (blue) have reached the input of the first pipeline register, but its state and output remain set to those computed during stage A for instruction `I1` (dark gray).
+		* The values computed in stage B for instruction `I1` (dark gray) have reached the input of the second pipeline register.
+![[Pasted image 20240919153903.png|400]]
+* Point 2 (241 ps) - the clock rises from point 1.
+	* As the clock rises, all the inputs are loaded into the pipeline registers, becoming the register outputs.
+	* The input to stage A is set to initiate the computation of instruction `I3` (light gray).
+![[Pasted image 20240919155013.png|400]]
+* Point 3 (300 ps) - the signals propagate through the combinational logic for the different stages.
+![[Pasted image 20240919155315.png|400]]
+* Point 4 (359 ps) - before time 360, the result values reach the inputs of the pipeline registers.
+* When the clock rises at time 360, each of the instructions will have progressed through one pipeline stage.
 
 
 
