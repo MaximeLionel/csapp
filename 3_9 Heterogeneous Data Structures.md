@@ -88,67 +88,43 @@ st_init:
 	movq %rdi, 12(%rdi)
 	ret
 ```
-NOTE: the assembly code above is wrong! Please refer to the correct one below:
-```
-.text
-.globl  st_init
-st_init:
-        movzwl  8(%rdi), %eax
-        movw    %ax, 10(%rdi)
-        leaq    10(%rdi), %rax
-        movq    %rax, (%rdi)
-        movq    %rdi, 16(%rdi)
-        ret
-```
+
 On the basis of this information, fill in the missing expressions in the code for `st_init`.
 
 **Solution**:
-A. offsets (in bytes) of the following fields:
-```
-struct test {
-	short *p;
-	struct {
-		short x;
-		short y;
-	} s;
-
-	struct test *next;
-};
-
-
-	p: 0
-	s.x: 0x8
-	s.y: 0xA
+A.
+```C
+	p:    0
+	s.x:  0x8
+	s.y:  0xA
 	next: 0xC
 ```
 
-B.
-Total bytes of the structure required: 8+2+2+8=0x14
+B. 
+0x14
 
-C. 
+C.
 ```z80
 # void st_init(struct test *st)
 # st in %rdi
 
-.text
-.globl  st_init
 st_init:
-        movzwl  8(%rdi), %eax       # eax=M(rdi+8): eax=st->x
-        movw    %ax, 10(%rdi)       # M(rdi+10)=ax: st->y=st->x
-        leaq    10(%rdi), %rax      # rax=rdi+10: rax=&(st->y)
-        movq    %rax, (%rdi)        # M(rdi)=rax: st->p=&(st->y)
-        movq    %rdi, 16(%rdi)      # M(rdi+16)=rdi: st->next=st
-        ret
+	movl 8(%rdi), %eax   # eax=M(rdi+8): eax = st->x
+	movl %eax, 10(%rdi)  # M(rdi+10)=eax: st->y = st->x
+	leaq 10(%rdi), %rax  # rax=rdi+10: rax = &(st->y)
+	movq %rax, (%rdi)    # M(rdi)=rax: st->p = &(st->y)
+	movq %rdi, 12(%rdi)  # M(rdi+12)=rdi: st->next = st
+	ret
 ```
-Then we try to fill in:
+
 ```C
 void st_init(struct test *st) {
-	st->s.y = st->s.x;
-	st->p = &(st->s.y);
+	st->s.y = st->x;
+	st->p = &(st->y);
 	st->next = st;
 }
 ```
-Pretty easy.
+
 
 # Analyze memory layout of structure element (take Practice Problem 3.41 as example) 
 Firstly, compile the source C code (st_init.c):
