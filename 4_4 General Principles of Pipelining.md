@@ -39,7 +39,10 @@ hardware
 	* The increased latency is due to the time overhead of the added pipeline registers.
 
 # 4.4.2 A Detailed Look at Pipeline Operation
-
+## Three-stage pipeline timing
+![[Pasted image 20240919151150.png|300]]
+* The transfer of the instructions between pipeline stages is controlled by a **clock signal**.
+* Every 120 ps, this signal rises from 0 to 1, initiating the next set of pipeline stage evaluations.
 
 
 
