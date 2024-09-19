@@ -38,6 +38,8 @@ hardware
 * Performance inprovements - increase the **throughput** of the system by a factor of 8.33/3.12 = 2.67 at the expense of some added hardware and a slight increase in the **latency** (360/320 = 1.12).
 	* The increased latency is due to the time overhead of the added pipeline registers.
 
+# 4.4.2 A Detailed Look at Pipeline Operation
+
 
 
 
