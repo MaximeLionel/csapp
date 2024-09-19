@@ -46,7 +46,7 @@ hardware
 * Every 120 ps, this signal rises from 0 to 1, initiating the next set of pipeline stage evaluations.
 
 ## One clock cycle of pipeline operation
-
+![[Pasted image 20240919152328.png|400]]
 
 
 
