@@ -89,16 +89,16 @@ hardware
 	* Some of the hardware units in a processor, such as the ALU and the memories, cannot be subdivided into multiple units with shorter delay.
 	* This makes it difficult to create a set of balanced stages.
 
-## Practice Problem 4.28
+### Practice Problem 4.28
 Suppose we analyze the combinational logic above and determine that it can be separated into a sequence of 6 blocks, named A to F, having delays of 80, 30, 60, 50, 70, and 10 ps, respectively, illustrated as follows:
 ![[Pasted image 20240920153326.png|400]]
 We can create pipelined versions of this design by inserting pipeline registers between pairs of these blocks. Different combinations of pipeline depth (how many stages) and maximum throughput arise, depending on where we insert the pipeline registers. Assume that a pipeline register has a delay of 20 ps.
 
 A. Inserting a single register gives a two-stage pipeline. Where should the register be inserted to maximize throughput? What would be the throughput and latency?
 
-B. Where should two registers be inserted to maximize the throughput of a three-stage pipeline? What would be the throughput and latency?
+B. Where should 2 registers be inserted to maximize the throughput of a three-stage pipeline? What would be the throughput and latency?
 
-C. Where should three registers be inserted to maximize the throughput of a 4-stage pipeline? What would be the throughput and latency?
+C. Where should 3 registers be inserted to maximize the throughput of a 4-stage pipeline? What would be the throughput and latency?
 
 D. What is the minimum number of stages that would yield a design with the maximum achievable throughput? Describe this design, its throughput, and its latency.
 
@@ -110,19 +110,39 @@ $Throughput = \frac{1~instruction} {(20+80+30+60)picoseconds}\times \frac{1,000~
 $Latency = (80+30+60+20)\times 2 = 380~ps$
 
 B.
+Insert 1 register between B and C.
+Insert 1 register between D and E.
+$Throughput = \frac{1~instruction} {(20+80+30)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 7.69~GIPS$
+$Latency = (80+30+20)\times 3 = 390~ps$
 
+C.
+Insert 1 register between A and B.
+Insert 1 register between C and D.
+Insert 1 register between D and E.
+$Throughput = \frac{1~instruction} {(20+30+60)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 9.09~GIPS$
+$Latency = (30+60+20)\times 4 = 440~ps$
 
+D.
+5 stages design:
+4 registers are inserted in AB, BC, CD and DE.
+$Throughput = \frac{1~instruction} {(20+80)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 10~GIPS$
+$Latency = (80+20)\times 5 = 500~ps$
 
+6 stages design (maximum number of stages):
+5 registers are inserted in AB, BC, CD, DE and EF.
+$Throughput = \frac{1~instruction} {(20+80)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 10~GIPS$
+$Latency = (80+20)\times 6 = 600~ps$
 
+The minimum number of stages that would yield a design with the maximum achievable throughput is 5.
 
-
-
-
-
-
-
-
-
+## Diminishing Returns of Deep Pipelining
+![[Pasted image 20240920164726.png|500]]
+* The system divides the computation into 6 stages, each requiring 50 ps.
+* The minimum clock period for this system is 50 + 20 = 70 picoseconds, giving a throughput of 14.29 GIPS.
+* We improve the performance by a factor of 14.29/8.33 = 1.71.
+* Even though we have cut the time required for each computation block by a factor of 2, we do not get a doubling of the throughput, due to the delay through the pipeline registers.
+	* This delay becomes a limiting factor in the throughput of the pipeline. 
+	* In our new design, this delay consumes 28.6% of the total clock period.
 
 
 
