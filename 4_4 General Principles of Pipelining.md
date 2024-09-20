@@ -72,6 +72,13 @@ hardware
 
 # 4.4.3 Limitations of Pipelining
 
+## Nonuniform Partitioning
+![[Pasted image 20240920150626.png|500]]
+* The system divides the computation into 3 stages, but the delays through the stages range from 50 to 150 ps. 
+* The sum of the delays through all of the stages remains 300 ps.
+* Stage A will be idle for 100 ps every clock cycle.
+* Stage C will be idle for 50 ps every clock cycle.
+* Only stage B will be continuously active for whole 170 ps every clock cycle.
 
 
 
