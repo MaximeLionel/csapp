@@ -167,6 +167,9 @@ $Latency=(20+300/k)\times k = 20k+300~ps$
 B.
 With k goes to infinity, the throughput will be 50 GIPS.
 
+# 4.4.4 Pipelining a System with Feedback
+
+
 
 
 
