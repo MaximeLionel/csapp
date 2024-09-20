@@ -143,13 +143,29 @@ The minimum number of stages that would yield a design with the maximum achievab
 * Even though we have cut the time required for each computation block by a factor of 2, we do not get a doubling of the throughput, due to the delay through the pipeline registers.
 	* This delay becomes a limiting factor in the throughput of the pipeline. 
 	* In our new design, this delay consumes 28.6% of the total clock period.
+* Challenges：
+	* Modern processors employ very deep pipelines (15 or more stages) in an attempt to maximize the processor clock rate. 
+	* The **processor architects** divide the instruction execution into a large number of very simple steps so that each stage can have a very small delay. 
+	* The **circuit designers** carefully design the pipeline registers to minimize their delay.
+	* The **chip designers** must also carefully design the clock distribution network to ensure that the clock changes at the exact same time across the entire chip.
+	* All of these factors contribute to the challenge of designing high-speed microprocessors.
 
+### Practice Problem 4.29
+![[Pasted image 20240920171328.png|300]]
+Suppose we could take the system above and divide it into an arbitrary number of pipeline stages k, each having a delay of 300/k, and with each pipeline register having a delay of 20 ps.
 
+A. What would be the latency and the throughput of the system, as functions of k?
 
+B. What would be the ultimate limit on the throughput?
 
+**Solution**:
+A.
+$Throughput = \frac{1~instruction} {(20+300/k)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} = \frac{1000k}{300+20k}~GIPS$
 
+$Latency=(20+300/k)\times k = 20k+300~ps$
 
-
+B.
+With k goes to infinity, the throughput will be 50 GIPS.
 
 
 
