@@ -274,13 +274,13 @@ For each DIE(debugging information entry), it's like:
 - `DW_AT_data_member_location`: offset to the start of the structure
 
 For example, let's analyze the size of `s`
-* we get the size of test is 24 bytes:
+* we get the size of `test` is 24 bytes:
 	```
 	<1><53>: Abbrev Number: 6 (DW_TAG_structure_type)
 	    <54>   DW_AT_name        : (indirect string, offset: 0xa9): test
 	    <58>   DW_AT_byte_size   : 24
 	```
-* the offset of `s` in structure test is 8:
+* the offset of `s` in structure `test` is 8:
 	```
 	 <2><6a>: Abbrev Number: 1 (DW_TAG_member)
 	    <6b>   DW_AT_name        : s
