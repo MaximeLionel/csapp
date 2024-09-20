@@ -76,10 +76,40 @@ hardware
 ![[Pasted image 20240920150626.png|500]]
 * The system divides the computation into 3 stages, but the delays through the stages range from 50 to 150 ps. 
 * The sum of the delays through all of the stages remains 300 ps.
-* Stage A will be idle for 100 ps every clock cycle.
-* Stage C will be idle for 50 ps every clock cycle.
-* Only stage B will be continuously active for whole 170 ps every clock cycle.
+* Nonuniform stage delays:
+	* Stage A will be idle for 100 ps every clock cycle.
+	* Stage C will be idle for 50 ps every clock cycle.
+	* Only stage B will be continuously active for whole 170 ps every clock cycle.
+* Computations:
+	* We must set the clock cycle to 150 + 20 = 170 picoseconds.
+	* $Throughput = \frac{1~instruction} {(20+150)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 5.88~GIPS$ - decreasing from 8.33 GIPS.
+	* $Latency = (150+20)\times 3 = 510~ps$ - increasing from 360 ps.
+* Challenges:
+	* Devising a partitioning of the system computation into a series of stages having uniform delays can be a major challenge for hardware designers.
+	* Some of the hardware units in a processor, such as the ALU and the memories, cannot be subdivided into multiple units with shorter delay.
+	* This makes it difficult to create a set of balanced stages.
 
+## Practice Problem 4.28
+Suppose we analyze the combinational logic above and determine that it can be separated into a sequence of 6 blocks, named A to F, having delays of 80, 30, 60, 50, 70, and 10 ps, respectively, illustrated as follows:
+![[Pasted image 20240920153326.png|400]]
+We can create pipelined versions of this design by inserting pipeline registers between pairs of these blocks. Different combinations of pipeline depth (how many stages) and maximum throughput arise, depending on where we insert the pipeline registers. Assume that a pipeline register has a delay of 20 ps.
+
+A. Inserting a single register gives a two-stage pipeline. Where should the register be inserted to maximize throughput? What would be the throughput and latency?
+
+B. Where should two registers be inserted to maximize the throughput of a three-stage pipeline? What would be the throughput and latency?
+
+C. Where should three registers be inserted to maximize the throughput of a 4-stage pipeline? What would be the throughput and latency?
+
+D. What is the minimum number of stages that would yield a design with the maximum achievable throughput? Describe this design, its throughput, and its latency.
+
+**Solution**:
+A.
+The point is to create the shortest latency.
+Insert between C and D.
+$Throughput = \frac{1~instruction} {(20+80+30+60)picoseconds}\times \frac{1,000~picoseconds}{1~nanoseconds} \approx 5.26~GIPS$
+$Latency = (80+30+60+20)\times 2 = 380~ps$
+
+B.
 
 
 
