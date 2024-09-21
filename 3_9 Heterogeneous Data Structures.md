@@ -431,7 +431,7 @@ union node_u {
 typedef enum { N_LEAF, N_INTERNAL } nodetype_t;
 
 struct node_t {
-	nodetype_t type;
+	nodetype_t type;   // with extra 4 bytes' paddings
 	union {
 		struct {
 			struct node_t *left;
