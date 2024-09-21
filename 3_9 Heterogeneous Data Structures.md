@@ -329,7 +329,7 @@ struct ACE {
 };
 short test(struct ACE *ptr);
 ```
-When the code for fun is compiled, gcc generates the following assembly code:
+When the code for function `test` is compiled, gcc generates the following assembly code:
 ```z80
 # short test(struct ACE* ptr)
 # ptr in %rdi
@@ -345,9 +345,9 @@ test:
 	jne .L3
 	rep; ret
 ```
-A. Use your reverse engineering skills to write C code for test.
+A. Use your reverse engineering skills to write C code for `test`.
 
-B. Describe the data structure that this structure implements and the operation performed by test.
+B. Describe the data structure that this structure implements and the operation performed by `test`.
 
 **Solution**:
 A.
@@ -356,32 +356,32 @@ A.
 # ptr in %rdi
 
 test:
-	movl $1, %eax            # eax=1
+	movl $1, %eax        # eax=1
 	jmp .L2
 	.L3:
-	imulq (%rdi), %rax      # rax=rax*M(rdi): rax=rax*(*ptr)
-	movq 2(%rdi), %rdi      # rdi=M(rdi+2): rdi=*(rdi+2)
+	imulq (%rdi), %rax   # rax=M(rdi)*rax: rax = *ptr * rax
+	movq 2(%rdi), %rdi   # rdi=M(rdi+2): rdi = *(ptr+2)
 	.L2:
-	testq %rdi, %rdi
-	jne .L3                 # if(rdi!=0), jump to .L3
+	testq %rdi, %rdi     # 
+	jne .L3              # if rdi!=0, jump to .L3
 	rep; ret
 ```
-* Reversed C code:
-```C
-short test(struct ACE* ptr)
+
+```c
+short test(struct ACE *ptr);
 {
-	int result = 1;
+	short result = 1;
 	while(ptr != 0)
 	{
 		result = result * (ptr->v);
 		ptr = ptr->p;
 	}
+	return result;
 }
 ```
 
 B.
-The function is to compute the cumulative product of the element values in a singly linked list.
-
+Compute the cumulative product of the values of the 1st element in a single linked list.
 
 # 3.9.2 Unions
 * Unions provide a way to circumvent the type system of C, allowing a single object to be referenced according to multiple types.
