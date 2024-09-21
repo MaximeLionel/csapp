@@ -423,7 +423,7 @@ union node_u {
 ```
 * For `node_s`, every node requires 32 bytes, with half the bytes wasted for each type of node.
 * For `node_u`, every node will require just 16 bytes.
-* If n is a pointer to a node of type union `node_u *`, we would reference the data of a leaf node as `n->data[0]` and `n->data[1]`, and the children of an internal node as `n->internal.left` and `n->internal.right`.
+* If n is a pointer to a node of type union `node_u *`, we would reference the data of a leaf node as `n->data[0]` and `n->data[1]`, or the children of an internal node as `n->internal.left` and `n->internal.right`.
 * With this encoding, however, there is no way to determine whether a given node is a leaf or an internal node.
 ## Example - introduce an enumerated type
 * A common method is to introduce an enumerated type defining the different possible choices for the union, and then create a structure containing a tag field and the union:
@@ -437,7 +437,7 @@ struct node_t {
 			struct node_t *left;
 			struct node_t *right;
 		} internal;
-	double data[2];
+		double data[2];
 	} info;
 };
 ```
