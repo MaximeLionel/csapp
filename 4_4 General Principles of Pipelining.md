@@ -168,9 +168,14 @@ B.
 With k goes to infinity, the throughput will be 50 GIPS.
 
 # 4.4.4 Pipelining a System with Feedback
-
-
-
+* For a system that executes machine programs such as x86-64 or Y86-64, however, there are potential ==dependencies== between successive instructions.
+* Example - **data dependency**:
+	![[Pasted image 20240922193615.png|200]]
+	* There is a **data dependency** between each successive pair of instructions
+	* The `irmovq` instruction (line 1) stores its result in `%rax`, which then must be read by the `addq` instruction (line 2); and this instruction stores its result in `%rbx`, which must then be read by the `mrmovq` instruction (line 3).
+* Example - **control dependency**:
+	![[Pasted image 20240922194758.png|200]]
+	* The `jne` instruction (line 3) creates a control dependency since the outcome of the conditional test determines whether the next instruction to execute will be the `irmovq` instruction (line 4) or the halt instruction (line 7)
 
 
 

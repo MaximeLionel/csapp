@@ -37,13 +37,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md",
+                "file": "4_4 General Principles of Pipelining.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -110,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "4_4 General Principles of Pipelining.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md",
+                "file": "4_4 General Principles of Pipelining.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_9 Heterogeneous Data Structures.md"
+                "file": "4_4 General Principles of Pipelining.md"
               }
             }
           }
@@ -172,8 +173,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "336240595a418a64",
   "lastOpenFiles": [
+    "3_6 Control.assets/Pasted image 20240922194758.png",
+    "3_6 Control.assets/Pasted image 20240922193615.png",
+    "4_3 Sequential Y86-64 Implementations.md",
+    "3_9 Heterogeneous Data Structures.md",
     "3_6 Control.assets/Pasted image 20240920171328.png",
     "3_6 Control.assets/Pasted image 20240920164726.png",
     "3_6 Control.assets/Pasted image 20240920153326.png",
@@ -183,13 +188,9 @@
     "3_6 Control.assets/Pasted image 20240919153903.png",
     "3_6 Control.assets/Pasted image 20240919153557.png",
     "3_6 Control.assets/Pasted image 20240919152328.png",
-    "3_6 Control.assets/Pasted image 20240919151150.png",
     "conflict-files-obsidian-git.md",
-    "3_9 Heterogeneous Data Structures.md",
     "4_4 General Principles of Pipelining.md",
-    "3_6 Control.assets/Pasted image 20240918163705.png",
     "3_8 Array Allocation and Access.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_11 Floating-Point Code.md",
