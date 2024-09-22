@@ -503,7 +503,7 @@ void get(u_type *up, type *dest) {
 	*dest = expr;
 }
 ```
-with different access expressions `expr` and with destination data type type set according to type associated with `expr`. You then examine the code generated when compiling the functions to see if they match your expectations.
+with different access expressions `expr` and with destination data type `type` set according to type associated with `expr`. You then examine the code generated when compiling the functions to see if they match your expectations.
 
 Suppose in these functions that `up` and `dest` are loaded into registers `%rdi` and `%rsi`, respectively. Fill in the following table with data type type and sequences of one to three instructions to compute the expression and store the result at dest.
 
@@ -519,14 +519,14 @@ Suppose in these functions that `up` and `dest` are loaded into registers `%rdi`
 ```C
 typedef union {
 	struct {
-		long u;
-		short v;
-		char w;
+		long u;     // offset 0
+		short v;    // offset 8
+		char w;     // offset 10
 	} t1;
 	
 	struct {
-		int a[2];
-		char *p;
+		int a[2];  // offset 0
+		char *p;   // offset 8
 	} t2;
 } u_type;
 ```
@@ -537,19 +537,19 @@ void get(u_type *up, type *dest) {
 }
 ```
 
-| expr               | type  | Code                                                                     | Actual compiled asm code                                                          |
-| :----------------- | :---- | :----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| up->t1.u           | long  | `movq (%rdi), %rax`<br>`movq %rax, (%rsi)`                               | `movq    (%rdi), %rax`<br>`movq    %rax, (%rsi)`                                  |
-| up->t1.v           | short | `movw 8(%rdi), %ax`<br>`movw %ax, (%rsi)`                                | `movzwl  8(%rdi), %eax`<br>`movw    %ax, (%rsi)`                                  |
-| &up->t1.w          | char* | `leaq 10(%rdi), %rax`<br>`movq %rax, (%rsi)`                             | `addq    $10, %rdi`<br>`movq    %rdi, (%rsi)`                                     |
-| up->t2.a           | int*  | `movq %rdi, (%rsi)`                                                      | `movq    %rdi, (%rsi)`                                                            |
-| up->t2.a[up->t1.u] | int   | `movq (%rdi), %rax`<br>`movl (%rdi,%rax,4), %eax`<br>`movl %eax, (%rsi)` | `movq    (%rdi), %rax`<br>`movl    (%rdi,%rax,4), %eax`<br>`movl    %eax, (%rsi)` |
-| *up->t2.p          | char  | `movq 8(%rdi), %rax`<br>`movb (%rax), %al`<br>`movb %al, (%rsi)`         | `movq    8(%rdi), %rax`<br>`movzbl  (%rax), %eax`<br>`movb    %al, (%rsi)`        |
+|        expr        | type  | Code                                                                 |
+| :----------------: | :---: | :------------------------------------------------------------------- |
+|      up->t1.u      | long  | movq (%rdi), %rax<br>movq %rax, (%rsi)                               |
+|      up->t1.v      | short | movw 8(%rdi), %rax<br>movw %rax, (%rsi)                              |
+|     &up->t1.w      | char* | leaq 10(%rdi), %rax<br>movq %rax, (%rsi)                             |
+|      up->t2.a      | int*  | movq %rdi, (%rsi)                                                    |
+| up->t2.a[up->t1.u] |  int  | movq (%rdi), %rax<br>movq (%rdi, %rax, 4), %eax<br>movl %eax, (%rsi) |
+|     *up->t2.p      | char  | movq 8(%rdi), %rax<br>movb (%rax), %al<br>movb %al, (%rsi)           |
 
 # 3.9.3 Data Alignment - 数据对齐
 * Many computer systems place restrictions on the allowable addresses for the primitive data types, requiring that the address for some objects must be a multiple of some value K (typically 2, 4, or 8).
 	![[image-20240605170724672.png|150]]
-* Such alignment restrictionssimplify the design of the hardware forming the interface between the processor and the memory system.
+* Such alignment restrictions simplify the design of the hardware forming the interface between the processor and the memory system.
 	* For example, suppose a processor always fetches 8 bytes from memory with an address that must be a multiple of 8.
 * Alignment is enforced by making sure that every data type is organized and allocated in such a way that every object within the type satisfies its alignment restrictions.
 * The compiler places directives in the assembly code indicating the desired alignment for global data：
