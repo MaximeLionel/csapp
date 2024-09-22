@@ -32,19 +32,18 @@
             }
           },
           {
-            "id": "336240595a418a64",
+            "id": "ddc0e58800788e7b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_4 General Principles of Pipelining.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_4 General Principles of Pipelining.md",
+                "file": "3_9 Heterogeneous Data Structures.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_4 General Principles of Pipelining.md",
+                "file": "3_9 Heterogeneous Data Structures.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_4 General Principles of Pipelining.md"
+                "file": "3_9 Heterogeneous Data Structures.md"
               }
             }
           }
@@ -173,8 +172,16 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "336240595a418a64",
+  "active": "e12c23177d9b1910",
   "lastOpenFiles": [
+    "4_5 Pipelined Y86-64 Implementations.md",
+    "4_1 The Y86-64 Instruction Set Architecture.md",
+    "4_4 General Principles of Pipelining.md",
+    "3_6 Control.assets/Pasted image 20240922214551.png",
+    "3_6 Control.assets/Pasted image 20240922214028.png",
+    "3_6 Control.assets/Pasted image 20240922213627.png",
+    "3_6 Control.assets/Pasted image 20240922213403.png",
+    "3_6 Control.assets/Pasted image 20240922212657.png",
     "3_6 Control.assets/Pasted image 20240922194758.png",
     "3_6 Control.assets/Pasted image 20240922193615.png",
     "4_3 Sequential Y86-64 Implementations.md",
@@ -182,16 +189,8 @@
     "3_6 Control.assets/Pasted image 20240920171328.png",
     "3_6 Control.assets/Pasted image 20240920164726.png",
     "3_6 Control.assets/Pasted image 20240920153326.png",
-    "3_6 Control.assets/Pasted image 20240920150626.png",
-    "3_6 Control.assets/Pasted image 20240919155315.png",
-    "3_6 Control.assets/Pasted image 20240919155013.png",
-    "3_6 Control.assets/Pasted image 20240919153903.png",
-    "3_6 Control.assets/Pasted image 20240919153557.png",
-    "3_6 Control.assets/Pasted image 20240919152328.png",
     "conflict-files-obsidian-git.md",
-    "4_4 General Principles of Pipelining.md",
     "3_8 Array Allocation and Access.md",
-    "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_11 Floating-Point Code.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",

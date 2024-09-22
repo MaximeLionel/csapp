@@ -168,15 +168,27 @@ B.
 With k goes to infinity, the throughput will be 50 GIPS.
 
 # 4.4.4 Pipelining a System with Feedback
+## Dependencies between instructions
 * For a system that executes machine programs such as x86-64 or Y86-64, however, there are potential ==dependencies== between successive instructions.
+### Data dependency
 * Example - **data dependency**:
 	![[Pasted image 20240922193615.png|200]]
 	* There is a **data dependency** between each successive pair of instructions
 	* The `irmovq` instruction (line 1) stores its result in `%rax`, which then must be read by the `addq` instruction (line 2); and this instruction stores its result in `%rbx`, which must then be read by the `mrmovq` instruction (line 3).
+### Control dependency
 * Example - **control dependency**:
 	![[Pasted image 20240922194758.png|200]]
-	* The `jne` instruction (line 3) creates a control dependency since the outcome of the conditional test determines whether the next instruction to execute will be the `irmovq` instruction (line 4) or the halt instruction (line 7)
+	* The `jne` instruction (line 3) creates a control dependency since the outcome of the conditional test determines whether the next instruction to execute will be the `irmovq` instruction (line 4) or the halt instruction (line 7).
+## Introducing pipelining into a system
+![[Pasted image 20240922212657.png|400]]
 
+![[Pasted image 20240922213403.png|300]]
+* In the unpipelined system, the result of each instruction is fed back around to the next instruction.
 
+![[Pasted image 20240922213627.png|400]]
+* Pipeline diagram - the result of I1 becomes an input to I2, and so on.
 
-
+![[Pasted image 20240922214551.png|450]]
+* If convert this to a three-stage pipeline above in the most straightforward manner, we change the behavior of the system in a wrong way.
+	* The result of I1 becomes an input to I4.
+* When we introduce pipelining into a Y86-64 processor, we must deal with feedback effects properly.
