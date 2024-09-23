@@ -23,9 +23,35 @@
 	* Retiming is often used to balance the delays between the different stages of a pipelined system.
 
 # 4.5.2 Inserting Pipeline Registers
+* In our first attempt at creating a pipelined Y86-64 processor, we insert **pipeline registers** between the stages of SEQ+ and rearrange signals somewhat, yielding the **PIPE−** processor, where the “−” in the name signifies that this processor has somewhat **less performance** than our ultimate processor design.
 
+## Hardware structure of PIPE−
+![[Pasted image 20240923161539.png|400]]
+* The pipeline registers are shown in this figure as blue boxes, each containing different fields that are shown as white boxes.
+* PIPE− uses nearly the same set of hardware units as our sequential design SEQ, but with the pipeline registers separating the stages.
+* The pipeline registers of PIPE-:
+	* F holds a predicted value of the program counter.
+	* D holds information about the most recently fetched instruction for processing by the decode stage.
+	* E holds information about the most recently decoded instruction and the values read from the register file for processing by the execute stage.
+	* M holds:
+		* Results of the most recently executed instruction for processing by the memory stage.
+		* Information about branch conditions and branch targets for processing conditional jumps.
+	* W supplies the computed results to the register file for writing and the return address to the PC selection logic when completing a `ret` instruction.
 
+## Example of instruction flow through pipeline
+![[Pasted image 20240923163336.png|450]]
+* This diagram shows the progression of each instruction through the pipeline stages, with time increasing from left to right.
+* Details:
+	* Instruction I1 is fetched In cycle 1, and it then proceeds through the pipeline stages, with its result being written to the register file after the end of cycle 5. 
+	* Instruction I2 is fetched in cycle 2, and its result is written back after the end of cycle 6, and so on. 
+	* At the bottom, we show an expanded view of the pipeline for cycle 5. At this point, there is one instruction in each of the pipeline stages.
 
+# 4.5.3 Rearranging and Relabeling Signals
+* Potential serious errors on PIPE-:
+	* Our sequential implementations SEQ and SEQ+ only process one instruction at a time, and so there are unique values for signals such as valC, srcA, and valE. 
+	* In our pipelined design, there will be multiple versions of these values associated with the different instructions flowing through the system.
+	* For example, in the detailed structure of PIPE−, there are 4 white boxes labeled “Stat” that hold the status codes for four different instructions.
+	* We need to take great care to make sure we use the proper version of a signal, or else we could have serious errors, such as storing the result computed for one instruction at the destination register specified by another instruction.
 
 
 
