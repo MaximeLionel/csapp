@@ -669,23 +669,33 @@ C. Rearrange the fields of the structure to minimize wasted space, and then show
 
 **Solution**:
 A.
+```C
+struct {
+	int *a;
+	float b;
+	char c;
+	short d;
+	long e;
+	double f;
+	int g;
+	char *h;
+} rec;
+```
 
-| Field | Offset | Comment                                                                                                                        |
-| ----- | ------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| a     | 0      | pointer                                                                                                                        |
-| b     | 8      | take 4 bytes for `float` type                                                                                                  |
-| c     | 12     | take 1 byte for `char` type and 1 byte for padding                                                                             |
-| d     | 14     | take 2 bytes for `short` type, because `short` is 2 bytes and `K` will 2, which means the address of d must be multiples of 2. |
-| e     | 16     | take 8 bytes for `long` type                                                                                                   |
-| f     | 24     | take 8 bytes for `double` type                                                                                                 |
-| g     | 32     | take 4 bytes for `int` type and 4 bytes for padding                                                                            |
-| h     | 40     | take 8 bytes for `char*` type                                                                                                  |
-We may check through `objdump --dwarf=info struct.o`
+| Field | Offset | Size |
+| ----- | ------ | ---- |
+| a     | 0      | 8    |
+| b     | 8      | 4    |
+| c     | 12     | 1    |
+| d     | 14     | 2    |
+| e     | 16     | 8    |
+| f     | 24     | 8    |
+| g     | 32     | 4    |
+| h     | 40     | 8    |
+Confirmed with dwarf information.
 
 B.
 Totally, 48 bytes.
 
 C.
-Logically, because the alignment is 8 bytes, we use blocks of 8 bytes as few as possible. It's partly like tetris (俄罗斯方块) .
-
-Considering the total size, it's already the best optimization which is 48 bytes.
+Already the most optimized arrangement, because the total size of all fields combined with no padding is already 43 bytes. Therefore, 48 is the smallest multiples of 8 which is bigger than 43.
