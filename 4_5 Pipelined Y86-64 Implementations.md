@@ -48,6 +48,7 @@
 
 # 4.5.3 Rearranging and Relabeling Signals
 ![[Pasted image 20240923161539.png|400]]
+
 * Potential serious errors on PIPE-:
 	* Our sequential implementations SEQ and SEQ+ only process one instruction at a time, and so there are unique values for signals such as valC, srcA, and valE. 
 	* In our pipelined design, there will be multiple versions of these values associated with the different instructions flowing through the system.
