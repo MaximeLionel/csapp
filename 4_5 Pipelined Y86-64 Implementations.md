@@ -47,11 +47,18 @@
 	* At the bottom, we show an expanded view of the pipeline for cycle 5. At this point, there is one instruction in each of the pipeline stages.
 
 # 4.5.3 Rearranging and Relabeling Signals
+![[Pasted image 20240923161539.png|400]]
 * Potential serious errors on PIPE-:
 	* Our sequential implementations SEQ and SEQ+ only process one instruction at a time, and so there are unique values for signals such as valC, srcA, and valE. 
 	* In our pipelined design, there will be multiple versions of these values associated with the different instructions flowing through the system.
 	* For example, in the detailed structure of PIPE−, there are 4 white boxes labeled “Stat” that hold the status codes for four different instructions.
 	* We need to take great care to make sure we use the proper version of a signal, or else we could have serious errors, such as storing the result computed for one instruction at the destination register specified by another instruction.
+* Naming scheme:
+	* We adopt a naming scheme where a signal stored in a pipeline register can be uniquely identified by **prefixing its name with that of the pipe register written in uppercase**.
+		* For example, the 4 status codes are named `D_stat`, `E_stat`, `M_stat`, and `W_stat`.
+	* Some signals that have just been computed within a stage, are labeled by prefixing the signal name with the first character of the stage name, written in lowercase.
+		* Using the status codes as examples, we can see control logic blocks labeled “Stat” in the fetch and memory stages. The outputs of these blocks are therefore named `f_stat` and `m_stat`.
+* We can also see that the actual status of the overall processor `Stat` is computed by a block in the write-back stage, based on the status value in pipeline register `W`.
 
 
 
