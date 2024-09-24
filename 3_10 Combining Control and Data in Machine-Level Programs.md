@@ -8,7 +8,7 @@
 			char **cpp;
 			```
 			* Variable `ip` is a pointer to an object of type int.
-			* Variable `cpp` is a pointer to an object that itself is a pointer to an object of type char.
+			* Variable `cpp` is a pointer to an object that itself is a pointer to an object of type `char`.
 		* In general, if the object has type `T`, then the pointer has type `*T`. 
 		* The special `void *` type represents a generic pointer. For example, the malloc function returns a generic pointer.
 		* Pointer types are not part of machine code; they are an abstraction provided by C to help programmers avoid addressing errors.
