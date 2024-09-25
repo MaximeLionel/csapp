@@ -10,7 +10,7 @@
 	* `Fetch` operation also possibly fetches an 8-byte constant word `valC`. 
 	* `Fetch` operation computes `valP` to be the address of the instruction following the current one in sequential order. `valP` equals the value of the PC plus the length of the fetched instruction.
 * ==Decode==. 
-	* The decode stage reads up to two operands from the register file, giving values `valA` and/or `valB`. 
+	* The decode stage reads up to 2 operands from the register file, giving values `valA` and/or `valB`. 
 	* `Decode` operation reads the registers designated by instruction fields `rA` and `rB`, but for some instructions it reads register `%rsp`.
 * ==Execute==. 
 	* In the execute stage, the `arithmetic/logic unit (ALU)` either performs the operation specified by the instruction (according to the value of `ifun`), computes the effective address of a memory reference, or increments or decrements the stack pointer. 
