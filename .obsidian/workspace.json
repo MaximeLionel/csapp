@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md",
+                "file": "4_4 General Principles of Pipelining.md",
                 "mode": "source",
                 "source": false
               }
@@ -44,7 +44,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -111,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md"
+                "file": "4_5 Pipelined Y86-64 Implementations.md"
               }
             }
           }
@@ -172,10 +172,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "fae7601defcadbaa",
+  "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
-    "4_5 Pipelined Y86-64 Implementations.md",
+    "3_6 Control.assets/Pasted image 20240925144046.png",
+    "3_6 Control.assets/Pasted image 20240925142739.png",
+    "3_6 Control.assets/Pasted image 20240925142612.png",
+    "3_6 Control.assets/Pasted image 20240925142430.png",
+    "4_4 General Principles of Pipelining.md",
     "4_3 Sequential Y86-64 Implementations.md",
+    "4_5 Pipelined Y86-64 Implementations.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
@@ -184,13 +189,9 @@
     "3_6 Control.assets/Pasted image 20240923161539.png",
     "3_6 Control.assets/Pasted image 20240923155237.png",
     "3_6 Control.assets/Pasted image 20240923153716.png",
-    "4_4 General Principles of Pipelining.md",
     "3_6 Control.assets/Pasted image 20240922214551.png",
     "3_6 Control.assets/Pasted image 20240922214028.png",
     "3_6 Control.assets/Pasted image 20240922213627.png",
-    "3_6 Control.assets/Pasted image 20240922213403.png",
-    "3_6 Control.assets/Pasted image 20240922212657.png",
-    "3_6 Control.assets/Pasted image 20240922194758.png",
     "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
     "3_11 Floating-Point Code.md",

@@ -47,7 +47,7 @@
 	* At the bottom, we show an expanded view of the pipeline for cycle 5. At this point, there is one instruction in each of the pipeline stages.
 
 # 4.5.3 Rearranging and Relabeling Signals
-![[Pasted image 20240923161539.png|400]]
+![[Pasted image 20240923161539.png|500]]
 
 * Potential serious errors on PIPE-:
 	* Our sequential implementations SEQ and SEQ+ only process one instruction at a time, and so there are unique values for signals such as valC, srcA, and valE. 
@@ -59,8 +59,29 @@
 		* For example, the 4 status codes are named `D_stat`, `E_stat`, `M_stat`, and `W_stat`.
 	* Some signals that have just been computed within a stage, are labeled by prefixing the signal name with the first character of the stage name, written in lowercase.
 		* Using the status codes as examples, we can see control logic blocks labeled “Stat” in the fetch and memory stages. The outputs of these blocks are therefore named `f_stat` and `m_stat`.
-* We can also see that the actual status of the overall processor `Stat` is computed by a block in the write-back stage, based on the status value in pipeline register `W`.
+* `Stat` - We can also see that the actual status of the overall processor `Stat` is computed by a block in the write-back stage, based on the status value in pipeline register `W`.
+* `dstE` and `dstM` - The decode stages of SEQ+ and PIPE− both generate signals `dstE` and `dstM` indicating the destination register for values `valE` and `valM`. 
+	* In SEQ+, we could connect `dstE` and `dstM` signals directly to the address inputs of the register file write ports. 
+		![[Pasted image 20240925142430.png|300]]
+	* With PIPE−, `dstE` and `dstM` signals are carried along in the pipeline through the execute and memory stages and are directed to the register file only once they reach the write-back stage.
+		![[Pasted image 20240925142612.png|300]]
+		* We do this to make sure the write port address and data inputs hold values from the same instruction. 
+		* Otherwise, the write back would be writing the values for the instruction in the write-back stage, but with register IDs from the instruction in the decode stage. 
+		* As a general principle, we want to keep all of the information about a particular instruction contained within a single pipeline stage.
+* `SelectA`:
+	![[Pasted image 20240925144046.png|400]]
+	* One block of PIPE− that is not present in SEQ+ in the exact same form is the block labeled “Select A” in the decode stage.
+	* `SelectA` block:
+		* Output: generates the value `valA` for the pipeline register E
+		* Input: choosing either `valP` from pipeline register D or the value `d_rvalA` read from the A port of the register file.
+	* `SelectA` block is included to reduce the amount of state that must be carried forward to pipeline registers E and M.
+	* Why be confident to choose either `valP` or `d_rvalA`?
+		* Of all the different instructions, only the `call` requires `valP` in the memory stage. Only the `jump` instructions require the value of `valP` in the execute stage (in the event the jump is not taken). 
+		* None of these instructions requires a value read from the register file.
+		* Therefore, we can reduce the amount of pipeline register state by merging these two signals and carrying them through the pipeline as a single signal `valA`.
+* `Stat` - the pipeline registers include a field for the status code `stat`, initially computed during the fetch stage and possibly modified during the memory stage.
 
+# 4.5.4 Next PC Prediction
 
 
 
