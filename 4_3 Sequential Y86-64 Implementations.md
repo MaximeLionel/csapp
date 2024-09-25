@@ -858,6 +858,14 @@ Write HCL code for `Stat`, generating the four status codes `SAOK`, `SADR`, `SIN
 | Writeback | $R[\%rsp] ← valE$                                                        | $R[\%rsp] ← valE$<br>$R[rA] ← valM$                                      |
 | PC update | $PC ← valP$                                                              | $PC ← valP$                                                              |
 
+| Stage     | jXX Dest                                                           | call Dest                                                          | ret                                            |
+| --------- | ------------------------------------------------------------------ | ------------------------------------------------------------------ | ---------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 9$ |
+| Decode    | -                                                                  | <br>$valB ← R[\%rsp]$                                              | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$         |
+| Execute   | <br>$Cnd ← Cond(CC, ifun)$                                         | $valE ← valB + (−8)$                                               | $valE ← valB + 8$                              |
+| Memory    | -                                                                  | $M_8[valE] ← valP$                                                 | $valM ← M_8[valA]$                             |
+| Writeback | -                                                                  | $R[\%rsp] ← valE$                                                  | $R[\%rsp] ← valE$                              |
+| PC update | $PC ← Cnd ? ~valC : valP$                                          | $PC ← valC$                                                        | $PC ← valM$                                    |
 
 
 
