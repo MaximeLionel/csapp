@@ -82,7 +82,7 @@
 * `Stat` - the pipeline registers include a field for the status code `stat`, initially computed during the fetch stage and possibly modified during the memory stage.
 
 # 4.5.4 Next PC Prediction
-
+* Our goal in the pipelined design is to issue a new instruction on every clock cycle, meaning that on each clock cycle, a new instruction proceeds into the execute stage and will ultimately be completed.
 
 
 
