@@ -860,7 +860,7 @@ Write HCL code for `Stat`, generating the four status codes `SAOK`, `SADR`, `SIN
 
 | Stage     | jXX Dest                                                           | call Dest                                                          | ret                                            |
 | --------- | ------------------------------------------------------------------ | ------------------------------------------------------------------ | ---------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 9$ |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 1$ |
 | Decode    | -                                                                  | <br>$valB ← R[\%rsp]$                                              | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$         |
 | Execute   | <br>$Cnd ← Cond(CC, ifun)$                                         | $valE ← valB + (−8)$                                               | $valE ← valB + 8$                              |
 | Memory    | -                                                                  | $M_8[valE] ← valP$                                                 | $valM ← M_8[valA]$                             |

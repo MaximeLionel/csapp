@@ -87,8 +87,15 @@
 * To do this, we must determine the location of the next instruction right after fetching the current instruction. However:
 	* If the fetched instruction is a conditional branch, we will not know whether or not the branch should be taken until several cycles later, after the instruction has passed through the execute stage. 
 	* If the fetched instruction is a `ret`, we cannot determine the return location until the instruction has passed through the memory stage.
-## conditional jump instructions and ret
-
+## conditional `jump` instructions and `ret`
+| Stage     | jXX Dest                                                           | ret                                            |
+| --------- | ------------------------------------------------------------------ | ---------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 9$ |
+| Decode    | -                                                                  | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$         |
+| Execute   | <br>$Cnd ← Cond(CC, ifun)$                                         | $valE ← valB + 8$                              |
+| Memory    | -                                                                  | $valM ← M_8[valA]$                             |
+| Writeback | -                                                                  | $R[\%rsp] ← valE$                              |
+| PC update | $PC ← Cnd ? ~valC : valP$                                          | $PC ← valM$                                    |
 
 
 
