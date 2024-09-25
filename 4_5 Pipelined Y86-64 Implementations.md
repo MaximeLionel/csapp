@@ -87,16 +87,35 @@
 * To do this, we must determine the location of the next instruction right after fetching the current instruction. However:
 	* If the fetched instruction is a conditional branch, we will not know whether or not the branch should be taken until several cycles later, after the instruction has passed through the execute stage. 
 	* If the fetched instruction is a `ret`, we cannot determine the return location until the instruction has passed through the memory stage.
-## conditional `jump` instructions and `ret`
-| Stage     | jXX Dest                                                           | ret                                            |
-| --------- | ------------------------------------------------------------------ | ---------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 9$ |
-| Decode    | -                                                                  | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$         |
-| Execute   | <br>$Cnd ← Cond(CC, ifun)$                                         | $valE ← valB + 8$                              |
-| Memory    | -                                                                  | $valM ← M_8[valA]$                             |
-| Writeback | -                                                                  | $R[\%rsp] ← valE$                              |
-| PC update | $PC ← Cnd ? ~valC : valP$                                          | $PC ← valM$                                    |
+## Conditional Jump - Branch Prediction
 
+| Stage     | jXX Dest                                                           | ret                                            | jump Dest                                       |
+| --------- | ------------------------------------------------------------------ | ---------------------------------------------- | ----------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$<br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br><br>$valP ← PC + 9$ | $icode :ifun ← M_1[PC]$<br>$valC ← M_8[PC + 1]$ |
+| Decode    | -                                                                  | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$         | -                                               |
+| Execute   | <br>$Cnd ← Cond(CC, ifun)$                                         | $valE ← valB + 8$                              | -                                               |
+| Memory    | -                                                                  | $valM ← M_8[valA]$                             | -                                               |
+| Writeback | -                                                                  | $R[\%rsp] ← valE$                              | -                                               |
+| PC update | $PC ← Cnd ? ~valC : valP$                                          | $PC ← valM$                                    | $PC←valC$                                       |
+* With the exception of conditional jump instructions and `ret`, we can determine the address of the next instruction based on information computed during the fetch stage.
+	* For `call` and `jmp` (unconditional jump), it will be valC, the constant word in the instruction, while for all others it will be valP, the address of the next instruction.
+* For conditional jumps, we can predict either that a jump will be taken, so that the new PC value would be `valC`, or that it will not be taken, so that the new PC value would be `valP`.
+* This technique of guessing the branch direction and then initiating the fetching of instructions according to our guess is known as **branch prediction**.
+* In our design, we will use the simple strategy of predicting that conditional branches are always taken, and so we predict the new value of the PC to be `valC`.
+
+## ret - simply hold off
+* We will simply hold off processing any more instructions until the `ret` instruction passes through the write-back stage.
+
+## Predict PC block
+![[Pasted image 20240925224905.png|400]]
+* The PIPE− fetch stage, diagrammed at the bottom of hardware structure, is responsible for both predicting the next value of the PC and selecting the actual PC for the instruction fetch.
+* The block labeled “Predict PC” can choose either `valP` (as computed by the PC incrementer) or `valC` (from the fetched instruction).
+* This value is stored in pipeline register F as the predicted value of the program counter.
+* The block labeled “Select PC” is similar to the block labeled “PC” in the SEQ+ PC selection stage. 
+	* It chooses one of 3 values to serve as the address for the instruction memory: 
+		* the predicted PC 
+		* the value of `valP` for a not-taken branch instruction that reaches pipeline register M (stored in register M_valA)
+		* the value of the return address when a `ret` instruction reaches pipeline register W (stored in W_valM).
 
 
 
