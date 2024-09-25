@@ -829,9 +829,34 @@ Write HCL code for `Stat`, generating the four status codes `SAOK`, `SADR`, `SIN
 	];
 ```
 
+# Overview of Intructions' Stage
 
+| Stage     | OPq rA,rB                                                                | rrmovq rA,rB                                                             | irmovq V,rB                                                                                   |
+| --------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | $valA ← R[rA]$                                                           | -                                                                                             |
+| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valA$                                                        | $valE ← 0 + valC$                                                                             |
+| Memory    | -                                                                        | -                                                                        | -                                                                                             |
+| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |
+| PC update | $PC ← valP$                                                              | $PC ← valP$                                                              | $PC ← valP$                                                                                   |
 
+| Stage     | rmmovq rA, D(rB)                                                                              | mrmovq D(rB), rA                                                                              |
+| --------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                                              | <br>$valB ← R[rB]$                                                                            |
+| Execute   | $valE ← valB + valC$                                                                          | $valE ← valB + valC$                                                                          |
+| Memory    | $M_8[valE] ← valA$                                                                            | $valM ← M_8[valE]$                                                                            |
+| Writeback | -                                                                                             | $R[rA] ← valM$                                                                                |
+| PC update | $PC ← valP$                                                                                   | $PC ← valP$                                                                                   |
 
+| Stage     | pushq rA                                                                 | popq rA                                                                  |
+| --------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[\%rsp]$                                      | $valA ← R[\%rsp]$<br>$valB ← R[\%rsp]$                                   |
+| Execute   | $valE ← valB + (−8)$                                                     | $valE ← valB + 8$                                                        |
+| Memory    | $M_8[valE] ← valA$                                                       | $valM ← M_8[valE]$                                                       |
+| Writeback | $R[\%rsp] ← valE$                                                        | $R[\%rsp] ← valE$<br>$R[rA] ← valM$                                      |
+| PC update | $PC ← valP$                                                              | $PC ← valP$                                                              |
 
 
 
