@@ -83,6 +83,10 @@
 
 # 4.5.4 Next PC Prediction
 * Our goal in the pipelined design is to issue a new instruction on every clock cycle, meaning that on each clock cycle, a new instruction proceeds into the execute stage and will ultimately be completed.
+* Achieving this goal would yield a throughput of 1 instruction per cycle.
+* To do this, we must determine the location of the next instruction right after fetching the current instruction. However:
+	* If the fetched instruction is a conditional branch, we will not know whether or not the branch should be taken until several cycles later, after the instruction has passed through the execute stage. 
+	* If the fetched instruction is a `ret`, we cannot determine the return location until the instruction has passed through the memory stage.
 
 
 
