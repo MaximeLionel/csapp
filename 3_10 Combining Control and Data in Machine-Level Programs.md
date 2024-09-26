@@ -101,7 +101,7 @@
 	* The program allocates 24 bytes on the stack by subtracting 24 from the stack pointer - `subq $24, %rsp`.
 	* Character `buf` is positioned at the top of the stack, as can be seen by the fact that `%rsp` is copied to `%rdi` to be used as the argument to the calls to both `gets` and `puts`.
 	* The 16 bytes between `buf` and the stored return pointer are not used.
-	* As long as the user types at most seven characters, the string returned by `gets` (including the terminating null) will fit within the space allocated for `buf`.
+	* As long as the user types at most 7 characters, the string returned by `gets` (including the terminating null) will fit within the space allocated for `buf`.
 	* A longer string, however, will cause `gets` to overwrite some of the information stored on the stack.
 		![[image-20240607175320293.png|300]]
 	* No serious consequence occurs for strings of up to 23 characters, but beyond that, the value of the return pointer, and possibly additional saved state, will be corrupted.
