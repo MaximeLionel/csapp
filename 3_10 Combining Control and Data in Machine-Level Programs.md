@@ -71,7 +71,7 @@
 		return s;
 	}
 	
-	/* Read input line and write it back */
+	/* Read input line and print it out */
 	void echo()
 	{
 		char buf[8]; /* Way too small! */
@@ -83,7 +83,7 @@
 	* Function `gets` reads a line from the standard input, stopping when either a terminating newline character or some error condition is encountered.
 	* Function `gets` then copies this string to the location designated by argument `s` and terminates the string with a `null` character.
 	* Function `echo` using `gets` simply reads a line from standard input and echos it back to standard output.
-	* In our echo example, we have purposely made the buffer very small—just eight characters long. Any string longer than seven characters will cause an out-of-bounds write.
+	* In our echo example, we have purposely made the buffer very small—just 8 characters long. Any string longer than 7 characters will cause an out-of-bounds write.
 * Assembly Code:
 	```z80
 	# void echo()
