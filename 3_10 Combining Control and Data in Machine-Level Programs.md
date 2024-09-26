@@ -52,7 +52,7 @@
 # 3.10.3 Out-of-Bounds Memory References and Buffer Overflow
 * We have seen that C does not perform any bounds checking for array references, and that local variables are stored on the stack along with state information such as saved register values and return addresses.
 	* The state stored on the stack can be corrupted by a write to an out-of-bounds array element.
-	* When the program then tries to reload the register or execute a ret instruction with this corrupted state, things will be unpredictable.
+	* When the program then tries to reload the register or execute a `ret` instruction with this corrupted state, things will be unpredictable.
 * A particularly common source of state corruption is known as **buffer overflow**.
 ## Example:
 ```C
