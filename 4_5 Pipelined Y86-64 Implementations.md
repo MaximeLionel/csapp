@@ -125,6 +125,7 @@
 * When such dependencies have the potential to cause an erroneous computation by the pipeline, they are called hazards. Like dependencies, hazards can be classified as either **data hazards** or **control hazards**.
 
 ## Data hazards
+### Example 1 - 3 nops - No data hazard
 ![[Pasted image 20240926110638.png|500]]
 
 | Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   |
@@ -135,23 +136,60 @@
 | Memory    | -                                                                        | -                                                                                             |
 | Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |
 | PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |
-* Cycle 6: 
-	* `0x00a: irmovq $3,%rax`: 
-		* $R[\%rax] ← 3$
-	* `0x017: addq %rdx,%rax`: 
-		* $icode :ifun ← M_1[0x017]$
-		* $\%rdx :\%rax ← M_1[0x018]$
-		* $valP ← 0x019$
-* Cycle 7:
-	* `0x00a: irmovq $3,%rax`: 
-		* $PC ← valP$
-	* `0x017: addq %rdx,%rax`: 
-		* $valA ← R[\%rdx]~=~10$
-		* $valB ← R[\%rax]~=~3$
+* Details:
+	* Cycle 6: 
+		* `0x00a: irmovq $3,%rax`:  Writeback stage
+			* $R[\%rax] ← 3$
+		* `0x017: addq %rdx,%rax`:  Fetch stage
+			* $icode :ifun ← M_1[0x017]$
+			* $\%rdx :\%rax ← M_1[0x018]$
+			* $valP ← 0x019$
+		* In this cycle: %rdx = 10, %rax will be set to 3 at the start of cycle 7 as the clock rises.
+	* Cycle 7:
+		* `0x00a: irmovq $3,%rax`:  PC update stage
+			* $PC ← valP$
+		* `0x017: addq %rdx,%rax`:  Decode stage
+			* $valA ← R[\%rdx]~=~10$
+			* $valB ← R[\%rax]~=~3$
+		* In this cycle: %rdx = 10, %rax = 13
+* As the `addq` instruction passes through the decode stage during cycle 7, it will therefore read the correct values for its source operands. 
+* The data dependencies between the 2 `irmovq` instructions and the `addq` instruction have not created data hazards in this example.
 
+### Example 2 - 2 nops - data hazard
+![[Pasted image 20240926155610.png|500]]
 
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
+* Details:
+	* Cycle 6: 
+		* `0x000: irmovq $10,%rdx`: PC update stage
+			* $PC ← valP~=0x00a$
+		* `0x00a: irmovq $3,%rax`:  Writeback stage
+			* $R[\%rax] ← 3$ - ==occurs at the start of cycle 7 as the clock rises==.
+		* `0x017: addq %rdx,%rax`:  Decode stage
+			* $valA ← R[\%rdx]~=~10$
+			* $valB ← R[\%rax]~=~???$ - error
+		* In this cycle: %rdx = 10, %rax = 3
+* The second `irmovq` instruction is in the writeback stage during this cycle, and so the write to program register `%rax` only occurs at the start of cycle 7 as the clock rises. 
+* As a result, the incorrect value zero would be read for register `%rax` (recall that we assume all registers are initially zero), since the pending write for this register has not yet occurred. 
 
+### Example 3 - 1 nop
+![[Pasted image 20240926163921.png|500]]
 
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x015: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x015]$<br>$rA :rB ← M_1[0x015 + 1]$<br><br>$valP ← 0x015 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x017$                                                                |
 
 
 
