@@ -118,6 +118,11 @@
 		* the value of the return address when a `ret` instruction reaches pipeline register W (stored in W_valM).
 
 # 4.5.5 Pipeline Hazards
+* Introducing pipelining into a system with feedback can lead to problems when there are **dependencies** between successive instructions.
+* Dependencies can take 2 forms:
+	* data dependencies - the results computed by one instruction are used as the data for a following instruction.
+	* control dependencies - one instruction determines the location of the following instruction, such as when executing a `jump`, `call`, or `ret`.
+* When such dependencies have the potential to cause an erroneous computation by the pipeline, they are called hazards. Like dependencies, hazards can be classified as either **data hazards** or **control hazards**.
 
 
 
