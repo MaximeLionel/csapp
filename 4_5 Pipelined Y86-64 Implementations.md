@@ -124,7 +124,30 @@
 	* control dependencies - one instruction determines the location of the following instruction, such as when executing a `jump`, `call`, or `ret`.
 * When such dependencies have the potential to cause an erroneous computation by the pipeline, they are called hazards. Like dependencies, hazards can be classified as either **data hazards** or **control hazards**.
 
+## Data hazards
+![[Pasted image 20240926110638.png|500]]
 
+| Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   |
+| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | -                                                                                             |
+| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valC$                                                                             |
+| Memory    | -                                                                        | -                                                                                             |
+| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |
+| PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |
+* Cycle 6: 
+	* `0x00a: irmovq $3,%rax`: 
+		* $R[\%rax] ← 3$
+	* `0x017: addq %rdx,%rax`: 
+		* $icode :ifun ← M_1[0x017]$
+		* $\%rdx :\%rax ← M_1[0x018]$
+		* $valP ← 0x019$
+* Cycle 7:
+	* `0x00a: irmovq $3,%rax`: 
+		* $PC ← valP$
+	* `0x017: addq %rdx,%rax`: 
+		* $valA ← R[\%rdx]$
+		* $valB ← R[\%rax]$
 
 
 
