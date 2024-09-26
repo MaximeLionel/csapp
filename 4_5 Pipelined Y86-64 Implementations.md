@@ -146,8 +146,8 @@
 	* `0x00a: irmovq $3,%rax`: 
 		* $PC ← valP$
 	* `0x017: addq %rdx,%rax`: 
-		* $valA ← R[\%rdx]$
-		* $valB ← R[\%rax]$
+		* $valA ← R[\%rdx]~=~10$
+		* $valB ← R[\%rax]~=~3$
 
 
 
