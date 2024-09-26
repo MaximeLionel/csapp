@@ -117,6 +117,9 @@
 		* the value of `valP` for a not-taken branch instruction that reaches pipeline register M (stored in register M_valA)
 		* the value of the return address when a `ret` instruction reaches pipeline register W (stored in W_valM).
 
+# 4.5.5 Pipeline Hazards
+
+
 
 
 
