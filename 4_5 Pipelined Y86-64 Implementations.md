@@ -124,7 +124,7 @@
 	* control dependencies - one instruction determines the location of the following instruction, such as when executing a `jump`, `call`, or `ret`.
 * When such dependencies have the potential to cause an erroneous computation by the pipeline, they are called hazards. Like dependencies, hazards can be classified as either **data hazards** or **control hazards**.
 
-## Data hazards
+## Data hazard Examples
 ### Example 1 - 3 nops - No data hazard
 ![[Pasted image 20240926110638.png|500]]
 
@@ -155,7 +155,7 @@
 * As the `addq` instruction passes through the decode stage during cycle 7, it will therefore read the correct values for its source operands. 
 * The data dependencies between the 2 `irmovq` instructions and the `addq` instruction have not created data hazards in this example.
 
-### Example 2 - 2 nops - data hazard
+### Example 2 - 2 nops - data hazard: 1 operand wrong
 ![[Pasted image 20240926155610.png|500]]
 
 | Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
@@ -179,7 +179,7 @@
 * The second `irmovq` instruction is in the writeback stage during this cycle, and so the write to program register `%rax` only occurs at the start of cycle 7 as the clock rises. 
 * As a result, the incorrect value zero would be read for register `%rax` (recall that we assume all registers are initially zero), since the pending write for this register has not yet occurred. 
 
-### Example 3 - 1 nop
+### Example 3 - 1 nop - data hazard - 2 operands wrong
 ![[Pasted image 20240926163921.png|500]]
 
 | Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x015: addq %rdx,%rax                                                             |
@@ -190,13 +190,46 @@
 | Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
 | Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
 | PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x017$                                                                |
+* Details:
+	* Cycle 5: 
+		* `0x000: irmovq $10,%rdx`: Writeback stage
+			* $R[\%rdx] ← valE~=10$ - ==occurs at the start of cycle 6 as the clock rises==
+		* `0x00a: irmovq $3,%rax`:  Memory stage
+			* Nothing to do
+		* `0x017: addq %rdx,%rax`:  Decode stage
+			* $valA ← R[\%rdx]~=~???$ - error
+			* $valB ← R[\%rax]~=~???$ - error
+		* In this cycle: %rdx = ???, %rax = ???
 
 
+### Example 4 - no nop - data hazard - 2 operands wrong
+![[Pasted image 20240926165348.png|500]]
 
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x014: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x014]$<br>$rA :rB ← M_1[0x014 + 1]$<br><br>$valP ← 0x014 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x016$                                                                |
+* Details:
+	* Cycle 4: 
+		* `0x000: irmovq $10,%rdx`: Memory stage
+			* Nothing to do
+		* `0x00a: irmovq $3,%rax`:  Execute stage
+			* $valE ← 0 + valC~=3$
+		* `0x017: addq %rdx,%rax`:  Decode stage
+			* $valA ← R[\%rdx]~=~???$ - error
+			* $valB ← R[\%rax]~=~???$ - error
+		* In this cycle: %rdx = ???, %rax = ???
+* The `addq` instruction would get the incorrect values for both operands.
 
+### Summary
+* These examples above illustrate that a data hazard can arise for an instruction when one of its operands is updated by any of the three preceding instructions.
+* These data hazards occur because our pipelined processor reads the operands for an instruction from the register file in the **decode stage** but does not write the results for the instruction to the register file until 3 cycles later, after the instruction passes through the **write-back** stage.
 
-
-
+## Avoiding Data Hazards by Stalling
 
 
 
