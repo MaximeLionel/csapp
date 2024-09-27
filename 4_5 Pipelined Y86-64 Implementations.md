@@ -282,7 +282,9 @@
 			* $valB ← R[\%rax]~=3$
 				* In D register:
 					* srcB = %rax
-		* The decode-stage logic detects that register `%rax` is the source register for operand `valB`, and that there is also a pending write to `%rax` on write port E.
+	* The decode-stage logic detects that register `%rax` is the source register for operand `valB`.
+	* There is also a pending write to `%rax` on write port E. 
+	* It can therefore avoid stalling by simply using the data word supplied to port E (signal `W_valE`) as the value for operand `valB`.
 
 
 
