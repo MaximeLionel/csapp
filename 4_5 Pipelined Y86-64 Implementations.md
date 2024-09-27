@@ -254,6 +254,8 @@
 
 ## Avoiding Data Hazards by Forwarding (转发)
 * Rather than stalling until the write has completed, it can simply pass the value that is about to be written to pipeline register E as the source operand.
+* **Data forwarding** - passing a result value directly from one pipeline stage to an earlier one (or simply forwarding, and sometimes bypassing).
+* Data forwarding requires adding additional data connections and control logic to the basic hardware structure.
 
 ### Example 1 - Pipelined execution of prog2 using forwarding
 ![[Pasted image 20240927154155.png|500]]
@@ -287,6 +289,36 @@
 	* It can therefore avoid stalling by simply using the data word supplied to port E (signal `W_valE`) as the value for operand `valB`.
 
 
+### Example 2 - Pipelined execution of prog3 using forwarding
+![[Pasted image 20240927170344.png|500]]
+
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
+* In cycle 5:
+	* `0x000: irmovq $10,%rdx`: Writeback stage
+		* about to execute:
+			* $R[\%rdx] ← valE~=10$
+				* In W register:
+					* W_desE = %rdx
+					* W_valE = 10
+	* `0x00a: irmovq $3,%rax`: Memory stage
+		* Nothing to execute:
+	* `0x016: addq %rdx,%rax`: decode stage
+		* about to execute:
+			* $valA ← R[\%rdx]~=10$
+				* In D register:
+					* srcA = %rdx
+			* $valB ← R[\%rax]~=3$
+				* In D register:
+					* $icode :ifun ← M_1[0x016]$
+					* $rA :rB ← M_1[0x016 + 1]$
+					* $valP ← 0x016 + 2$
 
 
 
