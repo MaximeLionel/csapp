@@ -230,9 +230,25 @@
 * These data hazards occur because our pipelined processor reads the operands for an instruction from the register file in the **decode stage** but does not write the results for the instruction to the register file until 3 cycles later, after the instruction passes through the **write-back** stage.
 
 ## Avoiding Data Hazards by Stalling
+* One very general technique for avoiding hazards involves **stalling**, where the processor holds back one or more instructions in the pipeline until the hazard condition no longer holds.
+	* Our processor can avoid data hazards by holding back an instruction in the **decode stage** until the instructions generating its source operands have passed through the **write-back** stage
+### Example 1 - Pipelined execution of prog2 using stalls
+![[Pasted image 20240927141354.png|500]]
+* In cycle 6:
+	* When the `addq` instruction is in the decode stage, the pipeline control logic detects that at least one of the instructions in the execute, memory, or write-back stage will update either register `%rdx` or register `%rax`.
+		* The stall control logic detects a data hazard due to the pending write to register `%rax` in the write-back stage.
+	* Rather than letting the `addq` instruction pass through the stage with the incorrect results, it stalls the instruction, holding it back in the decode stage for either one (for prog2) extra cycle.
+* In cycle 7:
+	* The stall logic control injects a **bubble** into the execute stage and repeats the decoding of the `addq` instruction.
+	* A **bubble** is like a dynamically generated `nop` instruction — it does not cause any changes to the registers, the memory, the condition codes, or the program status.
 
-
-
+### Example 2 - Pipelined execution of prog4 using stalls
+![[Pasted image 20240927143343.png|500]]
+* In cycle 4:
+	* The **stall control logic** detects data hazards for both source registers.
+* In cycle 5, 6, 7:
+	* The **stall control logi**c injects a bubble into the execute stage and repeats the decoding of the `addq` instruction.
+* In holding back the `addq` instruction in the decode stage, we must also hold back the `halt` instruction following it in the fetch stage. We can do this by keeping the **program counter** at a fixed value, so that the `halt` instruction will be fetched repeatedly until the stall has completed.
 
 
 
