@@ -253,8 +253,36 @@
 * There are numerous cases in which one instruction updates a register and a closely following instruction uses the same register. This will cause the pipeline to stall for up to 3 cycles, reducing the overall throughput significantly.
 
 ## Avoiding Data Hazards by Forwarding (转发)
+* Rather than stalling until the write has completed, it can simply pass the value that is about to be written to pipeline register E as the source operand.
 
+### Example 1 - Pipelined execution of prog2 using forwarding
+![[Pasted image 20240927154155.png|500]]
 
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
+* In cycle 6:
+	* `0x000: irmovq $10,%rdx`: PC update stage
+	* `0x00a: irmovq $3,%rax`: Writeback stage
+		* about to execute:
+			* $R[\%rax] ← valE~=3$
+				* In W register: 
+					* W_dstE = %rax
+					* W_valE = 3
+	* `0x016: addq %rdx,%rax`: decode stage
+		* about to execute:
+			* $valA ← R[\%rdx]~=10$
+				* In D register:
+					* srcA = %rdx
+			* $valB ← R[\%rax]~=3$
+				* In D register:
+					* srcB = %rax
+		* The decode-stage logic detects that register `%rax` is the source register for operand `valB`, and that there is also a pending write to `%rax` on write port E.
 
 
 
