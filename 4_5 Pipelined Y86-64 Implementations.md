@@ -229,7 +229,7 @@
 * These examples above illustrate that a data hazard can arise for an instruction when one of its operands is updated by any of the three preceding instructions.
 * These data hazards occur because our pipelined processor reads the operands for an instruction from the register file in the **decode stage** but does not write the results for the instruction to the register file until 3 cycles later, after the instruction passes through the **write-back** stage.
 
-## Avoiding Data Hazards by Stalling
+## Avoiding Data Hazards by Stalling (暂停)
 * One very general technique for avoiding hazards involves **stalling**, where the processor holds back one or more instructions in the pipeline until the hazard condition no longer holds.
 	* Our processor can avoid data hazards by holding back an instruction in the **decode stage** until the instructions generating its source operands have passed through the **write-back** stage
 ### Example 1 - Pipelined execution of prog2 using stalls
@@ -249,6 +249,12 @@
 * In cycle 5, 6, 7:
 	* The **stall control logi**c injects a bubble into the execute stage and repeats the decoding of the `addq` instruction.
 * In holding back the `addq` instruction in the decode stage, we must also hold back the `halt` instruction following it in the fetch stage. We can do this by keeping the **program counter** at a fixed value, so that the `halt` instruction will be fetched repeatedly until the stall has completed.
+* Injecting one bubble for prog2 and three for prog4 has the same effect as having 3 `nop` instructions between the second irmovq instruction and the `addq` instruction.
+* There are numerous cases in which one instruction updates a register and a closely following instruction uses the same register. This will cause the pipeline to stall for up to 3 cycles, reducing the overall throughput significantly.
+
+## Avoiding Data Hazards by Forwarding (转发)
+
+
 
 
 
