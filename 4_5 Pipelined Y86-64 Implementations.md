@@ -269,21 +269,21 @@
 | Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
 | PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
 * In cycle 6:
-	* `0x000: irmovq $10,%rdx`: PC update stage
+	* `0x000: irmovq $10,%rdx`: Finish writeback
 	* `0x00a: irmovq $3,%rax`: Writeback stage
+		![[Pasted image 20240928225327.png|400]]
 		* about to execute:
 			* $R[\%rax] ← valE~=3$
-				* In W register: 
-					* W_dstE = %rax
-					* W_valE = 3
+				* W_dstE = %rax
+				* W_valE = 3
 	* `0x016: addq %rdx,%rax`: decode stage
+		![[Pasted image 20240928223124.png|400]]
 		* about to execute:
 			* $valA ← R[\%rdx]~=10$
-				* In D register:
-					* srcA = %rdx
+				* srcA = %rdx
 			* $valB ← R[\%rax]~=3$
-				* In D register:
-					* srcB = %rax
+				* srcB = %rax
+				* $valB ← W\_valE~=3$
 	* The decode-stage logic detects that register `%rax` is the source register for operand `valB`.
 	* There is also a pending write to `%rax` on write port E. 
 	* It can therefore avoid stalling by simply using the data word supplied to port E (signal `W_valE`) as the value for operand `valB`.
@@ -302,31 +302,46 @@
 | PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
 * In cycle 5:
 	* `0x000: irmovq $10,%rdx`: Writeback stage
+		![[Pasted image 20240928225327.png|400]]
 		* about to execute:
 			* $R[\%rdx] ← valE~=10$
-				* In W register:
-					* W_desE = %rdx
-					* W_valE = 10
+				* W_desE = %rdx
+				* W_valE = 10
 	* `0x00a: irmovq $3,%rax`: Memory stage
+		![[Pasted image 20240928225548.png|400]]
 		* about to execute:
-			* In M register:
-				* M_desE = %rax
-				* M_valE = 3
+			* M_desE = %rax
+			* M_valE = 3
 	* `0x016: addq %rdx,%rax`: decode stage
+		![[Pasted image 20240928223124.png|400]]
 		* about to execute:
+			* $icode :ifun ← M_1[0x016]$
+			* $rA :rB ← M_1[0x016 + 1]$
+			* $valP ← 0x016 + 2$
 			* $valA ← R[\%rdx]~=10$
 				* In D register:
 					* srcA = %rdx
 					* $valA ← W_valE = 10$
 			* $valB ← R[\%rax]~=3$
 				* In D register:
-				* ![[Pasted image 20240928223124.png|400]]
-					* $icode :ifun ← M_1[0x016]$
-					* $rA :rB ← M_1[0x016 + 1]$
-					* $valP ← 0x016 + 2$
 					* srcB = %rax
-					* $valB ← M_valE = 3$
-![[Pasted image 20240928215802.png|300]]
+					* $valB ← M\_valE = 3$
+* In cycle 5, the decodestage logic detects a pending write to register `%rdx` in the write-back stage and to register `%rax` in the memory stage. 
+* Rather than stalling until the writes have occurred, it can use the value in the write-back stage (signal `W_valE`) for operand `valA` and the value in the memory stage (signal `M_valE`) for operand `valB`.
+* Data forwarding can also be used when there is a pending write to a register in the memory stage, avoiding the need to stall for program prog3.
+
+### Example 3 - Pipelined execution of prog4 using forwarding
+![[Pasted image 20240928231833.png|500]]
+
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x014: addq %rdx,%rax                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x014]$<br>$rA :rB ← M_1[0x014 + 1]$<br><br>$valP ← 0x014 + 2$ |
+| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
+| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
+| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x016$                                                                |
+
 
 
 
