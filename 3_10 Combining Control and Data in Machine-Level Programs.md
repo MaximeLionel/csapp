@@ -157,7 +157,6 @@ A. Fill in the diagram that follows, indicating as much as you can about the sta
 |                         |                |
 |                         |                |
 |                         |                |
-|                         |                |
 B. Modify your diagram to show the effect of the call to `gets` (line 5).
 
 C. To what address does the program attempt to return?
@@ -168,66 +167,79 @@ E. Besides the potential for buffer overflow, what two other things are wrong wi
 
 **Solution**：
 A.
-1. After executing `call get_line()`, stack would be:
+1. After executing `400720: 53              push %rbx`:
 
-| Stack                   | Label          |
-| ----------------------- | -------------- |
-| 00 00 00 00 00 40 00 76 | Return Address |
-2. The executing flow goes into function `get_line()`. After executing `push %rbx`, the stack would be:
+| Stack                   | Label                              |
+| ----------------------- | ---------------------------------- |
+| 00 00 00 00 00 40 00 76 | Return Address                     |
+| 01 23 45 67 89 AB CD EF | value of %rbx<br>top of stack %rsp |
+|                         |                                    |
+|                         |                                    |
+|                         |                                    |
+2. After executing `400721: 48 83 ec 10     sub $0x10,%rsp`:
 
-| Stack                   | Label          |
-| ----------------------- | -------------- |
-| 00 00 00 00 00 40 00 76 | Return Address |
-| 01 23 45 67 89 AB CD EF | saved `%rbp`   |
+| Stack                   | Label             |
+| ----------------------- | ----------------- |
+| 00 00 00 00 00 40 00 76 | Return Address    |
+| 01 23 45 67 89 AB CD EF | value of %rbx<br> |
+| xx xx xx xx xx xx xx xx |                   |
+| xx xx xx xx xx xx xx xx | top of stack %rsp |
+|                         |                   |
+3. After executing `400725: 48 89 e7        mov %rsp,%rdi`:
 
-3. After executing `sub $0x10,%rsp`, the stack would still be:
+| Stack                   | Label                                             |
+| ----------------------- | ------------------------------------------------- |
+| 00 00 00 00 00 40 00 76 | Return Address                                    |
+| 01 23 45 67 89 AB CD EF | value of %rbx<br>                                 |
+| xx xx xx xx xx xx xx xx |                                                   |
+| xx xx xx xx xx xx xx xx | top of stack %rsp<br>%rsp is copied to %rdi - buf |
+|                         |                                                   |
 
-| Stack                   | Label                                              |
-| ----------------------- | -------------------------------------------------- |
-| 00 00 00 00 00 40 00 76 | Return Address                                     |
-| 01 23 45 67 89 AB CD EF | saved `%rbp`                                       |
-|                         | extended stack box                                 |
-|                         | extended stack box (`rsp`=bottom of the stack box) |
+4. After executing `400728: e8 73 ff ff ff  callq 4006a0 <gets>`:
+
+`call` is equal to `push` ret address and `jump` to new function address.
+So we need to calculate the ret address first: 
+ret_address = 0x400728 + 0x5 = 0x40072D
+
+| Stack                   | Label                        |
+| ----------------------- | ---------------------------- |
+| 00 00 00 00 00 40 00 76 | Return Address for `getline` |
+| 01 23 45 67 89 AB CD EF | value of %rbx<br>            |
+| xx xx xx xx xx xx xx xx |                              |
+| xx xx xx xx xx xx xx xx | %rdi = current address - buf |
+| 00 00 00 00 00 40 07 2D | Return address for `gets`    |
 
 B.
-4. After executing `mov %rsp,%rdi`, the stack would be:
 
-| Stack                   | Label                                                |
-| ----------------------- | ---------------------------------------------------- |
-| 00 00 00 00 00 40 00 76 | Return Address                                       |
-| 01 23 45 67 89 AB CD EF | saved `%rbp`                                         |
-|                         | extended stack                                       |
-|                         | extended stack (`rsp`=`rdi`=bottom of the stack box) |
-5. After entering line 5 `callq 4006a0 <gets>`, the stack would be:
+| Stack                   | Label                        |
+| ----------------------- | ---------------------------- |
+| 00 00 00 00 00 40 00 76 | Return Address for `getline` |
+| 01 23 45 67 89 AB CD EF | value of %rbx<br>            |
+| xx xx xx xx xx xx xx xx |                              |
+| xx xx xx xx xx xx xx xx | %rdi = current address - buf |
+| 00 00 00 00 00 40 07 2D | Return address for `gets`    |
+In current stack situation, after we input string `0123456789012345678901234`, the stack will be like:
 
-| Stack                   | Label                                                                |
-| ----------------------- | -------------------------------------------------------------------- |
-| 00 00 00 00 00 40 00 76 | Return Address                                                       |
-| 01 23 45 67 89 AB CD EF | saved `%rbp`                                                         |
-|                         | extended stack                                                       |
-|                         | extended stack <br>(`rdi`= bottom of the stack box)                  |
-| 00 00 00 00 00 40 07 2D | Return Address after call `gets`<br>(`rsp`= bottom of the stack box) |
+| Stack                   | Label                         |
+| ----------------------- | ----------------------------- |
+| 00 00 00 00 00 40 00 34 | Return Address for `get_line` |
+| 33 32 31 30 39 38 37 36 | value of %rbx<br>             |
+| 35 34 33 32 31 30 39 38 |                               |
+| 37 36 35 34 33 32 31 30 | %rdi = current address - buf  |
+| 00 00 00 00 00 40 07 2D | Return address for `gets`     |
 
+We find that the input string has modified the value of `%rbx` and also the return address for function `get_line`.
 
-6. After finishing line 5 `callq 4006a0 <gets>`, the stack would be:
-`char *gets(char *s)`
+C.
+New return address: 0x400034
 
-| Stack                       | Label                                               |
-| --------------------------- | --------------------------------------------------- |
-| 00 00 00 00 00 40 00 ==34== | Return Address (changed)                            |
-| 33 32 31 30 39 38 37 36     | saved `%rbp`                                        |
-| 35 34 33 32 31 30 39 38     | extended stack                                      |
-| 37 36 35 34 33 32 31 30     | extended stack <br>(`rsp`= bottom of the stack box) |
+D.
+%rbx
 
-C. 
-`0x040034`
+E.
+1st problem is `malloc(strlen(buf))`, we should correct as `malloc(strlen(buf)+1)` to leave 1 byte for '\\0'.
 
-D. 
-`%rbp`
-
-E. 
-The call to malloc should have had `strlen(buf)+1` as its argument, and the code should also check that the returned value is not equal to `NULL`.
-
+2nd problem is that, there's possibilities for function `malloc` to return null pointer. So adding checking mechanism on null pointer is required.
 # 3.46 in real GDB
 Let's try to do this problem in real GDB.
 * Firstly, use GDB to open executable program and disassemble the `get_line` function:
