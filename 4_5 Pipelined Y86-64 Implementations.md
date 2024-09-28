@@ -317,11 +317,15 @@
 			* $valA ← R[\%rdx]~=10$
 				* In D register:
 					* srcA = %rdx
+					* $valA ← W_valE = 10$
 			* $valB ← R[\%rax]~=3$
 				* In D register:
+				* ![[Pasted image 20240928223124.png|400]]
 					* $icode :ifun ← M_1[0x016]$
 					* $rA :rB ← M_1[0x016 + 1]$
 					* $valP ← 0x016 + 2$
+					* srcB = %rax
+					* $valB ← M_valE = 3$
 ![[Pasted image 20240928215802.png|300]]
 
 
