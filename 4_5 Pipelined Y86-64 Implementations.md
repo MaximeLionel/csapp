@@ -308,7 +308,10 @@
 					* W_desE = %rdx
 					* W_valE = 10
 	* `0x00a: irmovq $3,%rax`: Memory stage
-		* Nothing to execute:
+		* about to execute:
+			* In M register:
+				* M_desE = %rax
+				* M_valE = 3
 	* `0x016: addq %rdx,%rax`: decode stage
 		* about to execute:
 			* $valA ← R[\%rdx]~=10$

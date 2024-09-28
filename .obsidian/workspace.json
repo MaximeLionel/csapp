@@ -169,11 +169,13 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
   "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_6 Control.assets/Pasted image 20240927170344.png",
     "3_6 Control.assets/Pasted image 20240927154155.png",
     "3_6 Control.assets/Pasted image 20240927143343.png",
@@ -181,14 +183,12 @@
     "3_6 Control.assets/Pasted image 20240926165348.png",
     "3_6 Control.assets/Pasted image 20240926163921.png",
     "3_6 Control.assets/Pasted image 20240926155610.png",
-    "4_3 Sequential Y86-64 Implementations.md",
-    "4_5 Pipelined Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240926110638.png",
+    "4_5 Pipelined Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240925224905.png",
+    "4_3 Sequential Y86-64 Implementations.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
-    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_6 Control.assets/Pasted image 20240925144046.png",
-    "3_6 Control.assets/Pasted image 20240925142739.png",
     "3_9 Heterogeneous Data Structures.md",
     "4_4 General Principles of Pipelining.md",
     "conflict-files-obsidian-git.md",
