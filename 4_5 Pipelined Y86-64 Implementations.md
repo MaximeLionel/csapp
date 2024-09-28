@@ -322,6 +322,7 @@
 					* $icode :ifun ← M_1[0x016]$
 					* $rA :rB ← M_1[0x016 + 1]$
 					* $valP ← 0x016 + 2$
+![[Pasted image 20240928215802.png|300]]
 
 
 
