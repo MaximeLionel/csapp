@@ -336,11 +336,11 @@
 | Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
 | --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
 | Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
-| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
+| Decode    | -                                                                                                            | -                                                                                                            | $srcA←\%rdx$<br>$valA ← R[\%rdx]$<br>$srcB←\%rax$<br>$valB ← R[\%rax]$            |
 | Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
 | Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
 | Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
-| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
 
 * In cycle 4:
 	* `0x000: irmovq $10,%rdx`: Memory stage
@@ -353,9 +353,23 @@
 		* about to execute:
 			* $valE ← 0 + valC~=3$
 				* M_desE = %rax
-			* M_valE = 3
-
-
+			* E_valE = 3
+	* `0x014: addq %rdx,%rax`: decode stage
+		![[Pasted image 20240928223124.png|400]]
+		* about to execute:
+			* $icode :ifun ← M_1[0x016]$
+			* $rA :rB ← M_1[0x016 + 1]$
+			* $valP ← 0x014 + 2$
+			* $valA ← R[\%rdx]~=10$
+				* In D register:
+					* srcA = %rdx
+					* $valA ← M\_valE = 10$
+			* $valB ← R[\%rax]~=3$
+				* In D register:
+					* srcB = %rax
+					* $valB ← E\_valE = 3$
+* In cycle 4, the decode stage logic detects a pending write to register `%rdx` in the memory stage. It also detects that a new value is being computed for register `%rax` in the execute stage. It uses these as the values for `valA` and `valB` rather than the values read from the register file.
+* To exploit data forwarding to its full extent, we can also pass newly computed values from the execute stage to the decode stage, avoiding the need to stall for program prog4.
 
 
 
