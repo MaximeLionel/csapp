@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_4 General Principles of Pipelining.md",
+                "file": "4_3 Sequential Y86-64 Implementations.md",
                 "mode": "source",
                 "source": false
               }
@@ -44,7 +44,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -94,8 +94,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md",
+                "file": "4_3 Sequential Y86-64 Implementations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md",
+                "file": "4_3 Sequential Y86-64 Implementations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md"
+                "file": "4_3 Sequential Y86-64 Implementations.md"
               }
             }
           }
@@ -172,12 +171,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "ddc0e58800788e7b",
+  "active": "fae7601defcadbaa",
   "lastOpenFiles": [
-    "3_6 Control.assets/Pasted image 20240929102830.png",
+    "4_2 Logic Design and the Hardware Control Language HCL4.md",
+    "4_1 The Y86-64 Instruction Set Architecture.md",
+    "4_0 Processor Architecture.md",
     "4_4 General Principles of Pipelining.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "4_5 Pipelined Y86-64 Implementations.md",
+    "3_6 Control.assets/Pasted image 20240929102830.png",
+    "4_3 Sequential Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20240929084824.png",
     "3_6 Control.assets/Pasted image 20240928231833.png",
     "3_6 Control.assets/Pasted image 20240928225548.png",
@@ -188,12 +190,9 @@
     "3_6 Control.assets/Pasted image 20240927170344.png",
     "3_6 Control.assets/Pasted image 20240927154155.png",
     "3_6 Control.assets/Pasted image 20240927143343.png",
-    "3_6 Control.assets/Pasted image 20240927141354.png",
-    "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
     "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
-    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_11 Floating-Point Code.md",
     "3_7 Procedures.md",
     "2_1.md",
@@ -208,7 +207,6 @@
     "3_homework.md",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
-    "4_0 Processor Architecture.md",
     "3_homework.assets",
     "2_0.md",
     "1_9.md",
