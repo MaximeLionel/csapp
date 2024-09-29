@@ -370,6 +370,7 @@
 					* $valB ← E\_valE = 3$
 * In cycle 4, the decode stage logic detects a pending write to register `%rdx` in the memory stage. It also detects that a new value is being computed for register `%rax` in the execute stage. It uses these as the values for `valA` and `valB` rather than the values read from the register file.
 * To exploit data forwarding to its full extent, we can also pass newly computed values from the execute stage to the decode stage, avoiding the need to stall for program prog4.
+* To exploit data forwarding to its full extent, we can also pass newly computed values from the execute stage to the decode stage, avoiding the need to stall for program prog4.
 
 
 
