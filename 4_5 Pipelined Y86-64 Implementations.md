@@ -372,6 +372,12 @@
 * To exploit data forwarding to its full extent, we can also pass newly computed values from the execute stage to the decode stage, avoiding the need to stall for program prog4.
 * To exploit data forwarding to its full extent, we can also pass newly computed values from the execute stage to the decode stage, avoiding the need to stall for program prog4.
 
+### Summary
+* Types of forwarding sources and destinations:
+	* sources: e_valE, m_valM, M_valE, W_valM, and W_valE
+	* destinations: valA and valB
+* How the decode stage logic can determine whether to use a value from the register file or to use a forwarded value.
+
 
 
 
