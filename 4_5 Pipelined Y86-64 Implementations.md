@@ -333,16 +333,27 @@
 ### Example 3 - Pipelined execution of prog4 using forwarding
 ![[Pasted image 20240928231833.png|500]]
 
-| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x014: addq %rdx,%rax                                                             |
+| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
 | --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x014]$<br>$rA :rB ← M_1[0x014 + 1]$<br><br>$valP ← 0x014 + 2$ |
+| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
 | Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
 | Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
 | Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
 | Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
-| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x016$                                                                |
+| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                
 
-
+* In cycle 4:
+	* `0x000: irmovq $10,%rdx`: Memory stage
+		![[Pasted image 20240928225548.png|400]]
+		* about to execute:
+			* M_desE = %rdx
+			* M_valE = 10
+	* `0x00a: irmovq $3,%rax`: Execute stage
+		![[Pasted image 20240929084824.png|400]]
+		* about to execute:
+			* $valE ← 0 + valC~=3$
+				* M_desE = %rax
+			* M_valE = 3
 
 
 

@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_3 Sequential Y86-64 Implementations.md",
+                "file": "4_4 General Principles of Pipelining.md",
                 "mode": "source",
                 "source": false
               }
@@ -169,12 +169,15 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "table-editor-obsidian:Advanced Tables Toolbar": false
+      "command-palette:Open command palette": false
     }
   },
   "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
+    "4_4 General Principles of Pipelining.md",
+    "4_3 Sequential Y86-64 Implementations.md",
+    "4_5 Pipelined Y86-64 Implementations.md",
+    "3_6 Control.assets/Pasted image 20240929084824.png",
     "3_6 Control.assets/Pasted image 20240928231833.png",
     "3_6 Control.assets/Pasted image 20240928225548.png",
     "3_6 Control.assets/Pasted image 20240928225327.png",
@@ -185,13 +188,8 @@
     "3_6 Control.assets/Pasted image 20240927154155.png",
     "3_6 Control.assets/Pasted image 20240927143343.png",
     "3_6 Control.assets/Pasted image 20240927141354.png",
-    "3_6 Control.assets/Pasted image 20240926165348.png",
-    "3_6 Control.assets/Pasted image 20240926163921.png",
-    "4_5 Pipelined Y86-64 Implementations.md",
-    "4_3 Sequential Y86-64 Implementations.md",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
-    "4_4 General Principles of Pipelining.md",
     "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
