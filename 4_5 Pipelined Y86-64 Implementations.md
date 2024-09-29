@@ -377,6 +377,19 @@
 	* sources: e_valE, m_valM, M_valE, W_valM, and W_valE
 	* destinations: valA and valB
 * How the decode stage logic can determine whether to use a value from the register file or to use a forwarded value.
+	* Associated with every value that will be written back to the register file is the **destination register ID**. 
+	* The logic can compare these IDs with the **source register** IDs `srcA` and `srcB` to detect a case for forwarding. 
+	* It is possible to have multiple destination register IDs match one of the source IDs. 
+	* We must establish a priority among the different forwarding sources to handle such cases.
+* Extention PIPE- structure to handle forwarding:
+	![[Pasted image 20240929102830.png|450]]
+	* The values from the 5 forwarding sources are fed back to the two blocks labeled “**Sel+Fwd A**” and “**Fwd B**” in the decode stage.
+	* The block labeled “Sel+Fwd A” combines the role of the block labeled “Select A” in PIPE− with the forwarding logic.
+		* It allows valA for pipeline register E to be either the incremented program counter `valP`, the value read from the A port of the register file, or one of the forwarded values.
+	* The block labeled “Fwd B” implements the forwarding logic for source operand `valB`.
+
+## Load/Use Data Hazards
+
 
 
 
