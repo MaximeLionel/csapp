@@ -389,8 +389,19 @@
 	* The block labeled “Fwd B” implements the forwarding logic for source operand `valB`.
 
 ## Load/Use Data Hazards
+* One class of data hazards cannot be handled purely by forwarding, because memory reads occur late in the pipeline.
+![[Pasted image 20240930093130.png|500]]
 
+| Stage     | mrmovq D(rB), rA<br>rB - %rdx<br>rA - %rax                                                    | addq %rdx,%rax                                                           |
+| --------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ |
+| Decode    | $srcB←\%rdx$<br>$valB ← R[\%rdx]$<br>                                                         | $srcA←\%rdx$<br>$valA ← R[\%rdx]$<br>$srcB←\%rax$<br>$valB ← R[\%rax]$   |
+| Execute   | $valE ← valB + valC$                                                                          | $valE ← valB~+~valA$                                                     |
+| Memory    | $valM ← M_8[valE]$                                                                            | -                                                                        |
+| Writeback | $R[rA] ← valM$                                                                                | $R[\%rax] ← valE$                                                        |
 
+* In cycle 7:
+	* `0x028: mrmovq 0(%rdx),%rax`: Execute stage
 
 
 
