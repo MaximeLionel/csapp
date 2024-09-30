@@ -142,21 +142,23 @@
 * Details:
 	* Cycle 6: 
 		* `0x00a: irmovq $3,%rax`:  Writeback stage
-			* $R[\%rax] ← 3$
-				* W_destE = %rax
-				* W_valE = 3
+			* %rax <- W_valE = 3
 		* `0x017: addq %rdx,%rax`:  Fetch stage
 			* $icode :ifun ← M_1[0x017]$
 			* $\%rdx :\%rax ← M_1[0x018]$
 			* $valP ← 0x019$
 		* In this cycle: %rdx = 10, %rax will be set to 3 at the start of cycle 7 as the clock rises.
 	* Cycle 7:
-		* `0x00a: irmovq $3,%rax`:  PC update stage
-			* $PC ← valP$
+		* `0x00a: irmovq $3,%rax`:  Finish writeback stage
 		* `0x017: addq %rdx,%rax`:  Decode stage
-			* $valA ← R[\%rdx]~=~10$
-			* $valB ← R[\%rax]~=~3$
-		* In this cycle: %rdx = 10, %rax = 13
+			* $E\_valA ← R[\%rdx]$:
+			 - d_srcA = %rdx
+			 - E_valA <- d_rvalA
+			* $E\_valB ← R[\%rax]$:
+			 - d_srcB = %rax
+			 - E_valB <- d_rvalB
+			* E_dstE <- %rax
+		* In this cycle: %rdx = 10, %rax = 3
 * As the `addq` instruction passes through the decode stage during cycle 7, it will therefore read the correct values for its source operands. 
 * The data dependencies between the 2 `irmovq` instructions and the `addq` instruction have not created data hazards in this example.
 
