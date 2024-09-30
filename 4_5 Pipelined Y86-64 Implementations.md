@@ -401,7 +401,12 @@
 | Writeback | $R[rA] ← valM$                                                                                | $R[\%rax] ← valE$                                                        |
 
 * In cycle 7:
+	* `0x01e: irmovq $10,%rbx`: 
 	* `0x028: mrmovq 0(%rdx),%rax`: Execute stage
+		![[Pasted image 20240929084824.png|400]]
+		* about to execute:
+			* $M\_valE ← E\_valB + E\_valC$
+			* $M\_desE = \%rax$
 
 
 
