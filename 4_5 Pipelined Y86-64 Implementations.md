@@ -61,6 +61,7 @@
 		* For example, the 4 status codes are named `D_stat`, `E_stat`, `M_stat`, and `W_stat`.
 	* Some signals that have just been computed within a stage, are labeled by prefixing the signal name with the first character of the stage name, written in lowercase.
 		* Using the status codes as examples, we can see control logic blocks labeled “Stat” in the fetch and memory stages. The outputs of these blocks are therefore named `f_stat` and `m_stat`.
+## Rearranging
 * `Stat` - We can also see that the actual status of the overall processor `Stat` is computed by a block in the write-back stage, based on the status value in pipeline register `W`.
 * `dstE` and `dstM` - The decode stages of SEQ+ and PIPE− both generate signals `dstE` and `dstM` indicating the destination register for values `valE` and `valM`. 
 	* In SEQ+, we could connect `dstE` and `dstM` signals directly to the address inputs of the register file write ports. 
@@ -130,14 +131,14 @@
 ### Example 1 - 3 nops - No data hazard
 ![[Pasted image 20240926110638.png|500]]
 
-| Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   | 0x00a: irmovq $3,%rax                                                                         |
-| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
-| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | -                                                                                             |                                                                                               |
-| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valC$                                                                             |                                                                                               |
-| Memory    | -                                                                        | -                                                                                             |                                                                                               |
-| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |                                                                                               |
-| PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |                                                                                               |
+| Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   | 0x00a: irmovq $3,%rax<br>V  = $3<br>rB = %rax                                                         |
+| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$D\_valC ← M_8[PC + 2]=3$<br>$D\_valP ← PC + 10$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | -                                                                                             | $E\_valC ← D\_valC$<br>$E\_dstE←$                                                                     |
+| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valC$                                                                             |                                                                                                       |
+| Memory    | -                                                                        | -                                                                                             |                                                                                                       |
+| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |                                                                                                       |
+| PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |                                                                                                       |
 * Details:
 	* Cycle 6: 
 		* `0x00a: irmovq $3,%rax`:  Writeback stage
