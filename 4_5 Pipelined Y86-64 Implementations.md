@@ -346,8 +346,8 @@
 	* `0x000: irmovq $10,%rdx`: Memory stage
 		![[Pasted image 20240928225548.png|400]]
 		* about to execute:
-			* M_desE = %rdx
-			* M_valE = 10
+			* W_desE = %rdx
+			* W_valE = 10
 	* `0x00a: irmovq $3,%rax`: Execute stage
 		![[Pasted image 20240929084824.png|400]]
 		* about to execute:
@@ -392,16 +392,20 @@
 * One class of data hazards cannot be handled purely by forwarding, because memory reads occur late in the pipeline.
 ![[Pasted image 20240930093130.png|500]]
 
-| Stage     | mrmovq D(rB), rA<br>rB - %rdx<br>rA - %rax                                                    | addq %rdx,%rax                                                           |
-| --------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ |
-| Decode    | $srcB←\%rdx$<br>$valB ← R[\%rdx]$<br>                                                         | $srcA←\%rdx$<br>$valA ← R[\%rdx]$<br>$srcB←\%rax$<br>$valB ← R[\%rax]$   |
-| Execute   | $valE ← valB + valC$                                                                          | $valE ← valB~+~valA$                                                     |
-| Memory    | $valM ← M_8[valE]$                                                                            | -                                                                        |
-| Writeback | $R[rA] ← valM$                                                                                | $R[\%rax] ← valE$                                                        |
+| Stage     | irmovq V,rB<br>V  = 10<br>rB = %rbx                                                           | mrmovq D(rB), rA<br>rB - %rdx<br>rA - %rax                                                    | addq %rdx,%rax                                                           |
+| --------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ |
+| Decode    | -                                                                                             | $srcB←\%rdx$<br>$valB ← R[\%rdx]$<br>                                                         | $srcA←\%rdx$<br>$valA ← R[\%rdx]$<br>$srcB←\%rax$<br>$valB ← R[\%rax]$   |
+| Execute   | $valE ← 0 + valC$                                                                             | $valE ← valB + valC$                                                                          | $valE ← valB~+~valA$                                                     |
+| Memory    | -                                                                                             | $valM ← M_8[valE]$                                                                            | -                                                                        |
+| Writeback | $R[rB] ← valE$                                                                                | $R[rA] ← valM$                                                                                | $R[\%rax] ← valE$                                                        |
+
 
 * In cycle 7:
-	* `0x01e: irmovq $10,%rbx`: 
+	* `0x01e: irmovq $10,%rbx`: Memory Stage
+		![[Pasted image 20240928225548.png|400]]
+		* about to execute:
+			* 
 	* `0x028: mrmovq 0(%rdx),%rax`: Execute stage
 		![[Pasted image 20240929084824.png|400]]
 		* about to execute:
