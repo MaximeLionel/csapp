@@ -224,7 +224,7 @@
 | Execute   | $M\_valE ← 0 + E\_valC~=10$<br>$M\_dstE←E\_dstE=\%rdx$                                                 | $M\_valE ← 0 + E\_valC ~= 3$<br>$M\_dstE←E\_dstE=\%rax$                                               | M_valE <- E_valB + E_valA<br>M_dstE <- E_dstE = %rax<br>$Set~CC$                                                                                         |
 | Memory    | W_valE <- M_valE = 10<br>W_dstE <- M_dstE = %rdx                                                       | W_valE <- M_valE = 3<br>W_dstE <- M_dstE                                                              | W_valE <- M_valE<br>W_dstE <- M_dstE = %rax                                                                                                              |
 | Writeback | %rdx <- W_valE = 10                                                                                    | %rax <- W_valE = 3                                                                                    | %rax <- W_valE                                                                                                                                           |
-| PC update | $PC ← valP~=0x00a$                                                                                     | $PC ← valP~=0x014$                                                                                    | $PC ← valP~=0x016$                                                                                                                                       |
+
 * Details:
 	* Cycle 4: 
 		* `0x000: irmovq $10,%rdx`: Memory stage
@@ -274,30 +274,31 @@
 ### Example 1 - Pipelined execution of prog2 using forwarding
 ![[Pasted image 20240927154155.png|500]]
 
-| Stage     | 0x000: irmovq $10,%rdx                                                                                       | 0x00a: irmovq $3,%rax                                                                                        | 0x016: addq %rdx,%rax                                                             |
-| --------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[0x000]$<br>$rA :rB ← M_1[0x000 + 1]$<br>$valC ← M_8[0x000 + 2]$=10<br>$valP ← 0x000 + 10$ | $icode :ifun ← M_1[0x00a]$<br>$rA :rB ← M_1[0x00a + 1]$<br>$valC ← M_8[0x00a + 2]~=3$<br>$valP ← 0x00a + 10$ | $icode :ifun ← M_1[0x016]$<br>$rA :rB ← M_1[0x016 + 1]$<br><br>$valP ← 0x016 + 2$ |
-| Decode    | -                                                                                                            | -                                                                                                            | $valA ← R[\%rdx]$<br>$valB ← R[\%rax]$                                            |
-| Execute   | $valE ← 0 + valC~=10$                                                                                        | $valE ← 0 + valC~=3$                                                                                         | $valE ← valB~+~valA$                                                              |
-| Memory    | -                                                                                                            | -                                                                                                            | -                                                                                 |
-| Writeback | $R[\%rdx] ← valE~=10$                                                                                        | $R[\%rax] ← valE~=3$                                                                                         | $R[\%rax] ← valE$                                                                 |
-| PC update | $PC ← valP~=0x00a$                                                                                           | $PC ← valP~=0x014$                                                                                           | $PC ← valP~=0x018$                                                                |
+| Stage     | 0x000: irmovq $10,%rdx<br>irmovq V,rB<br>V = $10<br>rB = %rdx                                          | 0x00a: irmovq $3,%rax<br>irmovq V,rB<br>V  = $3<br>rB = %rax                                          | 0x016: addq %rdx,%rax<br>OPq rA,rB<br>rA = %rdx<br>rB = %rax                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$D\_valC ← M_8[PC + 2]=10$<br>$D\_valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$D\_valC ← M_8[PC + 2]=3$<br>$D\_valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$                                                                                 |
+| Decode    | $E\_valC ← D\_valC=10$<br>$E\_dstE←D\_dstE=\%rdx$                                                      | $E\_valC ← D\_valC$<br>$E\_dstE←D\_dstE=\%rax$                                                        | $E\_valA ← R[\%rdx]$:<br> - d_srcA = %rdx<br> - E_valA <- d_rvalA<br>$E\_valB ← R[\%rax]$:<br> - d_srcB = %rax<br> - E_valB <- d_rvalB<br>E_dstE <- %rax |
+| Execute   | $M\_valE ← 0 + E\_valC~=10$<br>$M\_dstE←E\_dstE=\%rdx$                                                 | $M\_valE ← 0 + E\_valC ~= 3$<br>$M\_dstE←E\_dstE=\%rax$                                               | M_valE <- E_valB + E_valA<br>M_dstE <- E_dstE = %rax<br>$Set~CC$                                                                                         |
+| Memory    | W_valE <- M_valE = 10<br>W_dstE <- M_dstE = %rdx                                                       | W_valE <- M_valE = 3<br>W_dstE <- M_dstE = %rax                                                       | W_valE <- M_valE<br>W_dstE <- M_dstE = %rax                                                                                                              |
+| Writeback | W_dstE = %rdx<br>%rdx <- W_valE = 10                                                                   | W_dstE = %rax<br>%rax <- W_valE = 3                                                                   | %rax <- W_valE                                                                                                                                           |
+| PC update | $PC ← valP~=0x00a$                                                                                     | $PC ← valP~=0x014$                                                                                    | $PC ← valP~=0x018$                                                                                                                                       |
 * In cycle 6:
 	* `0x000: irmovq $10,%rdx`: Finish writeback
 	* `0x00a: irmovq $3,%rax`: Writeback stage
 		![[Pasted image 20240928225327.png|400]]
 		* about to execute:
-			* $R[\%rax] ← valE~=3$
-				* W_dstE = %rax
-				* W_valE = 3
+			* W_dstE = %rax
+			* %rax <- W_valE = 3
 	* `0x016: addq %rdx,%rax`: decode stage
 		![[Pasted image 20240928223124.png|400]]
 		* about to execute:
-			* $valA ← R[\%rdx]~=10$
-				* srcA = %rdx
-			* $valB ← R[\%rax]~=3$
-				* srcB = %rax
-				* $valB ← W\_valE~=3$
+			* $E\_valA ← R[\%rdx]$:
+			 - d_srcA = %rdx
+			 - E_valA <- d_rvalA
+			* $E\_valB ← R[\%rax]$:
+			 - d_srcB = %rax
+			 - E_valB <- W_valE - ==forwarding==
+			* E_dstE <- %rax
 	* The decode-stage logic detects that register `%rax` is the source register for operand `valB`.
 	* There is also a pending write to `%rax` on write port E. 
 	* It can therefore avoid stalling by simply using the data word supplied to port E (signal `W_valE`) as the value for operand `valB`.
