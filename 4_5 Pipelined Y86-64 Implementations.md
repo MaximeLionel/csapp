@@ -54,6 +54,8 @@
 	* In our pipelined design, there will be multiple versions of these values associated with the different instructions flowing through the system.
 	* For example, in the detailed structure of PIPE−, there are 4 white boxes labeled “Stat” that hold the status codes for four different instructions.
 	* We need to take great care to make sure we use the proper version of a signal, or else we could have serious errors, such as storing the result computed for one instruction at the destination register specified by another instruction.
+
+## Naming scheme
 * Naming scheme:
 	* We adopt a naming scheme where a signal stored in a pipeline register can be uniquely identified by **prefixing its name with that of the pipe register written in uppercase**.
 		* For example, the 4 status codes are named `D_stat`, `E_stat`, `M_stat`, and `W_stat`.
@@ -128,18 +130,20 @@
 ### Example 1 - 3 nops - No data hazard
 ![[Pasted image 20240926110638.png|500]]
 
-| Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   |
-| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
-| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | -                                                                                             |
-| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valC$                                                                             |
-| Memory    | -                                                                        | -                                                                                             |
-| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |
-| PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |
+| Stage     | OPq rA,rB                                                                | irmovq V,rB                                                                                   | 0x00a: irmovq $3,%rax                                                                         |
+| --------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Fetch     | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br><br>$valP ← PC + 2$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ | $icode :ifun ← M_1[PC]$<br>$rA :rB ← M_1[PC + 1]$<br>$valC ← M_8[PC + 2]$<br>$valP ← PC + 10$ |
+| Decode    | $valA ← R[rA]$<br>$valB ← R[rB]$                                         | -                                                                                             |                                                                                               |
+| Execute   | $valE ← valB~OP~valA$<br>$Set~CC$                                        | $valE ← 0 + valC$                                                                             |                                                                                               |
+| Memory    | -                                                                        | -                                                                                             |                                                                                               |
+| Writeback | $R[rB] ← valE$                                                           | $R[rB] ← valE$                                                                                |                                                                                               |
+| PC update | $PC ← valP$                                                              | $PC ← valP$                                                                                   |                                                                                               |
 * Details:
 	* Cycle 6: 
 		* `0x00a: irmovq $3,%rax`:  Writeback stage
 			* $R[\%rax] ← 3$
+				* W_destE = %rax
+				* W_valE = 3
 		* `0x017: addq %rdx,%rax`:  Fetch stage
 			* $icode :ifun ← M_1[0x017]$
 			* $\%rdx :\%rax ← M_1[0x018]$
