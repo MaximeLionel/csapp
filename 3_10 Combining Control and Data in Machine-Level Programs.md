@@ -328,7 +328,7 @@ Let's try to do this problem in real GDB.
 
 ## Stack Randomization
 * The idea of stack randomization is to make the position of the stack vary from one run of a program to another.
-* Stack randomization has become standard practice in Linux systems. It is one of a larger class of techniques known as **address-space layout randomization, or ASLR**.
+* Stack randomization has become standard practice in Linux systems. It is one of a larger class of techniques known as **address-space layout randomization（地址空间布局随机化）, or ASLR**.
 	* With ASLR, different parts of the program, including program code, library code, stack, global variables, and heap data, are loaded into different regions of memory each time a program is run.
 	* A program running on one machine will have very different address mappings than the same program running on other machines.
 * The following code shows a simple way to determine a “typical” stack address:
@@ -342,7 +342,7 @@ Let's try to do this problem in real GDB.
 	* This code simply prints the address of a local variable in the main function.
 	* Running the code 10,000 times on a Linux machine in 32-bit mode, the addresses ranged from 0xff7fc59c to 0xffffd09c, a range of around $2^{23}$. 
 	* Running in 64-bit mode on the newer machine, the addresses ranged from 0x7fff0001b698 to 0x7ffffffaa4a8, a range of nearly $2^{32}$.
-* `nop` sled - include a long sequence of `nop` instructions before the actual exploit code.
+* `nop` sled (nop滑梯) - include a long sequence of `nop` instructions before the actual exploit code.
 	* `nop` is short for “no operation” - Executing this instruction has no effect, other than incrementing the program counter to the next instruction.
 	* As long as the attacker can guess an address somewhere within this sequence, the program will run through the sequence and then hit the exploit code.
 	* Example: If we set up a 256-byte `nop` sled, then the randomization over $n = 2^{23}$ can be cracked by enumerating $2^{15} = 32,768$ starting addresses, which is entirely feasible for a determined attacker.

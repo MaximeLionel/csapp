@@ -43,8 +43,7 @@
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md"
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
               }
             }
           }
@@ -160,8 +159,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -174,7 +172,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "ddc0e58800788e7b",
+  "active": "3ed9e5b4077e51b8",
   "lastOpenFiles": [
     "4_3 Sequential Y86-64 Implementations.md",
     "4_5 Pipelined Y86-64 Implementations.md",
