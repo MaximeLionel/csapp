@@ -348,7 +348,7 @@ Let's try to do this problem in real GDB.
 	* Example: If we set up a 256-byte `nop` sled, then the randomization over $n = 2^{23}$ can be cracked by enumerating $2^{15} = 32,768$ starting addresses, which is entirely feasible for a determined attacker.
 
 ## Stack Corruption Detection
-* We saw in the example of the echo function below (Figure 3.40) that the corruption typically occurs when the program overruns the bounds of a local buffer.
+* We saw in the example of the echo function below that the corruption typically occurs when the program overruns the bounds of a local buffer.
 	![[image-20240612104851161.png|500]]
 * In C, there is no reliable way to prevent writing beyond the bounds of an array.
 * Recent versions of gcc incorporate a mechanism known as a **stack protector** into the generated code to detect buffer overruns.
