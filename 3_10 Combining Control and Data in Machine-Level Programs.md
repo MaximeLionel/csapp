@@ -388,12 +388,12 @@ Let's try to do this problem in real GDB.
 
 ### Setting Execute Permissions
 
-3. **Control Bits for Execution**:
+1. **Control Bits for Execution**:
     
     - **X (Execute) Bit**: Indicates if the page is executable.
     - For Intel architectures, this is often referred to as the NX (No-Execute) bit or XD (Execute Disable) bit.
     - For ARM architectures, it's known as the XN (Execute Never) bit.
-4. **Operating System Configuration**:
+2. **Operating System Configuration**:
     
     - When the operating system sets up memory pages, it configures the PTEs accordingly.
     - To mark a page as executable, the OS sets the appropriate bit (e.g., clears the NX/XD bit).
@@ -401,11 +401,11 @@ Let's try to do this problem in real GDB.
 
 ### CPU Execution and Permission Check
 
-5. **CPU Fetching an Instruction**:
+1. **CPU Fetching an Instruction**:
     
     - When the CPU fetches an instruction to execute, it translates the virtual address to a physical address using the page table.
     - The MMU reads the corresponding PTE to determine the properties of the page.
-6. **Permission Check**:
+2. **Permission Check**:
     
     - The MMU checks the Execute (X) bit in the PTE.
         - **If the X bit is set** (indicating executable), the CPU proceeds to execute the instruction.
@@ -414,18 +414,18 @@ Let's try to do this problem in real GDB.
 
 ### Hardware Support
 
-7. **Intel’s NX Bit**:
+1. **Intel’s NX Bit**:
     
     - In x86/x64 architectures, the NX bit (bit in the page table entry) marks pages as non-executable.
     - If the NX bit is set, the CPU will not execute code from that page.
-8. **ARM’s XN Bit**:
+2. **ARM’s XN Bit**:
     
     - In ARM architectures, the XN bit (Execute Never) serves the same purpose.
     - Setting the XN bit prevents execution of code on that page.
 
 ### Security Implications
 
-9. **Enhanced Security**:
+1. **Enhanced Security**:
     - This mechanism enhances security by preventing code execution in data pages, mitigating certain types of attacks like buffer overflows.
     - It allows for finer-grained control over memory access permissions, contributing to overall system stability and security.
 ### Summary
