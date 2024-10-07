@@ -373,7 +373,7 @@ Let's try to do this problem in real GDB.
 * Many systems allow control over three forms of access: read (reading data from memory), write (storing data into memory), and execute (treating the memory contents as machine-level code).
 * Some types of programs require the ability to dynamically generate and execute code, for example: “just-in-time” compilation techniques.
 * The techniques we have outlined—randomization, stack protection, and limiting which portions of memory can hold executable code—are three of the most common mechanisms used to minimize the vulnerability of programs to buffer overflow attacks.
-## Extented knowledge for `executable` access:
+## Extended knowledge for `executable` access:
 * The CPU determines if a page is executable through a combination of hardware support in the Memory Management Unit (MMU) and the operating system’s page table entries (PTEs). Here's a detailed explanation of how this process works:
 ### Memory Management Unit (MMU) and Page Tables
 
