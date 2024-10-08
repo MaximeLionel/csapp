@@ -412,16 +412,10 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 | Write back | -                                                                                         | W_dstE = %rbx<br>W_valE = $10<br>%rax <- W_valE=$10                                   | %rax ← W_valM                                                                     | %eax <- W_valE                                                                                                                             |
 
 
-* In cycle 7:
-	* `0x01e: irmovq $10,%rbx`: Memory Stage
-		![[Pasted image 20240928225548.png|400]]
-		* about to execute:
-			* 
-	* `0x028: mrmovq 0(%rdx),%rax`: Execute stage
-		![[Pasted image 20240929084824.png|400]]
-		* about to execute:
-			* $M\_valE ← E\_valB + E\_valC$
-			* $M\_desE = \%rax$
+
+| Cycle stage | 0x014: rmmovq %rcx,0(%rdx)<br>rmmovq rA, D(rB)<br>rA = %rcx<br>D  = 0<br>rB = %rdx | 0x01e: irmovq $10,%rbx<br>irmovq V,rB<br>V  = $10<br>rB = %rbx | 0x028: mrmovq 0(%rdx),%rax<br>mrmovq D(rB),rA<br>D = $0<br>rB = %rdx<br>rA = %rax | 0x032: addq %ebx,%eax<br>OPq rA,rB<br>rA = %ebx<br>rB = %eax                                                                                 |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cycle 7     | Writeback stage:<br>-                                                              | Memory stage:<br>W_valE←M_valE=$10<br>W_dstE←M_dstE=%rbx       | Execute stage:<br>M_valE←E_valB+E_valC<br>M_dstM←E_dstM=%rax                      | Decode stage:<br>E_valA←%ebx:<br> -d_srcA = %ebx<br> -E_valA←d_rvalA<br>E_valB←%eax:<br> -d_srcB = %eax<br> -E_valB←d_rvalB<br>E_dstE ← %eax |
 
 
 
