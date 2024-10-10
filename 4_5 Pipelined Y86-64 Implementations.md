@@ -439,7 +439,11 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* Load interlocks combined with forwarding suffice to handle all possible forms of data hazards. 
 
 ## Avoiding Control Hazards
+* Control hazards arise when the processor cannot reliably determine the address of the next instruction based on the current instruction in the fetch stage.
+* Control hazards can only occur in our pipelined processor for `ret` and `jump` instructions.
+	* It only causes difficulties when the direction of a conditional jump is mispredicted.
 
+### Example on `ret` instruction
 
 
 
