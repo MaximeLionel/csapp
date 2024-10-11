@@ -230,6 +230,8 @@ int sra(int x, int k) {
     int xsrl = (unsigned)x >> k; // right shift arithmetically
     unsigned w = sizeof(int) * 8; // bit width of integer
     unsigned mask = 0xFFFFFFFF << (w - k); // 0b 11...1 00...0
+    unsigned m = 1 << (w-1); // get the sign bit
+    mask &= ! (x & m) - 1;
     return xsrl | mask;
 
 }
