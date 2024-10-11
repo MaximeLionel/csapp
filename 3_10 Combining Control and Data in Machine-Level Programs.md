@@ -442,7 +442,10 @@ A. What is the approximate range of addresses?
 B. If we attempted a buffer overrun with a 128-byte `nop` sled, about how many attempts would it take to test all starting addresses?
 
 **Solution**:
-A. $2^{13}$
+A. 
+b is 0b 1011
+d is 0b 1101
+$2^{13}$
 B. 
 $128=2^7$
 Thus we only need $2^6$ attempts.
