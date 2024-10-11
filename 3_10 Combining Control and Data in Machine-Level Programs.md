@@ -443,12 +443,11 @@ B. If we attempted a buffer overrun with a 128-byte `nop` sled, about how many a
 
 **Solution**:
 A. 
-b is 0b 1011
-d is 0b 1101
+0xffffd754 - 0xffffb754 = 0x 2000
 $2^{13}$
 B. 
-$128=2^7$
-Thus we only need $2^6$ attempts.
+128 = $2^7$
+$2^{13}$ / $2^7$ = $2^6$
 
 # Practice Problem 3.48
 The functions `intlen`, `len`, and `iptoa` provide a very convoluted way to compute the number of decimal digits required to represent an integer. We will use this as a way to study some aspects of the gcc stack protector facility.

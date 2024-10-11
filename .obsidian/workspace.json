@@ -55,8 +55,7 @@
               }
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -123,7 +122,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +139,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_homework.md",
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +162,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_homework.md"
+                "file": "3_10 Combining Control and Data in Machine-Level Programs.md"
               }
             }
           }
@@ -186,10 +185,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "812a778a3a4e2316",
+  "active": "e12c23177d9b1910",
   "lastOpenFiles": [
-    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "4_5 Pipelined Y86-64 Implementations.md",
+    "2_homework.md",
+    "3_10 Combining Control and Data in Machine-Level Programs.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "3_6 Control.assets/Pasted image 20241008102934.png",
     "3_6 Control.assets/Pasted image 20240930093130.png",
@@ -213,7 +213,6 @@
     "2_2.md",
     "2_3.md",
     "2_4.md",
-    "2_homework.md",
     "3_2 Program Encodings.md",
     "3_4 Accessing Information.md",
     "3_5 Arithmetic and Logical Operations.md",
