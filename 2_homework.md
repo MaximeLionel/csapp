@@ -199,17 +199,13 @@ Fill in code for the following C functions. Function `srl` performs a logical ri
 unsigned srl(unsigned x, int k) {
     /* Perform shift arithmetically */
     unsigned xsra = (int) x >> k;
-。。。。。。
-
-
+......
 }
 
 int sra(int x, int k) {
     /* Perform shift logically */
     int xsrl = (unsigned) x >> k;
-
-. . . . . .
-
+......
 }
 ```
 
@@ -227,11 +223,13 @@ unsigned srl(unsigned x, int k) {
 
 /* Perform right shift arithmetically */
 int sra(int x, int k) {
-    int xsrl = (unsigned)x >> k; // right shift arithmetically
+    int xsrl = (unsigned)x >> k; // right shift logically
     unsigned w = sizeof(int) * 8; // bit width of integer
     unsigned mask = 0xFFFFFFFF << (w - k); // 0b 11...1 00...0
     unsigned m = 1 << (w-1); // get the sign bit
     mask &= ! (x & m) - 1;
+    // if x > 0, x&m=0, !(x & m)-1=0, mask will be 0
+    // if x < 0, x&m will be non-zero, !(x&m) will be 0, !(x & m)-1 will be -1 which makes mask keep same value.
     return xsrl | mask;
 
 }
@@ -247,7 +245,8 @@ int main()
     printf("0x80000000 right shift arithmetically for 8 bits is: 0x %X\n", sra(test1, 8));
     printf("0x80000000 right shift arithmetically for 16 bits is: 0x %X\n", sra(test1, 16));
     printf("\n");
-    printf("0x70000000 right shift arithmetically for 3 bits is: 0x %X\n", sra(test1, 3));
+    test1 = 0x70000000;
+    printf("0x70000000 right shift arithmetically for 3 bits is: 0x %08X\n", sra(test1, 3));
     return 0;
 }
 
