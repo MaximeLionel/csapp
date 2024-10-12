@@ -505,68 +505,67 @@ A. For both versions: What are the positions in the stack frame for buf, v, and 
 B. How does the rearranged ordering of the local variables in the protected code provide greater security against a buffer overrun attack?
 
 **Solution**:
+To disable gcc stack protector: `-fno-stack-protector`.
+
 A. 
-Analyze one by one.
-For unprotected version:
+(a) Without protector
 ```
 # int intlen(long x)
 # x in %rdi
 
 intlen:
-	subq $40, %rsp          # rsp-=40: extend stack
-	movq %rdi, 24(%rsp)     # *(rsp+24)=x: 
-	leaq 24(%rsp), %rsi     # rsi=rsp+24: &v
-	movq %rsp, %rdi         # rdi=rsp: buf
-	call iptoa
+	subq $40, %rsp          # rsp-=40: extend stack frame
+	movq %rdi, 24(%rsp)     # *(rsp+24)=rdi - *(rsp+24)=x: v = x
+	leaq 24(%rsp), %rsi     # rsi = rsp+24: rsi = &v
+	movq %rsp, %rdi         # rdi = rsp: buf
+	call iptoa              # iptoa(buf, &v)
 ```
-So, 
-buf = rsp
-v = \*(rsp+24)
 
-For protected version:
+buf: %rsp
+v: \*(rsp+24)
+
+(b) With protector
 ```
 # int intlen(long x)
 # x in %rdi
 
 intlen:
-	subq $56, %rsp          # rsp -= 56
-	movq %fs:40, %rax       # rax = canary value
-	movq %rax, 40(%rsp)     # *(rsp+40) = canary value
-	xorl %eax, %eax
-	movq %rdi, 8(%rsp)      # *(rsp+8) = x
-	leaq 8(%rsp), %rsi      # rsi=rsp+8: &v
-	leaq 16(%rsp), %rdi     # rdi=rsp+16: buf
-	call iptoa
+	subq $56, %rsp         # rsp-=56: extend stack frame
+	movq %fs:40, %rax      # canary value
+	movq %rax, 40(%rsp)    # *(rsp+40) = canary value
+	xorl %eax, %eax        # eax = 0
+	movq %rdi, 8(%rsp)     # *(rsp+8) = rdi - v = x
+	leaq 8(%rsp), %rsi     # rsi = rsp+8: &v
+	leaq 16(%rsp), %rdi    # rdi = rsp+16: buf
+	call iptoa             # iptoa(buf, &v)
 ```
-So,
-buf = rsp+16
-v = \*(rsp+8)
-canary value = \*(rsp+40)
+buf: rsp+16
+v: \*(rsp+8)
+canary value: \*(rsp+40)
 
 B.
+Without protector just before `call iptoa`:
 
-| Unprotected Stack | Comment |
-| ----------------- | ------- |
-| rsp+24            | &v      |
-| ...               | ...     |
-| rsp+12            | buf+12  |
-| ...               | ...     |
-| rsp               | buf     |
-For unprotected stack, if there's a buffer overrun attack, the `v` value will probably be changed.
+| Unprotected stack | Comment  |
+| ----------------- | -------- |
+| rsp + 24          | &v       |
+| ..                | ...      |
+| rsp + 11          | buf + 11 |
+| ...               | ...      |
+| rsp               | buf      |
+With protector just before `call iptoa`:
 
-| Protected Stack | Comment          |
-| --------------- | ---------------- |
-| rsp+40          | **canary value** |
-| ...             |                  |
-| rsp+28          | buf+12           |
-| ...             | ...              |
-| rsp+16          | buf              |
-| rsp+8           | &v               |
-| rsp             |                  |
-
-For protected stack, if there's a buffer overrun attack, the `v` value will never be changed. And because of canary value, if the return address is changed, it will be detected and pop up an error.
-
-
+| Protected stack | Comment |
+| --------------- | ------- |
+| ..              | ...     |
+| rsp + 27        | buf+11  |
+| ...             | ...     |
+| rsp + 16        | buf     |
+| ...             | ...     |
+| rsp + 8         | &v      |
+| ...             | ...     |
+| rsp             |         |
+When facing buffer overrun attack, the value of `v` will never be changed in Protected stack, because the address of `v` is smaller than `buf`.
 
 # 3.10.5 Supporting Variable-Size Stack Frames
 * For functions with fixed amount of local storage, the compiler can determine in advance the amount of space that must be allocated for their stack frames.
