@@ -680,59 +680,7 @@ vframe:
 	* `leave` instruction has the effect of deallocating the entire stack frame.
 * With x86-64 code, the frame pointer is used only in cases where the stack frame may be of **variable size**.
 
-## Generated assembly code in real life
-```
-# long vframe(long n, long idx, long *q)
-# n in %rdi, idx in %rsi, q in %rdx
-		.text
-        .globl  vframe
-        .type   vframe, @function
-vframe:
-        pushq   %rbp
-        movq    %rsp, %rbp         # rbp=rsp: frame pointer
-        subq    $16, %rsp          # rsp=rsp-0x10
-        movq    %rdi, %rcx         # rcx=rdi: rcx=n
-        movq    %rsi, %rdi         # rdi=rsi: rdi=idx
-        leaq    15(,%rcx,8), %rax  # rax=8*rcx+0xf: rax=8n+15
-        movq    %rax, %r8          # r8=rax: r8=8n+0xf
-        andq    $-16, %r8          # clear low 4 bits
-        andq    $-4096, %rax       # clear low 12 bits
-        movq    %rsp, %rsi         # rsi=rsp
-        subq    %rax, %rsi         # rsi=rsi-rax: rsi=rsp-(8n+15)
-.L2:
-        cmpq    %rsi, %rsp
-        je      .L3
-        subq    $4096, %rsp        # rsp=rsp-0x1000
-        orq     $0, 4088(%rsp)     # 0xFF8
-        jmp     .L2
-.L3:
-        movq    %r8, %rax
-        andl    $4095, %eax
-        subq    %rax, %rsp
-        testq   %rax, %rax
-        je      .L4
-        orq     $0, -8(%rsp,%rax)
-.L4:
-        leaq    7(%rsp), %rsi
-        movq    %rsi, %rax
-        shrq    $3, %rax
-        andq    $-8, %rsi
-        leaq    -8(%rbp), %r8
-        movq    %r8, 0(,%rax,8)
-        movq    $1, -8(%rbp)
-        jmp     .L5
-.L6:
-        movq    %rdx, (%rsi,%rax,8)
-        addq    $1, -8(%rbp)
-.L5:
-        movq    -8(%rbp), %rax
-        cmpq    %rcx, %rax
-        jl      .L6
-        movq    (%rsi,%rdi,8), %rax
-        movq    (%rax), %rax
-        leave
-        ret
-```
+
 # Practice Problem 3.49
 In this problem, we will explore the logic behind the code in lines 8–14 of Figure below, where space is allocated for variable-size array p. As the annotations of the code indicate, let us let s1 denote the address of the stack pointer after executing the `subq` instruction of line 7. This instruction allocates the space for local variable i. Let s2 denote the value of the stack pointer after executing the `subq` instruction of line 10. This instruction allocates the storage for local array p. Finally, let p denote the value assigned to registers `%r8` and `%rcx` in the instructions of lines 13–14. Both of these registers are used to reference array p. The right-hand side of Figure below diagrams the positions of the locations indicated by s1, s2, and p. It also shows that there may be an offset of e2 bytes between the values of s1 and p. This space will not be used. There may also be an offset of e1 bytes between the end of array p and the position indicated by s1.
 
