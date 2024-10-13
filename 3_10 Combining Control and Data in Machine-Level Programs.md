@@ -598,11 +598,11 @@ vframe:
 	pushq %rbp           # Save old %rbp 
 	movq %rsp, %rbp      # Set frame pointer 
 	subq $16, %rsp       # Allocate space for i (%rsp = s1) 
-	leaq 22(,%rdi,8), %rax 
-	andq $-16, %rax 
+	leaq 22(,%rdi,8), %rax # rax = 8*rdi+22
+	andq $-16, %rax        # rax = rax & -16: -16 - 0x FFFF FFFF FFFF FFF0
 	subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
-	leaq 7(%rsp), %rax 
-	shrq $3, %rax 
+	leaq 7(%rsp), %rax   # rax = rsp+7
+	shrq $3, %rax        # rax = rax >> 3
 	leaq 0(,%rax,8), %r8 # Set %r8 to &p[0] 
 	movq %r8, %rcx       # Set %rcx to &p[0] (%rcx = p) 
 	... 
@@ -625,7 +625,7 @@ vframe:
 * Sets up the stack frame:
 	```
 	pushq %rbp           # Save old %rbp 
-	movq %rsp, %rbp      # Set frame pointer 
+	movq %rsp, %rbp      # Set stack frame pointer 
 	```
 	* x86-64 code uses register `%rbp` to serve as a **frame pointer** (sometimes referred to as a base pointer).
 	* `%rbp` is a **callee-saved** register. 
@@ -636,11 +636,6 @@ vframe:
 	subq $16, %rsp
 	```
 	* Allocates 16 bytes on the stack, the first 8 of which are used to store local variable `i`, and the second 8 of which are unused.
-	* How we decide it's space for `i`? 
-	```
-	addq $1, %rax        # Increment i 
-	movq %rax, -8(%rbp)  # Store on stack 
-	```
 * Allocates space for array `p`:
 	```
 	leaq 22(,%rdi,8), %rax     # rax=8n+22
