@@ -677,7 +677,7 @@ vframe:
 
 
 # Practice Problem 3.49
-In this problem, we will explore the logic behind the code in lines 8–14 of Figure below, where space is allocated for variable-size array p. As the annotations of the code indicate, let us let s1 denote the address of the stack pointer after executing the `subq` instruction of line 7. This instruction allocates the space for local variable i. Let s2 denote the value of the stack pointer after executing the `subq` instruction of line 10. This instruction allocates the storage for local array p. Finally, let p denote the value assigned to registers `%r8` and `%rcx` in the instructions of lines 13–14. Both of these registers are used to reference array p. The right-hand side of Figure below diagrams the positions of the locations indicated by s1, s2, and p. It also shows that there may be an offset of e2 bytes between the values of s1 and p. This space will not be used. There may also be an offset of e1 bytes between the end of array p and the position indicated by s1.
+In this problem, we will explore the logic behind the code in lines 8–14 of Figure below, where space is allocated for variable-size array `p`. As the annotations of the code indicate, let us let `s1` denote the address of the stack pointer after executing the `subq` instruction of line 7. This instruction allocates the space for local variable i. Let `s2` denote the value of the stack pointer after executing the `subq` instruction of line 10. This instruction allocates the storage for local array p. Finally, let `p` denote the value assigned to registers `%r8` and `%rcx` in the instructions of lines 13–14. Both of these registers are used to reference array `p`. The right-hand side of Figure below diagrams the positions of the locations indicated by `s1`, `s2`, and `p`. It also shows that there may be an offset of `e2` bytes between the values of `s1` and `p`. This space will not be used. There may also be an offset of `e1` bytes between the end of array `p` and the position indicated by `s1`.
 
 ```
 	# long vframe(long n, long idx, long *q)
@@ -712,67 +712,77 @@ vframe:
 ```
 ![[image-20240614215310752.png|300]]
 
-A. Explain, in mathematical terms, the logic in the computation of s2 on lines 8–10. Hint: Think about the bit-level representation of −16 and its effect in the `andq` instruction of line 9.
+A. Explain, in mathematical terms, the logic in the computation of `s2` on lines 8–10. Hint: Think about the bit-level representation of `−16` and its effect in the `andq` instruction of line 9.
 
-B. Explain, in mathematical terms, the logic in the computation of p on lines 11–13. Hint: You may want to refer to the discussion on division by powers of 2 in Section 2.3.7.
+B. Explain, in mathematical terms, the logic in the computation of `p` on lines 11–13. Hint: You may want to refer to the discussion on division by powers of 2 in Section 2.3.7.
 
-C. For the following values of n and s1, trace the execution of the code to determine what the resulting values would be for s2, p, e1, and e2.
+C. For the following values of `n` and `s1`, trace the execution of the code to determine what the resulting values would be for `s2`, `p`, `e1`, and `e2`.
 
 |  n  |  s1  | s2  |  p  | e1  | e2  |
 | :-: | :--: | :-: | :-: | :-: | :-: |
 |  5  | 2065 |     |     |     |     |
 |  6  | 2064 |     |     |     |     |
 
-D. We can see that s2 is computed in a way that preserves whatever offset s1 has with the nearest multiple of 16. We can also see that p will be aligned on a multiple of 8, as is recommended for an array of 8-byte elements.
+D. What alignment properties does this code guarantee for the values of `s2` and `p`?
+
+
 
 **Solution**:
 A. 
-Firstly, -16 = 0x FFFF FFFF FFFF FFF0
-Then, `andq $-16, %rax` is to clear the last 4 bits, to meet 16 bytes' alignment.
-Next, from `leaq 22(,%rdi,8), %rax`, we get `rax=8n+22`.
-So, it's to clear last 4 bits of `rax=8n+22`.
-Therefore, `subq %rax, %rsp` is to subtract from s1 to s2 on stack.
+-16 = 0x FFFF FFFF FFFF FFF0
+`andq $-16, %rax` will clear low 4 bits of %rax.
+```
+leaq 22(,%rdi,8), %rax   # rax = 8n + 22
+andq $-16, %rax          # rax = -16 & rax = -16 & (8n + 22)
+subq %rax, %rsp      # Allocate space for array p (%rsp = s2) 
+                     # extend the stack pointer from s1 to s2 to store the array p
+```
 
 B.
 ```
-leaq 7(%rsp), %rax   # rax=rsp+7
-shrq $3, %rax        # rax=rax>>3
-leaq 0(,%rax,8), %r8 # r8 =8*rax: Set %r8 to &p[0] 
+leaq 7(%rsp), %rax     # rax = rsp + 7
+shrq $3, %rax          # rax = rax >> 3
+leaq 0(,%rax,8), %r8   # Set %r8 to &p[0] 
+					   # r8 = 8*rax
 ```
-so this 3 lines will round up to multiples of 8, which means to p in figure.
+
+This is to make sure that the first element of p (p[0]) starting from an address which is multiple of 8.
 
 C.
-if n = 5, 
-`leaq 22(,%rdi,8), %rax`: rax=8n+22=62
-`andq $-16, %rax`: rax=48
-`subq %rax, %rsp`: s2 = s1 - 48 = 2017
-`leaq 7(%rsp), %rax`: rax = 2024
-`shrq $3, %rax`: rax = 253
-`leaq 0(,%rax,8), %r8`: r8 = 2024
-e2 = p - s2 = 7
-e1 = s1 - (p+8\*n) = 2065 - (2024 + 40) = 1
 
 |  n  |  s1  |  s2  |  p   | e1  | e2  |
 | :-: | :--: | :--: | :--: | :-: | :-: |
 |  5  | 2065 | 2017 | 2024 |  1  |  7  |
 |  6  | 2064 | 2000 | 2000 | 16  |  0  |
-if n = 6,
-`leaq 22(,%rdi,8), %rax`: rax=8n+22=70
-`andq $-16, %rax`: rax=64
-`subq %rax, %rsp`: s2 = s1 - 64 = 2000
-`leaq 7(%rsp), %rax`: rax = 2007
-`shrq $3, %rax`: rax = 250
-`leaq 0(,%rax,8), %r8`: r8 = 2000
-e2 = p - s2 = 0
-e1 = s1 - (p+8\*n) = 2064 - (2000 + 48) = 16
+
+When n = 5, and s1 = 2065
+```
+	leaq 22(,%rdi,8), %rax   # rax = 8n + 22 = 62
+	andq $-16, %rax          # rax = 62 & (-16) = 48
+	subq %rax, %rsp          # rsp = s2 = 2065 - 48 = 2017 - s2
+	leaq 7(%rsp), %rax       # rax = 2017 + 7 = 2024
+	shrq $3, %rax            # rax = 2024/8 = 253
+	leaq 0(,%rax,8), %r8     # r8 = rax*8 = 2024 - &p[0]
+	movq %r8, %rcx       
+```
+
+	e1 = s1 - (8\*n + p) = 2065 - 40 - 2024 = 1
+
+When n = 6, and s1 = 2064
+
+```
+	leaq 22(,%rdi,8), %rax   # rax = 8n + 22 = 70
+	andq $-16, %rax          # rax = 70 & (-16) = 64
+	subq %rax, %rsp          # rsp = s2 = 2064 - 64 = 2000 : s2
+	leaq 7(%rsp), %rax       # rax = 2007
+	shrq $3, %rax            # rax = 2007/8
+	leaq 0(,%rax,8), %r8     # r8 = rax*8 = 2000 : &p[0]
+	movq %r8, %rcx       
+```
+
+	e1 = s1 - (8\*n + p) = 2064 - 48 - 2000 = 16
 
 
-
-
-
-
-
-
-
-
-
+D.
+s2 - make sure to allocate the space with size of multiple of 16, which also can store the whole p array.
+p - alignment of multiple of 8, because each element size of p is 8 bytes.
