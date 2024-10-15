@@ -522,6 +522,10 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	0x016: | target:
 	0x016: ff | .byte 0xFF                        # Invalid instruction code
 	```
+	* In this program, the pipeline will predict that the branch should be taken, and so it will fetch and attempt to use a byte with value 0xFF as an instruction. 
+	* The decode stage will therefore detect an invalid instruction exception. 
+	* Later, the pipeline will discover that the branch should not be taken, and so the instruction at address 0x016 should never even have been fetched. 
+	* The pipeline control logic will cancel this instruction, but we want to avoid raising an exception.
 
 
 
