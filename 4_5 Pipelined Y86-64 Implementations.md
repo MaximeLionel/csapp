@@ -464,14 +464,29 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 * The logic to handle `ret`:
 	* The `ret` instruction is fetched during cycle 3 and proceeds down the pipeline, reaching the write-back stage in cycle 7. 
 	* While `ret` passes through the decode, execute, and memory stages, the pipeline cannot do any useful activity. 
-	* Instead, we want to inject 3 bubbles into the pipeline. Once the ret instruction reaches the write-back stage, the PC selection logic will set the
-program counter to the return address, and therefore the fetch stage will fetch the
-irmovq instruction at the return point (address 0x013).
+	* Instead, we want to inject 3 bubbles into the pipeline. Once the ret instruction reaches the write-back stage, the PC selection logic will set the **program counter** to the **return address**, and therefore the fetch stage will fetch the `irmovq` instruction at the return point (address 0x013).
 
+### Example mispredicted branch (conditional jump)
 
+```
+0x000: xorq %rax,%rax
+0x002: jne target      # Not taken
+0x00b: irmovq $1, %rax # Fall through
+0x015: halt
+0x016: target:
+0x016: irmovq $2, %rdx # Target
+0x020: irmovq $3, %rbx # Target+1
+0x02a: halt
+```
 
-
-
+![[Pasted image 20241015135352.png|500]]
+* The instructions are listed in the order they enter the pipeline, rather than the order they occur in the program.
+* Since the jump instruction is **predicted as being taken**, the instruction at the jump target will be fetched in cycle 3, and the instruction following this one will be fetched in cycle 4.
+* In cycle 4, the branch logic detects that the jump should not be taken, 2 instructions have been fetched that should not continue being executed.
+	* Fortunately, neither of these instructions has caused a change in the programmer-visible state.
+* In cycle 5, the pipeline can simply **cancel** (sometimes called instruction squashing 指令排除) the 2 misfetched instructions by injecting bubbles into the decode and execute stages on the following cycle while also fetching the instruction following the jump instruction.
+	* The 2 misfetched instructions will then simply disappear from the pipeline and therefore not have any effect on the programmer-visible state. 
+	* The only drawback is that 2 clock cycles’ worth of instruction processing capability have been wasted.
 
 
 
