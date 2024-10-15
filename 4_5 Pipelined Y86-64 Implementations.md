@@ -487,6 +487,15 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 * In cycle 5, the pipeline can simply **cancel** (sometimes called instruction squashing 指令排除) the 2 misfetched instructions by injecting bubbles into the decode and execute stages on the following cycle while also fetching the instruction following the jump instruction.
 	* The 2 misfetched instructions will then simply disappear from the pipeline and therefore not have any effect on the programmer-visible state. 
 	* The only drawback is that 2 clock cycles’ worth of instruction processing capability have been wasted.
+* For control hazards, techniques such as stalling and injecting bubbles into the pipeline dynamically adjust the pipeline flow when special conditions arise.
+
+# 4.5.6 Exception Handling
+* A variety of activities in a processor can lead to **exceptional control flow**, where the normal chain of program execution gets broken.
+	* Exceptions can be generated either **internally**, by the executing program, or **externally**, by some outside signal.
+* Our instruction set architecture includes 3 different internally generated exceptions, caused by:
+	1. a `halt` instruction
+	2. an instruction with an invalid combination of instruction and function code
+	3. an attempt to access an invalid address, either for instruction fetch or data read or write
 
 
 
