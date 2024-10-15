@@ -445,9 +445,28 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 
 ### Example on `ret` instruction
 
+```
+0x000: irmovq stack,%rsp # Initialize stack pointer
+0x00a: call proc         # Procedure call
+0x013: irmovq $10,%rdx   # Return point
+0x01d: halt
+0x020: .pos 0x20
+0x020: proc:             # proc:
+0x020: ret               # Return immediately
+0x021: rrmovq %rdx,%rbx  # Not executed
+0x030: .pos 0x30
+0x030: stack:            # stack: Stack pointer
+```
 
+![[Pasted image 20241015085855.png|550]]
 
-
+* Unlike before, the instructions are not listed in the same order they occur in the program, since this program involves a control flow where instructions are not executed in a linear sequence.
+* The logic to handle `ret`:
+	* The `ret` instruction is fetched during cycle 3 and proceeds down the pipeline, reaching the write-back stage in cycle 7. 
+	* While `ret` passes through the decode, execute, and memory stages, the pipeline cannot do any useful activity. 
+	* Instead, we want to inject 3 bubbles into the pipeline. Once the ret instruction reaches the write-back stage, the PC selection logic will set the
+program counter to the return address, and therefore the fetch stage will fetch the
+irmovq instruction at the return point (address 0x013).
 
 
 
