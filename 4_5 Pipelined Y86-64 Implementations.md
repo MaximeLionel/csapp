@@ -500,11 +500,28 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 * **Excepting instruction** - the instruction causing the exception.
 * It should appear that all instructions up to the excepting instruction have completed, but none of the following instructions should have any effect on the programmer-visible state.
 ## Subtleties on exception handling
-### Multiple Instructions Simultaneously
+* In a pipelined system, exception handling involves several subtleties.
+### 1st subtlety - Multiple Instructions Simultaneously
 
 * It is possible to have exceptions triggered by **multiple** instructions simultaneously.
 * For example:
-	* During one cycle of pipeline operation, we could have a `halt` instruction in the fetch stage, and the data memory could report an out-of-bounds data address for the instruction in the memory stage.
+	* During one cycle of pipeline operation, we could have a `halt` instruction in the **fetch** stage, and the data memory could report an out-of-bounds data address for the instruction in the **memory** stage.
+	* We must determine which of these exceptions the processor should report to the operating system.
+	* The basic rule is to **put priority on the exception triggered by the instruction that is furthest along the pipeline**.
+	* In this example, this would be the out-of-bounds address attempted by the instruction in the **memory** stage.
+	* In terms of the machine-language program, the instruction in the memory stage should appear to execute before one in the fetch stage, and therefore only this exception should be reported to the operating system.
+
+### 2nd subtlety - instruction canceled due to a mispredicted branch
+* A second subtlety occurs when an instruction is first fetched and begins execution, causes an exception, and later is canceled due to a mispredicted branch.
+* Example:
+	```
+	0x000: 6300 | xorq %rax,%rax
+	0x002: 741600000000000000 | jne target        # Not taken
+	0x00b: 30f00100000000000000 | irmovq $1, %rax # Fall through
+	0x015: 00 | halt
+	0x016: | target:
+	0x016: ff | .byte 0xFF                        # Invalid instruction code
+	```
 
 
 
