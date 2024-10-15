@@ -496,6 +496,15 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	1. a `halt` instruction
 	2. an instruction with an invalid combination of instruction and function code
 	3. an attempt to access an invalid address, either for instruction fetch or data read or write
+* A more complete processor design would also handle external exceptions, such as when the processor receives a signal that the network interface has received a new packet or the user has clicked a mouse button.
+* **Excepting instruction** - the instruction causing the exception.
+* It should appear that all instructions up to the excepting instruction have completed, but none of the following instructions should have any effect on the programmer-visible state.
+## Subtleties on exception handling
+### Multiple Instructions Simultaneously
+
+* It is possible to have exceptions triggered by **multiple** instructions simultaneously.
+* For example:
+	* During one cycle of pipeline operation, we could have a `halt` instruction in the fetch stage, and the data memory could report an out-of-bounds data address for the instruction in the memory stage.
 
 
 
