@@ -544,6 +544,16 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* At this point, the pipeline control logic detects the occurrence of the exception and stops execution. 
 * To avoid having any updating of the programmer-visible state by instructions beyond the excepting instruction, the pipeline control logic must **disable** any updating of the condition code register or the data memory when an instruction in the memory or write-back stages has caused an exception.
 	* In the example program above, the control logic will detect that the `pushq` in the memory stage has caused an exception, and therefore the updating of the condition code register by the `addq` instruction in the execute stage will be disabled.
+* Details of this method of handling exceptions deals with the subtleties we have mentioned:
+	* When an exception occurs in one or more stages of a pipeline, the information is simply stored in the status fields of the **pipeline registers**. 
+	* The event has no effect on the flow of instructions in the pipeline until an excepting instruction reaches the final pipeline stage, except to disable any updating of the programmer-visible state (the condition code register and the memory) by later instructions in the pipeline. 
+	* Since instructions reach the write-back stage in the same order as they would be executed in a nonpipelined processor, we are guaranteed that the first instruction encountering an exception will arrive first in the write-back stage, at which point program execution can stop and the status code in pipeline register W can be recorded as the program status. 
+	* If some instruction is fetched but later canceled, any exception status information about the instruction gets canceled as well. 
+	* No instruction following one that causes an exception can alter the programmer-visible state. 
+	* The simple rule of carrying the exception status together with all other information about an instruction through the pipeline provides a simple and reliable mechanism for handling exceptions.
+
+# 4.5.7 PIPE Stage Implementations
+
 
 
 
