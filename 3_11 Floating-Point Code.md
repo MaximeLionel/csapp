@@ -46,7 +46,7 @@ float float_mov(float v1, float *src, float *dst) {
 	return v2;
 }
 ```
-* Reversed assembly code:
+* Assembly code:
 	```
 	# float float_mov(float v1, float *src, float *dst)
 	# v1 in %xmm0, src in %rdi, dst in %rsi
