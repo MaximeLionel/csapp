@@ -527,7 +527,18 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* Later, the pipeline will discover that the branch should not be taken, and so the instruction at address 0x016 should never even have been fetched. 
 	* The pipeline control logic will cancel this instruction, but we want to avoid raising an exception.
 
-
+### 3rd subtlety
+* Reason - a 3rd subtlety arises because a pipelined processor updates different parts of the system state in different stages. It is possible for an instruction following one causing an exception to alter some part of the state before the excepting instruction completes.
+* Example:
+	```
+	irmovq $1,%rax
+	xorq   %rsp,%rsp       # Set stack pointer to 0 and CC to 100
+	pushq  %rax            # Attempt to write to 0xfffffffffffffff8
+	addq   %rax,%rax       # (Should not be executed) Would set CC to 000
+	```
+	* The `pushq` instruction causes an address exception, because decrementing the stack pointer causes it to wrap around to 0xfffffffffffffff8.
+	* This exception is detected in the memory stage. On the same cycle, the `addq` instruction is in the execute stage, and it will cause the condition codes to be set to new values.
+	* This would **violate** our requirement that none of the instructions following the excepting instruction should have had any effect on the system state.
 
 
 
