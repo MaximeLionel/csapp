@@ -539,6 +539,11 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* The `pushq` instruction causes an address exception, because decrementing the stack pointer causes it to wrap around to 0xfffffffffffffff8.
 	* This exception is detected in the memory stage. On the same cycle, the `addq` instruction is in the execute stage, and it will cause the condition codes to be set to new values.
 	* This would **violate** our requirement that none of the instructions following the excepting instruction should have had any effect on the system state.
+* Logically, if an instruction generates an exception at some stage in its processing, the status field is set to indicate the nature of the exception. 
+	* The exception status propagates through the pipeline with the rest of the information for that instruction, until it reaches the write-back stage. 
+	* At this point, the pipeline control logic detects the occurrence of the exception and stops execution. 
+* To avoid having any updating of the programmer-visible state by instructions beyond the excepting instruction, the pipeline control logic must **disable** any updating of the condition code register or the data memory when an instruction in the memory or write-back stages has caused an exception.
+	* In the example program above, the control logic will detect that the `pushq` in the memory stage has caused an exception, and therefore the updating of the condition code register by the `addq` instruction in the execute stage will be disabled.
 
 
 
