@@ -553,9 +553,29 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* The simple rule of carrying the exception status together with all other information about an instruction through the pipeline provides a simple and reliable mechanism for handling exceptions.
 
 # 4.5.7 PIPE Stage Implementations
+![[Pasted image 20240929102830.png|450]]
+* In this section, we go through the design of the different logic blocks, deferring the design of the pipeline control logic to the next section. 
+* Many of the logic blocks are identical to their counterparts in SEQ and SEQ+, except that we must choose proper versions of the different signals from the pipeline registers (written with the pipeline register name, written in uppercase, as a prefix) or from the stage computations (written with the first character of the stage name, written in lowercase, as a prefix).
+* Compare the HCL code for the logic that generates the `srcA` signal in SEQ to the corresponding code in PIPE:
+	```
+	# Code from SEQ
+	word srcA = [
+		icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;
+		icode in { IPOPQ, IRET } : RRSP;
+		1 : RNONE; # Don’t need register
+	];
+	# Code from PIPE
+	word d_srcA = [
+		D_icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : D_rA;
+		D_icode in { IPOPQ, IRET } : RRSP;
+		1 : RNONE; # Don’t need register
+	];
+	```
+	* D_ for the source values, to indicate that the signals come from pipeline register D. 
+	* d_ for the result value, to indicate that it is generated in the decode stage.
 
-
-
+## PC Selection and Fetch Stage
+![[Pasted image 20241016155318.png|500]]
 
 
 
