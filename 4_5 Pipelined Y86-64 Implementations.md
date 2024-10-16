@@ -527,9 +527,55 @@ Signal `←` means the operation will be finished on the start of next cycle as 
 	* Later, the pipeline will discover that the branch should not be taken, and so the instruction at address 0x016 should never even have been fetched. 
 	* The pipeline control logic will cancel this instruction, but we want to avoid raising an exception.
 
+### 3rd subtlety
+* Reason - a 3rd subtlety arises because a pipelined processor updates different parts of the system state in different stages. It is possible for an instruction following one causing an exception to alter some part of the state before the excepting instruction completes.
+* Example:
+	```
+	irmovq $1,%rax
+	xorq   %rsp,%rsp       # Set stack pointer to 0 and CC to 100
+	pushq  %rax            # Attempt to write to 0xfffffffffffffff8
+	addq   %rax,%rax       # (Should not be executed) Would set CC to 000
+	```
+	* The `pushq` instruction causes an address exception, because decrementing the stack pointer causes it to wrap around to 0xfffffffffffffff8.
+	* This exception is detected in the memory stage. On the same cycle, the `addq` instruction is in the execute stage, and it will cause the condition codes to be set to new values.
+	* This would **violate** our requirement that none of the instructions following the excepting instruction should have had any effect on the system state.
+* Logically, if an instruction generates an exception at some stage in its processing, the status field is set to indicate the nature of the exception. 
+	* The exception status propagates through the pipeline with the rest of the information for that instruction, until it reaches the write-back stage. 
+	* At this point, the pipeline control logic detects the occurrence of the exception and stops execution. 
+* To avoid having any updating of the programmer-visible state by instructions beyond the excepting instruction, the pipeline control logic must **disable** any updating of the condition code register or the data memory when an instruction in the memory or write-back stages has caused an exception.
+	* In the example program above, the control logic will detect that the `pushq` in the memory stage has caused an exception, and therefore the updating of the condition code register by the `addq` instruction in the execute stage will be disabled.
+* Details of this method of handling exceptions deals with the subtleties we have mentioned:
+	* When an exception occurs in one or more stages of a pipeline, the information is simply stored in the status fields of the **pipeline registers**. 
+	* The event has no effect on the flow of instructions in the pipeline until an excepting instruction reaches the final pipeline stage, except to disable any updating of the programmer-visible state (the condition code register and the memory) by later instructions in the pipeline. 
+	* Since instructions reach the write-back stage in the same order as they would be executed in a nonpipelined processor, we are guaranteed that the first instruction encountering an exception will arrive first in the write-back stage, at which point program execution can stop and the status code in pipeline register W can be recorded as the program status. 
+	* If some instruction is fetched but later canceled, any exception status information about the instruction gets canceled as well. 
+	* No instruction following one that causes an exception can alter the programmer-visible state. 
+	* The simple rule of carrying the exception status together with all other information about an instruction through the pipeline provides a simple and reliable mechanism for handling exceptions.
 
+# 4.5.7 PIPE Stage Implementations
+![[Pasted image 20240929102830.png|450]]
+* In this section, we go through the design of the different logic blocks, deferring the design of the pipeline control logic to the next section. 
+* Many of the logic blocks are identical to their counterparts in SEQ and SEQ+, except that we must choose proper versions of the different signals from the pipeline registers (written with the pipeline register name, written in uppercase, as a prefix) or from the stage computations (written with the first character of the stage name, written in lowercase, as a prefix).
+* Compare the HCL code for the logic that generates the `srcA` signal in SEQ to the corresponding code in PIPE:
+	```
+	# Code from SEQ
+	word srcA = [
+		icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : rA;
+		icode in { IPOPQ, IRET } : RRSP;
+		1 : RNONE; # Don’t need register
+	];
+	# Code from PIPE
+	word d_srcA = [
+		D_icode in { IRRMOVQ, IRMMOVQ, IOPQ, IPUSHQ } : D_rA;
+		D_icode in { IPOPQ, IRET } : RRSP;
+		1 : RNONE; # Don’t need register
+	];
+	```
+	* D_ for the source values, to indicate that the signals come from pipeline register D. 
+	* d_ for the result value, to indicate that it is generated in the decode stage.
 
-
+## PC Selection and Fetch Stage
+![[Pasted image 20241016155318.png|500]]
 
 
 

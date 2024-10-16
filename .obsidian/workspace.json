@@ -43,7 +43,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -110,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_11 Floating-Point Code.md"
+                "file": "4_5 Pipelined Y86-64 Implementations.md"
               }
             }
           }
@@ -159,8 +160,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -169,14 +169,16 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "table-editor-obsidian:Advanced Tables Toolbar": false
+      "command-palette:Open command palette": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
-    "3_2 Program Encodings.md",
+    "assets/Pasted image 20241016155318.png",
+    "HCL.pdf",
+    "HCL.pdf.crdownload",
     "3_11 Floating-Point Code.md",
+    "3_2 Program Encodings.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "assets/Pasted image 20241015135352.png",
     "assets/Pasted image 20241015085855.png",
@@ -217,8 +219,6 @@
     "3_9 Heterogeneous Data Structures.assets",
     "3_8 Array Allocation and Access.assets",
     "Untitled.canvas",
-    "3_7 Procedures.assets",
-    "3_6 Control.assets",
-    "2_homework.assets/hw2_97"
+    "3_7 Procedures.assets"
   ]
 }
