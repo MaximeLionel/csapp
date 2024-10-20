@@ -1,4 +1,11 @@
 {
   "attachmentFolderPath": "./assets",
-  "autoConvertHtml": false
+  "autoConvertHtml": false,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "A4",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  }
 }
