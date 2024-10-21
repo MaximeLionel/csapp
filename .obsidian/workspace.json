@@ -123,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_1_0.md",
+                "file": "2_1 Information Storage.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_1_0.md",
+                "file": "2_1 Information Storage.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +163,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_1_0.md"
+                "file": "2_1 Information Storage.md"
               }
             }
           }
@@ -223,10 +223,12 @@
       }
     ]
   },
-  "active": "e01c3e55e55002dc",
+  "active": "650a77cd13aad93f",
   "lastOpenFiles": [
-    "2_1 Information Storage.md",
+    "assets/Pasted image 20241021232916.png",
+    "assets/Pasted image 20241021231815.png",
     "2_1_0.md",
+    "2_1 Information Storage.md",
     "conflict-files-obsidian-git.md",
     "3_11 Floating-Point Code.md",
     "Untitled.md",
@@ -256,12 +258,10 @@
     "3_6 Control.assets/Pasted image 20240929084824.png",
     "3_6 Control.assets/Pasted image 20240928231833.png",
     "3_6 Control.assets/Pasted image 20240928225548.png",
-    "3_6 Control.assets/Pasted image 20240928225327.png",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
     "4_4 General Principles of Pipelining.md",
     "3_8 Array Allocation and Access.md",
-    "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "3_homework.assets",
