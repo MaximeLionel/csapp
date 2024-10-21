@@ -613,11 +613,87 @@ Step3		  b     a
 ```
 
 # Practice Problem 2.11
+Armed with the function `inplace_swap` from Problem 2.10, you decide to write code that will reverse the elements of an array by swapping elements from opposite
+ends of the array, working toward the middle.
+
+You arrive at the following function:
+```c
+void reverse_array(int a[], int cnt) {
+	int first, last;
+	for(first = 0, last = cnt - 1; first <= last;first++,last--)
+    inplace_swap(&a[first], &a[last]);
+}
+```
+
+When you apply your function to an array containing elements 1, 2, 3, and 4, you find the array now has, as expected, elements 4, 3, 2, and 1. When you try it on an array with elements 1, 2, 3, 4, and 5, however, you are surprised to see that the array now has elements 5, 4, 0, 2, and 1. In fact, you discover that the code always works correctly on arrays of even length, but it sets the middle element to 0 whenever the array has odd length.
+
+A. For an array of odd length cnt = 2k + 1, what are the values of variables first and last in the final iteration of function reverse_array?
+
+B. Why does this call to function `inplace_swap` set the array element to 0?
+
+C. What simple modiﬁcation to the code for reverse_array would eliminate this problem?
+
+**Solution**:
+```c
+#include<stdio.h>
+
+void inplace_swap(int* x, int* y)
+{
+	*y = *x ^ *y;
+	*x = *x ^ *y;
+	*y = *x ^ *y;
+}
+
+void reverse_array(int a[], int cnt)
+{
+	int first, last;
+	for(first = 0, last = cnt - 1; first <= last; first++, last--)
+		inplace_swap(&a[first],&a[last]);
+}
 
 
+int main()
+{
+	int test[] = {0,1,2,3,4};
+	reverse_array(test,5);
+	for(int i = 0; i < sizeof(test)/sizeof(test[0]);i++)
+		printf("%d ",test[i]);
+	return 0;
+}
+```
 
+```
+gdb debugging:
+gcc -g test.c -o test	// add debugging symbols to test program
+gdb test	// start gdb to debug test program
+l 1,26	// list the code from line 1 to 26
+b 14		// add breakpoint on line 14
+r				// start run the code from first line
+p test[2]	// check variable content while hit breakpoint
+```
 
+![[./2_1.assets/Screenshot 2023-10-12 at 17.27.39.png|500]]
 
+B.
+![[./2_1.assets/Screenshot 2023-10-12 at 17.44.00.png|500]]
+
+So \*x ^ \*y = 0, which make it wrong result!
+
+C.
+==first <= last== ->==first < last==
+
+```c
+void reverse_array(int a[], int cnt)
+{
+	int first, last;
+	for(first = 0, last = cnt - 1; first < last; first++, last--)
+		inplace_swap(&a[first],&a[last]);
+}
+```
+
+* One common use of bit-level operations is to implement ==masking operations==, where a mask is a bit pattern that indicates a selected set of bits within a word. 
+	* The mask 0xFF indicates the low-order byte of a word. The bit-level operation x & 0xFF yields a value consisting of the least significant byte of x, but with all other bytes set to 0.
+	* with x = 0x89ABCDEF, the expression would yield 0x000000EF.
 
 
 
