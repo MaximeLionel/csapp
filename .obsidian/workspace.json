@@ -186,11 +186,49 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
+  "floating": {
+    "id": "9074c575e5abf56d",
+    "type": "floating",
+    "children": [
+      {
+        "id": "7607d4bbbd9a4313",
+        "type": "window",
+        "children": [
+          {
+            "id": "35aeee013f210e6c",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "650a77cd13aad93f",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "2_1 Information Storage.md",
+                    "mode": "source",
+                    "source": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 543,
+        "y": 39,
+        "width": 801,
+        "height": 745,
+        "maximize": false,
+        "zoom": 3
+      }
+    ]
+  },
   "active": "e01c3e55e55002dc",
   "lastOpenFiles": [
-    "3_11 Floating-Point Code.md",
-    "2_1_0.md",
     "2_1 Information Storage.md",
+    "2_1_0.md",
+    "conflict-files-obsidian-git.md",
+    "3_11 Floating-Point Code.md",
     "Untitled.md",
     "2_2.md",
     "4_5 Pipelined Y86-64 Implementations.md",
@@ -222,7 +260,6 @@
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
     "4_4 General Principles of Pipelining.md",
-    "conflict-files-obsidian-git.md",
     "3_8 Array Allocation and Access.md",
     "4_2 Logic Design and the Hardware Control Language HCL4.md",
     "3_6 Control.assets/Y86-64.htm",
