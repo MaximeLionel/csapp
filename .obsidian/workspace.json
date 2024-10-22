@@ -37,26 +37,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_5 Pipelined Y86-64 Implementations.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "e01c3e55e55002dc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2_1_0.md",
+                "file": "2_2 Integral Data Types.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -123,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_1 Information Storage.md",
+                "file": "2_2 Integral Data Types.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_1 Information Storage.md",
+                "file": "2_2 Integral Data Types.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_1 Information Storage.md"
+                "file": "2_2 Integral Data Types.md"
               }
             }
           }
@@ -172,8 +160,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,53 +173,18 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "floating": {
-    "id": "9074c575e5abf56d",
-    "type": "floating",
-    "children": [
-      {
-        "id": "7607d4bbbd9a4313",
-        "type": "window",
-        "children": [
-          {
-            "id": "35aeee013f210e6c",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "650a77cd13aad93f",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "2_1 Information Storage.md",
-                    "mode": "source",
-                    "source": false
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 543,
-        "y": 39,
-        "width": 801,
-        "height": 745,
-        "maximize": false,
-        "zoom": 3
-      }
-    ]
-  },
-  "active": "650a77cd13aad93f",
+  "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
+    "3_11 Floating-Point Code.md",
+    "2_2 Integral Data Types.md",
+    "2_3.md",
+    "2_1 Information Storage.md",
+    "2_1_0.md",
+    "assets/Pasted image 20241022083923.png",
     "assets/Pasted image 20241021232916.png",
     "assets/Pasted image 20241021231815.png",
-    "2_1_0.md",
-    "2_1 Information Storage.md",
     "conflict-files-obsidian-git.md",
-    "3_11 Floating-Point Code.md",
     "Untitled.md",
-    "2_2.md",
     "4_5 Pipelined Y86-64 Implementations.md",
     "2_0.md",
     "1_9.md",
@@ -256,8 +208,6 @@
     "3_6 Control.assets/Pasted image 20240930093130.png",
     "3_6 Control.assets/Pasted image 20240929102830.png",
     "3_6 Control.assets/Pasted image 20240929084824.png",
-    "3_6 Control.assets/Pasted image 20240928231833.png",
-    "3_6 Control.assets/Pasted image 20240928225548.png",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
     "4_4 General Principles of Pipelining.md",

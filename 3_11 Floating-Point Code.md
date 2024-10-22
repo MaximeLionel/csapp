@@ -93,9 +93,9 @@ float float_mov(float v1, float *src, float *dst) {
 	vcvtps2pd %xmm0, %xmm0                    # Convert two vector elements to double
 	```
 	* `vunpcklps` instruction is normally used to interleave the values in two XMM registers and store them in a third.
-		* Example - if register `%src0` contains words `[s3, s2, s1, s0]` and the other register `src1` contains words `[d3, d2, d1, d0]`, then after `vunpcklps %src0, %src1, %dest`, the value of the destination register `dest` will be `[s1, d1, s0, d0]`.
+		* Example - if register `%src0` (128bits, same as xmm) contains words `[s3, s2, s1, s0]` and the other register `%src1` contains words `[d3, d2, d1, d0]`, then after `vunpcklps %src0, %src1, %dest`, the value of the destination register `dest` will be `[s1, d1, s0, d0]`.
 		* So, if the original register `%xmm0` held values `[x3, x2, x1, x0]`, then after `vunpcklps %xmm0, %xmm0, %xmm0`, the instruction will update the register to hold values `[x1, x1, x0, x0]`.
-			* Please notice that x0,x1,x2 and x3 are all single precision value.
+			* Please notice that x0,x1,x2 and x3 are all single precision value (32bits).
 	* `vcvtps2pd` instruction expands the two low-order singleprecision values in the source XMM register to be the two double-precision values in the destination XMM register.
 		* If the original register `%xmm0` held values `[x3, x2, x1, x0]`, then after `vcvtps2pd %xmm0, %xmm0`, `%xmm0` will be `[dx0,dx0]`, while `dx0` is the result of converting `x` to double precision.
 	* Therefore, suppose `%xmm0` held values `[x3, x2, x1, x0]`, the `%xmm0` value will update as below:
@@ -125,7 +125,9 @@ vcvtsd2ss %xmm0, %xmm0, %xmm0
 	```c
 	double fcvt(int i, float *fp, double *dp, long *lp)
 	{
-		float f = *fp; double d = *dp; long l = *lp;
+		float f = *fp; 
+		double d = *dp; 
+		long l = *lp;
 		*lp = (long) d;
 		*fp = (float) i;
 		*dp = (double) l;

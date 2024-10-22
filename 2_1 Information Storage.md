@@ -695,21 +695,270 @@ void reverse_array(int a[], int cnt)
 	* The mask 0xFF indicates the low-order byte of a word. The bit-level operation x & 0xFF yields a value consisting of the least significant byte of x, but with all other bytes set to 0.
 	* with x = 0x89ABCDEF, the expression would yield 0x000000EF.
 
+# Practice Problem 2.12
+Write C expressions, in terms of variable x, for the following values. Your code should work for any word size w ≥ 8. For reference, we show the result of evaluating the expressions for x = 0x87654321, with w = 32.
 
+A. The least significant byte of x, with all other bits set to 0. [0x00000021]
 
+B. All but the least signiﬁcant byte of x complemented, with the least signiﬁcant byte left unchanged. [0x789ABC21]
 
+C. The least signiﬁcant byte set to all ones, and all other bytes of x left unchanged. [0x876543FF]
 
+**Solution**:
+A.
+x & 0xFF
 
+B.
+x ^ ~0x000000FF
 
+C.
+x | 0x000000FF
 
+# Practice Problem 2.13
+The Digital Equipment VAX computer was a very popular machine from the late 1970s until the late 1980s. Rather than instructions for Boolean operations and and or, it had instructions bis (bit set) and bic (bit clear). Both instructions take a data word x and a mask word m. They generate a result z consisting of the bits of x modiﬁed according to the bits of m. With bis, the modiﬁcation involves setting z to 1 at each bit position where m is 1. With bic, the modiﬁcation involves setting z to 0 at each bit position where m is 1.
 
+To see how these operations relate to the C bit-level operations, assume we have functions bis and bic implementing the bit set and bit clear operations, and that we want to use these to implement functions computing bitwise operations | and ^, without using any other C operations. Fill in the missing code below. Hint: Write C expressions for the operations bis and bic.
 
+```c
+/* Declarations of functions implementing operations bis and bic */ 
+int bis(int x, int m); 
+int bic(int x, int m);
 
+/* Compute x|y using only calls to functions bis and bic */ 
+int bool_or(int x, int y) {
+	int result = bis(x,y);
+	return result; 
+}
 
+/* Compute x^y using only calls to functions bis and bic */ 
+int bool_xor(int x, int y) {
+	int result = bis(bic(x,y), bic(y,x));
+	return result; 
+}
+```
 
+**Solution**:
+bic(x,m) = x & ~m
 
+bis(x,m) = x | m
 
+xor formula:  x ^ y = (x & ~y) | (~x & y)
 
+x ^ y = bis(bic(x,y), bic(y,x))
+
+# 2.1.8 Logical Operations in C
+* C also provides a set of logical operators ||, &&, and !, which correspond to the or, and, and not operations of logic.
+* Differences between logical operations(|| && !) and bit-level operations (| & ~):
+	1. The logical operations treat any **nonzero argument as representing true and argument 0 as representing false**.
+	    * View 0 as "False", while anything nonzero as "True"
+		* The logical operations return either 1 or 0, indicating a result of either true or false.
+		* Example:
+		![[./2_1.assets/Screenshot 2023-10-12 at 19.33.14.png|180]]
+	2. A second important distinction between the logical operators ‘&&’ and ‘||’ versus their bit-level counterparts ‘&’ and ‘|’ is that **the logical operators do not evaluate their second argument if the result of the expression can be determined by evaluating the first argument**. 
+		* Example:
+			* a && 5/a will never cause a division by zero
+			* p && \*p will never cause the dereferencing of a null pointer.
+
+# Practice Problem 2.14
+Suppose that a and b have byte values 0x55 and 0x46, respectively. Fill in the following table indicating the byte values of the different C expressions:
+
+![[Pasted image 20241022083923.png|350]]
+
+**Solution**:
+```
+a  = 0b 0101 0101
+b  = 0b 0100 0110
+~a = 0b 1010 1010
+~b = 0b 1011 1001
+
+a & b = 0b 0101 0101 & 0b 0100 0110 = 0b 0100 0100 = 0x44
+a && b = 1
+
+a | b = 0b 0101 0111
+a || b = 1
+
+~a | ~b = 0b 1011 1011 = 0xBB					
+!a || !b = 0
+
+a & !b = 0					a && ~b = 1
+```
+
+# Practice Problem 2.15
+Using only bit-level and logical operations, write a C expression that is equivalent to x == y. In other words, it will return 1 when x and y are equal and 0 otherwise.
+
+**Solution**:
+```
+! (x ^ y)
+```
+
+# 2.1.9 Shift Operations in C (移位)
+* C also provides a set of shift operations for shifting bit patterns to the left and to the right.
+	* Left shift: x<\<y
+		* shift bit-vector x left y positions
+	* Right shift: x>>y
+		* shift bit-vector x right y positions
+* To the left x<<k:
+	* an operand x having bit representation $[x_{w−1}, x_{w−2}, . . . , x_0]$, the C expression x << k yields a value with bit representation $[x_{w−k−1} , x_{w−k−2} , . . . , x_0 , 0, . . . , 0]$. That is, x is shifted k bits to the left, dropping off the k most significant bits and filling the right end with k zeros.
+	* Shift operations associate from left to right, so x << j << k is equivalent to (x << j) << k.
+* To the right x>>k:
+	* Logical - fills the left end with ==k zeros==, giving a result Arithmetic. 
+		* $[0,...,0,x_{w-1},x_{w-2},...x_k]$
+	* Arithmetic - shift fills the left end with ==k repetitions of the most significant bit==, giving a result $[x_{w−1} , . . . , x_{w−1} , x_{w−1} , x_{w−2} , . . . x_k ]$. This convention might seem peculiar, but as we will see, it is useful for operating on signed integer data.
+* Example:
+	![[./2_1.assets/Screenshot 2023-10-12 at 20.24.34.png|300]]
+	* Code:
+```c
+#include <stdio.h>
+
+void print_CharToBin(char num)
+{
+	char chars_list[0x2] = "01";
+	char result[0x8] = "00000000";
+	int length;	// the length of result array
+			
+	if(num == 0) printf("0b 0\n");
+
+	// Calculate the result and store into result array
+	for(int i = 0;num!=0;i++)
+	{
+		result[i] = chars_list[num%0x2];// repeatly divide input number by 16
+						// record the remainder into result[i]
+		num /= 0x2;	// get the quotient
+	}
+
+	printf("0b ");
+	for(int i = 8; i >= 0; i--)
+	{
+		printf("%c",result[i]);
+	}
+	printf("\r\n");
+}
+
+void print_UIntToBin(unsigned int num)
+{
+	char chars_list[0x2] = "01";
+	char result[0x20] = "00000000000000000000000000000000";
+	int length;	// the length of result array
+			
+	if(num == 0) printf("0b 0\n");
+
+	// Calculate the result and store into result array
+	for(int i = 0;num!=0;i++)
+	{
+		result[i] = chars_list[num%0x2];// repeatly divide input number by 16
+						// record the remainder into result[i]
+		num /= 0x2;	// get the quotient
+	}
+
+	printf("0b ");
+	for(int i = 0x20; i >= 0; i--)
+	{
+		printf("%c",result[i]);
+	}
+	printf("\r\n");
+}
+
+int main()
+{
+	char x = 0b10010101;
+	printf("=== CHAR TEST ===\n");
+	printf("The original number: ");
+	print_CharToBin(x);
+	printf("x << 4: ");
+	print_CharToBin(x<<4);
+	printf("x >> 4: ");
+	print_CharToBin(x>>4);
+
+	printf("\n");
+	printf("=== INT TEST ===\n");
+	int y = 0b10010101000000001111111100001111;
+	printf("The original number: ");
+	print_UIntToBin(y);
+	printf("y << 4: ");
+	print_UIntToBin(y<<4);
+	printf("y >> 4: ");
+	print_UIntToBin(y>>4);
+	return 0;
+}
+```
+
+![[./2_1.assets/Screenshot 2023-10-16 at 13.17.41.png|500]]
+
+* Some truths:
+	* For C, The C standards do not precisely deﬁne which type of right shift should be used with signed numbers—either arithmetic or logical shifts may be used. This unfortunately means that any code assuming one form or the other will potentially encounter portability problems.
+	* In practice, however, almost all compiler/machine combinations use ==arithmetic right shifts for signed data==, and many programmers assume this to be the case. But, ==unsigned data right shifts must be logical==.
+	* For Java, Java has a precise deﬁnition of how right shifts should be performed.
+		* The expression x >> k shifts x arithmetically by k positions, while x >>> k shifts it logically.
+	* Undefined behavior: shift amount < 0 or >= word size
+		* Example:
+```c
+char x = 0x12
+x<<8 = ?
+```
+
+# Practice Problem 2.16
+Fill in the table below showing the effects of the different shift operations on single-byte quantities. The best way to think about shift operations is to work with binary representations. Convert the initial values to binary, perform the shifts, and then convert back to hexadecimal. Each of the answers should be 8 binary digits or 2 hexadecimal digits.
+![[./2_1.assets/Screenshot 2023-10-12 at 20.29.38.png]]
+0x 87
+
+**Solution**:
+```
+Hex: 					0xD4
+Binary: 			0b 1101 0100
+a<<2 binary:  0b 0101 0000	
+a<<2 hex: 		0x 50
+Logical a>>3 binary: 0b 0001 1010
+Logical a>>3 hex: 	 0x 1A
+Arithmetic a>>3 binary: 0b 1111 1010
+Arithmetic a>>3 hex:		0x FA
+```
+
+```
+Hex: 					0x 64
+Binary: 			0b 0110 0100	
+a<<2 binary: 	0b 1001 0000
+a<<2 hex: 		0x 90
+Logical a>>3 binary: 0b 0000 1100
+Logical a>>3 hex: 	 0x 0C
+Arithmetic a>>3 binary: 0b 0000 1100
+Arithmetic a>>3 hex:		0x 0C
+```
+
+```
+Hex: 					0x 72
+Binary: 			0b 0111 0010
+a<<2 binary: 	0b 1100 1000
+a<<2 hex: 		0x C8
+Logical a>>3 binary: 0b 0000 1110
+Logical a>>3 hex: 	 0x 0E
+Arithmetic a>>3 binary: 0b 0000 1110
+Arithmetic a>>3 hex:		0x 0E
+```
+
+```
+Hex: 					0x 44
+Binary: 			0b 0100 0100
+a<<2 binary: 	0b 0001 0000
+a<<2 hex: 		0x 10
+Logical a>>3 binary: 0b 0000 1000
+Logical a>>3 hex:    0x 08
+Arithmetic a>>3 binary: 0b 0000 1000
+Arithmetic a>>3 hex:	  0x 08
+```
+
+```
+Hex: 					0x 87
+Binary: 			0b 1000 0111
+a<<2 binary: 	0b 0001 1100
+a<<2 hex: 		0x 1C
+Logical a>>3 binary: 0b 0001 0000
+Logical a>>3 hex: 	 0x 10
+Arithmetic a>>3 binary: 0b 1111 0000
+Arithmetic a>>3 hex:		0x F0
+```
+
+* Addition (and subtraction) have higher precedence than shifts.
+	* 1<<2 + 3<<4 -> 1 << (2+3) << 4
 
 
 
