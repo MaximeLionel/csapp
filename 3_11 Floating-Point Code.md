@@ -325,9 +325,10 @@ D. double g4(float a, int \*b, float c, double d);
 	* Assembly code on book:
 		![[image-20240619155030256.png|400]]
 		![[image-20240619155051303.png|400]]
-		* a, x, and b are passed in XMM registers `%xmm0–%xmm2`, while i is passed in register `%edi`.
-		* lines 2–3: standard two-instruction sequence is used to convert argument x to double.
-		* line 5: convert argument i to double.
+		* a, x, and b are passed in XMM registers `%xmm0–%xmm2`
+		* i is passed in register `%edi`.
+		* lines 2–3: standard two-instruction sequence is used to convert argument x from single precision to double.
+		* line 5: convert argument i from integer to double.
 		* Return in register `%xmm0`.
 	* In real life, it's like:
 		* AXV - Compile in avx code with `-mavx` option: `gcc -mavx -Og -fno-stack-protector -S funct.c -o funct_avx.s`
@@ -353,7 +354,7 @@ D. double g4(float a, int \*b, float c, double d);
 		```
 
 # Practice Problem 3.53
-For the following C function, the types of the four arguments are defined by typedef:
+For the following C function, the types of the 4 arguments are defined by `typedef`:
 ```c
 double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
 {
@@ -366,8 +367,8 @@ When compiled, gcc generates the following code:
 # double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
 
 funct1:
-	vcvtsi2ssq      %rsi, %xmm2, %xmm2
-	vaddss          %xmm0, %xmm2, %xmm0
+	vcvtsi2ssq      %rsi, %xmm2, %xmm2     
+	vaddss          %xmm0, %xmm2, %xmm0    
 	vcvtsi2ss       %edi, %xmm2, %xmm2
 	vdivss          %xmm0, %xmm2, %xmm0
 	vunpcklps       %xmm0, %xmm0, %xmm0
@@ -375,31 +376,36 @@ funct1:
 	vsubsd          %xmm1, %xmm0, %xmm0
 	ret
 ```
-Determine the possible combinations of types of the four arguments (there may be more than one).
+Determine the possible combinations of types of the 4 arguments (there may be more than one).
 
 **Solution**:
+```c
+double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
+{
+	return p/(q+r) - s;
+}
+```
 ```
 # double funct1(arg1_t p, arg2_t q, arg3_t r, arg4_t s)
 
 funct1:
-	vcvtsi2ssq      %rsi, %xmm2, %xmm2   # xmm2=(float)rsi: rsi - type long
-	vaddss          %xmm0, %xmm2, %xmm0  # xmm0=xmm0+xmm2=xmm0+(float)rsi refer to (q+r)
-	                                     # so q and r can be xmm0 or rsi while type is float or long
-	vcvtsi2ss       %edi, %xmm2, %xmm2   # xmm2=(float)edi: 
-	                                     # p can only be edi which type is int
-	vdivss          %xmm0, %xmm2, %xmm0  # xmm0=xmm2/xmm0=((float)edi)/xmm0: xmm0=(float)p/(q+r)
-	vunpcklps       %xmm0, %xmm0, %xmm0
-	vcvtps2pd       %xmm0, %xmm0         # xmm0 = (double)xmm0
-	vsubsd          %xmm1, %xmm0, %xmm0  # xmm0=xmm0-xmm1
-	                                     # s = xmm1 - type double
+	vcvtsi2ssq      %rsi, %xmm2, %xmm2     # xmm2 = (float)rsi: rsi - long
+	vaddss          %xmm0, %xmm2, %xmm0    # xmm0 = xmm0 + xmm2: probably q+r, q - float/long, r - long/float
+	vcvtsi2ss       %edi, %xmm2, %xmm2     # xmm2 = (float)edi: edi - int
+	vdivss          %xmm0, %xmm2, %xmm0    # xmm0 = xmm2/xmm0: p must be int
+
+	vunpcklps       %xmm0, %xmm0, %xmm0    
+	vcvtps2pd       %xmm0, %xmm0           # xmm0 = (double)xmm0
+	vsubsd          %xmm1, %xmm0, %xmm0    # xmm0 = xmm0 - xmm1: s must be double
 	ret
 ```
-Therefore, there's 2 possibilities:
-```C
-double funct1(int p, float q, long r, double s);
-or
-double funct1(int p, long q, float r, double s);
+
 ```
+double funct1(int p, float q, long r, double s)
+or
+double funct1(int p, long q, float r, double s)
+```
+
 
 # Practice Problem 3.54
 Function funct2 has the following prototype:
