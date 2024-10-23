@@ -248,24 +248,29 @@ For execution on x86-64, assume that argument x is either in %xmm0 or in the app
 # 3.11.2 Floating-Point Code in Procedures
 * With x86-64, the XMM registers are used for passing floating-point arguments to functions and for returning floating-point values from them.
 * The following conventions are observed:
-	* Up to eight floating-point arguments can be passed in XMM registers `%xmm0–%xmm7`.
+	* Up to 8 floating-point arguments can be passed in XMM registers `%xmm0–%xmm7`.
 	* Additional floating-point arguments can be passed on the **stack**.
 	* A function that returns a floating-point value does so in register `%xmm0`.
 	* All XMM registers are caller saved.
-	* When a function contains a combination of pointer, integer, and floating point arguments, the pointers and integers are passed in general-purpose registers, while the floating-point values are passed in XMM registers.
+	* When a function contains a combination of pointer, integer, and floating point arguments:
+		* the pointers and integers are passed in **general-purpose registers**.
+		* the floating-point values are passed in **XMM registers**.
 * Examples:
 	```c
 	double f1(int x, double y, long z);
 	```
 	* x in `%edi`, y in `%xmm0`, and z in `%rsi`.
+	* return value in `%xmm0`
 	```c
 	double f2(double y, int x, long z);
 	```
-	* y in `%xmm0`, x in `%edi`, and z in `%rsi`. Same as above.
+	* y in `%xmm0`, x in `%edi`, and z in `%rsi`. 
+	* return value in `%xmm0`
 	```c
 	double f1(float x, double *y, long *z);
 	```
 	* x in `%xmm0`, y in `%rdi`, and z in `%rsi`.
+	* return value in `%xmm0`
 
 # Practice Problem 3.52
 For each of the following function declarations, determine the register assignments for the arguments:
@@ -278,38 +283,29 @@ C. double g3(double \*a, double b, int c, float d);
 D. double g4(float a, int \*b, float c, double d);
 
 **Solution**:
-A.
-```c
-double g1(double a, long b, float c, int d);
-a - %xmm0
-b - %rdi
-c - %xmm1
-d - %esi
-```
-B.
-```c
-double g2(int a, double *b, float *c, long d);
-a - %edi
-b - %rsi
-c - %rcx
-d - %rdx
-```
-C.
-```c
-double g3(double *a, double b, int c, float d);
-a - %rdi
-b - %xmm0
-c - %esi
-d - %xmm1
-```
-D.
-```c
-double g4(float a, int *b, float c, double d);
-a - %xmm0
-b - %rdi
-c - %xmm1
-d - %xmm2
-```
+A. double g1(double a, long b, float c, int d);
+	a - %xmm0
+	b - %rdi
+	c - %xmm1
+	d - %esi
+
+B. double g2(int a, double \*b, float \*c, long d);
+	a - %edi
+	b - %rsi
+	c - %rcx
+	d - %rdx
+
+C. double g3(double \*a, double b, int c, float d);
+	a - %rdi
+	b - %xmm0
+	c - %esi
+	d - %xmm1
+
+D. double g4(float a, int \*b, float c, double d);
+	a - %xmm0
+	b - %rdi
+	c - %xmm1
+	d - %xmm2
 
 # 3.11.3 Floating-Point Arithmetic Operations
 * A set of scalar AVX2 floating-point instructions that perform arithmetic operations:
@@ -344,7 +340,7 @@ d - %xmm2
 		vsubsd  %xmm2, %xmm1, %xmm0              # xmm0=xmm1-xmm2: xmm0=a*x-b/i
 		ret
 		```
-		* SSE2 - Compile in sse2 code with `-mavx` option: `gcc -msse2 -Og -fno-stack-protector -S funct.c -o funct_sse2.s`
+		* SSE2 - Compile in sse2 code with `-msse2` option: `gcc -msse2 -Og -fno-stack-protector -S funct.c -o funct_sse2.s`
 		```
 		cvtss2sd        %xmm1, %xmm1       # xmm1=(double)x
 		mulsd   %xmm0, %xmm1               # xmm1=a*x

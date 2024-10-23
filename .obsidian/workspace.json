@@ -43,8 +43,7 @@
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -111,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2_2 Integral Data Types.md",
+                "file": "3_11 Floating-Point Code.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2_2 Integral Data Types.md",
+                "file": "3_11 Floating-Point Code.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2_2 Integral Data Types.md"
+                "file": "3_11 Floating-Point Code.md"
               }
             }
           }
@@ -160,7 +159,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -173,12 +173,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "ddc0e58800788e7b",
+  "active": "e12c23177d9b1910",
   "lastOpenFiles": [
+    "2_2 Integral Data Types.md",
     "3_11 Floating-Point Code.md",
     "4_0 Processor Architecture.md",
     "3_homework.md",
-    "2_2 Integral Data Types.md",
     "2_3.md",
     "2_1 Information Storage.md",
     "2_1_0.md",
