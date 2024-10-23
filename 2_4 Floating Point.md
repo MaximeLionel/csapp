@@ -97,7 +97,7 @@ The Patriot system contains an internal clock, implemented as a counter that is 
 	  * Double precision floating-point format - 双精度浮点型
 		  * s = 1, k = 11,  n = 52
 
-![[./2_4.assets/Screenshot 2023-12-15 at 11.31.10-2653888.png]]
+![[./2_4.assets/Screenshot 2023-12-15 at 11.31.10-2653888.png|500]]
 
 * The value encoded by a given bit representation can be divided into three different cases:
 
@@ -155,7 +155,7 @@ The Patriot system contains an internal clock, implemented as a counter that is 
     * $[100010]=(-1)^1 \times 0.10 \times 2^{-2} = -\frac{1}{8}$
 	    * s = 1, e = [000], f = [10]
 
-![[./2_4.assets/Screenshot 2023-12-17 at 15.44.51.png]]
+![[./2_4.assets/Screenshot 2023-12-17 at 15.44.51.png|600]]
 
 ### Example 1
 
@@ -501,10 +501,6 @@ Format B:
 	Format A (denormalized): $V = 0.0001\times2^{-2}=\frac{1}{64}$
 	Convert to format B (normalized):$$0.0001\times2^{-2}=1.000\times2^{[0001]-7}=[0001000]_2=\frac{1}{64}$$
 	Tip: denormalized -> normalized
-
-
-
-
 
 
 ## 2.4.5 Floating-Point Operations
