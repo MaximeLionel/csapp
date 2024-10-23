@@ -187,45 +187,38 @@ fcvt2:
 ```
 
 **Solution**:
-Firstly, go though all asm instructions:
 ```
 # double fcvt2(int *ip, float *fp, double *dp, long l)
 # ip in %rdi, fp in %rsi, dp in %rdx, l in %rcx
 # Result returned in %xmm0
 
 fcvt2:
-	movl (%rdi), %eax                # eax=M(rdi):  eax = *ip
-	vmovss (%rsi), %xmm0             # xmm0=M(rsi): xmm0= *fp
-	vcvttsd2si (%rdx), %r8d          # r8d=M(rdx):  r8d = (int)(*dp)
-	movl %r8d, (%rdi)                # M(rdi)=r8d:  *ip = r8d
-	vcvtsi2ss %eax, %xmm1, %xmm1     # xmm1=(float)eax=(float)(*ip)
-	vmovss %xmm1, (%rsi)             # M(rsi)=xmm1: (*fp) = xmm1 = (float)(*ip)
-	vcvtsi2sdq %rcx, %xmm1, %xmm1    # xmm1=(double)rcx: xmm1=(double)l
-	vmovsd %xmm1, (%rdx)             # M(rdx)=xmm1: (*dp)=xmm1=(double)l
-	vunpcklps %xmm0, %xmm0, %xmm0    # convert float in xmm0 to double
-	vcvtps2pd %xmm0, %xmm0
+	movl (%rdi), %eax              # eax = M(rdi): eax = *ip
+	vmovss (%rsi), %xmm0           # xmm0 = M(rsi): xmm0 = *fp
+	vcvttsd2si (%rdx), %r8d        # r8d = (int)M(rdx): r8d = (int)(*dp)
+	movl %r8d, (%rdi)              # M(rdi) = r8d: *ip = r8d
+	vcvtsi2ss %eax, %xmm1, %xmm1   # xmm1 = (float)eax: xmm1 = (float)(*ip)
+	vmovss %xmm1, (%rsi)           # M(rsi) = xmm1: *fp = xmm1
+	vcvtsi2sdq %rcx, %xmm1, %xmm1  # xmm1 = (double)rcx: xmm1 = (double)l
+	vmovsd %xmm1, (%rdx)           # M(rdx) = xmm1: *dp = xmm1
+	vunpcklps %xmm0, %xmm0, %xmm0  
+	vcvtps2pd %xmm0, %xmm0         # xmm0 = (double)xmm0
 	ret
 ```
 
-Secondly, 
-* val1
-	From `*ip = (int) val1` , we need to find out `*ip`.
-	From line 8 and 9, `*ip` is from `*dp` by converting to `int`.
-	So `val1 = d`.
-* val2
-	From `*fp = (float) val2`, we need to find out `*fp`.
-	From line 11, `*fp` is from `*ip` by converting to `float`.
-	So `val2 = i`.
-* val3
-	From `*dp = (double) val3`, we need to find out `*dp`.
-	From line 13, `*dp` is from `l` by converting to `double`.
-	So `val3 = d`.
-* val4
-	The funtion returns `double` type, so the return value is stored in `xmm0`. From line 7, `xmm0` is from `f`.
-	So `val4 = f`.
-	
+```c
+double fcvt2(int *ip, float *fp, double *dp, long l)
+{
+	int i = *ip; float f = *fp; double d = *dp;
+	*ip = (int) val1;     // val1 = *dp = d
+	*fp = (float) val2;   // val2 = *ip = i
+	*dp = (double) val3;  // val3 = l
+	return (double) val4; // val4 = *fp = f
+}
+```
+
 # Practice Problem 3.51
-The following C function converts an argument of type `src_t` to a return value of type `dst_t`, where these two types are defined using typedef:
+The following C function converts an argument of type `src_t` to a return value of type `dst_t`, where these two types are defined using `typedef`:
 ```c
 dest_t cvt(src_t x)
 {
@@ -235,22 +228,22 @@ dest_t cvt(src_t x)
 ```
 For execution on x86-64, assume that argument x is either in %xmm0 or in the appropriately named portion of register `%rdi` (i.e., `%rdi` or `%edi`). One or two instructions are to be used to perform the type conversion and to copy the value to the appropriately named portion of register `%rax` (integer result) or `%xmm0` (floating-point result). Show the instruction(s), including the source and destination registers.
 
-| $T_x$  | $T_y$  | Instructions             |
-| ------ | ------ | ------------------------ |
-| long   | double | `vcvtsi2sdq %rdi, %xmm0` |
-| double | int    |                          |
-| double | float  |                          |
-| long   | float  |                          |
-| float  | long   |                          |
+| $T_x$  | $T_y$  | Instructions           |
+| ------ | ------ | ---------------------- |
+| long   | double | vcvtsi2sdq %rdi, %xmm0 |
+| double | int    |                        |
+| double | float  |                        |
+| long   | float  |                        |
+| float  | long   |                        |
 **Solution**:
 
-| $T_x$  | $T_y$  | Instructions                                                                                                  |
-| ------ | ------ | ------------------------------------------------------------------------------------------------------------- |
-| long   | double | `vcvtsi2sdq %rdi, %xmm0`                                                                                      |
-| double | int    | `vcvttsd2si %xmm0, %eax`                                                                                      |
-| double | float  | `vcvtsd2ss %xmm0, %xmm0, %xmm0`<br>In gcc, it's like:<br>`vmovddup %xmm0, %xmm0      vcvtpd2psx %xmm0, %xmm0` |
-| long   | float  | `vcvtsi2ssq %rdi, %xmm0, %xmm0`                                                                               |
-| float  | long   | `vcvttss2siq %xmm0, %rax`                                                                                     |
+| $T_x$  | $T_y$  | Instructions                                                                                                                           |
+| ------ | ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| long   | double | vcvtsi2sdq %rdi, %xmm0                                                                                                                 |
+| double | int    | vcvtsd2si %xmm0, %eax                                                                                                                  |
+| double | float  | Logically, vcvtsd2ss %xmm0, %xmm0<br><br>In reality, gcc generates 2 instructions:<br>vmovddup %xmm0, %xmm0<br>vcvtpd2psx %xmm0, %xmm0 |
+| long   | float  | vcvtsi2ssq %rdi, %xmm0, %xmm0                                                                                                          |
+| float  | long   | vcvtss2siq %xmm0, %rax                                                                                                                 |
 
 # 3.11.2 Floating-Point Code in Procedures
 * With x86-64, the XMM registers are used for passing floating-point arguments to functions and for returning floating-point values from them.

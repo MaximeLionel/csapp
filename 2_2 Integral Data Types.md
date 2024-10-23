@@ -527,20 +527,21 @@ uy = 4294954951:  ff ff cf c7
 
 This shows that, when converting from short to unsigned, the program first changes the size and then the type. That is, (unsigned) sx is equivalent to (unsigned) (int) sx, evaluating to 4,294,954,951, not (unsigned) (unsigned short) sx, which evaluates to 53,191. Indeed, this convention is required by the C standards.
 
+**Solution**:
+
 ![[./2_2.assets/Screenshot 2023-11-23 at 14.32.18.png|350]]
 
 This problem is to find out how our machine cast from short to unsigned:
 
 By logically, there are 2 paths:
-
 * short(-12345) -> unsigned short (53191)-> unsigned (53191)
-  * The result will be: 53191	0x c7 cf 00 00
+	* The result will be: 53191	0x c7 cf 00 00
 * short  (-12345)-> int (-12345) -> unsigned (4294954951) -- ==Our machine choose this path!!!==
-  * The result will be: 4294954951	0x c7 cf ff ff
+	* The result will be: 4294954951	0x c7 cf ff ff
 
 In Summary, **when converting from short to unsigned, the program first changes the size and then the type**.
 
-### Practice Problem 2.23
+# Practice Problem 2.23
 
 Consider the following C functions:
 
@@ -558,8 +559,13 @@ Assume these are executed as a 32-bit program on a machine that uses two’s- co
 
 A. Fill in the following table showing the effect of these functions for several example arguments. You will find it more convenient to work with a hexadecimal representation. Just remember that hex digits 8 through F have their most significant bits equal to 1.
 
-<img src="./2_2.assets/Screenshot 2023-11-23 at 14.42.49.png" alt="Screenshot 2023-11-23 at 14.42.49" style="zoom:50%;" />
+![[./2_2.assets/Screenshot 2023-11-23 at 14.42.49.png|300]]
 
+B. Describe in words the useful computation each of these functions performs.
+
+**Solutions**:
+
+A.
 ```
 0x 00000076		
 	fun1(w): <<24  - 0x76000000 -> >>24 - 0x00000076 -> (int) - 0x00000076  
@@ -575,15 +581,14 @@ A. Fill in the following table showing the effect of these functions for several
 	fun2(w): (int) - 0xEDCBA987 -> <<24 - 0x87000000 -> >>24  - 0xFFFFFF87
 ```
 
-B. Describe in words the useful computation each of these functions performs.
-
+B.
 fun1: extract the low 8 bits of the argument (w) and do a zero extension to 32 bits. Return the signed integer.
 
 fun2: extract the low 8 bits of the argument (w)  and do a signed extension to 32 bits. Return the signed integer.
 
 
 
-### 2.2.7 Truncating Numbers
+# 2.2.7 Truncating Numbers
 
 * For both unsigned and signed, bits are truncated but the result should be reinterpreted.
 * Example:
@@ -594,53 +599,50 @@ short sx = (short)x;
 int y = sx;
 ```
 
-#### Truncation of an unsigned number
+## Truncation of an unsigned number
 
 * Truncation of an **unsigned number**:
-
-  * Let $\vec x$ be the bit vector $[x_{w-1},x_{w-2},...,x_0]$
-  * Let $\vec x'$ be result of truncating it to k bits $[x_{k-1},x_{k-2},...,x_0]$
-  * Let $x = B2U_w(\vec x)$ and $x' = B2U_k(\vec x')$
-  * Therefore: $x' = x mod 2^k$
+	* Let $\vec x$ be the bit vector $[x_{w-1},x_{w-2},...,x_0]$
+	* Let $\vec x'$ be result of truncating it to k bits $[x_{k-1},x_{k-2},...,x_0]$
+	* Let $x = B2U_w(\vec x)$ and $x' = B2U_k(\vec x')$
+	* Therefore: $x' = x mod 2^k$
 
 * Proving:
+	$x mod 2^k = B2U_w([x_{w-1},x_{w-2},...,x_0]) mod 2^k$
+	
+	$= [\sum^{w-1}_{i=0}x_i2^i]mod 2^k$
+	
+	$= (x_{w-1}2^{w-1}+x_{w-2}2^{w-2}+...+x_{k}2^{k}+x_{k-1}2^{k-1}+x_{k-2}2^{k-2}+...+x_02^0)mod2^k$
+	
+	$= [\sum^{k-1}_{i=0}x_i2^i]mod 2^k$
+	
+	$= \sum^{k-1}_{i=0}x_i2^i$
+	
+	$= B2U_k([x_{k-1},x_{k-2},...,x_0])$
+	
+	$= x'$
 
-  $x mod 2^k = B2U_w([x_{w-1},x_{w-2},...,x_0]) mod 2^k$
-
-  $= [\sum^{w-1}_{i=0}x_i2^i]mod 2^k$
-
-  $= (x_{w-1}2^{w-1}+x_{w-2}2^{w-2}+...+x_{k}2^{k}+x_{k-1}2^{k-1}+x_{k-2}2^{k-2}+...+x_02^0)mod2^k$
-
-  $= [\sum^{k-1}_{i=0}x_i2^i]mod 2^k$
-
-  $= \sum^{k-1}_{i=0}x_i2^i$
-
-  $= B2U_k([x_{k-1},x_{k-2},...,x_0])$
-  
-  $= x'$
-
-#### Truncation of a two's-complement number
+## Truncation of a two's-complement number
 
 * Truncation of a **two's-complement number**:
-
-  * Let $\vec x$ be the bit vector $[x_{w-1},x_{w-2},...,x_0]$
-  * Let $\vec x'$ be result of truncating it to k bits $[x_{k-1},x_{k-2},...,x_0]$
-  * Let $x = B2T_w(\vec x)$ and $x' = B2T_k(\vec x')$
-  * Therefore: $x' = U2T_k(x mod 2^k)$
+	* Let $\vec x$ be the bit vector $[x_{w-1},x_{w-2},...,x_0]$
+	* Let $\vec x'$ be result of truncating it to k bits $[x_{k-1},x_{k-2},...,x_0]$
+	* Let $x = B2T_w(\vec x)$ and $x' = B2T_k(\vec x')$
+	* Therefore: $x' = U2T_k(x mod 2^k)$
 
 * Proving:
-
-  $U2T_k(x mod 2^k) = U2T_k(B2U_k(\vec x'))$
-
-  $= B2T_k(\vec x') = x'$
+	$U2T_k(x mod 2^k) = U2T_k(B2U_k(\vec x'))$
+	$= B2T_k(\vec x') = x'$
 
 
 
-### Practice Problem 2.24
+# Practice Problem 2.24
 
 Suppose we truncate a 4-bit value (represented by hex digits 0 through F) to a 3- bit value (represented as hex digits 0 through 7.) Fill in the table below showing the effect of this truncation for some cases, in terms of the unsigned and two’s- complement interpretations of those bit patterns.
 
-<img src="./2_2.assets/Screenshot 2023-11-23 at 16.28.29.png" alt="Screenshot 2023-11-23 at 16.28.29" style="zoom:50%;" />
+![[./2_2.assets/Screenshot 2023-11-23 at 16.28.29.png|450]]
+
+**Solution**:
 
 Unsigned truncation: $x' = x mod 2^k$
 
@@ -665,11 +667,11 @@ Two's complement:
 
 
 
-### 2.2.8 Advice on Signed versus Unsigned
+# 2.2.8 Advice on Signed versus Unsigned
 
 * The implicit casting of signed to unsigned leads to some non-intuitive behavior. Nonintuitive features often lead to program bugs, and ones involving the nuances of implicit casting can be especially difficult to see. 
 
-### Practice Problem 2.25
+# Practice Problem 2.25
 
 Consider the following code that attempts to sum the elements of an array a, where the number of elements is given by parameter length:
 
@@ -687,7 +689,7 @@ float sum_elements(float a[], unsigned length)
 
 When run with argument length equal to 0, this code should return 0. Instead, it encounters a memory error. Explain why this happens. Show how this code can be corrected.
 
-Solution:
+**Solution**:
 
 ```c
 // P112.c
@@ -712,11 +714,11 @@ int main()
 }
 ```
 
-<img src="./2_2.assets/Screenshot 2023-11-23 at 21.21.20.png" alt="Screenshot 2023-11-23 at 21.21.20" style="zoom:50%;" />
+![[./2_2.assets/Screenshot 2023-11-23 at 21.21.20.png|500]]
 
-Correction: i <= length-1 to i<length
+Correction: i <= length-1 to i\<length
 
-### Practice Problem 2.26
+# Practice Problem 2.26
 
 You are given the assignment of writing a function that determines whether one string is longer than another. You decide to make use of the string library function strlen having the following declaration:
 
@@ -732,14 +734,19 @@ When you test this on some sample data, things do not seem to work quite right. 
 
 A. For what cases will this function produce an incorrect result? 
 
-​	strlen(s) < strlen(t)
-
 B. Explain how this incorrect result comes about.
-
-​	strlen returns unsigned integer, which makes the value of strlen(s) - strlen(t) is never negative.
 
 C. Show how to fix the code so that it will work reliably.
 
+**Solution**:
+
+A. 
+​	strlen(s) < strlen(t)
+
+B. 
+​	strlen returns unsigned integer, which makes the value of strlen(s) - strlen(t) is never negative.
+
+C. 
 ​	return strlen(s) > strlen(t)
 
 

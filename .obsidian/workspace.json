@@ -176,6 +176,8 @@
   "active": "ddc0e58800788e7b",
   "lastOpenFiles": [
     "3_11 Floating-Point Code.md",
+    "4_0 Processor Architecture.md",
+    "3_homework.md",
     "2_2 Integral Data Types.md",
     "2_3.md",
     "2_1 Information Storage.md",
@@ -210,8 +212,6 @@
     "3_6 Control.assets/Pasted image 20240929084824.png",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "3_9 Heterogeneous Data Structures.md",
-    "4_4 General Principles of Pipelining.md",
-    "3_8 Array Allocation and Access.md",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "3_homework.assets",
