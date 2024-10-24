@@ -1,7 +1,7 @@
 * Suppose we write a C program as two files p1.c and p2.c. We can then compile this code using a Unix command line:
-```
-	linux> gcc -Og -o p p1.c p2.c
-```
+	```
+		linux> gcc -Og -o p p1.c p2.c
+	```
 	- gcc: indicates the gcc C compiler. It's the default compiler on Linux.
 	- -0g: instructs the compiler to apply a level of optimization that yields machine code that follows the overall structure of the original C code.
 		- higher levels of optimization can generate code that is so heavily transformed that the relationship between the generated machine code and the original source code is difficult to understand.

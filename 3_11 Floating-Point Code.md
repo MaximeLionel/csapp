@@ -430,28 +430,29 @@ funct2:
 Write a C version of funct2.
 
 **Solution**:
-Firstly, analyze assembly code:
 ```
 # double funct2(double w, int x, float y, long z)
 # w in %xmm0, x in %edi, y in %xmm1, z in %rsi
 
 funct2:
-	vcvtsi2ss    %edi, %xmm2, %xmm2         # xmm2=(float)edi: xmm2 = (float)x
-	vmulss       %xmm1, %xmm2, %xmm1        # xmm1=xmm1*xmm2: xmm1 = y*(float)x
-	vunpcklps    %xmm1, %xmm1, %xmm1        
-	vcvtps2pd    %xmm1, %xmm2               # xmm2=(double)xmm1: xmm2 = (double)(y*(float)x)
-	vcvtsi2sdq   %rsi, %xmm1, %xmm1         # xmm1=(double)rsi: xmm1 = (double)z
-	vdivsd       %xmm1, %xmm0, %xmm0        # xmm0=xmm0/xmm1: xmm0 = w/(double)z
-	vsubsd       %xmm0, %xmm2, %xmm0        # xmm0=xmm2-xmm0: xmm0 = (double)(y*(float)x) - w/(double)z
+	vcvtsi2ss    %edi, %xmm2, %xmm2     # xmm2 = (float)edi: xmm2 = (float)x
+	vmulss       %xmm1, %xmm2, %xmm1    # xmm1 = xmm1*xmm2: xmm1 = y * (float)x
+	vunpcklps    %xmm1, %xmm1, %xmm1    
+	vcvtps2pd    %xmm1, %xmm2           # xmm2 = (double)xmm1: xmm2 = (double)(y * (float)x)
+	vcvtsi2sdq   %rsi, %xmm1, %xmm1     # xmm1 = (double)rsi: xmm1 = (double)z
+	vdivsd       %xmm1, %xmm0, %xmm0    # xmm0 = xmm0/xmm1: xmm0 = w/((double)z)
+	vsubsd       %xmm0, %xmm2, %xmm0    # xmm0 = xmm2-xmm0: xmm0 = (double)(y * (float)x) - w/((double)z)
 	ret
 ```
-Secondly, easily get the function code below:
-```c
+
+Therefore,
+```C
 double funct2(double w, int x, float y, long z)
 {
-	return y*x - w/z;
+	return y * x - w / z;
 }
 ```
+
 
 # 3.11.4 Defining and Using Floating-Point Constants
 * Unlike integer arithmetic operations, AVX floating-point operations **cannot have immediate values as operands**.
