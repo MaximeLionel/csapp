@@ -512,7 +512,7 @@ Show how the numbers declared at label .LC3 encode the number 32.0.
 # 3.11.5 Using Bitwise Operations in Floating-Point Code
 * Bitwise operations on packed data：
 	![[image-20240621083926082.png|350]]
-	* These instructions perform Boolean operations on all 128 bits in an XMM register.
+	* These instructions perform Boolean operations (布尔运算) on all 128 bits in an XMM register.
 	* These operations all act on packed data, meaning that they update the entire destination XMM register, applying the bitwise operation to all the data in the two source registers.
 
 # Practice Problem 3.56
@@ -553,52 +553,44 @@ C.
 
 **Solution**:
 A.
-Firstly, convert to hex representation:
-	2147483647 = 0x 7FFF FFFF
-	4294967295 = 0x FFFF FFFF
-Secondly, analyze the assembly code:
 ```
-	vmovsd .LC1(%rip), %xmm1         # xmm1 = 0x 7FFF FFFF FFFF FFFF
-	vandpd %xmm1, %xmm0, %xmm0       # xmm0=xmm0&xmm1: xmm0 = x & 0x 7FFF FFFF FFFF FFFF
+# double simplefun(double x)
+
+	vmovsd .LC1(%rip), %xmm1     # xmm1 = 0x 7fff ffff ffff ffff
+	vandpd %xmm1, %xmm0, %xmm0   # xmm0 = xmm0 & xmm1
 .LC1:
-	.long 4294967295
-	.long 2147483647
+	.long 4294967295    # 0x ffff ffff
+	.long 2147483647    # 0x 7fff ffff
 	.long 0
 	.long 0
 ```
-Thirdly, we find that `xmm0 = x & 0x 7FFF FFFF FFFF FFFF` is to clear the sign bit to get the absolute value.
-So the result is like:
+Easily to find out that the operation is just to clear the sign bit, which means trying to get the absolute value of `x`. So we can use fabs() representing EXPR().
 ```c
-#include <math.h>
-# define EXPR(x) fabs(x)
+#define EXPR(x) fabs(x)
 ```
 
 B.
 ```
-	vxorpd %xmm0, %xmm0, %xmm0      # xmm0 = xmm0^xmm0 is to clear xmm0
+	vxorpd %xmm0, %xmm0, %xmm0
 ```
-So the result:
+This is clear all bits in xmm0. So:
 ```c
-# define EXPR(x) 0.0
+#define EXPR(x) 0.0
 ```
 
 C.
-Firstly, convert to hex representation:
--2147483648 = 0x FFFF FFFF 8000 0000
-Secondly, analyze the assembly code:
 ```
-	vmovsd .LC2(%rip), %xmm1       # xmm1 = 0x 8000 0000 0000 0000
-	vxorpd %xmm1, %xmm0, %xmm0     # xmm0 = x ^ 0x 8000 0000 0000 0000
+	vmovsd .LC2(%rip), %xmm1    # xmm1 = 0x8000 0000 0000 0000
+	vxorpd %xmm1, %xmm0, %xmm0  # xmm0 = xmm0^xmm1: xmm0 = xmm0 ^ 0x8000 0000 0000 0000
 .LC2:
 	.long 0
-	.long -2147483648
+	.long -2147483648   # 0x 8000 0000
 	.long 0
 	.long 0
 ```
-Thirdly, we find that `xmm0 = x ^ 0x 8000 0000 0000 0000` is to simply change the sign bit.
-So, the result is like:
+It's also the operation on sign bit, which is to reverse the sign bit.
 ```c
-# define EXPR(x) -x
+#define EXPR(x) -x
 ```
 
 # 3.11.6 Floating-Point Comparison Operations
