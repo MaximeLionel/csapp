@@ -701,38 +701,40 @@ Write a C version of funct3.
 # ap in %rdi, b in %xmm0, c in %rsi, dp in %rdx
 
 funct3:
-	vmovss       (%rdx), %xmm1         # xmm1=M(rdx): xmm1 = (float)(*dp)
+	vmovss       (%rdx), %xmm1         # xmm1=(float)M(rdx):  xmm1 = (float)(*dp)
 	vcvtsi2sd    (%rdi), %xmm2, %xmm2  # xmm2=(double)M(rdi): xmm2 = (double)(*ap)
-	vucomisd     %xmm2, %xmm0          # cmp xmm0:xmm2: compare b:(double)(*ap)
-	jbe          .L8                   # if xmm0<=xmm2: b<=(double)(*ap), goto .L8
-	vcvtsi2ssq   %rsi, %xmm0, %xmm0    # xmm0=(float)rsi: xmm0 = (float)c
+	vucomisd     %xmm2, %xmm0          # cmp xmm0,xmm2: cmp b,(double)(*ap)
+	jbe          .L8                   # if b <= (double)(*ap), jump to .L8
+	                                   # if b > (double)(*ap)
+	vcvtsi2ssq   %rsi, %xmm0, %xmm0    # xmm0 = (float)rsi: xmm0 = (float)c
 	vmulss       %xmm1, %xmm0, %xmm1   # xmm1=xmm0*xmm1: xmm1 = (float)c * (float)(*dp)
 	vunpcklps    %xmm1, %xmm1, %xmm1
-	vcvtps2pd    %xmm1, %xmm0          # xmm0=(double)xmm1: xmm0 = (double)((float)c * (float)(*dp))
+	vcvtps2pd    %xmm1, %xmm0          # xmm0 = (double)xmm1: xmm0 = (double)((float)c * (float)(*dp))
 	ret
 
 .L8:
 	vaddss       %xmm1, %xmm1, %xmm1   # xmm1=xmm1+xmm1: xmm1 = 2*(float)(*dp)
 	vcvtsi2ssq   %rsi, %xmm0, %xmm0    # xmm0=(float)rsi: xmm0 = (float)c
-	vaddss       %xmm1, %xmm0, %xmm0   # xmm0=xmm0+xmm1: xmm0 = (float)c + 2*(float)(*dp)
-	vunpcklps    %xmm0, %xmm0, %xmm0
-	vcvtps2pd    %xmm0, %xmm0          # xmm0 = (double)((float)c + 2*(float)(*dp))
+	vaddss       %xmm1, %xmm0, %xmm0   # xmm0=xmm0+xmm1: xmm0 = 2*(float)(*dp) + (float)c
+	vunpcklps    %xmm0, %xmm0, %xmm0   
+	vcvtps2pd    %xmm0, %xmm0          # xmm0=(double)xmm0: xmm0 = (double)(2*(float)(*dp) + (float)c)
 	ret
 ```
 
-Thus, we may easily get the c code below:
 ```c
 double funct3(int *ap, double b, long c, float *dp)
 {
 	if(b <= (double)(*ap))
 	{
-		return (double)((float)c + 2*(*dp));
+		return (double)(2*(float)(*dp) + (float)c);
 	}
 	else
 	{
-		return (double)((float)c * (*dp));
+		return (double)((float)c * (float)(*dp));
 	}
 }
 ```
+
+
 
 
