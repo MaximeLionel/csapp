@@ -608,7 +608,7 @@ It's also the operation on sign bit, which is to reverse the sign bit.
 				* Example: the `jp` (for “jump on parity”) instruction is used to conditionally jump when a floating-point comparison yields an unordered result.
 	* ZF is set when the 2 operands are equal.
 	* CF is set when S2 < S1. 
-		* Instructions such as ja and jb are used to conditionally jump on various combinations of these flags.
+		* Instructions such as `ja` and `jb` are used to conditionally jump on various combinations of these flags.
 ## Example:
 * C code:
 ```c
@@ -636,9 +636,9 @@ range_t find_range(float x)
 find_range:
 	vxorps %xmm1, %xmm1, %xmm1          # Set %xmm1 = 0
 	vucomiss %xmm0, %xmm1               # Compare 0:x
-	ja .L5                              # If >, goto neg
+	ja .L5                              # If xmm1 > xmm0 (0.0 > x), goto neg
 	vucomiss %xmm1, %xmm0               # Compare x:0
-	jp .L8                              # If NaN, goto posornan
+	jp .L8                              # If unordered case (NaN occurs), goto posornan
 	movl $1, %eax                       # result = ZERO
 	je .L3                              # If =, goto done
 
