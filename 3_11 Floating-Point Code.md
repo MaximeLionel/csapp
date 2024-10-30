@@ -605,8 +605,8 @@ It's also the operation on sign bit, which is to reverse the sign bit.
 		* For floating-point comparisons, however, the flag is set when either operand is `NaN`.
 			* For example, even the comparison x == x yields 0 when x is `NaN`.
 			* The unordered case occurs when either operand is NaN. This can be detected with the parity flag.
-				* Example: the jp (for “jump on parity”) instruction is used to conditionally jump when a floating-point comparison yields an unordered result.
-	* ZF is set when the two operands are equal.
+				* Example: the `jp` (for “jump on parity”) instruction is used to conditionally jump when a floating-point comparison yields an unordered result.
+	* ZF is set when the 2 operands are equal.
 	* CF is set when S2 < S1. 
 		* Instructions such as ja and jb are used to conditionally jump on various combinations of these flags.
 ## Example:
@@ -657,10 +657,10 @@ find_range:
 ```
 
 * 4 possible comparison results:
-	* x < 0.0 The `ja` branch on line  will be taken, jumping to the end with a return value of 0.
+	* x < 0.0 The `ja` branch on line 7 will be taken, jumping to the end with a return value of 0.
 	* x = 0.0 The `ja` (line 7) and `jp` branch (line 9) will not be taken, but the `je `will, returning with %eax equal to 1.
-	* x > 0.0 None of the three branches will be taken. The setbe (line 15) will yield 0, and this will be incremented by the addl instruction (line 17) to give a return value of 2.
-	* x = NaN The jp branch (line 9) will be taken. The third vucomiss (line 14) will set both the carry and the zero flag, and so the instruction setbe instruction (line 15) and the following instruction will set %eax to 1. This gets incremented by the addl instruction (line 17) to give a return value of 3.
+	* x > 0.0 None of the three branches will be taken. The `setbe` (line 15) will yield 0, and this will be incremented by the `addl` instruction (line 17) to give a return value of 2.
+	* x = NaN The jp branch (line 9) will be taken. The third `vucomiss` (line 14) will set both the carry and the zero flag, and so the instruction `setbe` instruction (line 15) and the following instruction will set %eax to 1. This gets incremented by the `addl` instruction (line 17) to give a return value of 3.
 
 # Practice Problem 3.57
 Function funct3 has the following prototype:
