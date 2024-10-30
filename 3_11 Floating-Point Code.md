@@ -642,7 +642,7 @@ find_range:
 	movl $1, %eax                       # result = ZERO
 	je .L3                              # If =, goto done
 
-.L8:                                    # posornan:
+.L8:                                    # pos or nan:
 	vucomiss .LC0(%rip), %xmm0          # Compare x:0
 	setbe %al                           # Set result = NaN?1:0
 	movzbl %al, %eax                    # Zero-extend
