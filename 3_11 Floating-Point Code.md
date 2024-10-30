@@ -659,8 +659,10 @@ find_range:
 * 4 possible comparison results:
 	* x < 0.0 The `ja` branch on line 7 will be taken, jumping to the end with a return value of 0.
 	* x = 0.0 The `ja` (line 7) and `jp` branch (line 9) will not be taken, but the `je `will, returning with %eax equal to 1.
-	* x > 0.0 None of the three branches will be taken. The `setbe` (line 15) will yield 0, and this will be incremented by the `addl` instruction (line 17) to give a return value of 2.
-	* x = NaN The jp branch (line 9) will be taken. The third `vucomiss` (line 14) will set both the carry and the zero flag, and so the instruction `setbe` instruction (line 15) and the following instruction will set %eax to 1. This gets incremented by the `addl` instruction (line 17) to give a return value of 3.
+	* x > 0.0 None of the 3 branches will be taken. The `setbe` (line 15) will yield 0, and this will be incremented by the `addl` instruction (line 17) to give a return value of 2.
+	* x = NaN The `jp` branch (line 9) will be taken. The third `vucomiss` (line 14) will set both the carry and the zero flag, and so the instruction `setbe` instruction (line 15) and the following instruction will set %eax to 1. This gets incremented by the `addl` instruction (line 17) to give a return value of 3.
+		* Intel manual for reference of `setbe` instruction:
+			![[Pasted image 20241030162051.png|400]]
 
 # Practice Problem 3.57
 Function funct3 has the following prototype:
