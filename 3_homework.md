@@ -23,21 +23,24 @@ Write C code for decode2 that will have an effect equivalent to the assembly cod
 Analyze assembly code:
 ```
 # long decode2(long x, long y, long z)
-# rdi - x, rsi - y, rdx - z
+# x - rdi
+# y - rsi
+# z - rdx
 decode2:
-	subq %rdx, %rsi    # rsi=rsi-rdx: rsi = y - z
-	imulq %rsi, %rdi   # rdi=rdi*rsi: rdi = x * (y - z)
+	subq %rdx, %rsi    # rsi=rsi-rdx: y = y - z
+	imulq %rsi, %rdi   # rdi=rdi*rsi: x = x * (y - z)
 	movq %rsi, %rax    # rax=rsi: rax = y - z
-	salq $63, %rax     # rax=rax<<63: rax = (y-z)<<63
-	sarq $63, %rax     # rax=rax>>63: rax = ((y-z)<<63)>>63
-	xorq %rdi, %rax    # rax=rax^rdi: rax = ((y-z)<<63)>>63 ^ (x * (y - z))
+	salq $63, %rax     # rax=rax<<63: rax = (y - z) << 63
+	sarq $63, %rax     # rax=rax>>63: rax = ((y - z) << 63) >> 63
+	xorq %rdi, %rax    # rax=rax^rdi: rax = (((y - z) << 63) >> 63) ^ (x * (y - z))
 	ret
 ```
-Thus the C code:
-```C
+
+So the code:
+```c
 long decode2(long x, long y, long z)
 {
-	return ((y-z)<<63)>>63 ^ (x*(y-z));
+	return (((y - z) << 63) >> 63) ^ (x * (y - z));
 }
 ```
 
@@ -70,32 +73,6 @@ This code uses three multiplications for the multiprecision arithmetic required 
 $p = 2^{64} \times p_h + p_l$, where $p_h$ and $p_l$ are 64-bit values. Show how the code computes the values of $p_h$ and $p_l$ in terms of $x_h$, $x_l$, $y_h$, and $y_l$.
 
 **Solution**:
-* Firstly, let's analyze the theory:
-	* For bit representation $[x_0,x_1 ... x_{63}]$, $x$ is its signed value and $ux$ is its unsigned value. 
-	* Then $ux = x + 2^{64}*x_{63}$ while $x_{63}$ is the sign bit value of $x$.
-	* So we also get same for $y$: $uy = y + 2^{64}*y_{63}$
-	* Combined to get $x*y$: $x*y=(ux-2^{64}*x_{63})*(uy-2^{64}*y_{63})=ux*uy-(x_{63}*uy+y_{63}*ux)2^{64}$
-	* Ok, now we get the formula, let's go through the assembly code.
-* Analyze the assembly code:
-```
-# void store_prod(int128_t *dest, int64_t x, int64_t y)
-# rdi - dest, rsi - x, rdx - y
-store_prod:
-	movq    %rdx, %rax     # rax=rdx: rax = y
-	cqto                   # convert 64bits in rax to 128bits: 
-	                       # rdx = y >> 63
-	                       # rax = y
-	movq    %rsi, %rcx     # rcx=rsi: rcx = x
-	sarq    $63, %rcx      # rcx=rcx>>63: rcx = x>>63 - get the sign bit of x which is x63
-	imulq   %rax, %rcx     # rcx=rcx*rax: rcx = y * (x>>63)
-	imulq   %rsi, %rdx     # rdx=rdx*rsi: rdx = (y>>63) * x
-	addq    %rdx, %rcx     # rcx=rcx+rdx: rcx = (y*(x>>63)) + ((y>>63)*x)
-	mulq    %rsi           # rdx:rax=rax*rsi: rdx:rax = uy * ux
-	addq    %rcx, %rdx     # rdx=rdx+rcx: rdx = rdx + (y*(x>>63)) + ((y>>63)*x) - high64bits operation
-	movq    %rax, (%rdi)   # M(rdi)=rax: *dest = rax - set low 64 bits
-	movq    %rdx, 8(%rdi)  # M(rdi+8)=rdx: *(dest+8) = rdx - set high 64 bits
-	ret
-```
 
 # 3.60 **
 Consider the following assembly code:
