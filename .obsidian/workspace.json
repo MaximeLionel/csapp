@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_homework.md",
                 "mode": "source",
                 "source": false
               }
@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_4 Accessing Information.md",
+                "file": "2_2 Integral Data Types.md",
                 "mode": "source",
                 "source": false
               }
@@ -93,7 +93,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -109,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_homework.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -126,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "3_11 Floating-Point Code.md",
+                "file": "3_homework.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -149,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3_11 Floating-Point Code.md"
+                "file": "3_homework.md"
               }
             }
           }
@@ -174,17 +175,17 @@
   },
   "active": "e12c23177d9b1910",
   "lastOpenFiles": [
-    "assets/Pasted image 20241030162051.png",
+    "2_2 Integral Data Types.md",
+    "2_1 Information Storage.md",
+    "2_3.md",
     "3_4 Accessing Information.md",
-    "3_2 Program Encodings.md",
+    "3_homework.md",
     "3_11 Floating-Point Code.md",
+    "assets/Pasted image 20241030162051.png",
+    "3_2 Program Encodings.md",
     "2_homework.md",
     "2_4 Floating Point.md",
-    "2_3.md",
-    "2_2 Integral Data Types.md",
     "4_0 Processor Architecture.md",
-    "3_homework.md",
-    "2_1 Information Storage.md",
     "2_1_0.md",
     "assets/Pasted image 20241022083923.png",
     "assets/Pasted image 20241021232916.png",
@@ -210,7 +211,6 @@
     "3_6 Control.assets/Pasted image 20241008102934.png",
     "3_6 Control.assets/Pasted image 20240930093130.png",
     "3_6 Control.assets/Pasted image 20240929102830.png",
-    "3_6 Control.assets/Pasted image 20240929084824.png",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "3_homework.assets",
