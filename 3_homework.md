@@ -72,7 +72,7 @@ store_prod:
 This code uses three multiplications for the multiprecision arithmetic required to implement 128-bit arithmetic on a 64-bit machine. Describe the algorithm used to compute the product, and annotate the assembly code to show how it realizes your algorithm. Hint: When extending arguments of x and y to 128 bits, they can be rewritten as $x = 2^{64} \times x_h + x_l$ and $y = 2^{64} \times y_h + y_l$, where $x_h$, $x_l$, $y_h$, and $y_l$ are 64-bit values. Similarly, the 128-bit product can be written as
 $p = 2^{64} \times p_h + p_l$, where $p_h$ and $p_l$ are 64-bit values. Show how the code computes the values of $p_h$ and $p_l$ in terms of $x_h$, $x_l$, $y_h$, and $y_l$.
 
-**Solution**:
+**Solution**: 
 Firstly, we know that $x = 2^{64} \times x_h + x_l$ and $y = 2^{64} \times y_h + y_l$.
 Then, $x\times y =2^{128}\times x_h\times y_h+2^{64}\times x_h \times y_l+2^{64}\times y_h\times x_l+x_l\times y_l$
 Let's analyze the 4 parts above:
