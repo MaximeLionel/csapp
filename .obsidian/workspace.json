@@ -48,6 +48,20 @@
               "icon": "lucide-file",
               "title": "2_2 Integral Data Types"
             }
+          },
+          {
+            "id": "0842bd5afb354dfb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2_3 Integer Arithmetic.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2_3 Integer Arithmetic"
+            }
           }
         ]
       }
@@ -179,8 +193,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -194,10 +207,10 @@
   },
   "active": "e12c23177d9b1910",
   "lastOpenFiles": [
+    "2_3 Integer Arithmetic.md",
     "2_2 Integral Data Types.md",
     "3_homework.md",
     "2_1 Information Storage.md",
-    "2_3.md",
     "3_4 Accessing Information.md",
     "3_11 Floating-Point Code.md",
     "assets/Pasted image 20241030162051.png",
