@@ -73,12 +73,37 @@ This code uses three multiplications for the multiprecision arithmetic required 
 $p = 2^{64} \times p_h + p_l$, where $p_h$ and $p_l$ are 64-bit values. Show how the code computes the values of $p_h$ and $p_l$ in terms of $x_h$, $x_l$, $y_h$, and $y_l$.
 
 **Solution**: 
-Firstly, we know that $x = 2^{64} \times x_h + x_l$ and $y = 2^{64} \times y_h + y_l$.
-Then, $x\times y =2^{128}\times x_h\times y_h+2^{64}\times x_h \times y_l+2^{64}\times y_h\times x_l+x_l\times y_l$
-Let's analyze the 4 parts above:
-* $2^{128}\times x_h\times y_h$: overflow so ignore
-* $2^{64}\times x_h \times y_l$: 
-
+Firstly, let's analyze the 'hint':
+$x \times y$ = ($2^{64} \times x_h + x_l$) x ($2^{64} \times y_h + y_l$\) = $2^{128}\times x_h \times y_h + 2^{64}\times x_h \times y_l + 2^{64}\times x_l \times y_h + x_l \times y_l$
+We look into it one by one:
+* $2^{128}\times x_h \times y_h$: ignore
+* $2^{64}\times x_h \times y_l$: signed multiplication, only need 64 bits
+* $2^{64}\times x_l \times y_h$: signed multiplication, only need 64 bits
+* $x_l \times y_l$: we need 128 bits. Unsigned multiplication.
+This is our algorithm.
+Secondly, reverse the assembly code:
+```
+# void store_prod(int128_t *dest, int64_t x, int64_t y)
+# rdi - dest
+# rsi - x
+# rdx - y
+store_prod:
+	movq    %rdx, %rax      # rax=rdx: rax = y
+	cqto                    # signed extend to 128bits
+	                        # rdx: y>>63 - copy the sign bit of rax to all bits in rdx - yh
+	                        # rax: y - yl
+	movq    %rsi, %rcx      # rcx=rsi: rcx = x - xl
+	sarq    $63, %rcx       # rcx=rcx>>63 - get the sign bit of x - xh
+	imulq   %rax, %rcx      # rcx=rcx*rax: rcx = xh * yl
+	imulq   %rsi, %rdx      # rdx=rdx*rsi: rdx = yh * xl
+	addq    %rdx, %rcx      # rcx=rcx+rdx: rcx = xh * yl + yh * xl
+	mulq    %rsi            # rdx:rax=rax*rsi: rdx:rax = yl * xl
+	addq    %rcx, %rdx      # rdx=rdx+rcx: ph = rdx +  xh * yl + yh * xl
+	                                       pl = rax
+	movq    %rax, (%rdi)    # M(rdi)=rax: *dest = pl
+	movq    %rdx, 8(%rdi)   # M(rdi+8)=rdx: *(dest+8) = ph
+	ret
+```
 
 # 3.60 **
 Consider the following assembly code:
