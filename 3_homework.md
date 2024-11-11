@@ -155,48 +155,60 @@ E. How does result get updated?
 F. Fill in all the missing parts of the C code.
 
 **Solution**:
-Firstly, analyze the assembly code:
+Annotate the assembly code:
+```c
+long loop(long x, long n)
+{
+	long result = ______;
+	long mask;
+	for (mask = ______; mask ______; mask = ______) {
+		result |= ______;
+	}
+	return result;
+}
+```
 ```
 # long loop(long x, int n)
 # x in %rdi, n in %esi
 
 loop:
-	movl %esi, %ecx     # ecx=esi: ecx = n
-	movl $1, %edx       # edx=1: edx = 1
-	movl $0, %eax       # eax=0: eax = 0
+	movl %esi, %ecx   # ecx=esi: ecx = n
+	movl $1, %edx     # edx=1
+	movl $0, %eax     # eax=0
 	jmp .L2
 
 .L3:
-	movq %rdi, %r8      # r8=rdi: r8 = x
-	andq %rdx, %r8      # r8=r8&rdx: r8 = x & rdx
-	orq %r8, %rax       # rax=rax|r8: rax = rax | (x & rdx)
-	salq %cl, %rdx      # rdx=rdx>>cl
+	movq %rdi, %r8    # r8=rdi: r8 = x
+	andq %rdx, %r8    # r8=r8&rdx: r8 = x & rdx
+	orq %r8, %rax     # rax=rax|r8: rax = rax | (x & rdx)
+	salq %cl, %rdx    # rdx=rdx<<cl
 
 .L2:
-	testq %rdx, %rdx    
-	jne .L3             # if rdx!=0, goto .L3 - rdx is mask
-	rep; ret
+	testq %rdx, %rdx  # test rdx
+	jne .L3           # if rdx!=0, jump to .L3
+	rep; ret          # if rdx==0, return
 ```
-
 A. Which registers hold program values x, n, result, and mask?
-	mask - rdx
-	result - rax
 	x - rdi
 	n - esi
+	result - rax
+	mask - rdx
 
 B. What are the initial values of result and mask?
-	`movl $0, %eax` - The initial value of result is 0.
-	`movl $1, %edx` - The initial value of mask is 1.
+	result - `movl $0, %eax`: 0
+	mask - `movl $1, %edx`: 1
 
 C. What is the test condition for mask?
-	`testq %rdx, %rdx` - `mask != 0`
+	`testq %rdx, %rdx` - check if rdx equals 0
 
 D. How does mask get updated?
-	`salq %cl, %rdx` - `mask << n`
+	`salq %cl, %rdx` - mask = mask << n
 
 E. How does result get updated?
-	`andq %rdx, %r8` - `r8 = x & mask`
-	`orq %r8, %rax` - `result = result | (x & mask)`
+```
+	andq %rdx, %r8    # r8=r8&rdx: r8 = x & rdx
+	orq %r8, %rax     # rax=rax|r8: rax = rax | (x & rdx)
+```
 
 F. Fill in all the missing parts of the C code.
 ```c
@@ -204,12 +216,13 @@ long loop(long x, long n)
 {
 	long result = 0;
 	long mask;
-	for (mask = 1; mask != 0; mask = mask << n) {
+	for (mask = 1; mask != 0; mask = mask<<n) {
 		result |= (x & mask);
 	}
 	return result;
 }
 ```
+
 
 # 3.61 **
 In Section 3.6.6, we examined the following code as a candidate for the use of conditional data transfer:
