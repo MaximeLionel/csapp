@@ -253,9 +253,9 @@ which is:
 ```c
 long cread(long *xp) {
 	v = *xp;
-	if x = 0
 	ve = 0
-	v = ve
+	if xp = 0
+		v = ve
 	return v;
 }
 ```
@@ -272,7 +272,7 @@ Then the pseudo-code would be:
 long cread(long *xp) {
 	v = 0;
 	if !xp = 0
-	v = (*xp)
+		v = (*xp)
 	return v;
 }
 ```
