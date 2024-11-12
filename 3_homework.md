@@ -308,37 +308,38 @@ long switch3(long *p1, long *p2, mode_t action)
 ```
 The part of the generated assembly code implementing the different actions is shown below. The annotations indicate the argument locations, the register values, and the case labels for the different jump destinations.
 ```
+# long switch3(long *p1, long *p2, mode_t action)
 # p1 in %rdi, p2 in %rsi, action in %edx
 
 .L8:             # MODE_E
-	movl $27, %eax
+	movl $27, %eax        
 	ret
 
 .L3:             # MODE_A
-	movq (%rsi), %rax
-	movq (%rdi), %rdx
-	movq %rdx, (%rsi)
+	movq (%rsi), %rax     
+	movq (%rdi), %rdx     
+	movq %rdx, (%rsi)     
 	ret
 
 .L5:             # MODE_B
-	movq (%rdi), %rax
-	addq (%rsi), %rax
-	movq %rax, (%rdi)
+	movq (%rdi), %rax     
+	addq (%rsi), %rax     
+	movq %rax, (%rdi)     
 	ret
 
 .L6:             # MODE_C
-	movq $59, (%rdi)
-	movq (%rsi), %rax
+	movq $59, (%rdi)      
+	movq (%rsi), %rax     
 	ret
 
 .L7:             # MODE_D
-	movq (%rsi), %rax
-	movq %rax, (%rdi)
-	movl $27, %eax
+	movq (%rsi), %rax     
+	movq %rax, (%rdi)     
+	movl $27, %eax        
 	ret
 
 .L9:             # default
-	movl $12, %eax
+	movl $12, %eax        
 	ret
 ```
 
@@ -346,40 +347,41 @@ Fill in the missing parts of the C code. It contained one case that fell through
 
 **Solution**:
 ```
+# long switch3(long *p1, long *p2, mode_t action)
 # p1 in %rdi, p2 in %rsi, action in %edx
 
 .L8:             # MODE_E
-	movl $27, %eax           # eax = 27
+	movl $27, %eax        # eax=27: result = 27
 	ret
 
 .L3:             # MODE_A
-	movq (%rsi), %rax        # rax = M(rsi): rax = *(p2)
-	movq (%rdi), %rdx        # rdx = M(rdi): rdx = *(p1)
-	movq %rdx, (%rsi)        # M(rsi) = rdx: *(p2) = rdx = *(p1)
+	movq (%rsi), %rax     # rax=M(rsi): rax = *p2
+	movq (%rdi), %rdx     # rdx=M(rdi): rdx = *p1
+	movq %rdx, (%rsi)     # M(rsi)=rdx: *p2 = rdx = *p1
 	ret
-
+	
 .L5:             # MODE_B
-	movq (%rdi), %rax        # rax = M(rdi): rax = *(p1)
-	addq (%rsi), %rax        # rax = rax + M(rsi): rax = *(p2) + *(p1)
-	movq %rax, (%rdi)        # M(rdi) = rax: *p1 = rax = *(p2) + *(p1)
+	movq (%rdi), %rax     # rax=M(rdi): rax = *p1
+	addq (%rsi), %rax     # rax+=M(rsi): rax = *p2 + *p1
+	movq %rax, (%rdi)     # M(rdi)=rax: *p1 = rax = *p2 + *p1
 	ret
 
 .L6:             # MODE_C
-	movq $59, (%rdi)         # M(rdi) = 59: (*p1) = 59
-	movq (%rsi), %rax        # rax = M(rsi): rax = *p2
+	movq $59, (%rdi)      # M(rdi)=59: *p1 = 59
+	movq (%rsi), %rax     # rax=M(rsi): rax = *p2
 	ret
 
 .L7:             # MODE_D
-	movq (%rsi), %rax        # rax = M(rsi): rax = *p2
-	movq %rax, (%rdi)        # M(rdi) = rax: (*p1) = rax = (*p2)
-	movl $27, %eax           # eax = 27
+	movq (%rsi), %rax     # rax=M(rsi): rax = *p2
+	movq %rax, (%rdi)     # M(rdi)=rax: *p1 = rax = *p2
+	movl $27, %eax        # eax=27: result = 27
 	ret
 
 .L9:             # default
-	movl $12, %eax           # eax = 12
+	movl $12, %eax        # eax=12: result = 12
 	ret
 ```
-So we can get the C code below:
+
 ```c
 /* Enumerated type creates set of constants numbered 0 and upward */
 typedef enum {MODE_A, MODE_B, MODE_C, MODE_D, MODE_E} mode_t;
@@ -390,34 +392,30 @@ long switch3(long *p1, long *p2, mode_t action)
 	switch(action) {
 		case MODE_A:
 			result = *p2;
-			*(p2) = *(p1);
+			*p2 = *p1;
 			break;
-		
 		case MODE_B:
-			result = *(p2) + *(p1);
+			result = *p2 + *p1;
 			*p1 = result;
 			break;
-			
 		case MODE_C:
-			(*p1) = 59;
+			*p1 = 59;
 			result = *p2;
 			break;
-			
 		case MODE_D:
-			(*p1) = (*p2);
+			*p1 = *p2;
 			result = 27;
 			break;
-			
 		case MODE_E:
-			result = 27;
+			result = 27；
 			break;
-			
 		default:
 			result = 12;
 	}
 	return result;
 }
 ```
+
 
 # 3.63 **
 This problem will give you a chance to reverse engineer a switch statement from disassembled machine code. In the following procedure, the body of the switch statement has been omitted:
