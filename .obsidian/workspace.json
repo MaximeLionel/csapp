@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_6 Control.md",
+                "file": "3_8 Array Allocation and Access.md",
                 "mode": "source",
                 "source": false
               }
@@ -175,8 +175,10 @@
   },
   "active": "e12c23177d9b1910",
   "lastOpenFiles": [
-    "3_6 Control.md",
+    "3_8 Array Allocation and Access.md",
     "3_homework.md",
+    "3_7 Procedures.md",
+    "3_6 Control.md",
     "2_3 Integer Arithmetic.md",
     "2_2 Integral Data Types.md",
     "2_1 Information Storage.md",
@@ -203,8 +205,6 @@
     "1_4.md",
     "1_3.md",
     "1_2.md",
-    "1_1.md",
-    "1_0.md",
     "assets/Pasted image 20241016155318.png",
     "HCL.pdf",
     "assets/Pasted image 20241015135352.png",

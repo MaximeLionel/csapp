@@ -622,27 +622,20 @@ C. What is the value of M?
 **Solution**:
 Look into the assembly code:
 ```
-# void transpose(long A[M][M])
-# rdi - A
 .L6:
-	movq (%rdx), %rcx     # rcx=M(rdx): rcx = A[i][j]
-	movq (%rax), %rsi     # rsi=M(rax): rsi = A[j][i]
-	movq %rsi, (%rdx)     # M(rdx)=rsi:  
-	movq %rcx, (%rax)     # M(rax)=rcx:
-	addq $8, %rdx         # rdx=rdx+8: (&A[i][j])++
-	addq $120, %rax       # rax=rax+120: &A[j][i] = &A[j][i] + j
+	movq (%rdx), %rcx   # rcx=M(rdx): rcx = A[i][j]
+	movq (%rax), %rsi   # rsi=M(rax): rsi = A[j][i]
+	movq %rsi, (%rdx)   # M(rdx)=rsi: A[i][j] = rsi
+	movq %rcx, (%rax)   # M(rax)=rcx: A[j][i] = rcx
+	addq $8, %rdx       # rdx - &A[i][j]
+	addq $120, %rax     # rax - &A[j][i]
 	cmpq %rdi, %rax
 	jne .L6
 ```
-
-A.
-rdx
-
-B.
-rax
-
+A. rdx, B. rax, 
 C.
-15
+M\*8 = 120
+M = 15
 
 # 3.66 *
 Consider the following source code, where NR and NC are macro expressions declared with #define that compute the dimensions of array A in terms of parameter n. This code computes the sum of the elements of column j of the array.
