@@ -521,8 +521,6 @@ long switch_prob(long x, long n) {
 }
 ```
 
-
-
 # 3.64 ***
 Consider the following source code, where R, S, and T are constants declared with #define:
 ```c
@@ -558,7 +556,7 @@ B. Use your reverse engineering skills to determine the values of R, S, and T ba
 
 **Solution**:
 A.
-What is euqation 3.1?
+What is equation 3.1?
 T  D\[R\]\[C\];
 $\&D[i][j] = x_D + L(C \times i + j)$
 This is for 2 dimensions' array. When doing on 3 dimensions' array, it's like:
@@ -571,25 +569,22 @@ B.
 # i in %rdi, j in %rsi, k in %rdx, dest in %rcx
 
 store_ele:
-	leaq (%rsi,%rsi,2), %rax   # rax=3*rsi:  rax = 3j
-	leaq (%rsi,%rax,4), %rax   # rax=rsi+4*rax: rax = j + 12j = 13j
-	movq %rdi, %rsi            # rsi=rdi: rsi = i
-	salq $6, %rsi              # rsi=rsi<<6: rsi = 64i
-	addq %rsi, %rdi            # rdi=rdi+rsi: rdi = i + 64i = 65i
-	addq %rax, %rdi            # rdi=rdi+rax: rdi = 65i + 13j
-	addq %rdi, %rdx            # rdx=rdx+rdi: rdx = k + 65i + 13j
-	movq A(,%rdx,8), %rax      # rax=A+8*rdx: rax = A + 8(k + 65i + 13j)
-	movq %rax, (%rcx)          # M(rcx)=rax: *dest = A + 8(k + 65i + 13j)
-	movl $3640, %eax           # eax=3640
+	leaq (%rsi,%rsi,2), %rax  # rax=3*rsi: rax = 3j
+	leaq (%rsi,%rax,4), %rax  # rax=rsi+4*rax: rax = j + 12j = 13j
+	movq %rdi, %rsi           # rsi=rdi: rsi = i
+	salq $6, %rsi             # rsi=rsi<<6: rsi = 64i
+	addq %rsi, %rdi           # rdi=rdi+rsi: rdi = i + 64i = 65i
+	addq %rax, %rdi           # rdi=rdi+rax: rdi = 65i + 13j
+	addq %rdi, %rdx           # rdx=rdx+rdi: rdx = 65i + 13j + k
+	movq A(,%rdx,8), %rax     # rax=A+8*rdx: rax = A + 8*(65i + 13j + k)
+	movq %rax, (%rcx)         # M(rcx)=rax: *dest = A + 8*(65i + 13j + k)
+	movl $3640, %eax          # eax=3640
 	ret
 ```
-Thus, we get `*dest = A + 8(k + 65i + 13j)`
-From all the information, we get:
-$R*S*T*8=3640$
-$S*T=65$
-$T=13$
-$S=5$
-$R=7$
+We get that: $*dest = A + 8*(65i + 13j + k)$
+So, L = 8, S\*T=65, T = 13, S = 5
+8\*R\*S\*T = 3640
+So R = 7
 
 # 3.65 *
 The following code transposes the elements of an M × M array, where M is a constant defined by #define:
