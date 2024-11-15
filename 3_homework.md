@@ -453,7 +453,7 @@ Figure below shows the disassembled machine code for the procedure:
 	4005c7: c3                      retq
 ```
 
-The jump table resides in a different area of memory. We can see from the indirect jump on line 5 that the jump table begins at address 0x4006f8. Using the gdb debugger, we can examine the six 8-byte words of memory comprising the jump table with the command x/6gx 0x4006f8. Gdb prints the following:
+The jump table resides in a different area of memory. We can see from the indirect jump on line 8 that the jump table begins at address 0x4006f8. Using the gdb debugger, we can examine the six 8-byte words of memory comprising the jump table with the command x/6gx 0x4006f8. Gdb prints the following:
 ```shell
 (gdb) x/6gx 0x4006f8
 
@@ -471,52 +471,57 @@ We look into the assembly code:
 # x in %rdi, n in %rsi
 
 0000000000400590 <switch_prob>:
-	400590: 48 83 ee 3c             sub  $0x3c,%rsi                 # rsi=rsi-0x3c: n = n - 0x3c
-	400594: 48 83 fe 05             cmp  $0x5,%rsi                  # cmp 5 and rsi: cmp 5 and n-0x3c
-	400598: 77 29                   ja   4005c3 <switch_prob+0x33>  # if n-0x3c > 5, goto 4005c3
-	40059a: ff 24 f5 f8 06 40 00    jmpq *0x4006f8(,%rsi,8)         # goto *(0x4006f8+8*rsi)
-	4005a1: 48 8d 04 fd 00 00 00    lea  0x0(,%rdi,8),%rax          # if rsi=0 or 2, rax=8*rdi: 
-	                                                                # if n - 0x3c = 0, result = 8*x
+	400590: 48 83 ee 3c             sub  $0x3c,%rsi    # rsi=rsi-0x3c: rsi = n - 0x3c
+	400594: 48 83 fe 05             cmp  $0x5,%rsi     # compare rsi,5
+	400598: 77 29                   ja   4005c3 <switch_prob+0x33> if rsi>5, jump to 4005c3
+																   if rsi<=5, continue
+	40059a: ff 24 f5 f8 06 40 00    jmpq *0x4006f8(,%rsi,8) # jump to 0x4006f8 + 8*(n-0x3c)
+															# if n = 0x3c or 0x3e
+	4005a1: 48 8d 04 fd 00 00 00    lea  0x0(,%rdi,8),%rax  # rax=8*rdi: rax = 8x
 	4005a8: 00
 	4005a9: c3                      retq
-	4005aa: 48 89 f8                mov  %rdi,%rax                  # if rsi=3, rax=rdi
-	                                                                # if n - 0x3c = 3, result = x
-	4005ad: 48 c1 f8 03             sar  $0x3,%rax                  # rax=rax>>3: result = x/8
+															# if n = 0x3f
+	4005aa: 48 89 f8                mov  %rdi,%rax          # rax=rdi: rax = x
+	4005ad: 48 c1 f8 03             sar  $0x3,%rax          # rax=rax>>3: rax=x>>3
 	4005b1: c3                      retq
-	4005b2: 48 89 f8                mov  %rdi,%rax                  # if rsi=4, rax=rdi
-	                                                                # if n - 0x3c = 4, result = x
-	4005b5: 48 c1 e0 04             shl  $0x4,%rax                  # rax=rax<<4: result = x*16
-	4005b9: 48 29 f8                sub  %rdi,%rax                  # rax=rax-rdi: result = 15*x
-	4005bc: 48 89 c7                mov  %rax,%rdi                  # rdi=rax: rdi = 15*x
-	
-	4005bf: 48 0f af ff             imul %rdi,%rdi                  # sharedcode - rdi=rdi*rdi
-	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax            # sharedcode - if rsi=1, rax=rdi+0x4b                                                        # rax = rdi + 0x4b
-	                                                                # sharedcode - if n - 0x3c = 1, result = x + 0x4b
+															# if n = 0x40
+	4005b2: 48 89 f8                mov  %rdi,%rax          # rax=rdi: rax = x
+	4005b5: 48 c1 e0 04             shl  $0x4,%rax          # rax=rax<<4: rax=x<<4
+	4005b9: 48 29 f8                sub  %rdi,%rax          # rax=rax-rdi: rax = x<<4-x = 15*x
+	4005bc: 48 89 c7                mov  %rax,%rdi          # rdi=rax: rdi = 15x
+															# if n = 0x41
+	4005bf: 48 0f af ff             imul %rdi,%rdi          # sharedcode - rdi=rdi*rdi
+															# sharedcode - if n = 0x3d
+	4005c3: 48 8d 47 4b             lea  0x4b(%rdi),%rax    # sharedcode - rax=rdi+0x4b
 	4005c7: c3                      retq
 ```
 
-Then construct the C code:
+Then we start to deal with the C code:
 ```c
 long switch_prob(long x, long n) {
 	long result = x;
 	switch(n) {
 		/* Fill in code here */
-		case 0x3c:        // rsi = 0
-		case 0x3e:        // rsi = 2
+		case 0x3c:
+		case 0x3e:
 			result = 8*x;
 			break;
-		case 0x3f:        // rsi = 3
+		case 0x3f:
 			result = x/8;
 			break;
-		case 0x40:        // rsi = 4
-			result = 15*x*15*x + 0x4b;
+		case 0x40:
+			x = 15*x;
+		case 0x41:
+			result = x*x + 0x4b;
 			break;
-		default:        // rsi = 1
+		default: 
 			result = x + 0x4b;
 	}
 	return result;
 }
 ```
+
+
 
 # 3.64 ***
 Consider the following source code, where R, S, and T are constants declared with #define:
