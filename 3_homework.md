@@ -1202,7 +1202,7 @@ void proc (union ele *up) {
 # 3.71 ◆
 Write a function good_echo that reads a line from standard input and writes it to standard output. Your implementation should work for an input line of arbitrary length. You may use the library function fgets, but you must make sure your function works correctly even when the input line requires more space than you have allocated for your buffer. Your code should also check for error conditions and return when one is encountered. Refer to the definitions of the standard I/O functions for documentation [45, 61].
 
-**Solutino**:
+**Solution**:
 Get the syntax of `fgets` function:
 ```c
 char* fgets(char *_str_, int _n_, FILE *_stream_);
@@ -1230,6 +1230,13 @@ int main()
 	return 0;
 }
 ```
+
+For example:
+If you input the string "01234567890":
+1. fgets read the 1st 4 chars "0123", store into buffer and output;
+2. fgets read the 2nd 4 chars "4567", store into buffer and output;
+3. fgets read the 3rd 3 chars "890", store into buffer and output.
+4. Until EOF of the file, which is ctrl+d.
 # 3.72 ◆◆
 The C code below shows the code for a function that is similar to function vfunct. We used vfunct to illustrate the use of a frame pointer in managing variable-size stack frames. The new function aframe allocates space for local array p by calling library function `alloca`. This function is similar to the more commonly used function `malloc`, except that it allocates space on the run-time stack. The space is automatically deallocated when the executing procedure returns. The assembly code below shows the part of the assembly code that sets up the frame pointer and allocates space for local variables i and p. It is very similar to the corresponding code for vframe. Let us use the same notation as in Problem 3.49: The stack pointer is set to values $s_1$ at line 7 and $s_2$ at line 10. The start address of array p is set to value p at line 12. Extra space $e_2$ may arise between $s_2$ and p, and extra space $e_1$ may arise between the end of array p and $s_1$.
 ```c
