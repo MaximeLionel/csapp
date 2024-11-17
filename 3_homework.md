@@ -1173,6 +1173,29 @@ e2.x          0x0
 e2.next       0x8
 ```
 
+B. 
+16 bytes.
+
+C.
+Reverse engineer the assembly code:
+```
+# void proc (union ele *up)
+# up in %rdi
+
+proc:
+	movq 8(%rdi), %rax    # rax=M(rdi+8): rax = up->next
+	movq (%rax), %rdx     # rdx=M(rax): rdx = *(up->next) = up->next->p
+	movq (%rdx), %rdx     # rdx=M(rdx): rdx = *(up->next->p)
+	subq 8(%rax), %rdx    # rdx=rdx-M(rax+8): rdx = *(up->next->p) - (up->next->y)
+	movq %rdx, (%rdi)     # up->x = *(up->next->p) - (up->next->y)
+	ret
+```
+Fill in the C code:
+```c
+void proc (union ele *up) {
+	up-> x = *(up->e2.next->e1.p) - (up->e2.next->e1.y);
+}
+```
 
 
 
