@@ -1153,50 +1153,28 @@ On the basis of this information, fill in the missing expressions in the code fo
 
 **Solution**:
 A. 
-We analyze the offsets first:
 ```c
 union ele {
 	struct {
-		long *p;     // offset - 0
-		long y;      // offset - 8
+		long *p;
+		long y;
 	} e1;
 
 	struct {
-		long x;            // offset - 0
-		union ele *next;   // offset - 8
+		long x;
+		union ele *next;
 	} e2;
 };
 ```
-
-| Element | Offset |
-| ------- | ------ |
-| e1.p    | 0      |
-| e1.y    | 8      |
-| e2.x    | 0      |
-| e2.next | 8      |
-B.
-16 bytes
-
-C.
-Look into the assembly code first:
 ```
-# void proc (union ele *up)
-# up in %rdi
+e1.p          0x0
+e1.y          0x8
+e2.x          0x0
+e2.next       0x8
+```
 
-proc:
-	movq 8(%rdi), %rax     # rax=M(rdi+8): rax = *(up + 8) - up->y or up->next
-	movq (%rax), %rdx      # rdx=M(rax): rdx = *(up->next) = up->next->p
-	movq (%rdx), %rdx      # rdx=M(rdx): rdx = *(up->next->p)
-	subq 8(%rax), %rdx     # rdx=rdx-M(rax+8): rdx = *(up->next->p) - (up->next->y)
-	movq %rdx, (%rdi)      # M(rdi)=rdx: up->x = *(up->next->p) - (up->next->y)
-	ret
-```
-Then fill in the code below:
-```c
-void proc (union ele *up) {
-	up->e2.x = *(up->e2.next->e1.p) - up->e2.next->e1.y;
-}
-```
+
+
 
 # 3.71 ◆
 Write a function good_echo that reads a line from standard input and writes it to standard output. Your implementation should work for an input line of arbitrary length. You may use the library function fgets, but you must make sure your function works correctly even when the input line requires more space than you have allocated for your buffer. Your code should also check for error conditions and return when one is encountered. Refer to the definitions of the standard I/O functions for documentation [45, 61].
