@@ -1284,7 +1284,7 @@ Reverse the assembly code:
 
 aframe:
 	pushq %rbp
-	movq %rsp, %rbp
+	movq %rsp, %rbp             # setup stack frame pointer
 	subq $16, %rsp              # rsp=rsp-16: Allocate space for i (%rsp = s1)
 	leaq 30(,%rdi,8), %rax      # rax=8*rdi+30: rax = 8*n + 0x 1E
 	andq $-16, %rax             # rax = rax & 0x FFFF FFF0
@@ -1298,7 +1298,7 @@ Go through all instructions with changing in stack frame step by step:
 	![[image-20240704170455325.png|250]]
 2. After executing `pushq %rbp` 
 	![[image-20240704170809783.png|250]]
-3. After executing `movq %rsp, %rbp`
+3. After executing `movq %rsp, %rbp` to set stack frame pointer
 	![[image-20240704170945156.png|250]]
 4. After executing `subq $16, %rsp`
 	![[image-20240704171555542.png|250]]
@@ -1317,9 +1317,6 @@ Go through all instructions with changing in stack frame step by step:
 	![[image-20240704174623686.png|300]]
 11. Add $e_1$, $e_2$ labels
 	![[image-20240705104621981.png|300]]
-
-
-
 
 
 Consider s1 - s2: ((8n+0x1E)&0xfffffff0)
@@ -1347,7 +1344,7 @@ p = ($s_2$+15) & 0x FFFF FFF0, which is the closest multiples of 16 which is gre
 
 C.
 The minimum e1: when n is an even number, $e1_{min}$ = 1
-The maximum e1: when n is an odd number, $e2_{max}=24$
+The maximum e1: when n is an odd number, $e1_{max}=24$
 
 D.
 16 bytes.
