@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3_10 Combining Control and Data in Machine-Level Programs.md",
+                "file": "3_8 Array Allocation and Access.md",
                 "mode": "source",
                 "source": false
               }
@@ -174,9 +174,10 @@
   },
   "active": "e12c23177d9b1910",
   "lastOpenFiles": [
+    "3_8 Array Allocation and Access.md",
+    "3_9 Heterogeneous Data Structures.md",
     "3_10 Combining Control and Data in Machine-Level Programs.md",
     "3_homework.md",
-    "3_8 Array Allocation and Access.md",
     "3_7 Procedures.md",
     "3_6 Control.md",
     "2_3 Integer Arithmetic.md",
@@ -203,7 +204,6 @@
     "1_7.md",
     "1_5&6.md",
     "1_4.md",
-    "1_3.md",
     "assets/Pasted image 20241016155318.png",
     "HCL.pdf",
     "assets/Pasted image 20241015135352.png",
