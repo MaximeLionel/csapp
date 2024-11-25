@@ -1350,7 +1350,7 @@ D.
 16 bytes.
 
 # 3.73 ◆
-Write a function in assembly code that matches the behavior of the function find_range in code below. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all $2^{32}$ possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
+Write a function in assembly code that matches the behavior of the function `find_range` in code below. Your code should contain only one floating-point comparison instruction, and then it should use conditional branches to generate the correct result. Test your code on all $2^{32}$ possible argument values. Web Aside asm:easm on page 214 describes how to incorporate functions written in assembly code into C programs.
 * C code:
 ```c
 typedef enum {NEG, ZERO, POS, OTHER} range_t; // 0 (NEG), 1 (ZERO), 2 (POS), and 3 (OTHER)
