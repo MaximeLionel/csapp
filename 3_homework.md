@@ -1743,7 +1743,7 @@ Firstly, let's find out what is `complex numbers`.
 * "complex numbers" refers to numbers that have both a real part and an imaginary part. 
 * A complex number is typically written in the form (a + bi)
 	* (a) is the real part
-	* (b) is the imaginary part
+	* (bi) is the imaginary part
 	* (i) is the imaginary unit with the property that (i^2 = -1).
 	* a and b are both real number
 So we get that, as a complex number, when doing parameters transferring, basically it's just passing a and b.
