@@ -1,4 +1,4 @@
-* In this section, we will design our own ISA !
+* In this section, we will design our own ISA!
 * Instruction set architecture (ISA) - The instructions supported by a particular processor and their byte-level encodings are known as its instruction set architecture (ISA).
 * ISA provides a conceptual layer of abstraction between compiler writers, who need only know what instructions are permitted and how they are encoded, and processor designers, who must build machines that execute those instructions.
 * In this chapter, we start by defining a simple instruction set that we call this the “Y86-64”.
