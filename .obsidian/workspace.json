@@ -55,7 +55,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -155,7 +156,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_1 The Y86-64 Instruction Set Architecture.md"
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-list",
               "title": "Outline of 4_1 The Y86-64 Instruction Set Architecture"
