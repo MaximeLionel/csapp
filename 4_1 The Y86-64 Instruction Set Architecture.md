@@ -42,7 +42,7 @@
 ![[Pasted image 20240730225244.png|100]]
 * 4 integer operation instructions: `addq`, `subq`, `andq`, and `xorq`.
 * Y86-64 `OPq` operate only on register data, whereas x86-64 `OPq` also allows operations on memory data.
-* Y86-64 `OPq` set the three condition codes ZF, SF, and OF (zero, sign, and overflow).
+* Y86-64 `OPq` set the 3 condition codes ZF, SF, and OF (zero, sign, and overflow).
 
 ## `JXX` - jump instructions
 * 7 jump instructions: `jmp`, `jle`, `jl`, `je`, `jne`, `jge`, and `jg`.
