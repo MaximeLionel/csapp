@@ -3,5 +3,6 @@
   "theme": "moonstone",
   "baseFontSize": 12,
   "textFontFamily": "Courier",
-  "cssTheme": "Prism"
+  "cssTheme": "Prism",
+  "showRibbon": true
 }

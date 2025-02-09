@@ -35,7 +35,8 @@
               "title": "4_1 The Y86-64 Instruction Set Architecture"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -108,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "4_0 Processor Architecture.md",
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 4_0 Processor Architecture"
+              "title": "Backlinks for 4_1 The Y86-64 Instruction Set Architecture"
             }
           },
           {
@@ -127,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "4_0 Processor Architecture.md",
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 4_0 Processor Architecture"
+              "title": "Outgoing links from 4_1 The Y86-64 Instruction Set Architecture"
             }
           },
           {
@@ -154,10 +155,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "4_0 Processor Architecture.md"
+                "file": "4_1 The Y86-64 Instruction Set Architecture.md"
               },
               "icon": "lucide-list",
-              "title": "Outline of 4_0 Processor Architecture"
+              "title": "Outline of 4_1 The Y86-64 Instruction Set Architecture"
             }
           }
         ],
@@ -179,10 +180,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e12c23177d9b1910",
+  "active": "2b7cfad5aece4304",
   "lastOpenFiles": [
-    "4_1 The Y86-64 Instruction Set Architecture.md",
+    "simguide.pdf",
     "4_0 Processor Architecture.md",
+    "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "3_8 Array Allocation and Access.md",
     "3_homework.md",
@@ -210,7 +212,6 @@
     "2_0.md",
     "1_9.md",
     "1_8.md",
-    "1_7.md",
     "assets/Pasted image 20241016155318.png",
     "HCL.pdf",
     "assets/Pasted image 20241015135352.png",
