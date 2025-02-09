@@ -30,10 +30,10 @@
 
 ## `MOVQ` - data transfer instruction
 ![[Pasted image 20240730223317.png|500]]
-* The Y86-64 `movq` instruction is split into four different instructions: `irmovq`, `rrmovq`, `mrmovq`, and `rmmovq`, explicitly indicating the form of the source and destination.
+* The Y86-64 `movq` instruction is split into 4 different instructions: `irmovq`, `rrmovq`, `mrmovq`, and `rmmovq`, explicitly indicating the form of the source and destination.
 * The source is either immediate (i), register (r), or memory (m). It is designated by the first character in the instruction name.
 * The destination is either register (r) or memory (m). It is designated by the second character in the instruction name.
-* The memory references for the two memory movement instructions have a simple base and displacement format.
+* The memory references for the 2 memory movement instructions have a simple base and displacement format.
 * As with x86-64, we do not allow direct transfers from one memory location to another. In addition, we do not allow a transfer of immediate data to memory.
 
 ## `OPq` - integer operation instructions
