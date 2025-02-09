@@ -84,7 +84,7 @@
 * Each of the 15 program registers has an associated **identifier (ID)** ranging from 0 to 0xE. 
 * ID 0xF in a register field of an instruction indicates the absence of a register operand.
 * The program registers are stored within the CPU in a register file, a small random access memory where the register IDs serve as addresses.
-* There can be an additionalregister specifier byte, specifying either one or two registers. These register fields are called rA and rB.
+* There can be an additional register specifier byte, specifying either one or two registers. These register fields are called rA and rB.
 	![[Pasted image 20240801145505.png|350]]
 	* As the assembly-code versions of the instructions show, they can specify the registers used for data sources and destinations, as well as the base register used in an address computation, depending on the instruction type.
 	* Instructions that have no register operands, such as `branches` and `call`, do not have a register specifier byte.
