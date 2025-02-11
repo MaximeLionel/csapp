@@ -94,11 +94,12 @@
 ![[Pasted image 20240801145505.png|350]]
 * Some instructions require an additional 8-byte constant word.
 * This word can serve as the immediate data for `irmovq`, the displacement for `rmmovq` and `mrmovq` address specifiers, and the destination of `branches` and `calls`.
-* Fpr Y86-64, branch and call destinations are given as absolute addresses, rather than using the PC-relative addressing seen in x86-64.
+* For Y86-64, branch and call destinations are given as absolute addresses, rather than using the PC-relative addressing seen in x86-64.
 * As with x86-64, all integers have a `little-endian encoding`. When the instruction is written in disassembled form, these bytes appear in reverse order.
 
 ## Example - generate the byte encoding of an instruction
 Let us generate the byte encoding of the instruction `rmmovq %rsp,0x123456789abcd(%rdx)` in hexadecimal.
+* The basic format of `rmmovq`: `rmmovq rA, D(rB)`
 * `rmmovq` has initial byte 40.
 * The source register `%rsp`: 
 	* Encoded in the `rA` field.
