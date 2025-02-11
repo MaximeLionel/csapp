@@ -117,7 +117,7 @@ Let us generate the byte encoding of the instruction `rmmovq %rsp,0x123456789abc
 	```
 
 
-# Summary of Y86-64 Instructions
+# Summary of Y86-64 Instructions Set
 ![[Pasted image 20240801215256.png|550]]
 ![[Y86-64.htm]]
 
@@ -135,60 +135,54 @@ loop:
 ```
 
 **Solution**:
-`irmovq $15,%rbx`:
-* `irmovq` format:
-	![[Pasted image 20240801154741.png|500]]
-* rB - rbx (register ID: 3)
-* Constant - 15:
-	* 15 - 0x 00 00 00 00 00 00 00 0F
-	* Reverse the bits - `0F 00 00 00 00 00 00 00`
-* Byte encoding: `30 F3 0F 00 00 00 00 00 00 00
+irmovq $15,%rbx:
+![[Pasted image 20250211112409.png|500]]
+* `irmovq` - 30
+* rB: `rbx` - 3
+* V: 15 - 0x 00 00 00 00 00 00 00 0F
+	* To reverse based on little endian - 0x 0F 00 00 00 00 00 00 00
+The full encoding: 0x100: 30 F3 0F 00 00 00 00 00 00 00
 
-`rrmovq %rbx,%rcx`:
-* `rrmovq` format:
-	![[Pasted image 20240801161232.png|200]]
-* rA - rbx (register ID: 3)
-* rB - rcx (register ID: 1)
-* Byte encoding: `20 31`
+rrmovq %rbx,%rcx:
+![[Pasted image 20250211112735.png|200]]
+* `rrmovq` - 20
+* rA: `rbx` - 3
+* rB: `rcx` - 1
+The full encoding: 0x10A: 20 31
 
-`rmmovq %rcx,-3(%rbx)`:
-* `rmmovq` format:
-	![[Pasted image 20240801161427.png|500]]
-* rA - rcx (register ID: 1)
-* rB - rbx (register ID: 3)
-* D - 0x FF FF FF FF FF FF FF FD
-	* Reverse the bits - `FD FF FF FF FF FF FF FF`
-* Byte encoding: `40 13 FD FF FF FF FF FF FF FF`
+rmmovq %rcx,-3(%rbx):
+![[Pasted image 20250211113002.png|500]]
+* `rmmovq` - 40
+* rA: `rcx` - 1
+* rB: `rbx` - 3
+* D: -3 - 0x FF FF FF FF FF FF FF FD
+	* To reverse based on little endian - 0x FD FF FF FF FF FF FF FF
+The full encoding: 0x10C: 40 13 FD FF FF FF FF FF FF FF
 
-`addq %rbx,%rcx`:
-* `addq` format:
-	![[Pasted image 20240801161835.png|200]]
-	* function values of `addq` - 60
-	![[Pasted image 20240801161921.png|70]]
-* rA - rbx (register ID: 3)
-* rB - rcx (register ID: 1)
-* Byte encoding: `60 31`
+addq %rbx,%rcx
+![[Pasted image 20250211113302.png|300]]
+* `addq` - 60
+* rA: `rbx` - 3
+* rB: `rcx` - 1
+The full encoding: 0x116: 60 31
 
-`jmp loop`:
-* `jmp` format:
-	![[Pasted image 20240801162302.png|500]]
-	* function values of `jmp` - 70
-	![[Pasted image 20240801162429.png|120]]
-* Dest:
-	* We need to calculate the address of .loop: 0x 100 + 0x A + 0x 2 = 0x 10C
-	* Expand to 8 bytes: 0x 00 00 00 00 00 00 01 0C
-	* Reverse the bits: `0C 01 00 00 00 00 00 00`
-* Byte encoding: `70 0C 01 00 00 00 00 00 00`
+jmp loop
+![[Pasted image 20250211113450.png|800]]
+* `jmp` - 70
+* Dest - 0x 00 00 00 00 00 00 01 0C
+	* To reverse based on little endian - 0x 0C 01 00 00 00 00 00 00
+The full encoding: 0x118: 70 0C 01 00 00 00 00 00 00
 
-Overall, we get the full byte encodings below:
+To summarize:
 ```
-.pos 0x100 # Start code at address 0x100
-100	 30 F3 0F 00 00 00 00 00 00 00  irmovq $15,%rbx
-10A	 20 31                          rrmovq %rbx,%rcx
-10C  40 13 FD FF FF FF FF FF FF FF  rmmovq %rcx,-3(%rbx)
-116  60 31	                        addq %rbx,%rcx
-118  70 0C 01 00 00 00 00 00 00	    jmp loop
+0x100: 30 F3 0F 00 00 00 00 00 00 00
+0x10A: 20 31
+0x10C: 40 13 FD FF FF FF FF FF FF FF
+0x116: 60 31
+0x118: 70 0C 01 00 00 00 00 00 00
 ```
+
+
 
 # Practice Problem 4.2
 For each byte sequence listed, determine the Y86-64 instruction sequence it encodes. If there is some invalid byte in the sequence, show the instruction sequence up to that point and indicate where the invalid value occurs. For each sequence, we show the starting address, then a colon, and then the byte sequence.
