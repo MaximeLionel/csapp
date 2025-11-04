@@ -1,5 +1,8 @@
 [
   "obsidian-git",
   "obsidian-style-settings",
-  "code-styler"
+  "code-styler",
+  "cm-editor-syntax-highlight-obsidian",
+  "mousewheel-image-zoom",
+  "obsidian-custom-attachment-location"
 ]
