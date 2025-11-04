@@ -1,7 +1,7 @@
 {
   "accentColor": "",
   "theme": "moonstone",
-  "baseFontSize": 12,
+  "baseFontSize": 16,
   "textFontFamily": "Courier",
   "cssTheme": "Prism",
   "showRibbon": true

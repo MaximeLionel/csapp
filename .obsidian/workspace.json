@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "4_1 The Y86-64 Instruction Set Architecture.md",
+                "file": "4_5 Pipelined Y86-64 Implementations.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "4_1 The Y86-64 Instruction Set Architecture"
+              "title": "4_5 Pipelined Y86-64 Implementations"
             }
           }
         ],
@@ -185,6 +185,7 @@
   },
   "active": "2b7cfad5aece4304",
   "lastOpenFiles": [
+    "4_1 The Y86-64 Instruction Set Architecture.md",
     "assets/Pasted image 20250211113450.png",
     "assets/Pasted image 20250211113302.png",
     "assets/Pasted image 20250211113002.png",
@@ -192,7 +193,6 @@
     "assets/Pasted image 20250211112409.png",
     "simguide.pdf",
     "4_0 Processor Architecture.md",
-    "4_1 The Y86-64 Instruction Set Architecture.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "3_8 Array Allocation and Access.md",
     "3_homework.md",
@@ -222,7 +222,6 @@
     "1_8.md",
     "assets/Pasted image 20241016155318.png",
     "HCL.pdf",
-    "assets/Pasted image 20241015135352.png",
     "3_6 Control.assets/Y86-64.htm",
     "3_6 Control.assets/Book1.htm",
     "3_homework.assets",

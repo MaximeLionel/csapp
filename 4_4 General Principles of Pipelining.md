@@ -4,7 +4,7 @@
 ## Unpipelined computation
 hardware
 ![[Pasted image 20240918161817.png|400]]
-* A simple nonpipelined hardware system: 
+* A simple non-pipelined hardware system: 
 	* consists of some **logic** that performs a computation, followed by a **register** to hold the results of this computation. 
 	* A **clock signal** controls the loading of the register at some regular time interval.
 	* The computational block is implemented as **combinational logic**, meaning that the signals will pass through a series of logic gates, with the outputs becoming some function of the inputs after some time delay.
