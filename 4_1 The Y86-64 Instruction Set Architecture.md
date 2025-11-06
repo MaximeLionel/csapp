@@ -374,7 +374,7 @@ Full code:
 		irmovq $8,%r8           # Constant 8
 		irmovq $1,%r9           # Constant 1
 	```
-	* The Y86-64 code requires two instructions to read a value from memory and add it to a register, whereas the x86-64 code can do this with a single `addq` instruction.
+	* The Y86-64 code requires 2 instructions to read a value from memory and add it to a register, whereas the x86-64 code can do this with a single `addq` instruction.
 	```y86-64
 		mrmovq (%rdi),%r10      # Get *start
 		addq %r10,%rax          # Add to sum
@@ -452,7 +452,7 @@ stack:
 			.quad 0xa000a000a000
 		```
 		* The label `array` denotes the start of this array, and is aligned on an 8-byte boundary.
-	* Lines 16 to 19 show a “main” procedure that calls the function sum on the four-word array and then halts.
+	* Lines 16 to 19 show a “main” procedure that calls the function sum on the 4-word array and then halts.
 		```
 		main:
 			irmovq array,%rdi
