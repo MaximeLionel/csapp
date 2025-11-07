@@ -185,6 +185,10 @@
   },
   "active": "2b7cfad5aece4304",
   "lastOpenFiles": [
+    "chap4/4_1_5/sample.yo",
+    "chap4/4_1_5/sample.ys",
+    "chap4/4_1_5",
+    "chap4",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "assets/Pasted image 20250211113450.png",
     "assets/Pasted image 20250211113302.png",
@@ -227,9 +231,6 @@
     "3_homework.assets",
     "3_11 Floating-Point Code.assets",
     "3_10 Combining Control and Data in Machine-Level Programs.assets",
-    "3_9 Heterogeneous Data Structures.assets",
-    "3_8 Array Allocation and Access.assets",
-    "Untitled.canvas",
-    "3_7 Procedures.assets"
+    "Untitled.canvas"
   ]
 }
