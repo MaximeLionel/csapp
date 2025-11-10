@@ -462,6 +462,10 @@ stack:
 		```
 &&&
 ## Output of yas assembler
+```shell
+yas sample.ys -o sample.yo
+```
+
 ```
                             | # Execution begins at address 0
 0x000:                      | .pos 0

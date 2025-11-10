@@ -93,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 286.5
   },
   "right": {
     "id": "4338f334bff37d2d",
@@ -185,17 +185,23 @@
   },
   "active": "2b7cfad5aece4304",
   "lastOpenFiles": [
-    "chap4/4_1_5/sample.yo",
-    "chap4/4_1_5/sample.ys",
-    "chap4/4_1_5",
-    "chap4",
+    "sim/misc/yas",
+    "sim/misc/yas-grammar.c",
+    "sim/misc/lex.yy.c",
+    "sim/misc/hcl.tab.c",
+    "sim/pipe/psim.c",
+    "sim/misc/hcl2c",
+    "sim/misc/yis",
+    "sim/seq/ssim.c",
+    "sim/misc/yas-grammar.o",
+    "sim/misc/yas.o",
+    "sim/misc/isa.o",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "assets/Pasted image 20250211113450.png",
     "assets/Pasted image 20250211113302.png",
     "assets/Pasted image 20250211113002.png",
     "assets/Pasted image 20250211112735.png",
     "assets/Pasted image 20250211112409.png",
-    "simguide.pdf",
     "4_0 Processor Architecture.md",
     "4_3 Sequential Y86-64 Implementations.md",
     "3_8 Array Allocation and Access.md",
@@ -225,12 +231,6 @@
     "1_9.md",
     "1_8.md",
     "assets/Pasted image 20241016155318.png",
-    "HCL.pdf",
-    "3_6 Control.assets/Y86-64.htm",
-    "3_6 Control.assets/Book1.htm",
-    "3_homework.assets",
-    "3_11 Floating-Point Code.assets",
-    "3_10 Combining Control and Data in Machine-Level Programs.assets",
     "Untitled.canvas"
   ]
 }
