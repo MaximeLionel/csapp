@@ -460,7 +460,7 @@ stack:
 			call sum              # sum(array, 4)
 			ret
 		```
-&&&
+
 ## Output of yas assembler
 ```shell
 yas sample.ys -o sample.yo
@@ -513,6 +513,10 @@ yas sample.ys -o sample.yo
 * We have implemented an instruction set simulator we call `yis`, the purpose of which is to model the execution of a Y86-64 machine-code program without attempting to model the behavior of any specific processor implementation.
 
 ## Output of yis simulator
+```shell
+yis sample.yo
+```
+
 ```
 Stopped in 34 steps at PC = 0x13. Status ’HLT’, CC Z=1 S=0 O=0
 Changes to registers:
@@ -530,8 +534,7 @@ Changes to memory:
 * In printing register and memory values, it only prints out words that change during simulation, either in registers or in memory. The original values (here they are all zero) are shown on the left, and the final values are shown on the right.
 
 # Practice Problem 4.3
-One common pattern in machine-level programs is to add a constant value to a
-register. With the Y86-64 instructions presented thus far, this requires first using an `irmovq` instruction to set a register to the constant, and then an `addq` instruction to add this value to the destination register. Suppose we want to add a new instruction `iaddq` with the following format:
+One common pattern in machine-level programs is to add a constant value to a register. With the Y86-64 instructions presented thus far, this requires first using an `irmovq` instruction to set a register to the constant, and then an `addq` instruction to add this value to the destination register. Suppose we want to add a new instruction `iaddq` with the following format:
 ![[Pasted image 20240803235003.png|400]]
 This instruction adds the constant value `V` to register `rB`.
 Rewrite the Y86-64 sum function to make use of the `iaddq` instruction. In the original version, we dedicated registers `%r8` and `%r9` to hold constant values. Now, we can avoid using those registers altogether.
@@ -557,9 +560,9 @@ Rewrite the Y86-64 sum function to make use of the `iaddq` instruction. In the o
 		ret                     # Return
 ```
 
+&&&
 # Practice Problem 4.4
-Write Y86-64 code to implement a recursive product function `rproduct`, based
-on the following C code:
+Write Y86-64 code to implement a recursive product function `rproduct`, based on the following C code:
 ```C
 long rproduct(long *start, long count)
 {
@@ -569,8 +572,7 @@ long rproduct(long *start, long count)
 }
 ```
 
-Use the same argument passing and register saving conventions as x86-64 code
-does. You might find it helpful to compile the C code on an x86-64 machine and then translate the instructions to Y86-64.
+Use the same argument passing and register saving conventions as x86-64 code does. You might find it helpful to compile the C code on an x86-64 machine and then translate the instructions to Y86-64.
 
 **Solution**:
 * Compile the C code first:`gcc -Og -S -fno-stack-protector rproduct.c`
@@ -605,7 +607,7 @@ does. You might find it helpful to compile the C code on an x86-64 machine and t
 		jle	.L3               # if count <= 1, goto .L3
 		                      # if count > 1
 		pushq	%rbx          # save %rbx
-		mvmovq	(%rdi), %rbx  # rbx=M(rdi): rbx = *start
+		mrmovq	(%rdi), %rbx  # rbx=M(rdi): rbx = *start
 		subq	$r8, %rsi     # rsi=rsi-1: count--
 		addq	%r9, %rdi     # rdi=rdi+8: start++
 		call	rproduct      # rproduct(start+1, count-1)
