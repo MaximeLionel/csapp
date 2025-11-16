@@ -560,7 +560,7 @@ Rewrite the Y86-64 sum function to make use of the `iaddq` instruction. In the o
 		ret                     # Return
 ```
 
-&&&
+
 # Practice Problem 4.4
 Write Y86-64 code to implement a recursive product function `rproduct`, based on the following C code:
 ```C

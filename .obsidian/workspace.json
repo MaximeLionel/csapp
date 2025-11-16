@@ -197,6 +197,7 @@
   },
   "active": "fbc154ea709a0a56",
   "lastOpenFiles": [
+    "chap4/PracProblem4_4/rproduct.ys",
     "chap4/PracProblem4_4/rproduct.yo",
     "chap4/PracProblem4_4/rproduct.s",
     "chap4/PracProblem4_4/rproduct.c",
@@ -207,7 +208,6 @@
     "sim/misc/hcl.tab.c",
     "sim/pipe/psim.c",
     "sim/misc/hcl2c",
-    "sim/misc/yis",
     "4_1 The Y86-64 Instruction Set Architecture.md",
     "assets/Pasted image 20250211113450.png",
     "assets/Pasted image 20250211113302.png",

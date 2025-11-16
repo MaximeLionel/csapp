@@ -1,0 +1,21 @@
+# long rproduct(long *start, long count)
+# %rdi - start, %rsi - count
+.pos 0
+rproduct:
+    irmovq  $1,%r8   #
+    irmovq    $8, %r9
+    subq    %r8, %rsi 
+    jle     L3 
+
+    pushq   %rbx
+    mrmovq  (%rdi), %rbx 
+    subq    %r8, %rsi 
+    addq    %r9, %rdi 
+    call    rproduct
+    imulq   %rbx, %rax
+    popq    %rbx
+    ret 
+
+L3:
+    irmovq    $1, %rax   #
+    ret
