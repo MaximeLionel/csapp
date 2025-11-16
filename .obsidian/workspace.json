@@ -34,9 +34,21 @@
               "icon": "lucide-file",
               "title": "4_5 Pipelined Y86-64 Implementations"
             }
+          },
+          {
+            "id": "fbc154ea709a0a56",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.10.3"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.10.3"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -183,7 +195,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2b7cfad5aece4304",
+  "active": "fbc154ea709a0a56",
   "lastOpenFiles": [
     "chap4/PracProblem4_4/rproduct.yo",
     "chap4/PracProblem4_4/rproduct.s",
